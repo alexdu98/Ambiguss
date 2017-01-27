@@ -1,4 +1,5 @@
 [INSTALLATION WINDOWS (WAMP)](https://github.com/alexdu98/TERM1/blob/master/README.md#installation-windows-wamp)
+
 [INSTALLATION UBUNTU (LAMP)](https://github.com/alexdu98/TERM1/blob/master/README.md#installation-ubuntu-lamp)
 
 ## INSTALLATION WINDOWS (WAMP)

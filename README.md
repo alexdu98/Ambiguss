@@ -49,12 +49,12 @@ Téléchargez et installez [Composer](https://getcomposer.org/download/). (Windo
 Dans un terminal
 ```
 cd C:\wamp\www\TERM1
-php composer.phar update
+composer update
 ```
 PS : il faudra peut être ajouter "C:\ProgramData\ComposerSetup\bin" dans votre PATH s'il n'y ai pas déjà.
 
 #### Utilisation
-Démarrer WAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev)
+Démarrer WAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev/) ou [http://term1.calyxe.dev/app_dev.php](http://term1.calyxe.dev/app_dev.php/)
 
 ## INSTALLATION UBUNTU (LAMP)
 ##### Installer LAMP

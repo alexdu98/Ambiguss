@@ -7,6 +7,9 @@
 Téléchargez et installez [WAMP](http://www.wampserver.com/).
 
 #### Configurer WAMP
+Dans le fichier C:\wamp\bin\apache\apache2.4.23\conf\httpd.conf, cherchez "Include conf/extra/httpd-vhosts.conf",
+et décommentez la ligne en enlevant le #.
+
 Dans le fichier C:\wamp\bin\apache\apache2.4.23\conf\extra\httpd-vhosts.conf, ajoutez
 ```
 <VirtualHost *:80>
@@ -133,4 +136,4 @@ php composer.phar update
 ```
 
 #### Utilisation
-Démarrer LAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev)
+Démarrer LAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev) ou [http://term1.calyxe.dev/app_dev.php](http://term1.calyxe.dev/app_dev.php/)

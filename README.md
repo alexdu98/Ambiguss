@@ -117,6 +117,12 @@ cd /var/www
 git clone https://github.com/alexdu98/TERM1.git
 ```
 
+#### Changer les droits des répertoires
+```
+chmod -R 777 /var/www/TERM1/var/cache
+chmod -R 777 /var/www/TERM1/var/logs
+```
+
 #### Installer Composer
 ```
 cd /var/www/TERM1
@@ -127,4 +133,4 @@ php composer.phar update
 ```
 
 #### Utilisation
-Démarrer WAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev)
+Démarrer LAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev)

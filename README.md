@@ -59,6 +59,9 @@ composer update
 ```
 PS : il faudra peut être ajouter "C:\ProgramData\ComposerSetup\bin" dans votre PATH s'il n'y ai pas déjà.
 
+#### Vérification de la configuration
+Rendez-vous sur la page [http://term1.calyxe.dev/config.php](http://term1.calyxe.dev/config.php), et vérifiez que vous n'avez d'erreurs importantes (en rouges). Si vous en avez, corrigez les avec Google, ou en demandant à Alexandre.
+
 #### Utilisation
 Démarrer WAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev/) ou [http://term1.calyxe.dev/app_dev.php](http://term1.calyxe.dev/app_dev.php/)
 
@@ -135,6 +138,9 @@ php composer-setup.php
 php -r "unlink('composer-setup.php');"
 php composer.phar update
 ```
+
+#### Vérification de la configuration
+Rendez-vous sur la page [http://term1.calyxe.dev/config.php](http://term1.calyxe.dev/config.php), et vérifiez que vous n'avez d'erreurs importantes (en rouges). Si vous en avez, corrigez les avec Google, ou en demandant à Alexandre.
 
 #### Utilisation
 Démarrer LAMP, et ouvrir le navigateur sur la page : [http://term1.calyxe.dev](http://term1.calyxe.dev) ou [http://term1.calyxe.dev/app_dev.php](http://term1.calyxe.dev/app_dev.php/)

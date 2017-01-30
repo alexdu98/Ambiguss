@@ -91,8 +91,9 @@ vim /etc/php5/cli/php.ini
 # Puis remplacez par
 date.timezone = Europe/Paris
 ```
-Redémarrer Apache2
+Activer le site et redémarrer Apache2
 ```
+a2ensite term1.calyxe.dev.conf
 service apache2 restart
 ```
 ```

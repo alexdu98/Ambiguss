@@ -44,7 +44,7 @@ Téléchargez et installez [GIT](https://git-scm.com/).
 Avec le terminal, rendez-vous dans C:\wamp\www, et clonez le projet
 ```
 cd C:\wamp\www
-git clone https://github.com/alexdu98/IMNA.git
+git clone https://github.com/alexdu98/TERM1.git
 ```
 
 #### Installer Composer
@@ -114,7 +114,7 @@ sudo apt-get install git
 #### Cloner le projet
 ```
 cd /var/www
-git clone https://github.com/alexdu98/IMNA.git
+git clone https://github.com/alexdu98/TERM1.git
 ```
 
 #### Installer Composer

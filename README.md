@@ -124,6 +124,7 @@ git clone https://github.com/alexdu98/TERM1.git
 ```
 chmod -R 777 /var/www/TERM1/var/cache
 chmod -R 777 /var/www/TERM1/var/logs
+chmod -R 777 /var/www/TERM1/var/sessions
 ```
 
 #### Installer Composer

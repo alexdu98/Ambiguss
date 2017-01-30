@@ -72,16 +72,16 @@ vim /etc/apache2/sites-available/term1.calyxe.dev.conf
 <VirtualHost *:80>
 	ServerName term1.calyxe.dev
 
-	DocumentRoot C:/wamp/www/TERM1/web
+	DocumentRoot /var/www/TERM1/web
 
-	<Directory  "C:/wamp/www/TERM1/web">
+	<Directory  /var/www/TERM1/web">
 		AllowOverride All
 		Order Allow,Deny
         Allow from All
 	</Directory>
 
-	ErrorLog C:/wamp/www/TERM1/error.log
-  CustomLog C:/wamp/www/TERM1/access.log combined
+	ErrorLog /var/www/TERM1/error.log
+  CustomLog /var/www/TERM1/access.log combined
 </VirtualHost>
 ```
 ```

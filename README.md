@@ -80,7 +80,7 @@ vim /etc/apache2/sites-available/term1.calyxe.dev.conf
 
 	DocumentRoot /var/www/TERM1/web
 
-	<Directory  /var/www/TERM1/web">
+	<Directory "/var/www/TERM1/web">
 		AllowOverride All
 		Order Allow,Deny
         Allow from All

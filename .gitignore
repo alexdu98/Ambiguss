@@ -17,3 +17,6 @@
 /.idea/
 /access.log
 /error.log
+/dumpBD
+/backup/*
+!/backup/.gitkeep

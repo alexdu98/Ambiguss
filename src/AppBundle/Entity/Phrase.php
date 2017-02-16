@@ -1,0 +1,251 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Phrase
+ *
+ * @ORM\Table(name="phrase")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PhraseRepository")
+ */
+class Phrase
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contenu", type="string", length=512)
+     */
+    private $contenu;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_creation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_modification", type="datetime")
+     */
+    private $dateModification;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="signale", type="boolean")
+     */
+    private $signale;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible", type="boolean")
+     */
+    private $visible;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_modificateur", type="integer", nullable=true)
+     */
+    private $idModificateur;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_auteur", type="integer", nullable=true)
+     */
+    private $idAuteur;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set contenu
+     *
+     * @param string $contenu
+     *
+     * @return Phrase
+     */
+    public function setContenu($contenu)
+    {
+        $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    /**
+     * Get contenu
+     *
+     * @return string
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return Phrase
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     *
+     * @return Phrase
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
+    }
+
+    /**
+     * Set signale
+     *
+     * @param boolean $signale
+     *
+     * @return Phrase
+     */
+    public function setSignale($signale)
+    {
+        $this->signale = $signale;
+
+        return $this;
+    }
+
+    /**
+     * Get signale
+     *
+     * @return bool
+     */
+    public function getSignale()
+    {
+        return $this->signale;
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     *
+     * @return Phrase
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return bool
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * Set idModificateur
+     *
+     * @param integer $idModificateur
+     *
+     * @return Phrase
+     */
+    public function setIdModificateur($idModificateur)
+    {
+        $this->idModificateur = $idModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get idModificateur
+     *
+     * @return int
+     */
+    public function getIdModificateur()
+    {
+        return $this->idModificateur;
+    }
+
+    /**
+     * Set idAuteur
+     *
+     * @param integer $idAuteur
+     *
+     * @return Phrase
+     */
+    public function setIdAuteur($idAuteur)
+    {
+        $this->idAuteur = $idAuteur;
+
+        return $this;
+    }
+
+    /**
+     * Get idAuteur
+     *
+     * @return int
+     */
+    public function getIdAuteur()
+    {
+        return $this->idAuteur;
+    }
+}

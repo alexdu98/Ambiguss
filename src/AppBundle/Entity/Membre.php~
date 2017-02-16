@@ -148,8 +148,6 @@ class Membre
      */
     private $historiques;
 
-
-    
     /**
      * @ORM\OneToMany(targetEntity="Droit_membre", mappedBy="membre")
      */
@@ -160,14 +158,6 @@ class Membre
      * @ORM\JoinColumn(name="groupe_id", referencedColumnName="id")
      */
     private $groupe;
-
-   
-    /**
-     * @ORM\OneToMany(targetEntity="Glose", mappedBy="membre")
-     */
-    private $gloses;
-    
-
     /**
      * Get id
      *
@@ -613,70 +603,5 @@ class Membre
     }
 
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->historiques = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->droit_membres = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get dateNaissance
-     *
-     * @return \DateTime
-     */
-    public function getDateNaissance()
-    {
-        return $this->dateNaissance;
-    }
-
-    /**
-     * Add historique
-     *
-     * @param \AppBundle\Entity\Historique $historique
-     *
-     * @return Membre
-     */
-    public function addHistorique(\AppBundle\Entity\Historique $historique)
-    {
-        $this->historiques[] = $historique;
-
-        return $this;
-    }
-
-    /**
-     * Remove historique
-     *
-     * @param \AppBundle\Entity\Historique $historique
-     */
-    public function removeHistorique(\AppBundle\Entity\Historique $historique)
-    {
-        $this->historiques->removeElement($historique);
-    }
-
-    /**
-     * Add droitMembre
-     *
-     * @param \AppBundle\Entity\Droit_membre $droitMembre
-     *
-     * @return Membre
-     */
-    public function addDroitMembre(\AppBundle\Entity\Droit_membre $droitMembre)
-    {
-        $this->droit_membres[] = $droitMembre;
-
-        return $this;
-    }
-
-    /**
-     * Remove droitMembre
-     *
-     * @param \AppBundle\Entity\Droit_membre $droitMembre
-     */
-    public function removeDroitMembre(\AppBundle\Entity\Droit_membre $droitMembre)
-    {
-        $this->droit_membres->removeElement($droitMembre);
-    }
 }
+

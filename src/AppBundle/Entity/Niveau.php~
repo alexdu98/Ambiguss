@@ -153,28 +153,5 @@ class Niveau
     }
 
 
-
-    /**
-     * Add membre
-     *
-     * @param \AppBundle\Entity\Membre $membre
-     *
-     * @return Niveau
-     */
-    public function addMembre(\AppBundle\Entity\Membre $membre)
-    {
-        $this->membres[] = $membre;
-
-        return $this;
-    }
-
-    /**
-     * Remove membre
-     *
-     * @param \AppBundle\Entity\Membre $membre
-     */
-    public function removeMembre(\AppBundle\Entity\Membre $membre)
-    {
-        $this->membres->removeElement($membre);
-    }
 }
+

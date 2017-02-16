@@ -42,6 +42,25 @@ class Mot_ambigu_phrase
      */
     private $idPhrase;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Mot_ambigu", inversedBy="mots_amibus_phrases")
+     * @ORM\JoinColumn(name="mot_ambigu_id", referencedColumnName="id")
+     */
+    private $motAmbigu;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="mot_ambigu_phrase")
+     */
+    private $Reponses;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="mots_ambigus_phrases")
+     * @ORM\JoinColumn(name="phrase_id", referencedColumnName="id")
+     */
+    private $phrase;
+
+
 
     /**
      * Get id
@@ -124,4 +143,53 @@ class Mot_ambigu_phrase
     {
         return $this->idPhrase;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMotAmbigu()
+    {
+        return $this->motAmbigu;
+    }
+
+    /**
+     * @param mixed $motAmbigu
+     */
+    public function setMotAmbigu($motAmbigu)
+    {
+        $this->motAmbigu = $motAmbigu;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReponses()
+    {
+        return $this->Reponses;
+    }
+
+    /**
+     * @param mixed $Reponses
+     */
+    public function setReponses($Reponses)
+    {
+        $this->Reponses = $Reponses;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhrase()
+    {
+        return $this->phrase;
+    }
+
+    /**
+     * @param mixed $phrase
+     */
+    public function setPhrase($phrase)
+    {
+        $this->phrase = $phrase;
+    }
+
 }

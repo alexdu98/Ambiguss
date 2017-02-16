@@ -166,7 +166,44 @@ class Membre
      * @ORM\OneToMany(targetEntity="Glose", mappedBy="membre")
      */
     private $gloses;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Jeton", mappedBy="membre")
+     */
+    private $jetons;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Newsletter", mappedBy="membre")
+     */
+    private $newsletters;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Jugement", mappedBy="membre")
+     */
+    private $jugements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="membre")
+     */
+    private $commentaires;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Vote_jugement", mappedBy="membre")
+     */
+    private $voteJugements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Succes_membre", mappedBy="membre")
+     */
+    private $succesMembres;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Aimer_phrase", mappedBy="membre")
+     */
+    private $AimerPhrases;
+
+
 
     /**
      * Get id
@@ -679,4 +716,135 @@ class Membre
     {
         $this->droit_membres->removeElement($droitMembre);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getGloses()
+    {
+        return $this->gloses;
+    }
+
+    /**
+     * @param mixed $gloses
+     */
+    public function setGloses($gloses)
+    {
+        $this->gloses = $gloses;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJetons()
+    {
+        return $this->jetons;
+    }
+
+    /**
+     * @param mixed $jetons
+     */
+    public function setJetons($jetons)
+    {
+        $this->jetons = $jetons;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewsletters()
+    {
+        return $this->newsletters;
+    }
+
+    /**
+     * @param mixed $newsletters
+     */
+    public function setNewsletters($newsletters)
+    {
+        $this->newsletters = $newsletters;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJugements()
+    {
+        return $this->jugements;
+    }
+
+    /**
+     * @param mixed $jugements
+     */
+    public function setJugements($jugements)
+    {
+        $this->jugements = $jugements;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
+    }
+
+    /**
+     * @param mixed $commentaires
+     */
+    public function setCommentaires($commentaires)
+    {
+        $this->commentaires = $commentaires;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVoteJugements()
+    {
+        return $this->voteJugements;
+    }
+
+    /**
+     * @param mixed $voteJugements
+     */
+    public function setVoteJugements($voteJugements)
+    {
+        $this->voteJugements = $voteJugements;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSuccesMembres()
+    {
+        return $this->succesMembres;
+    }
+
+    /**
+     * @param mixed $succesMembres
+     */
+    public function setSuccesMembres($succesMembres)
+    {
+        $this->succesMembres = $succesMembres;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAimerPhrases()
+    {
+        return $this->AimerPhrases;
+    }
+
+    /**
+     * @param mixed $AimerPhrases
+     */
+    public function setAimerPhrases($AimerPhrases)
+    {
+        $this->AimerPhrases = $AimerPhrases;
+    }
+
+    
+    
 }

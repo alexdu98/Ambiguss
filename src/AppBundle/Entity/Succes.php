@@ -70,7 +70,10 @@ class Succes
      * @ORM\Column(name="id_succes_parent", type="integer", nullable=true)
      */
     private $idSuccesParent;
-
+    /**
+     * @ORM\OneToMany(targetEntity="Succes_membre", mappedBy="succes")
+     */
+    private $succesMembres;
 
     /**
      * Get id
@@ -240,6 +243,22 @@ class Succes
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSuccesMembres()
+    {
+        return $this->succesMembres;
+    }
+
+    /**
+     * @param mixed $succesMembres
+     */
+    public function setSuccesMembres($succesMembres)
+    {
+        $this->succesMembres = $succesMembres;
     }
 
 }

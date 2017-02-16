@@ -6,11 +6,56 @@
 
 html{
 	height: 100%;
+	--color-green: #A0D233;
+	--color-yellow: #FAFAD2;
+	--color-brown: #8B4513;
 }
 body{
 	display: table;
 	width: 100%;
 	height: 100%;
+}
+a{
+	color: var(--color-brown);
+}
+a:hover{
+	color: var(--color-brown);
+	text-decoration: none;
+}
+.bg-green{
+	background: var(--color-green);
+}
+.bg-yellow{
+	background: var(--color-yellow);
+}
+
+/*
+    #####################################################################
+    ################################ MENU ###############################
+    #####################################################################
+*/
+
+nav{
+	background: var(--color-green) !important;
+	color: var(--color-yellow) !important;
+}
+nav .navbar-brand{
+	margin-top: -7px;
+}
+nav .active a{
+	background: var(--color-yellow) !important;
+}
+
+/*
+    #####################################################################
+    ############################### FOOTER ##############################
+    #####################################################################
+*/
+
+footer{
+	background: var(--color-green);
+	color: var(--color-yellow);
+	box-shadow: 0 0 3px #444;
 }
 
 /*

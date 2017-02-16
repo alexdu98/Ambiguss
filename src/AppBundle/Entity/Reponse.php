@@ -99,6 +99,19 @@ class Reponse
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Mot_ambigu_phrase", inversedBy="reponses")
+     * @ORM\JoinColumn(name="mot_ambigu_phrase_id", referencedColumnName="id")
+     */
+    private $Mot_ambigu_phrase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="reponses")
+     * @ORM\JoinColumn(name="phrase_id", referencedColumnName="id")
+     */
+    private $phrase;
+
+
+    /**
      * Get id
      *
      * @return int
@@ -339,5 +352,54 @@ class Reponse
     {
         $this->poids = $poids;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getGlose()
+    {
+        return $this->glose;
+    }
+
+    /**
+     * @param mixed $glose
+     */
+    public function setGlose($glose)
+    {
+        $this->glose = $glose;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMotAmbiguPhrase()
+    {
+        return $this->Mot_ambigu_phrase;
+    }
+
+    /**
+     * @param mixed $Mot_ambigu_phrase
+     */
+    public function setMotAmbiguPhrase($Mot_ambigu_phrase)
+    {
+        $this->Mot_ambigu_phrase = $Mot_ambigu_phrase;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhrase()
+    {
+        return $this->phrase;
+    }
+
+    /**
+     * @param mixed $phrase
+     */
+    public function setPhrase($phrase)
+    {
+        $this->phrase = $phrase;
+    }
+
 
 }

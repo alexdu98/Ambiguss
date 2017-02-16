@@ -58,6 +58,14 @@ class Newsletter
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="newsletters")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+
+
+    /**
      * Get id
      *
      * @return int
@@ -186,4 +194,21 @@ class Newsletter
     {
         return $this->idAuteur;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+    
 }

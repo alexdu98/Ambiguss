@@ -35,6 +35,20 @@ class Aimer_phrase
      */
     private $dateDesaimer;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="aimer_phrases")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="aimer_phrases")
+     * @ORM\JoinColumn(name="phrase_id", referencedColumnName="id")
+     */
+    private $phrase;
+
+
+
 
     /**
      * Get id
@@ -93,4 +107,38 @@ class Aimer_phrase
     {
         return $this->dateDesaimer;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhrase()
+    {
+        return $this->phrase;
+    }
+
+    /**
+     * @param mixed $phrase
+     */
+    public function setPhrase($phrase)
+    {
+        $this->phrase = $phrase;
+    }
+
+    
 }

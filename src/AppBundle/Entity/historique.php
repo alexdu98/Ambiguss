@@ -43,8 +43,8 @@ class Historique
     private $idMembre;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="historiques")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+    * @ORM\ManyToOne(targetEntity="Membre", inversedBy="historiques")
+    * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
      */
     private $membre;
 

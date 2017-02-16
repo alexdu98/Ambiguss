@@ -71,6 +71,26 @@ class Jugement
     private $resultat;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="jugements")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Vote_jugement", mappedBy="jugement")
+     */
+    private $voteJugements;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="jugement")
+     */
+    private $Commentaires;
+
+
+
+    /**
      * Get id
      *
      * @return int
@@ -223,6 +243,55 @@ class Jugement
     {
         $this->categorie = $categorie;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVoteJugements()
+    {
+        return $this->voteJugements;
+    }
+
+    /**
+     * @param mixed $voteJugements
+     */
+    public function setVoteJugements($voteJugements)
+    {
+        $this->voteJugements = $voteJugements;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCommentaires()
+    {
+        return $this->Commentaires;
+    }
+
+    /**
+     * @param mixed $Commentaires
+     */
+    public function setCommentaires($Commentaires)
+    {
+        $this->Commentaires = $Commentaires;
+    }
+    
     
     
 }

@@ -29,6 +29,22 @@ class succes_membre
     private $dateCreation;
 
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="succes_membres")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Succes", inversedBy="succes_membres")
+     * @ORM\JoinColumn(name="succes_id", referencedColumnName="id")
+     */
+    private $succes;
+
+
+
+
     /**
      * Get id
      *
@@ -62,4 +78,47 @@ class succes_membre
     {
         return $this->dateCreation;
     }
+
+    /**
+     * @return int
+     */
+    public function getIdSucces()
+    {
+        return $this->idSucces;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSucces()
+    {
+        return $this->succes;
+    }
+
+    /**
+     * @param mixed $succes
+     */
+    public function setSucces($succes)
+    {
+        $this->succes = $succes;
+    }
+
+
 }

@@ -49,21 +49,21 @@ class Mot_ambigu
      */
     private $active;
 
-    /**
-     * @ORM\ManyToMany(targetEntity ="Glose", mappedBy="mots_ambigus")
-     */
-    private $gloses;
 
     /**
-     * Mot_ambigu constructor.
-     * @param $gloses
+     * @ORM\OneToMany(targetEntity="Mot_ambigu_special", mappedBy="mot_ambigu")
      */
-    public function __construct($gloses)
-    {
-        $this->gloses = $gloses;
-    }
+    private $motsAmbigusSpecials;
 
     /**
+     * @ORM\OneToMany(targetEntity="Mot_ambigu_phrase", mappedBy="mot_ambigu")
+     */
+    private $motsAmbigusPhrases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Glose_mot_ambigu", mappedBy="mot_ambigu")
+     */
+    private $GloseMotsAmbigus;
 
 
 
@@ -173,4 +173,71 @@ class Mot_ambigu
     {
         return $this->active;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getGloses()
+    {
+        return $this->gloses;
+    }
+
+    /**
+     * @param mixed $gloses
+     */
+    public function setGloses($gloses)
+    {
+        $this->gloses = $gloses;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMotsAmbigusSpecials()
+    {
+        return $this->motsAmbigusSpecials;
+    }
+
+    /**
+     * @param mixed $motsAmbigusSpecials
+     */
+    public function setMotsAmbigusSpecials($motsAmbigusSpecials)
+    {
+        $this->motsAmbigusSpecials = $motsAmbigusSpecials;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMotsAmbigusPhrases()
+    {
+        return $this->motsAmbigusPhrases;
+    }
+
+    /**
+     * @param mixed $motsAmbigusPhrases
+     */
+    public function setMotsAmbigusPhrases($motsAmbigusPhrases)
+    {
+        $this->motsAmbigusPhrases = $motsAmbigusPhrases;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGloseMotsAmbigus()
+    {
+        return $this->GloseMotsAmbigus;
+    }
+
+    /**
+     * @param mixed $GloseMotsAmbigus
+     */
+    public function setGloseMotsAmbigus($GloseMotsAmbigus)
+    {
+        $this->GloseMotsAmbigus = $GloseMotsAmbigus;
+    }
+
+
+
 }

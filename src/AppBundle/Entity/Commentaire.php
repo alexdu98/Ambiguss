@@ -91,6 +91,17 @@ class Commentaire
      */
     private $idPhrase;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="Commentaires")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Jugement", inversedBy="commentaires")
+     * @ORM\JoinColumn(name="jugement_id", referencedColumnName="id")
+     */
+    private $jugement;
 
     /**
      * Get id
@@ -341,4 +352,37 @@ class Commentaire
     {
         return $this->idPhrase;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJugement()
+    {
+        return $this->jugement;
+    }
+
+    /**
+     * @param mixed $jugement
+     */
+    public function setJugement($jugement)
+    {
+        $this->jugement = $jugement;
+    }
+
 }

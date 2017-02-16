@@ -49,6 +49,13 @@ class Jeton
      */
     private $idMembre;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="jetons")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+
 
     /**
      * Get id
@@ -155,4 +162,21 @@ class Jeton
     {
         return $this->idMembre;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+    
 }

@@ -43,6 +43,14 @@ class Mot_ambigu_special
      * @ORM\Column(name="id_MotAmbigu", type="integer", nullable=true)
      */
     private $idMotAmbigu;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Mot_ambigu", inversedBy="mots_amibus_specials")
+     * @ORM\JoinColumn(name="mot_ambigu_id", referencedColumnName="id")
+     */
+    private $motAmbigu;
+
     /**
      * Get id
      *
@@ -120,4 +128,21 @@ class Mot_ambigu_special
     {
         return $this->ambigu;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMotAmbigu()
+    {
+        return $this->motAmbigu;
+    }
+
+    /**
+     * @param mixed $motAmbigu
+     */
+    public function setMotAmbigu($motAmbigu)
+    {
+        $this->motAmbigu = $motAmbigu;
+    }
+    
 }

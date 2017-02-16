@@ -20,20 +20,20 @@ class Glose_mot_ambigu
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_glose", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Mot_ambigu", inversedBy="glose_mots_ambigus")
+     * @ORM\JoinColumn(name="mot_ambigu_id", referencedColumnName="id")
      */
-    private $idGlose;
+    private $motAmbigu;
+
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_mot_ambigu", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="glose", inversedBy="glose_mots_ambigus")
+     * @ORM\JoinColumn(name="glose_id", referencedColumnName="id")
      */
-    private $idMotAmbigu;
+    private $glose;
 
     /**
      * Get id
@@ -75,6 +75,38 @@ class Glose_mot_ambigu
     public function setIdMotAmbigu($idMotAmbigu)
     {
         $this->idMotAmbigu = $idMotAmbigu;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMotAmbigu()
+    {
+        return $this->motAmbigu;
+    }
+
+    /**
+     * @param mixed $motAmbigu
+     */
+    public function setMotAmbigu($motAmbigu)
+    {
+        $this->motAmbigu = $motAmbigu;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGlose()
+    {
+        return $this->glose;
+    }
+
+    /**
+     * @param mixed $glose
+     */
+    public function setGlose($glose)
+    {
+        $this->glose = $glose;
     }
 
 

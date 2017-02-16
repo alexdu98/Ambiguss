@@ -57,6 +57,17 @@ class vote_jugement
      */
     private $vote;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="vote_jugements")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     */
+    private $membre;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Jugement", inversedBy="vote_jugements")
+     * @ORM\JoinColumn(name="jugement_id", referencedColumnName="id")
+     */
+    private $jugement;
 
     /**
      * Get id
@@ -179,5 +190,38 @@ class vote_jugement
     {
         $this->vote = $vote;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * @param mixed $membre
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJugement()
+    {
+        return $this->jugement;
+    }
+
+    /**
+     * @param mixed $jugement
+     */
+    public function setJugement($jugement)
+    {
+        $this->jugement = $jugement;
+    }
+
 
 }

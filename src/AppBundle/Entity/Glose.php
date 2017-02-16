@@ -76,25 +76,18 @@ class Glose
      */
     private $membre;
 
-    /**
 
-     * @ORM\ManyToMany (targetEntity="Mot_ambigu", inversedBy="gloses")
-     * @ORM\JoinTable (name="gloses_mots_ambigus")
-     */
-    private $motsAmbigus;
-
-    /**
-     * Glose constructor.
-     * @param $motsAmbigus
-     */
-    public function __construct($motsAmbigus)
-    {
-        $this->motsAmbigus = $motsAmbigus;
-    }
       /**
       * @ORM\OneToMany(targetEntity="Reponse", mappedBy="glose")
       */
-    private $Reponses;
+    private $reponses;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Glose_mot_ambigu", mappedBy="glose")
+     */
+    private $GloseMotsAmbigus;
+
 
 
     /**
@@ -306,5 +299,39 @@ class Glose
     {
         $this->motsAmbigus = $motsAmbigus;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
+    }
+
+    /**
+     * @param mixed $reponses
+     */
+    public function setReponses($reponses)
+    {
+        $this->reponses = $reponses;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGloseMotsAmbigus()
+    {
+        return $this->GloseMotsAmbigus;
+    }
+
+    /**
+     * @param mixed $GloseMotsAmbigus
+     */
+    public function setGloseMotsAmbigus($GloseMotsAmbigus)
+    {
+        $this->GloseMotsAmbigus = $GloseMotsAmbigus;
+    }
+
+
 
 }

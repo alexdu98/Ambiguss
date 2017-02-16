@@ -70,6 +70,20 @@ class Phrase
      */
     private $idAuteur;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="phrase")
+     */
+    private $Reponses;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Mot_ambigu_phrase", mappedBy="phrase")
+     */
+    private $motsAmbigusPhrases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Aimer_phrase", mappedBy="phrase")
+     */
+    private $AimerPhrases;
 
     /**
      * Get id
@@ -248,4 +262,55 @@ class Phrase
     {
         return $this->idAuteur;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReponses()
+    {
+        return $this->Reponses;
+    }
+
+    /**
+     * @param mixed $Reponses
+     */
+    public function setReponses($Reponses)
+    {
+        $this->Reponses = $Reponses;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMotsAmbigusPhrases()
+    {
+        return $this->motsAmbigusPhrases;
+    }
+
+    /**
+     * @param mixed $motsAmbigusPhrases
+     */
+    public function setMotsAmbigusPhrases($motsAmbigusPhrases)
+    {
+        $this->motsAmbigusPhrases = $motsAmbigusPhrases;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAimerPhrases()
+    {
+        return $this->AimerPhrases;
+    }
+
+    /**
+     * @param mixed $AimerPhrases
+     */
+    public function setAimerPhrases($AimerPhrases)
+    {
+        $this->AimerPhrases = $AimerPhrases;
+    }
+
+
+    
 }

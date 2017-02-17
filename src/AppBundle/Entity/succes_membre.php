@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="succes_membre")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\succes_membreRepository")
  */
-class succes_membre
+class Succes_membre
 {
     /**
      * @var int
@@ -32,13 +32,13 @@ class succes_membre
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="succes_membres")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Succes", inversedBy="succes_membres")
-     * @ORM\JoinColumn(name="succes_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_succes", referencedColumnName="id")
      */
     private $succes;
 
@@ -78,15 +78,6 @@ class succes_membre
     {
         return $this->dateCreation;
     }
-
-    /**
-     * @return int
-     */
-    public function getIdSucces()
-    {
-        return $this->idSucces;
-    }
-
 
     /**
      * @return mixed

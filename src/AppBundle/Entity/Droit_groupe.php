@@ -51,7 +51,7 @@ class Droit_groupe
 
     /**
      * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="droit_groupes")
-     * @ORM\JoinColumn(name="groupe_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_groupe", referencedColumnName="id")
      */
     private $groupe;
 

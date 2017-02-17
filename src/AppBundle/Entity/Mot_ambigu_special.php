@@ -47,7 +47,7 @@ class Mot_ambigu_special
 
     /**
      * @ORM\ManyToOne(targetEntity="Mot_ambigu", inversedBy="mots_amibus_specials")
-     * @ORM\JoinColumn(name="mot_ambigu_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_mot_ambigu", referencedColumnName="id")
      */
     private $motAmbigu;
 

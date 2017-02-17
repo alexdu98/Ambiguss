@@ -43,13 +43,6 @@ class Reponse
     private $contenuPhrase;
 
     /**
-     * @var enum
-     *
-     * @ORM\Column(name="poinds", type="integer")
-     */
-    private $poids;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="valeur_mot_ambigu", type="string", length=32)
@@ -93,22 +86,28 @@ class Reponse
 
     /**
      * @ORM\ManyToOne(targetEntity="Glose", inversedBy="reponses")
-     * @ORM\JoinColumn(name="glose_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_glose", referencedColumnName="id")
      */
     private $glose;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="Mot_ambigu_phrase", inversedBy="reponses")
-     * @ORM\JoinColumn(name="mot_ambigu_phrase_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_mot_ambigu_phrase", referencedColumnName="id")
      */
     private $Mot_ambigu_phrase;
 
     /**
      * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="reponses")
-     * @ORM\JoinColumn(name="phrase_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_phrase", referencedColumnName="id")
      */
     private $phrase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Enum_poids_reponse")
+     * @ORM\JoinColumn(name="id_enum_poids_reponse", referencedColumnName="id", nullable=false)
+     */
+    private $poidsReponse;
 
 
     /**
@@ -338,22 +337,6 @@ class Reponse
     }
 
     /**
-     * @return string
-     */
-    public function getPoids()
-    {
-        return $this->poids;
-    }
-
-    /**
-     * @param string $poids
-     */
-    public function setPoids($poids)
-    {
-        $this->poids = $poids;
-    }
-
-    /**
      * @return mixed
      */
     public function getGlose()
@@ -402,4 +385,28 @@ class Reponse
     }
 
 
+
+    /**
+     * Set poidsReponse
+     *
+     * @param \AppBundle\Entity\Enum_poids_reponse $poidsReponse
+     *
+     * @return Reponse
+     */
+    public function setPoidsReponse(\AppBundle\Entity\Enum_poids_reponse $poidsReponse)
+    {
+        $this->poidsReponse = $poidsReponse;
+
+        return $this;
+    }
+
+    /**
+     * Get poidsReponse
+     *
+     * @return \AppBundle\Entity\Enum_poids_reponse
+     */
+    public function getPoidsReponse()
+    {
+        return $this->poidsReponse;
+    }
 }

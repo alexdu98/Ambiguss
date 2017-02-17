@@ -93,13 +93,13 @@ class Commentaire
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="Commentaires")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Jugement", inversedBy="commentaires")
-     * @ORM\JoinColumn(name="jugement_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_jugement", referencedColumnName="id")
      */
     private $jugement;
 

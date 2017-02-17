@@ -59,7 +59,7 @@ class Newsletter
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="newsletters")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 

@@ -167,5 +167,28 @@ class Groupe
     {
         $this->droit_groupes = $droit_groupes;
     }
-    
+
+    /**
+     * Add droitGroupe
+     *
+     * @param \AppBundle\Entity\Droit_groupe $droitGroupe
+     *
+     * @return Groupe
+     */
+    public function addDroitGroupe(\AppBundle\Entity\Droit_groupe $droitGroupe)
+    {
+        $this->droit_groupes[] = $droitGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove droitGroupe
+     *
+     * @param \AppBundle\Entity\Droit_groupe $droitGroupe
+     */
+    public function removeDroitGroupe(\AppBundle\Entity\Droit_groupe $droitGroupe)
+    {
+        $this->droit_groupes->removeElement($droitGroupe);
+    }
 }

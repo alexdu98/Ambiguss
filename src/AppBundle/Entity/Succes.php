@@ -34,19 +34,11 @@ class Succes
      * @ORM\Column(name="description", type="string", length=512)
      */
     private $description;
-    /**
-     * @var enum
-     *
-     * @ORM\Column(name="type", type="string", length=256)
-     */
-
-    private $type;
-
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Conditions", type="string", length=256)
+     * @ORM\Column(name="conditions", type="string", length=256)
      */
     private $conditions;
 
@@ -74,6 +66,12 @@ class Succes
      * @ORM\OneToMany(targetEntity="Succes_membre", mappedBy="succes")
      */
     private $succesMembres;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Enum_type_succes")
+     * @ORM\JoinColumn(name="id_enum_type_succes", referencedColumnName="id", nullable=false)
+     */
+    private $typeSucces;
 
     /**
      * Get id
@@ -230,22 +228,6 @@ class Succes
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return mixed
      */
     public function getSuccesMembres()
@@ -261,4 +243,59 @@ class Succes
         $this->succesMembres = $succesMembres;
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->succesMembres = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add succesMembre
+     *
+     * @param \AppBundle\Entity\Succes_membre $succesMembre
+     *
+     * @return Succes
+     */
+    public function addSuccesMembre(\AppBundle\Entity\Succes_membre $succesMembre)
+    {
+        $this->succesMembres[] = $succesMembre;
+
+        return $this;
+    }
+
+    /**
+     * Remove succesMembre
+     *
+     * @param \AppBundle\Entity\Succes_membre $succesMembre
+     */
+    public function removeSuccesMembre(\AppBundle\Entity\Succes_membre $succesMembre)
+    {
+        $this->succesMembres->removeElement($succesMembre);
+    }
+
+    /**
+     * Set typeSucces
+     *
+     * @param \AppBundle\Entity\Enum_type_succes $typeSucces
+     *
+     * @return Succes
+     */
+    public function setTypeSucces(\AppBundle\Entity\Enum_type_succes $typeSucces)
+    {
+        $this->typeSucces = $typeSucces;
+
+        return $this;
+    }
+
+    /**
+     * Get typeSucces
+     *
+     * @return \AppBundle\Entity\Enum_type_succes
+     */
+    public function getTypeSucces()
+    {
+        return $this->typeSucces;
+    }
 }

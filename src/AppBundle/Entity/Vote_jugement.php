@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="vote_jugement")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\vote_jugementRepository")
  */
-class vote_jugement
+class Vote_jugement
 {
     /**
      * @var int
@@ -49,25 +49,23 @@ class vote_jugement
      */
     private $idJugement;
 
-
-    /**
-     * @var enum
-     *
-     * @ORM\Column(name="vote", type="string", length=256)
-     */
-    private $vote;
-
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="vote_jugements")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Jugement", inversedBy="vote_jugements")
-     * @ORM\JoinColumn(name="jugement_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_jugement", referencedColumnName="id")
      */
     private $jugement;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Enum_type_vote")
+     * @ORM\JoinColumn(name="id_enum_type_vote", referencedColumnName="id", nullable=false)
+     */
+    private $typeVote;
 
     /**
      * Get id
@@ -178,22 +176,6 @@ class vote_jugement
     /**
      * @return mixed
      */
-    public function getVote()
-    {
-        return $this->vote;
-    }
-
-    /**
-     * @param mixed $vote
-     */
-    public function setVote($vote)
-    {
-        $this->vote = $vote;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getMembre()
     {
         return $this->membre;
@@ -224,4 +206,28 @@ class vote_jugement
     }
 
 
+
+    /**
+     * Set typeVote
+     *
+     * @param \AppBundle\Entity\Enum_type_vote $typeVote
+     *
+     * @return Vote_jugement
+     */
+    public function setTypeVote(\AppBundle\Entity\Enum_type_vote $typeVote)
+    {
+        $this->typeVote = $typeVote;
+
+        return $this;
+    }
+
+    /**
+     * Get typeVote
+     *
+     * @return \AppBundle\Entity\Enum_type_vote
+     */
+    public function getTypeVote()
+    {
+        return $this->typeVote;
+    }
 }

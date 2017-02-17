@@ -177,22 +177,6 @@ class Mot_ambigu
     /**
      * @return mixed
      */
-    public function getGloses()
-    {
-        return $this->gloses;
-    }
-
-    /**
-     * @param mixed $gloses
-     */
-    public function setGloses($gloses)
-    {
-        $this->gloses = $gloses;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getMotsAmbigusSpecials()
     {
         return $this->motsAmbigusSpecials;
@@ -240,4 +224,85 @@ class Mot_ambigu
 
 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->motsAmbigusSpecials = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->motsAmbigusPhrases = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->GloseMotsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add motsAmbigusSpecial
+     *
+     * @param \AppBundle\Entity\Mot_ambigu_special $motsAmbigusSpecial
+     *
+     * @return Mot_ambigu
+     */
+    public function addMotsAmbigusSpecial(\AppBundle\Entity\Mot_ambigu_special $motsAmbigusSpecial)
+    {
+        $this->motsAmbigusSpecials[] = $motsAmbigusSpecial;
+
+        return $this;
+    }
+
+    /**
+     * Remove motsAmbigusSpecial
+     *
+     * @param \AppBundle\Entity\Mot_ambigu_special $motsAmbigusSpecial
+     */
+    public function removeMotsAmbigusSpecial(\AppBundle\Entity\Mot_ambigu_special $motsAmbigusSpecial)
+    {
+        $this->motsAmbigusSpecials->removeElement($motsAmbigusSpecial);
+    }
+
+    /**
+     * Add motsAmbigusPhrase
+     *
+     * @param \AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase
+     *
+     * @return Mot_ambigu
+     */
+    public function addMotsAmbigusPhrase(\AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase)
+    {
+        $this->motsAmbigusPhrases[] = $motsAmbigusPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Remove motsAmbigusPhrase
+     *
+     * @param \AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase
+     */
+    public function removeMotsAmbigusPhrase(\AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase)
+    {
+        $this->motsAmbigusPhrases->removeElement($motsAmbigusPhrase);
+    }
+
+    /**
+     * Add gloseMotsAmbigus
+     *
+     * @param \AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus
+     *
+     * @return Mot_ambigu
+     */
+    public function addGloseMotsAmbigus(\AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus)
+    {
+        $this->GloseMotsAmbigus[] = $gloseMotsAmbigus;
+
+        return $this;
+    }
+
+    /**
+     * Remove gloseMotsAmbigus
+     *
+     * @param \AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus
+     */
+    public function removeGloseMotsAmbigus(\AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus)
+    {
+        $this->GloseMotsAmbigus->removeElement($gloseMotsAmbigus);
+    }
 }

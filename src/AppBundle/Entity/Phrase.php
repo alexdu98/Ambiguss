@@ -313,4 +313,85 @@ class Phrase
 
 
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->Reponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->motsAmbigusPhrases = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->AimerPhrases = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     *
+     * @return Phrase
+     */
+    public function addReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->Reponses[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->Reponses->removeElement($reponse);
+    }
+
+    /**
+     * Add motsAmbigusPhrase
+     *
+     * @param \AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase
+     *
+     * @return Phrase
+     */
+    public function addMotsAmbigusPhrase(\AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase)
+    {
+        $this->motsAmbigusPhrases[] = $motsAmbigusPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Remove motsAmbigusPhrase
+     *
+     * @param \AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase
+     */
+    public function removeMotsAmbigusPhrase(\AppBundle\Entity\Mot_ambigu_phrase $motsAmbigusPhrase)
+    {
+        $this->motsAmbigusPhrases->removeElement($motsAmbigusPhrase);
+    }
+
+    /**
+     * Add aimerPhrase
+     *
+     * @param \AppBundle\Entity\Aimer_phrase $aimerPhrase
+     *
+     * @return Phrase
+     */
+    public function addAimerPhrase(\AppBundle\Entity\Aimer_phrase $aimerPhrase)
+    {
+        $this->AimerPhrases[] = $aimerPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Remove aimerPhrase
+     *
+     * @param \AppBundle\Entity\Aimer_phrase $aimerPhrase
+     */
+    public function removeAimerPhrase(\AppBundle\Entity\Aimer_phrase $aimerPhrase)
+    {
+        $this->AimerPhrases->removeElement($aimerPhrase);
+    }
 }

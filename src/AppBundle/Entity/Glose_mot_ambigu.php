@@ -24,14 +24,14 @@ class Glose_mot_ambigu
 
     /**
      * @ORM\ManyToOne(targetEntity="Mot_ambigu", inversedBy="glose_mots_ambigus")
-     * @ORM\JoinColumn(name="mot_ambigu_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_mot_ambigu", referencedColumnName="id")
      */
     private $motAmbigu;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="glose", inversedBy="glose_mots_ambigus")
-     * @ORM\JoinColumn(name="glose_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_glose", referencedColumnName="id")
      */
     private $glose;
 
@@ -48,33 +48,9 @@ class Glose_mot_ambigu
     /**
      * @return int
      */
-    public function getIdGlose()
+    public function getGlose()
     {
-        return $this->idGlose;
-    }
-
-    /**
-     * @param int $idGlose
-     */
-    public function setIdGlose($idGlose)
-    {
-        $this->idGlose = $idGlose;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIdMotAmbigu()
-    {
-        return $this->idMotAmbigu;
-    }
-
-    /**
-     * @param int $idMotAmbigu
-     */
-    public function setIdMotAmbigu($idMotAmbigu)
-    {
-        $this->idMotAmbigu = $idMotAmbigu;
+        return $this->glose;
     }
 
     /**
@@ -91,14 +67,6 @@ class Glose_mot_ambigu
     public function setMotAmbigu($motAmbigu)
     {
         $this->motAmbigu = $motAmbigu;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGlose()
-    {
-        return $this->glose;
     }
 
     /**

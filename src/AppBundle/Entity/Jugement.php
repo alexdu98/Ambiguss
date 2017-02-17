@@ -29,20 +29,6 @@ class Jugement
     private $description;
 
     /**
-     * @var enum
-     *
-     * @ORM\Column(name="type", type="string", length=256)
-     */
-    private $type;
-
-    /**
-     * @var enum
-     *
-     * @ORM\Column(name="categorie", type="string", length=256)
-     */
-    private $categorie;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateCreation", type="datetime")
@@ -63,16 +49,9 @@ class Jugement
      */
     private $idAuteur;
 
-
-    /**
-     * @var enum
-     * @ORM\Column(name="resultat", type="string", length=256)
-     */
-    private $resultat;
-
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="jugements")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
@@ -87,6 +66,24 @@ class Jugement
      * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="jugement")
      */
     private $Commentaires;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Enum_type_vote")
+	 * @ORM\JoinColumn(name="id_enum_type_vote", referencedColumnName="id", nullable=true)
+	 */
+	private $typeVote;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Enum_type_objet")
+	 * @ORM\JoinColumn(name="id_enum_type_objet", referencedColumnName="id", nullable=false)
+	 */
+    private $typeObjet;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Enum_categorie_jugement")
+	 * @ORM\JoinColumn(name="id_enum_categorie_jugement", referencedColumnName="id", nullable=false)
+	 */
+	private $categorieJugement;
 
 
 
@@ -197,54 +194,6 @@ class Jugement
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResultat()
-    {
-        return $this->resultat;
-    }
-
-    /**
-     * @param mixed $resultat
-     */
-    public function setResultat($resultat)
-    {
-        $this->resultat = $resultat;
-    }
-
-    /**
-     * @return enum
-     */
-    public function getCategorie()
-    {
-        return $this->categorie;
-    }
-
-    /**
-     * @param enum $categorie
-     */
-    public function setCategorie($categorie)
-    {
-        $this->categorie = $categorie;
-    }
-
-    /**
      * @return mixed
      */
     public function getMembre()
@@ -294,4 +243,132 @@ class Jugement
     
     
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->voteJugements = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Commentaires = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add voteJugement
+     *
+     * @param \AppBundle\Entity\Vote_jugement $voteJugement
+     *
+     * @return Jugement
+     */
+    public function addVoteJugement(\AppBundle\Entity\Vote_jugement $voteJugement)
+    {
+        $this->voteJugements[] = $voteJugement;
+
+        return $this;
+    }
+
+    /**
+     * Remove voteJugement
+     *
+     * @param \AppBundle\Entity\Vote_jugement $voteJugement
+     */
+    public function removeVoteJugement(\AppBundle\Entity\Vote_jugement $voteJugement)
+    {
+        $this->voteJugements->removeElement($voteJugement);
+    }
+
+    /**
+     * Add commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     *
+     * @return Jugement
+     */
+    public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->Commentaires[] = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     */
+    public function removeCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->Commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Set typeVote
+     *
+     * @param \AppBundle\Entity\Enum_type_vote $typeVote
+     *
+     * @return Jugement
+     */
+    public function setTypeVote(\AppBundle\Entity\Enum_type_vote $typeVote = null)
+    {
+        $this->typeVote = $typeVote;
+
+        return $this;
+    }
+
+    /**
+     * Get typeVote
+     *
+     * @return \AppBundle\Entity\Enum_type_vote
+     */
+    public function getTypeVote()
+    {
+        return $this->typeVote;
+    }
+
+    /**
+     * Set typeObjet
+     *
+     * @param \AppBundle\Entity\Enum_type_objet $typeObjet
+     *
+     * @return Jugement
+     */
+    public function setTypeObjet(\AppBundle\Entity\Enum_type_objet $typeObjet)
+    {
+        $this->typeObjet = $typeObjet;
+
+        return $this;
+    }
+
+    /**
+     * Get typeObjet
+     *
+     * @return \AppBundle\Entity\Enum_type_objet
+     */
+    public function getTypeObjet()
+    {
+        return $this->typeObjet;
+    }
+
+    /**
+     * Set categorieJugement
+     *
+     * @param \AppBundle\Entity\Enum_categorie_jugement $categorieJugement
+     *
+     * @return Jugement
+     */
+    public function setCategorieJugement(\AppBundle\Entity\Enum_categorie_jugement $categorieJugement)
+    {
+        $this->categorieJugement = $categorieJugement;
+
+        return $this;
+    }
+
+    /**
+     * Get categorieJugement
+     *
+     * @return \AppBundle\Entity\Enum_categorie_jugement
+     */
+    public function getCategorieJugement()
+    {
+        return $this->categorieJugement;
+    }
 }

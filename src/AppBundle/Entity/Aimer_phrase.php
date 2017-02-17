@@ -37,13 +37,13 @@ class Aimer_phrase
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="aimer_phrases")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="aimer_phrases")
-     * @ORM\JoinColumn(name="phrase_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_phrase", referencedColumnName="id")
      */
     private $phrase;
 

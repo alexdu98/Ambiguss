@@ -44,7 +44,7 @@ class Historique
 
     /**
     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="historiques")
-    * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+    * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
@@ -58,20 +58,6 @@ class Historique
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set valeur
-     *
-     * @param string $valeur
-     *
-     * @return valeur
-     */
-    public function setValeur($valeur)
-    {
-        $this->valeur = $valeur;
-
-        return $this;
     }
 
     /**
@@ -142,4 +128,18 @@ class Historique
     }
 
     
+
+    /**
+     * Set valeur
+     *
+     * @param string $valeur
+     *
+     * @return Historique
+     */
+    public function setValeur($valeur)
+    {
+        $this->valeur = $valeur;
+
+        return $this;
+    }
 }

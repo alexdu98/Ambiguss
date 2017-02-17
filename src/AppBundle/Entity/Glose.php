@@ -72,7 +72,7 @@ class Glose
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="gloses")
-     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_membre", referencedColumnName="id")
      */
     private $membre;
 
@@ -287,22 +287,6 @@ class Glose
     /**
      * @return mixed
      */
-    public function getMotsAmbigus()
-    {
-        return $this->motsAmbigus;
-    }
-
-    /**
-     * @param mixed $motsAmbigus
-     */
-    public function setMotsAmbigus($motsAmbigus)
-    {
-        $this->motsAmbigus = $motsAmbigus;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getReponses()
     {
         return $this->reponses;
@@ -334,4 +318,60 @@ class Glose
 
 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->GloseMotsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     *
+     * @return Glose
+     */
+    public function addReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->reponses[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->reponses->removeElement($reponse);
+    }
+
+    /**
+     * Add gloseMotsAmbigus
+     *
+     * @param \AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus
+     *
+     * @return Glose
+     */
+    public function addGloseMotsAmbigus(\AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus)
+    {
+        $this->GloseMotsAmbigus[] = $gloseMotsAmbigus;
+
+        return $this;
+    }
+
+    /**
+     * Remove gloseMotsAmbigus
+     *
+     * @param \AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus
+     */
+    public function removeGloseMotsAmbigus(\AppBundle\Entity\Glose_mot_ambigu $gloseMotsAmbigus)
+    {
+        $this->GloseMotsAmbigus->removeElement($gloseMotsAmbigus);
+    }
 }

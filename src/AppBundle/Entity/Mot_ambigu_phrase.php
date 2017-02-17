@@ -44,7 +44,7 @@ class Mot_ambigu_phrase
 
     /**
      * @ORM\ManyToOne(targetEntity="Mot_ambigu", inversedBy="mots_amibus_phrases")
-     * @ORM\JoinColumn(name="mot_ambigu_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_mot_ambigu", referencedColumnName="id")
      */
     private $motAmbigu;
 
@@ -56,7 +56,7 @@ class Mot_ambigu_phrase
 
     /**
      * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="mots_ambigus_phrases")
-     * @ORM\JoinColumn(name="phrase_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_phrase", referencedColumnName="id")
      */
     private $phrase;
 
@@ -192,4 +192,35 @@ class Mot_ambigu_phrase
         $this->phrase = $phrase;
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->Reponses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     *
+     * @return Mot_ambigu_phrase
+     */
+    public function addReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->Reponses[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->Reponses->removeElement($reponse);
+    }
 }

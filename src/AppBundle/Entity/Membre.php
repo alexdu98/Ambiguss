@@ -139,7 +139,7 @@ class Membre
 
     /**
      * @ORM\ManyToOne(targetEntity="Niveau", inversedBy="membres")
-     * @ORM\JoinColumn(name="niveau_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_niveau", referencedColumnName="id")
      */
     private $niveau;
 
@@ -157,7 +157,7 @@ class Membre
 
     /**
      * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="membres")
-     * @ORM\JoinColumn(name="groupe_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_groupe", referencedColumnName="id")
      */
     private $groupe;
 
@@ -366,7 +366,7 @@ class Membre
      *
      * @return Membre
      */
-    public function setDatenaissance($datenaissance)
+    public function setDatenaissance($dateNaissance)
     {
         $this->dateNaissance = $dateNaissance;
 
@@ -378,7 +378,7 @@ class Membre
      *
      * @return \DateTime
      */
-    public function getDateNnaissance()
+    public function getDateNaissance()
     {
         return $this->dateNaissance;
     }
@@ -660,16 +660,6 @@ class Membre
     }
 
     /**
-     * Get dateNaissance
-     *
-     * @return \DateTime
-     */
-    public function getDateNaissance()
-    {
-        return $this->dateNaissance;
-    }
-
-    /**
      * Add historique
      *
      * @param \AppBundle\Entity\Historique $historique
@@ -847,4 +837,196 @@ class Membre
 
     
     
+
+    /**
+     * Add glose
+     *
+     * @param \AppBundle\Entity\Glose $glose
+     *
+     * @return Membre
+     */
+    public function addGlose(\AppBundle\Entity\Glose $glose)
+    {
+        $this->gloses[] = $glose;
+
+        return $this;
+    }
+
+    /**
+     * Remove glose
+     *
+     * @param \AppBundle\Entity\Glose $glose
+     */
+    public function removeGlose(\AppBundle\Entity\Glose $glose)
+    {
+        $this->gloses->removeElement($glose);
+    }
+
+    /**
+     * Add jeton
+     *
+     * @param \AppBundle\Entity\Jeton $jeton
+     *
+     * @return Membre
+     */
+    public function addJeton(\AppBundle\Entity\Jeton $jeton)
+    {
+        $this->jetons[] = $jeton;
+
+        return $this;
+    }
+
+    /**
+     * Remove jeton
+     *
+     * @param \AppBundle\Entity\Jeton $jeton
+     */
+    public function removeJeton(\AppBundle\Entity\Jeton $jeton)
+    {
+        $this->jetons->removeElement($jeton);
+    }
+
+    /**
+     * Add newsletter
+     *
+     * @param \AppBundle\Entity\Newsletter $newsletter
+     *
+     * @return Membre
+     */
+    public function addNewsletter(\AppBundle\Entity\Newsletter $newsletter)
+    {
+        $this->newsletters[] = $newsletter;
+
+        return $this;
+    }
+
+    /**
+     * Remove newsletter
+     *
+     * @param \AppBundle\Entity\Newsletter $newsletter
+     */
+    public function removeNewsletter(\AppBundle\Entity\Newsletter $newsletter)
+    {
+        $this->newsletters->removeElement($newsletter);
+    }
+
+    /**
+     * Add jugement
+     *
+     * @param \AppBundle\Entity\Jugement $jugement
+     *
+     * @return Membre
+     */
+    public function addJugement(\AppBundle\Entity\Jugement $jugement)
+    {
+        $this->jugements[] = $jugement;
+
+        return $this;
+    }
+
+    /**
+     * Remove jugement
+     *
+     * @param \AppBundle\Entity\Jugement $jugement
+     */
+    public function removeJugement(\AppBundle\Entity\Jugement $jugement)
+    {
+        $this->jugements->removeElement($jugement);
+    }
+
+    /**
+     * Add commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     *
+     * @return Membre
+     */
+    public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires[] = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     */
+    public function removeCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Add voteJugement
+     *
+     * @param \AppBundle\Entity\Vote_jugement $voteJugement
+     *
+     * @return Membre
+     */
+    public function addVoteJugement(\AppBundle\Entity\Vote_jugement $voteJugement)
+    {
+        $this->voteJugements[] = $voteJugement;
+
+        return $this;
+    }
+
+    /**
+     * Remove voteJugement
+     *
+     * @param \AppBundle\Entity\Vote_jugement $voteJugement
+     */
+    public function removeVoteJugement(\AppBundle\Entity\Vote_jugement $voteJugement)
+    {
+        $this->voteJugements->removeElement($voteJugement);
+    }
+
+    /**
+     * Add succesMembre
+     *
+     * @param \AppBundle\Entity\Succes_membre $succesMembre
+     *
+     * @return Membre
+     */
+    public function addSuccesMembre(\AppBundle\Entity\Succes_membre $succesMembre)
+    {
+        $this->succesMembres[] = $succesMembre;
+
+        return $this;
+    }
+
+    /**
+     * Remove succesMembre
+     *
+     * @param \AppBundle\Entity\Succes_membre $succesMembre
+     */
+    public function removeSuccesMembre(\AppBundle\Entity\Succes_membre $succesMembre)
+    {
+        $this->succesMembres->removeElement($succesMembre);
+    }
+
+    /**
+     * Add aimerPhrase
+     *
+     * @param \AppBundle\Entity\Aimer_phrase $aimerPhrase
+     *
+     * @return Membre
+     */
+    public function addAimerPhrase(\AppBundle\Entity\Aimer_phrase $aimerPhrase)
+    {
+        $this->AimerPhrases[] = $aimerPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Remove aimerPhrase
+     *
+     * @param \AppBundle\Entity\Aimer_phrase $aimerPhrase
+     */
+    public function removeAimerPhrase(\AppBundle\Entity\Aimer_phrase $aimerPhrase)
+    {
+        $this->AimerPhrases->removeElement($aimerPhrase);
+    }
 }

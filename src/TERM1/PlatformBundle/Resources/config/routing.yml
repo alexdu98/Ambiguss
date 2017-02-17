@@ -1,7 +1,0 @@
-term1_platform_homepage:
-    path:     /
-    defaults: { _controller: TERM1PlatformBundle:Main:index }
-
-term1_inscription:
-    path: /inscription
-    defaults: {_controller: TERM1PlatformBundle:Inscription:index}

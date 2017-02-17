@@ -1,0 +1,7 @@
+ambiguss_accueil:
+    path:     /
+    defaults: { _controller: AmbigussBundle:Accueil:main }
+
+ambiguss_inscription:
+    path: /inscription
+    defaults: {_controller: AmbigussBundle:Inscription:main}

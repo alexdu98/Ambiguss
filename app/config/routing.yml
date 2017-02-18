@@ -2,6 +2,11 @@ ambiguss:
     resource: "@AmbigussBundle/Resources/config/routing.yml"
     prefix:   /
 
+inscription:
+    path: /inscription
+    defaults:
+        _controller: UserBundle:Security:inscription
+
 connexion:
     path: /connexion
     defaults:

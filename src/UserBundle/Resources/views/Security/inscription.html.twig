@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block contenu %}
+	{% if error %}
+		<div class="alert alert-danger">{{ error.message }}</div>
+	{% endif %}
+
+	<form action="{{ path('inscription') }}" method="post">
+
+	</form>
+{% endblock %}

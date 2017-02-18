@@ -20,4 +20,11 @@ class SecurityController extends Controller
 			'error'         => $authenticationUtils->getLastAuthenticationError(),
 		));
 	}
+
+	public function inscriptionAction(Request $request)
+	{
+		return $this->render('UserBundle:Security:inscription.html.twig', array(
+			'error'     => null
+		));
+	}
 }

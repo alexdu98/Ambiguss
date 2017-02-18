@@ -44,8 +44,12 @@
 						    </li>
 					    </ul>
 					    <ul class="nav navbar-nav navbar-right">
-						    <li class="bg-yellow"><a href="app_dev.php/inscription">S'inscrire</a></li>
-						    <li><a href="/connexion">Se connecter</a></li>
+						    {% if app.user %}
+							    <li class="bg-yellow"><a href="/deconnexion">Se déconnecter</a></li>
+						    {% else %}
+							    <li class="bg-yellow"><a href="/inscription">S'inscrire</a></li>
+						        <li><a href="/connexion">Se connecter</a></li>
+						    {% endif %}
 					    </ul>
 				    </div>
 			    </div>

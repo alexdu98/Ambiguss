@@ -1,24 +1,36 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/security.html
 security:
+  encoders:
+    Symfony\Component\Security\Core\User\User:
+      algorithm: bcrypt
+      cost: 10
+    AmbigussBundle\Entity\Membre:
+      algorithm: bcrypt
+      cost: 10
 
-    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
-    providers:
-        in_memory:
-            memory: ~
+  role_hierarchy:
+    ROLE_ADMIN:       ROLE_USER
+    ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
-    firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+  providers:
+    main:
+      entity:
+        class: AmbigussBundle\Entity\Membre
+        property: pseudo
 
-        main:
-            anonymous: ~
-            # activate different ways to authenticate
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      pattern: ^/
+      anonymous: true
+      provider:     main
+      form_login:
+        login_path: connexion
+        check_path: connexion_verif
+      logout:
+        path:       deconnexion
+        target:     /
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+  access_control:
+    #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

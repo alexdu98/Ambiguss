@@ -3,6 +3,7 @@
 namespace AmbigussBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Membre
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="membre")
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\MembreRepository")
  */
-class Membre
+class Membre implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -525,4 +526,65 @@ class Membre
     {
         return $this->niveau;
     }
+
+
+	/**
+	 * IMPLEMENTS UserInterface
+	 */
+
+	/**
+	 * Get roles (droits)
+	 *
+	 * @return array
+	 */
+	public function getRoles(){
+		// return $this->getDroits();
+		return array();
+	}
+
+	/**
+	 * Get password (mdp)
+	 *
+	 * @return string
+	 */
+	public function getPassword(){
+		return $this->getMdp();
+	}
+
+	public function getSalt(){
+		return null;
+	}
+
+	/**
+	 * Get username (pseudo)
+	 *
+	 * @return string
+	 */
+	public function getUsername(){
+		return $this->getPseudo();
+	}
+
+	public function eraseCredentials(){}
+
+
+	/**
+	 * IMPLEMENTS Serializable
+	 */
+
+	public function serialize(){
+		return serialize(array(
+			$this->id,
+			$this->pseudo,
+			$this->mdp
+		));
+	}
+
+	public function unserialize($serialized){
+		list (
+			$this->id,
+			$this->pseudo,
+			$this->mdp,
+			) = unserialize($serialized);
+	}
+
 }

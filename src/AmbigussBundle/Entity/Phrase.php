@@ -69,6 +69,16 @@ class Phrase
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+        $this->signale = 0;
+        $this->visible = 1;
+    }
+
+    /**
      * Get id
      *
      * @return int

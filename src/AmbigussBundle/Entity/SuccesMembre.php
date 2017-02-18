@@ -42,6 +42,14 @@ class SuccesMembre
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+    }
+
+    /**
      * Get id
      *
      * @return int

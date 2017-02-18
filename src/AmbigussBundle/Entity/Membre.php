@@ -46,14 +46,14 @@ class Membre implements UserInterface, \Serializable
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_inscription", type="datetimetz")
+     * @ORM\Column(name="date_inscription", type="datetime")
      */
     private $dateInscription;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_connexion", type="datetimetz", nullable=true)
+     * @ORM\Column(name="date_connexion", type="datetime", nullable=true)
      */
     private $dateConnexion;
 
@@ -132,6 +132,19 @@ class Membre implements UserInterface, \Serializable
 	 */
 	private $niveau;
 
+
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->dateInscription = new \DateTime();
+		$this->pointsClassement = 0;
+		$this->credits = 0;
+		$this->newsletter = 1;
+		$this->banni = 1;
+		$this->commentaireBan = "En attente de la validation de l'email";
+	}
 
     /**
      * Get id

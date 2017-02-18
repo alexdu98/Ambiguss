@@ -56,6 +56,16 @@ class MotAmbigu
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+	    $this->active = 1;
+	    $this->gloses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -159,13 +169,6 @@ class MotAmbigu
     public function getActive()
     {
         return $this->active;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->gloses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

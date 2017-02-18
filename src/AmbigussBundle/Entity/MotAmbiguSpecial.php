@@ -66,6 +66,14 @@ class MotAmbiguSpecial
 	private $modificateur;
 
 
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->dateCreation = new \DateTime();
+	}
+
     /**
      * Get id
      *

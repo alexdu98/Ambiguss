@@ -57,6 +57,16 @@ class Jeton
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+	    $this->ip = $_SERVER["REMOTE_ADDR"];
+        $this->dateCreation = new \DateTime();
+	    $this->actif = 1;
+    }
+
+    /**
      * Get id
      *
      * @return int

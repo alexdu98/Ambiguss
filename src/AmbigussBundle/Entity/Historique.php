@@ -43,6 +43,14 @@ class Historique
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateAction = new \DateTime();
+    }
+
+    /**
      * Get id
      *
      * @return int

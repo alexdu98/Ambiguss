@@ -28,6 +28,13 @@ class Reponse
      */
     private $ip;
 
+	/**
+	 * @var \DateTime
+	 *
+	 * @ORM\Column(name="date_reponse", type="datetime")
+	 */
+	private $dateReponse;
+
     /**
      * @var string
      *
@@ -86,6 +93,15 @@ class Reponse
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+	    $this->ip = $_SERVER["REMOTE_ADDR"];
+        $this->dateReponse = new \DateTime();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -118,6 +134,30 @@ class Reponse
     {
         return $this->ip;
     }
+
+	/**
+	 * Set dateReponse
+	 *
+	 * @param \DateTime $dateReponse
+	 *
+	 * @return Newsletter
+	 */
+	public function setDateReponse($dateReponse)
+	{
+		$this->dateReponse = $dateReponse;
+
+		return $this;
+	}
+
+	/**
+	 * Get dateReponse
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateReponse()
+	{
+		return $this->dateReponse;
+	}
 
     /**
      * Set contenuPhrase

@@ -37,6 +37,14 @@ class Visite
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateVisite = new \DateTime();
+    }
+
+    /**
      * Get id
      *
      * @return int

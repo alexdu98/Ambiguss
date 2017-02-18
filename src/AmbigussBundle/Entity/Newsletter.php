@@ -57,6 +57,14 @@ class Newsletter
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateEnvoi = new \DateTime();
+    }
+
+    /**
      * Get id
      *
      * @return int

@@ -105,5 +105,52 @@ class DroitGroupe
     {
         return $this->autoriser;
     }
-}
 
+    /**
+     * Set typeDroit
+     *
+     * @param \AmbigussBundle\Entity\TypeDroit $typeDroit
+     *
+     * @return DroitGroupe
+     */
+    public function setTypeDroit(\AmbigussBundle\Entity\TypeDroit $typeDroit)
+    {
+        $this->typeDroit = $typeDroit;
+
+        return $this;
+    }
+
+    /**
+     * Get typeDroit
+     *
+     * @return \AmbigussBundle\Entity\TypeDroit
+     */
+    public function getTypeDroit()
+    {
+        return $this->typeDroit;
+    }
+
+    /**
+     * Set groupe
+     *
+     * @param \AmbigussBundle\Entity\Groupe $groupe
+     *
+     * @return DroitGroupe
+     */
+    public function setGroupe(\AmbigussBundle\Entity\Groupe $groupe)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \AmbigussBundle\Entity\Groupe
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
+    }
+}

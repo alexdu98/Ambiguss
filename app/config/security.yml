@@ -8,8 +8,9 @@ security:
       cost: 10
 
   role_hierarchy:
-    ROLE_ADMIN:       ROLE_USER
-    ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+    ROLE_MEMBRE:          ROLE_VISITEUR
+    ROLE_MODERATEUR:      ROLE_MEMBRE
+    ROLE_ADMINISTRATEUR:  ROLE_MODERATEUR
 
   providers:
     main:

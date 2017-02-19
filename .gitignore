@@ -1,6 +1,4 @@
 /app/config/parameters.yml
-/build/
-/phpunit.xml
 /var/*
 !/var/cache
 /var/cache/*
@@ -17,6 +15,5 @@
 /.idea/
 /access.log
 /error.log
-/dumpBD
 /backup/*
 !/backup/.gitkeep

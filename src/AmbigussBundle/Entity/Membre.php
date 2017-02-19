@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -132,6 +133,11 @@ class Membre implements UserInterface, \Serializable
 	 */
 	private $niveau;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="MembreRole", mappedBy="membre")
+	 */
+	private $membreRoles;
+
 
 	/**
 	 * Constructor
@@ -144,6 +150,7 @@ class Membre implements UserInterface, \Serializable
 		$this->newsletter = 1;
 		$this->banni = 1;
 		$this->commentaireBan = "En attente de la validation de l'email";
+		$this->membreRoles = new ArrayCollection();
 	}
 
     /**
@@ -540,6 +547,42 @@ class Membre implements UserInterface, \Serializable
         return $this->niveau;
     }
 
+	/**
+	 * Add membreRole
+	 *
+	 * @param \AmbigussBundle\Entity\MembreRole $membreRole
+	 *
+	 * @return Membre
+	 */
+	public function addMembreRole(\AmbigussBundle\Entity\MembreRole $membreRole)
+	{
+		$this->membreRoles[] = $membreRole;
+
+		$membreRole->setMembre($this);
+
+		return $this;
+	}
+
+	/**
+	 * Remove membreRole
+	 *
+	 * @param \AmbigussBundle\Entity\MembreRole $membreRole
+	 */
+	public function removeMembreRole(\AmbigussBundle\Entity\MembreRole $membreRole)
+	{
+		$this->membreRoles->removeElement($membreRole);
+	}
+
+	/**
+	 * Get membreRoles
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getMembreRoles()
+	{
+		return $this->membreRoles;
+	}
+
 
 	/**
 	 * IMPLEMENTS UserInterface
@@ -550,9 +593,17 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return array
 	 */
-	public function getRoles(){
-		// return $this->getDroits();
-		return array();
+	public function getRoles()
+	{
+		$roles = ["ROLE_VISITEUR"];
+
+		$roles = array_merge($roles, $this->getGroupe()->getRoles());
+
+		foreach ($this->getMembreRoles() as $membreRole) {
+			$roles[] = $membreRole->getRole()->getNom();
+		}
+
+		return $roles;
 	}
 
 	/**
@@ -560,11 +611,18 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return string
 	 */
-	public function getPassword(){
+	public function getPassword()
+	{
 		return $this->getMdp();
 	}
 
-	public function getSalt(){
+	/**
+	 * Get salt
+	 *
+	 * @return null (no use with BCryptEncoder)
+	 */
+	public function getSalt()
+	{
 		return null;
 	}
 
@@ -573,7 +631,8 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return string
 	 */
-	public function getUsername(){
+	public function getUsername()
+	{
 		return $this->getPseudo();
 	}
 
@@ -584,20 +643,23 @@ class Membre implements UserInterface, \Serializable
 	 * IMPLEMENTS Serializable
 	 */
 
-	public function serialize(){
+	public function serialize()
+	{
 		return serialize(array(
 			$this->id,
 			$this->pseudo,
+			$this->email,
 			$this->mdp
 		));
 	}
 
-	public function unserialize($serialized){
+	public function unserialize($serialized)
+	{
 		list (
 			$this->id,
 			$this->pseudo,
+			$this->email,
 			$this->mdp,
 			) = unserialize($serialized);
 	}
-
 }

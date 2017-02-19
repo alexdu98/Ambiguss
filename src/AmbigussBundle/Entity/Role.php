@@ -5,12 +5,12 @@ namespace AmbigussBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TypeDroit
+ * Role
  *
- * @ORM\Table(name="type_droit")
- * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\TypeDroitRepository")
+ * @ORM\Table(name="role")
+ * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\RoleRepository")
  */
-class TypeDroit
+class Role
 {
     /**
      * @var int
@@ -24,9 +24,9 @@ class TypeDroit
     /**
      * @var string
      *
-     * @ORM\Column(name="type_droit", type="string", length=8, unique=true)
+     * @ORM\Column(name="nom", type="string", length=32, unique=true)
      */
-    private $typeDroit;
+    private $nom;
 
 
     /**
@@ -40,27 +40,27 @@ class TypeDroit
     }
 
     /**
-     * Set typeDroit
+     * Set nom
      *
-     * @param string $typeDroit
+     * @param string $nom
      *
-     * @return TypeDroit
+     * @return Role
      */
-    public function setTypeDroit($typeDroit)
+    public function setNom($nom)
     {
-        $this->typeDroit = $typeDroit;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get typeDroit
+     * Get nom
      *
      * @return string
      */
-    public function getTypeDroit()
+    public function getNom()
     {
-        return $this->typeDroit;
+        return $this->nom;
     }
 }
 

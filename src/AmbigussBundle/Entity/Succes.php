@@ -45,9 +45,9 @@ class Succes
     /**
      * @var array
      *
-     * @ORM\Column(name="recompense", type="json_array")
+     * @ORM\Column(name="recompenses", type="json_array")
      */
-    private $recompense;
+    private $recompenses;
 
     /**
      * @var string
@@ -157,9 +157,9 @@ class Succes
      *
      * @return Succes
      */
-    public function setRecompense($recompense)
+    public function setRecompenses($recompenses)
     {
-        $this->recompense = $recompense;
+        $this->recompenses = $recompenses;
 
         return $this;
     }
@@ -169,9 +169,9 @@ class Succes
      *
      * @return array
      */
-    public function getRecompense()
+    public function getRecompenses()
     {
-        return $this->recompense;
+        return $this->recompenses;
     }
 
     /**

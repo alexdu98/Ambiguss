@@ -41,13 +41,8 @@ class SecurityController extends Controller
 
         //ajout des attributs qu'on veut afficher dans le formulaire
         $form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
-            ->add('Pseudo', TextType::class)->add('mdp', PasswordType::class)
+            ->add('Pseudo', TextType::class)->add('MotDePasse', PasswordType::class)
             ->add('Email', EmailType::class)
-            ->add('Sexe', ChoiceType::class, array('choices' => array(
-                'Feminin' => null,
-                'Masculin' => null
-            )))
-            ->add('DateNaissance', BirthdayType::class)
             ->add('Newsletter', CheckboxType::class)
             ->add('Valider', SubmitType::class)
             ->getform();
@@ -57,6 +52,12 @@ class SecurityController extends Controller
             $form->handleRequest($request);
             try {
                 if ($form->isValid()) {
+                        //cypte mdp
+                        $encoder = $this->container->get('security.password_encoder');
+                        $encoded = $encoder->encodePassword($membre, $membre->getMotDePasse());
+
+                        $membre->setMotDePasse($encoded);
+
                     //affecte le nouveau memebre à un groupe
                     $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Groupe');
                     $grp = $repository->find(2); // 2 <=> membre
@@ -66,6 +67,20 @@ class SecurityController extends Controller
                     $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Niveau');
                     $grp = $repository->find(1); // 1 <=>niveau
                     $membre->setNiveau($grp);
+
+
+                    // Envoi mail confimation/validation
+
+                    /*   $message = \Swift_Message::newInstance()
+                        ->setSubject("Confimation d'insciption à Ambiguss") // sujet du message
+                        ->setFrom(array("ambiguss@hotmail.fr" => "Equipe Ambiguss")) // faudrait nous cée une adesse mail !!!
+                        ->setTo(array($membre->getEmail() => "Nouveau membre")) // Set the To addresses with an associative array
+                        ->setBody("L'équipe Ambiguss vous souhaite la bienvenue :-D \nPour valider votre inscription cliquez sur le lien ci dessousn \nA bientôt !") ;  // Give it a body
+                        $this->get('mailer')->send($message) ;
+                     */
+
+                    // on verifie que le lien a été "cliqué"
+
                     // On enregistre notre objet $advert dans la base de données, par exemple
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($membre);

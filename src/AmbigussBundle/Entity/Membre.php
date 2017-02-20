@@ -228,7 +228,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @return Membre
      */
-    public function setmdp($mdp)
+    public function setMotDePasse($mdp)
     {
         $this->mdp = $mdp;
 
@@ -240,7 +240,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @return string
      */
-    public function getmdp()
+    public function getMotDePasse()
     {
         return $this->mdp;
     }
@@ -578,7 +578,7 @@ class Membre implements UserInterface, \Serializable
 	 * @return string
 	 */
 	public function getPassword(){
-		return $this->getmdp();
+		return $this->getMotDePasse();
 	}
 
 	public function getSalt(){

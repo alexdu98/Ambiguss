@@ -2,15 +2,17 @@
 
 namespace AmbigussBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Membre
  *
  * @ORM\Table(name="membre")
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\MembreRepository")
+ * @UniqueEntity(fields="pseudo", message="Ce pseudo existe déjà.")
+ * @UniqueEntity(fields="email", message="Cette adresse mail existe déjà.")
  */
 class Membre implements UserInterface, \Serializable
 {
@@ -27,6 +29,10 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="pseudo", type="string", length=32, unique=true)
+     * @Assert\Regex(
+     *     pattern = "/^[a-zA-Z0-9_.\-]{3,32}$/",
+     *     message = " Votre pseudo contient un caractère non autorisé !"
+     * )
      */
     private $pseudo;
 
@@ -34,6 +40,11 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=128, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email(
+     *     message = "L'email '{{ value }}' n'est pas une adresse mail valide.",
+     *     checkMX = true
+     * )
      */
     private $email;
 
@@ -41,6 +52,10 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="mdp", type="string", length=64)
+     * @Assert\Regex(
+     *     pattern = "/^[a-zA-Z0-9]{6,64}$/",
+     *     message = " Votre mot de passe ne doit contenir que des chiffres ou des lettres !"
+     * )
      */
     private $mdp;
 
@@ -91,7 +106,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @ORM\Column(name="cle_oubli_mdp", type="string", length=128, nullable=true)
      */
-    private $cleOubliMdp;
+    private $cleOublimdp;
 
     /**
      * @var bool
@@ -133,11 +148,6 @@ class Membre implements UserInterface, \Serializable
 	 */
 	private $niveau;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="MembreRole", mappedBy="membre")
-	 */
-	private $membreRoles;
-
 
 	/**
 	 * Constructor
@@ -147,10 +157,10 @@ class Membre implements UserInterface, \Serializable
 		$this->dateInscription = new \DateTime();
 		$this->pointsClassement = 0;
 		$this->credits = 0;
-		$this->newsletter = 1;
+		$this->newsletter = true;
 		$this->banni = 1;
 		$this->commentaireBan = "En attente de la validation de l'email";
-		$this->membreRoles = new ArrayCollection();
+
 	}
 
     /**
@@ -218,7 +228,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @return Membre
      */
-    public function setMdp($mdp)
+    public function setmdp($mdp)
     {
         $this->mdp = $mdp;
 
@@ -230,7 +240,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @return string
      */
-    public function getMdp()
+    public function getmdp()
     {
         return $this->mdp;
     }
@@ -380,27 +390,27 @@ class Membre implements UserInterface, \Serializable
     }
 
     /**
-     * Set cleOubliMdp
+     * Set cleOublimdp
      *
-     * @param string $cleOubliMdp
+     * @param string $cleOublimdp
      *
      * @return Membre
      */
-    public function setCleOubliMdp($cleOubliMdp)
+    public function setCleOublimdp($cleOublimdp)
     {
-        $this->cleOubliMdp = $cleOubliMdp;
+        $this->cleOublimdp = $cleOublimdp;
 
         return $this;
     }
 
     /**
-     * Get cleOubliMdp
+     * Get cleOublimdp
      *
      * @return string
      */
-    public function getCleOubliMdp()
+    public function getCleOublimdp()
     {
-        return $this->cleOubliMdp;
+        return $this->cleOublimdp;
     }
 
     /**
@@ -547,42 +557,6 @@ class Membre implements UserInterface, \Serializable
         return $this->niveau;
     }
 
-	/**
-	 * Add membreRole
-	 *
-	 * @param \AmbigussBundle\Entity\MembreRole $membreRole
-	 *
-	 * @return Membre
-	 */
-	public function addMembreRole(\AmbigussBundle\Entity\MembreRole $membreRole)
-	{
-		$this->membreRoles[] = $membreRole;
-
-		$membreRole->setMembre($this);
-
-		return $this;
-	}
-
-	/**
-	 * Remove membreRole
-	 *
-	 * @param \AmbigussBundle\Entity\MembreRole $membreRole
-	 */
-	public function removeMembreRole(\AmbigussBundle\Entity\MembreRole $membreRole)
-	{
-		$this->membreRoles->removeElement($membreRole);
-	}
-
-	/**
-	 * Get membreRoles
-	 *
-	 * @return \Doctrine\Common\Collections\Collection
-	 */
-	public function getMembreRoles()
-	{
-		return $this->membreRoles;
-	}
-
 
 	/**
 	 * IMPLEMENTS UserInterface
@@ -593,17 +567,9 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return array
 	 */
-	public function getRoles()
-	{
-		$roles = ["ROLE_VISITEUR"];
-
-		$roles = array_merge($roles, $this->getGroupe()->getRoles());
-
-		foreach ($this->getMembreRoles() as $membreRole) {
-			$roles[] = $membreRole->getRole()->getNom();
-		}
-
-		return $roles;
+	public function getRoles(){
+		// return $this->getDroits();
+		return array();
 	}
 
 	/**
@@ -611,18 +577,11 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return string
 	 */
-	public function getPassword()
-	{
-		return $this->getMdp();
+	public function getPassword(){
+		return $this->getmdp();
 	}
 
-	/**
-	 * Get salt
-	 *
-	 * @return null (no use with BCryptEncoder)
-	 */
-	public function getSalt()
-	{
+	public function getSalt(){
 		return null;
 	}
 
@@ -631,8 +590,7 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return string
 	 */
-	public function getUsername()
-	{
+	public function getUsername(){
 		return $this->getPseudo();
 	}
 
@@ -643,23 +601,22 @@ class Membre implements UserInterface, \Serializable
 	 * IMPLEMENTS Serializable
 	 */
 
-	public function serialize()
-	{
+	public function serialize(){
 		return serialize(array(
 			$this->id,
 			$this->pseudo,
-			$this->email,
 			$this->mdp
 		));
 	}
 
-	public function unserialize($serialized)
-	{
+	public function unserialize($serialized){
 		list (
 			$this->id,
 			$this->pseudo,
-			$this->email,
 			$this->mdp,
 			) = unserialize($serialized);
 	}
+
+
+
 }

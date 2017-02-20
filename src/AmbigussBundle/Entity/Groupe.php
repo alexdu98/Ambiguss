@@ -29,13 +29,6 @@ class Groupe
     private $nom;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="roles", type="json_array")
-     */
-    private $roles;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Groupe")
      */
     private $groupeParent;
@@ -97,29 +90,5 @@ class Groupe
     public function getGroupeParent()
     {
         return $this->groupeParent;
-    }
-
-    /**
-     * Set roles
-     *
-     * @param array $roles
-     *
-     * @return Groupe
-     */
-    public function setRoles($roles)
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * Get roles
-     *
-     * @return array
-     */
-    public function getRoles()
-    {
-        return $this->roles;
     }
 }

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
-
+{% block css %}
+	<link rel="stylesheet" href="{{ asset('assets/css/connexion.css') }}">
+{% endblock %}
 {% block title %}Connexion{% endblock %}
 
 {% block contenu %}
@@ -8,12 +10,14 @@
 	{% endif %}
 
 	<form action="{{ path('connexion_verif') }}" method="post">
-		<label for="username">Login :</label>
-		<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
+		<div class=well">
+			<label for="username"> Login :</label>
+			<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
 
-		<label for="password">Mot de passe :</label>
-		<input type="password" class="form-control" id="password" name="_password">
-		<br>
-		<input type="submit" value="Connexion" class="btn btn-default">
+			<label for="password"> Mot de passe :</label>
+			<input type="password" class="form-control" id="password" name="_password">
+			<br>
+			<input type="submit" value="Connexion" class="btn btn-default">
+		</div>
 	</form>
 {% endblock %}

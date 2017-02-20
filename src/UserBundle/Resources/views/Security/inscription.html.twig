@@ -2,12 +2,19 @@
 
 {% block title %}Inscription{% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/css/inscription.css') }}">
+{% endblock %}
+
 {% block contenu %}
-	{% if error %}
-		<div class="alert alert-danger">{{ error.message }}</div>
-	{% endif %}
 
-	<form action="{{ path('inscription') }}" method="post">
+    <h3>Formulaire d'inscription</h3>
 
-	</form>
+    <div class="well" >
+        {{ form(form) }}
+
+    </div>
+
+
+
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -51,10 +52,10 @@ class Membre implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="mdp", type="string", length=64)
+     * @ORM\Column(name="mdp", type="string", length=72)
      * @Assert\Regex(
-     *     pattern = "/^[a-zA-Z0-9]{6,64}$/",
-     *     message = " Votre mot de passe ne doit contenir que des chiffres ou des lettres !"
+     *     pattern = "/^[a-zA-Z0-9]{6,72}$/",
+     *     message = "Votre mot de passe ne doit contenir que des chiffres ou des lettres et faire entre 6 et 72 caracteres!"
      * )
      */
     private $mdp;
@@ -106,7 +107,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @ORM\Column(name="cle_oubli_mdp", type="string", length=128, nullable=true)
      */
-    private $cleOublimdp;
+    private $cleOubliMdp;
 
     /**
      * @var bool
@@ -142,11 +143,16 @@ class Membre implements UserInterface, \Serializable
      */
     private $groupe;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Niveau")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $niveau;
+    /**
+     * @ORM\ManyToOne(targetEntity="Niveau")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $niveau;
+
+    /**
+     * @ORM\OneToMany(targetEntity="MembreRole", mappedBy="membre")
+     */
+    private $membreRoles;
 
 
 	/**
@@ -160,7 +166,7 @@ class Membre implements UserInterface, \Serializable
 		$this->newsletter = true;
 		$this->banni = 1;
 		$this->commentaireBan = "En attente de la validation de l'email";
-
+		$this->membreRoles = new ArrayCollection();
 	}
 
     /**
@@ -392,25 +398,25 @@ class Membre implements UserInterface, \Serializable
     /**
      * Set cleOublimdp
      *
-     * @param string $cleOublimdp
+     * @param string $cleOubliMdp
      *
      * @return Membre
      */
-    public function setCleOublimdp($cleOublimdp)
+    public function setCleOubliMdp($cleOubliMdp)
     {
-        $this->cleOublimdp = $cleOublimdp;
+        $this->cleOubliMdp = $cleOubliMdp;
 
         return $this;
     }
 
     /**
-     * Get cleOublimdp
+     * Get cleOubliMdp
      *
      * @return string
      */
-    public function getCleOublimdp()
+    public function getCleOubliMdp()
     {
-        return $this->cleOublimdp;
+        return $this->cleOubliMdp;
     }
 
     /**
@@ -557,6 +563,42 @@ class Membre implements UserInterface, \Serializable
         return $this->niveau;
     }
 
+    /**     
+     * Add membreRole       
+     *      
+     * @param \AmbigussBundle\Entity\MembreRole $membreRole     
+     *      
+     * @return Membre       
+     */     
+    public function addMembreRole(\AmbigussBundle\Entity\MembreRole $membreRole)        
+    {       
+        $this->membreRoles[] = $membreRole;     
+        
+        $membreRole->setMembre($this);      
+        
+        return $this;       
+    }       
+        
+    /**     
+     * Remove membreRole        
+     *      
+     * @param \AmbigussBundle\Entity\MembreRole $membreRole     
+     */     
+    public function removeMembreRole(\AmbigussBundle\Entity\MembreRole $membreRole)     
+    {       
+        $this->membreRoles->removeElement($membreRole);     
+    }       
+        
+    /**     
+     * Get membreRoles      
+     *      
+     * @return \Doctrine\Common\Collections\Collection      
+     */     
+    public function getMembreRoles()        
+    {       
+        return $this->membreRoles;      
+    }
+
 
 	/**
 	 * IMPLEMENTS UserInterface
@@ -567,9 +609,17 @@ class Membre implements UserInterface, \Serializable
 	 *
 	 * @return array
 	 */
-	public function getRoles(){
-		// return $this->getDroits();
-		return array();
+	public function getRoles()
+    {
+		$roles = ["ROLE_VISITEUR"];
+
+        $roles = array_merge($roles, $this->getGroupe()->getRoles());
+
+        foreach ($this->getMembreRoles() as $membreRole) {
+            $roles[] = $membreRole->getRole()->getNom();
+        }       
+
+        return $roles;
 	}
 
 	/**
@@ -581,6 +631,11 @@ class Membre implements UserInterface, \Serializable
 		return $this->getMotDePasse();
 	}
 
+    /** 
+     * Get salt 
+     *  
+     * @return null (no use with BCryptEncoder) 
+     */
 	public function getSalt(){
 		return null;
 	}
@@ -605,6 +660,7 @@ class Membre implements UserInterface, \Serializable
 		return serialize(array(
 			$this->id,
 			$this->pseudo,
+            $this->email,
 			$this->mdp
 		));
 	}
@@ -613,6 +669,7 @@ class Membre implements UserInterface, \Serializable
 		list (
 			$this->id,
 			$this->pseudo,
+            $this->email,
 			$this->mdp,
 			) = unserialize($serialized);
 	}

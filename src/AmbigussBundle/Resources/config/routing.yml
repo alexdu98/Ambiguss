@@ -13,3 +13,7 @@ ambiguss_conditions:
 ambiguss_contact:
     path:     /contact
     defaults: { _controller: AmbigussBundle:Contact:main }
+
+creationPhrase:
+    path: /creationPhrase
+    defaults: {_controller: AmbigussBundle:CreationPhrase:main }

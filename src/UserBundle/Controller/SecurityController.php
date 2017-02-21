@@ -4,12 +4,14 @@ namespace UserBundle\Controller;
 
 use AmbigussBundle\AmbigussBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -41,65 +43,113 @@ class SecurityController extends Controller
 
         //ajout des attributs qu'on veut afficher dans le formulaire
         $form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
-            ->add('Pseudo', TextType::class)->add('MotDePasse', PasswordType::class)
-            ->add('Email', EmailType::class)
-            ->add('Newsletter', CheckboxType::class)
-            ->add('Valider', SubmitType::class)
+            ->add('Pseudo', TextType::class, array(
+	            'attr' => array('placeholder' => 'Pseudo'),
+	            'invalid_message' => 'Pseudo invalide'
+            ))
+	        ->add('Mdp', RepeatedType::class, array(
+		        'type' => PasswordType::class,
+		        'options' => array('attr' => array('class' => 'password-field')),
+		        'first_options'  => array(
+			        'label' => 'Mot de passe',
+			        'attr' => array('placeholder' => 'Mot de passe')
+		        ),
+		        'second_options' => array(
+			        'label' => 'Confirmation du mot de passe',
+			        'attr' => array('placeholder' => 'Confirmation du mot de passe')
+		        ),
+		        'invalid_message' => 'Les mots de passe ne sont pas identiques.'
+	        ))
+            ->add('Email', EmailType::class, array(
+	            'attr' => array('placeholder' => 'Email')
+            ))
+            ->add('Newsletter', CheckboxType::class, array(
+	            'label' => "J'accepte de recevoir les newsletter du site",
+	            'required' => false
+            ))
+	        ->add('Conditions', CheckboxType::class, array(
+		        'label' => "J'accepte les CGU du site",
+		        'required' => true,
+		        'mapped' => false
+	        ))
+            ->add('Valider', SubmitType::class, array(
+	            'attr' => array('class' => 'btn btn-primary'),
+            ))
             ->getform();
 
         // Si la requête est en POST
         if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-            try {
-                if ($form->isValid()) {
-                        //cypte mdp
-                        $encoder = $this->container->get('security.password_encoder');
-                        $encoded = $encoder->encodePassword($membre, $membre->getMotDePasse());
+	        $recaptcha = $this->get('app.recaptcha');
+	        if($recaptcha->check($request->request->get('g-recaptcha-response'))){
+		        $form->handleRequest($request);
+		        if($form->isValid()){
+			        // Hash le Mdp
+			        $encoder = $this->get('security.password_encoder');
+			        $hash = $encoder->encodePassword($membre, $membre->getMdp());
 
-                        $membre->setMotDePasse($encoded);
+			        $membre->setMdp($hash);
 
-                    //affecte le nouveau memebre à un groupe
-                    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Groupe');
-                    $grp = $repository->find(2); // 2 <=> membre
-                    $membre->setGroupe($grp);
+			        // Affecte le nouveau membre à un groupe
+			        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Groupe');
+			        $grp = $repository->findOneByNom('Membre');
+			        $membre->setGroupe($grp);
 
-                    //affecte un niveau au nouveau membre
-                    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Niveau');
-                    $grp = $repository->find(1); // 1 <=>niveau
-                    $membre->setNiveau($grp);
+			        // Affecte un niveau au nouveau membre
+			        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Niveau');
+			        $grp = $repository->findOneByTitre('Facile');
+			        $membre->setNiveau($grp);
 
+			        // Génère la clé pour la confirmation d'email et l'enregistre dans le champ cleOubliMdp
+			        $cleConfirmation = $membre->generateCle();
 
-                    // Envoi mail confimation/validation
+			        try{
+				        // On enregistre le membre dans la base de données
+				        $em = $this->getDoctrine()->getManager();
+				        $em->persist($membre);
+				        $em->flush();
+			        }
+			        catch(Exception $e){
+				        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du membre");
+			        }
 
-                    /*   $message = \Swift_Message::newInstance()
-                        ->setSubject("Confimation d'insciption à Ambiguss") // sujet du message
-                        ->setFrom(array("ambiguss@hotmail.fr" => "Equipe Ambiguss")) // faudrait nous cée une adesse mail !!!
-                        ->setTo(array($membre->getEmail() => "Nouveau membre")) // Set the To addresses with an associative array
-                        ->setBody("L'équipe Ambiguss vous souhaite la bienvenue :-D \nPour valider votre inscription cliquez sur le lien ci dessousn \nA bientôt !") ;  // Give it a body
-                        $this->get('mailer')->send($message) ;
-                     */
+			        // Envoi de l'email confimation/validation
+			        $message = \Swift_Message::newInstance()
+				        ->setSubject("[Ambiguss] Confirmation d'inscription")
+				        ->setFrom(array(
+					        "no-reply@ambiguss.calyxe.fr" => "Ambiguss"
+				        ))
+				        ->setTo(array(
+					        $membre->getEmail() => $membre->getPseudo()
+				        ))
+				        ->setBody($this->renderView('emails/inscription.html.twig', array(
+						        'titre'           => "Confirmation d'inscription",
+						        'pseudo'          => $membre->getPseudo(),
+						        'cleConfirmation' => $cleConfirmation
+		                )),
+			        'text/html');
 
-                    // on verifie que le lien a été "cliqué"
+			        if($this->get('mailer')->send($message)){
+				        $this->get('session')->getFlashBag()->add('succes', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyer par email.');
+			        }
+			        else{
+				        $this->get('session')->getFlashBag()->add('erreur', "Inscription réussie, mais l'envoi de
+		                l'email de confirmation a échoué. Contactez un administrateur.");
+			        }
 
-                    // On enregistre notre objet $advert dans la base de données, par exemple
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($membre);
-                    // envoyer email de validation
-                    $em->flush();
-
-                    $request->getSession()->getFlashBag()->add('notice', 'Inscription enegistrée, veuillez cliquez sur le lien de confirmation que nous venons de vous envyer.');
-                    // rediriger vers l'accueil
-                    return $this->redirectToRoute('ambiguss_accueil');
-                }
-            } catch (UniqueConstraintViolationException $e) {/* erreur*/
-            } catch (IntegrityConstraintViolation $e) {/* erreur*/
-            }
+			        // rediriger vers la page de connexion
+			        return $this->redirectToRoute('connexion');
+		        }
+	        }
+	        $this->get('session')->getFlashBag()->add('erreur', "Captcha invalide.");
         }
-//sinon
-        // On redirige vers le formulaire
+		// Pas de formulaire envoyé ou erreur
         return $this->render('UserBundle:Security:inscription.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
+	public function confirmationInscriptionAction(Request $request)
+	{
+		return $this->render('err.html.twig');
+	}
 }

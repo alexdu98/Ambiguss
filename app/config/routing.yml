@@ -7,6 +7,11 @@ inscription:
     defaults:
         _controller: UserBundle:Security:inscription
 
+confirmationInscription:
+    path: /confirmationInscription
+    defaults:
+        _controller: UserBundle:Security:confirmationInscription
+
 connexion:
     path: /connexion
     defaults:

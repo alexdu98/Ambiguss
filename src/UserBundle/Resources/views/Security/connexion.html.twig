@@ -1,23 +1,30 @@
 {% extends 'base.html.twig' %}
-{% block css %}
-	<link rel="stylesheet" href="{{ asset('assets/css/connexion.css') }}">
-{% endblock %}
+
 {% block title %}Connexion{% endblock %}
 
-{% block contenu %}
-	{% if error %}
-		<div class="alert alert-danger">{{ error.message }}</div>
-	{% endif %}
+{% block css %}
+{% endblock %}
 
-	<form action="{{ path('connexion_verif') }}" method="post">
-		<div class=well">
+{% block titre %}Formulaire de connexion{% endblock %}
+
+{% block contenu %}
+
+	<div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 well">
+		{% for flashMessage in app.session.flashbag.get('succes') %}
+			<div class="alert alert-success">{{ flashMessage }}</div>
+		{% endfor %}
+		{% if error %}
+			<div class="alert alert-danger">{{ error.message }}</div>
+		{% endif %}
+
+		<form action="{{ path('connexion_verif') }}" method="post">
 			<label for="username"> Login :</label>
 			<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
-
 			<label for="password"> Mot de passe :</label>
 			<input type="password" class="form-control" id="password" name="_password">
 			<br>
-			<input type="submit" value="Connexion" class="btn btn-default">
-		</div>
-	</form>
+			<input type="submit" value="Connexion" class="btn btn-primary">
+		</form>
+	</div>
+
 {% endblock %}

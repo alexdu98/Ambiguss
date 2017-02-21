@@ -15,6 +15,18 @@ body{
 	width: 100%;
 	height: 100%;
 }
+h1{
+	display: block;
+	font-size: 48px;
+	font-family: "Lobster", "cursive";
+	color: #A0D233;
+	text-shadow: 2px 2px 1px #EEE, 3px 3px 5px #000;
+	text-align: center;
+	margin-bottom: 15px;
+}
+h1:first-letter{
+	color: #333;
+}
 a{
 	color: var(--color-brown);
 }
@@ -52,10 +64,27 @@ nav .active a{
     #####################################################################
 */
 
+article{
+	margin-bottom: 20px;
+}
+article > .container-fluid{
+	margin-bottom: 20px;
+}
+
+/*
+    #####################################################################
+    ############################### FOOTER ##############################
+    #####################################################################
+*/
+
 footer{
 	background: var(--color-green);
 	color: var(--color-yellow);
 	box-shadow: 0 0 3px #444;
+}
+.divBottom{
+	padding-top: 10px;
+	padding-bottom: 5px;
 }
 
 /*

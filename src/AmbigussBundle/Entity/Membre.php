@@ -30,9 +30,10 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="pseudo", type="string", length=32, unique=true)
+     *
      * @Assert\Regex(
-     *     pattern = "/^[a-zA-Z0-9_.\-]{3,32}$/",
-     *     message = " Votre pseudo contient un caractère non autorisé !"
+     *     pattern = "#^[a-zA-Z0-9_\.\\-]{3,32}$#",
+     *     message = "Pseudo invalide. (3 à 32 caractères alphanumérique)"
      * )
      */
     private $pseudo;
@@ -41,9 +42,9 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=128, unique=true)
-     * @Assert\NotBlank()
+     *
      * @Assert\Email(
-     *     message = "L'email '{{ value }}' n'est pas une adresse mail valide.",
+     *     message = "L'email '{{ value }}' n'est pas valide.",
      *     checkMX = true
      * )
      */
@@ -53,9 +54,11 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="mdp", type="string", length=72)
+     *
+     * UpperCase|LowerCase & Number|SpecialChar between 6 and 72 char (si je me suis pas trompé)
      * @Assert\Regex(
-     *     pattern = "/^[a-zA-Z0-9]{6,72}$/",
-     *     message = "Votre mot de passe ne doit contenir que des chiffres ou des lettres et faire entre 6 et 72 caracteres!"
+     *     pattern = "#(?=^.{6,72}$)((?=.*\d)|(?=.*\W+))(?![.\n])((?=.*[A-Z])|(?=.*[a-z])).*$#",
+     *     message = "Mot de passe invalide. (alphabétique et numérique ou spécial de 6 à 72 caractères)"
      * )
      */
     private $mdp;
@@ -78,6 +81,11 @@ class Membre implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="sexe", type="string", length=8, nullable=true)
+     *
+     * @Assert\Regex(
+     *     pattern = "#Homme|Femme#",
+     *     message = "Sexe invalide. (Homme ou Femme)"
+     * )
      */
     private $sexe;
 
@@ -85,6 +93,8 @@ class Membre implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(name="date_naissance", type="datetime", nullable=true)
+     *
+     * @Assert\DateTime()
      */
     private $dateNaissance;
 
@@ -113,6 +123,8 @@ class Membre implements UserInterface, \Serializable
      * @var bool
      *
      * @ORM\Column(name="newsletter", type="boolean")
+     *
+     * @Assert\NotBlank
      */
     private $newsletter;
 
@@ -120,6 +132,8 @@ class Membre implements UserInterface, \Serializable
      * @var bool
      *
      * @ORM\Column(name="banni", type="boolean")
+     *
+     * @Assert\NotBlank
      */
     private $banni;
 
@@ -134,6 +148,8 @@ class Membre implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(name="date_deban", type="datetime", nullable=true)
+     *
+     * @Assert\DateTime()
      */
     private $dateDeban;
 
@@ -164,7 +180,7 @@ class Membre implements UserInterface, \Serializable
 		$this->pointsClassement = 0;
 		$this->credits = 0;
 		$this->newsletter = true;
-		$this->banni = 1;
+		$this->banni = true;
 		$this->commentaireBan = "En attente de la validation de l'email";
 		$this->membreRoles = new ArrayCollection();
 	}
@@ -234,7 +250,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @return Membre
      */
-    public function setMotDePasse($mdp)
+    public function setMdp($mdp)
     {
         $this->mdp = $mdp;
 
@@ -246,7 +262,7 @@ class Membre implements UserInterface, \Serializable
      *
      * @return string
      */
-    public function getMotDePasse()
+    public function getMdp()
     {
         return $this->mdp;
     }
@@ -628,7 +644,7 @@ class Membre implements UserInterface, \Serializable
 	 * @return string
 	 */
 	public function getPassword(){
-		return $this->getMotDePasse();
+		return $this->getMdp();
 	}
 
     /** 
@@ -675,5 +691,18 @@ class Membre implements UserInterface, \Serializable
 	}
 
 
+    /**
+     * AUTRES
+     */
 
+    /**
+     * Génère, initialise et retourne une clé
+     *
+     * @return string
+     */
+    public function generateCle(){
+        $cle = hash('sha256', uniqid(rand(), true) . "N1TDf^%PEc!G*s$");
+        $this->setCleOubliMdp($cle);
+        return $cle;
+    }
 }

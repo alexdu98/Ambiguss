@@ -1,0 +1,13 @@
+{% extends "emails/base.html.twig" %}
+
+{% block titre %}Confirmation d'inscription{% endblock %}
+
+{% block pseudo %}{{ pseudo }}{% endblock %}
+
+{% block contenu %}
+	<p>
+		Vous venez de vous inscrire sur Ambiguss et nous vous en remercions.<br><br>
+		Pour confirmer votre inscription, merci de visiter le lien suivant : <br>
+		<a href="{{ url('confirmationInscription') }}/{{ cleConfirmation }}">{{ url('confirmationInscription') }}/{{ cleConfirmation }}</a>
+	</p>
+{% endblock %}

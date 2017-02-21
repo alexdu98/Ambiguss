@@ -14,7 +14,7 @@
     </head>
     <body>
 	    <header class="page-row">
-		    <nav class="navbar navbar-default">
+		    <nav class="navbar navbar-default navbar-static-top">
 			    <div class="container-fluid">
 				    <div class="navbar-header">
 					    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -58,14 +58,17 @@
 
 	    <article class="page-row page-row-expanded">
 		    <div class="container-fluid">
-			    {% block contenu %}{% endblock %}
+			    <div class="col-md-12">
+				    <h1>{% block titre %}{% endblock %}</h1>
+				    {% block contenu %}{% endblock %}
+			    </div>
 		    </div>
 	    </article>
 
 	    <footer class="page-row">
 		    <div class="container-fluid">
 			    <div class="row">
-				    <div class="col-md-6 col-md-offset-3">
+				    <div class="col-md-6 col-md-offset-3 divBottom">
 					    <div class="container-fluid">
 						    <div class="row">
 							    <div class="col-md-8">

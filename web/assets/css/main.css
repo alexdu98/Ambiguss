@@ -101,3 +101,29 @@ footer{
 .page-row-expanded{
 	height: 100%;
 }
+
+/*
+    #####################################################################
+    ######################### FACEBOOK & TWITTER ########################
+    #####################################################################
+*/
+.btn-facebook{
+	padding: 5px 20px;
+	background: #3b5998;
+	color: #FFF;
+	border: 2px solid #3b5998;
+}
+.btn-facebook:hover{
+	background: #FFF;
+	color: #3b5998;
+}
+.btn-twitter{
+	padding: 5px 20px;
+	background: #1b95e0;
+	color: #FFF;
+	border: 2px solid #1b95e0;
+}
+.btn-twitter:hover{
+	background: #FFF;
+	color: #1b95e0;
+}

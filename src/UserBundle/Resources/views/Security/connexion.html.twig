@@ -9,22 +9,45 @@
 
 {% block contenu %}
 
-	<div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 well">
-		{% for flashMessage in app.session.flashbag.get('succes') %}
-			<div class="alert alert-success">{{ flashMessage }}</div>
-		{% endfor %}
-		{% if error %}
-			<div class="alert alert-danger">{{ error.message }}</div>
-		{% endif %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+			<button class="btn btn-facebook btn-block" id="login-facebook">
+				<i class="fa fa-facebook" aria-hidden="true"></i>
+				S'inscrire avec Facebook
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+			<button class="btn btn-twitter btn-block" id="login-twitter">
+				<i class="fa fa-twitter" aria-hidden="true"></i>
+				S'inscrire avec Twitter
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
+			{% for flashMessage in app.session.flashbag.get('succes') %}
+				<div class="alert alert-success">{{ flashMessage }}</div>
+			{% endfor %}
+			{% if error %}
+				<div class="alert alert-danger">{{ error.message }}</div>
+			{% endif %}
 
-		<form action="{{ path('connexion_verif') }}" method="post">
-			<label for="username"> Login :</label>
-			<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
-			<label for="password"> Mot de passe :</label>
-			<input type="password" class="form-control" id="password" name="_password">
-			<br>
-			<input type="submit" value="Connexion" class="btn btn-primary">
-		</form>
+			<form action="{{ path('connexion_verif') }}" method="post">
+				<div class="form-group">
+					<label for="username"> Pseudo :</label>
+					<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
+				</div>
+				<div class="form-group">
+					<label for="password"> Mot de passe :</label>
+					<input type="password" class="form-control" id="password" name="_password">
+				</div>
+				<input type="submit" value="Connexion" class="btn btn-primary">
+			</form>
+		</div>
 	</div>
 
 {% endblock %}

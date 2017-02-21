@@ -26,6 +26,20 @@ class SecurityController extends Controller
 
 		$authenticationUtils = $this->get('security.authentication_utils');
 
+		//créer l'objet membre
+		$membre = new \AmbigussBundle\Entity\Membre();
+
+		//ajout des attributs qu'on veut afficher dans le formulaire
+		$form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
+			->add('Pseudo', TextType::class, array(
+				'attr' => array('placeholder' => 'Pseudo'),
+				'invalid_message' => 'Pseudo invalide'
+			))
+			->add('Connexion', SubmitType::class, array(
+				'attr' => array('class' => 'btn btn-primary'),
+			))
+			->getform();
+
 		return $this->render('UserBundle:Security:connexion.html.twig', array(
 			'last_username' => $authenticationUtils->getLastUsername(),
 			'error'         => $authenticationUtils->getLastAuthenticationError(),

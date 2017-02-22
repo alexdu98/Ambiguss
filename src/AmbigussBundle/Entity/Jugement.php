@@ -50,13 +50,6 @@ class Jugement
     private $idObjet;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="type_jugement", type="string", length=8)
-     */
-    private $typeJugement;
-
-    /**
      * @ORM\ManyToOne(targetEntity="CategorieJugement")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -78,6 +71,11 @@ class Jugement
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $auteur;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Membre")
+	 */
+	private $juge;
 
 
     /**
@@ -195,30 +193,6 @@ class Jugement
     }
 
     /**
-     * Set typeJugement
-     *
-     * @param string $typeJugement
-     *
-     * @return Jugement
-     */
-    public function setTypeJugement($typeJugement)
-    {
-        $this->typeJugement = $typeJugement;
-
-        return $this;
-    }
-
-    /**
-     * Get typeJugement
-     *
-     * @return string
-     */
-    public function getTypeJugement()
-    {
-        return $this->typeJugement;
-    }
-
-    /**
      * Set categorieJugement
      *
      * @param \AmbigussBundle\Entity\CategorieJugement $categorieJugement
@@ -312,5 +286,29 @@ class Jugement
     public function getAuteur()
     {
         return $this->auteur;
+    }
+
+    /**
+     * Set juge
+     *
+     * @param \AmbigussBundle\Entity\Membre $juge
+     *
+     * @return Jugement
+     */
+    public function setJuge(\AmbigussBundle\Entity\Membre $juge = null)
+    {
+        $this->juge = $juge;
+
+        return $this;
+    }
+
+    /**
+     * Get juge
+     *
+     * @return \AmbigussBundle\Entity\Membre
+     */
+    public function getJuge()
+    {
+        return $this->juge;
     }
 }

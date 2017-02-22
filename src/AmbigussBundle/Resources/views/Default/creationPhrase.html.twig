@@ -5,6 +5,12 @@
 {% block contenu %}
 	<h3>Creation de phrase</h3>
 
-	
+	{% if pasConnect is defined %} 
+		{{ pasConnect }} 
+	{% else %}
+		{{ form(formMot) }}
+		
+	{% endif %}
+
 
 {% endblock %}

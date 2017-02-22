@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Form;
 
+use AmbigussBundle\Form\MotAmbiguType;
 use AmbigussBundle\Form\PhraseType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,7 +19,9 @@ class MotAmbiguPhraseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('phrase', PhraseType::class, array('label' => "Entrez votre phrase"))
-        ->add('valeurMotAmbigu', TextType::class, array('label' => "Quel est le mot ambigu de cette phrase ?"));
+        ->add('valeurMotAmbigu', TextType::class, array('label' => "Quel est le mot ambigu de cette phrase ?"))
+        ->add('motAmbigu', MotAmbiguType::class)
+        ->add('Valider', SubmitType::class);
     }
     
     /**

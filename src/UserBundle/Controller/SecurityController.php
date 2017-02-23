@@ -27,7 +27,7 @@ class SecurityController extends Controller
 		$authenticationUtils = $this->get('security.authentication_utils');
 
 		//créer l'objet membre
-		$membre = new \AmbigussBundle\Entity\Membre();
+		$membre = new \UserBundle\Entity\Membre();
 
 		//ajout des attributs qu'on veut afficher dans le formulaire
 		$form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
@@ -48,12 +48,8 @@ class SecurityController extends Controller
 
 	public function inscriptionAction(Request $request)
 	{
-        /**
-         * @Route("/inscription")
-         */
-
         //créer l'objet membre
-        $membre = new \AmbigussBundle\Entity\Membre();
+        $membre = new \UserBundle\Entity\Membre();
 
         //ajout des attributs qu'on veut afficher dans le formulaire
         $form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
@@ -104,12 +100,12 @@ class SecurityController extends Controller
 			        $membre->setMdp($hash);
 
 			        // Affecte le nouveau membre à un groupe
-			        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Groupe');
+			        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Groupe');
 			        $grp = $repository->findOneByNom('Membre');
 			        $membre->setGroupe($grp);
 
 			        // Affecte un niveau au nouveau membre
-			        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Niveau');
+			        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
 			        $grp = $repository->findOneByTitre('Facile');
 			        $membre->setNiveau($grp);
 
@@ -162,8 +158,8 @@ class SecurityController extends Controller
         ));
     }
 
-	public function confirmationInscriptionAction(Request $request)
+	public function inscriptionConfirmationAction(Request $request)
 	{
-		return $this->render('err.html.twig');
+		return $this->render('UserBundle:Security:inscription_confirmation.html.twig');
 	}
 }

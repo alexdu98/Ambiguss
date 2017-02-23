@@ -36,7 +36,7 @@
 				<div class="alert alert-danger">{{ error.message }}</div>
 			{% endif %}
 
-			<form action="{{ path('connexion_verif') }}" method="post">
+			<form action="{{ path('user_connexion_verification') }}" method="post">
 				<div class="form-group">
 					<label for="username"> Pseudo :</label>
 					<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">

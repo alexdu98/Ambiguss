@@ -57,13 +57,13 @@ class Glose
     private $visible;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Membre")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Membre")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
      */
     private $modificateur;
 
@@ -211,11 +211,11 @@ class Glose
     /**
      * Set auteur
      *
-     * @param \AmbigussBundle\Entity\Membre $auteur
+     * @param \UserBundle\Entity\Membre $auteur
      *
      * @return Glose
      */
-    public function setAuteur(\AmbigussBundle\Entity\Membre $auteur)
+    public function setAuteur(\UserBundle\Entity\Membre $auteur)
     {
         $this->auteur = $auteur;
 
@@ -225,7 +225,7 @@ class Glose
     /**
      * Get auteur
      *
-     * @return \AmbigussBundle\Entity\Membre
+     * @return \UserBundle\Entity\Membre
      */
     public function getAuteur()
     {
@@ -235,11 +235,11 @@ class Glose
     /**
      * Set modificateur
      *
-     * @param \AmbigussBundle\Entity\Membre $modificateur
+     * @param \UserBundle\Entity\Membre $modificateur
      *
      * @return Glose
      */
-    public function setModificateur(\AmbigussBundle\Entity\Membre $modificateur = null)
+    public function setModificateur(\UserBundle\Entity\Membre $modificateur = null)
     {
         $this->modificateur = $modificateur;
 
@@ -249,7 +249,7 @@ class Glose
     /**
      * Get modificateur
      *
-     * @return \AmbigussBundle\Entity\Membre
+     * @return \UserBundle\Entity\Membre
      */
     public function getModificateur()
     {

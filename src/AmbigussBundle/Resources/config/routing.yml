@@ -1,19 +1,28 @@
-ambiguss_accueil:
-    path:     /
-    defaults: { _controller: AmbigussBundle:Accueil:main }
+ambiguss_phrase:
+    path: /ambiguss/phrase
+    defaults: {_controller: AmbigussBundle:Phrase:main }
 
-ambiguss_mentions:
-    path:     /mentions
-    defaults: { _controller: AmbigussBundle:Mentions:main }
+ambiguss_phrase_view:
+    path: /ambiguss/phrase/view/{id}
+    defaults:
+        _controller: AmbigussBundle:Phrase:view
+    requirements:
+        id: \d+
 
-ambiguss_conditions:
-    path:     /conditions
-    defaults: { _controller: AmbigussBundle:Conditions:main }
+ambiguss_phrase_add:
+    path: /ambiguss/phrase/add
+    defaults: {_controller: AmbigussBundle:Phrase:add }
 
-ambiguss_contact:
-    path:     /contact
-    defaults: { _controller: AmbigussBundle:Contact:main }
+ambiguss_phrase_edit:
+    path: /ambiguss/phrase/edit/{id}
+    defaults:
+        _controller: AmbigussBundle:Phrase:edit
+    requirements:
+            id: \d+
 
-creationPhrase:
-    path: /creationPhrase
-    defaults: {_controller: AmbigussBundle:CreationPhrase:main }
+ambiguss_phrase_delete:
+    path: /ambiguss/phrase/delete{id}
+    defaults:
+        _controller: AmbigussBundle:Phrase:delete
+    requirements:
+            id: \d+

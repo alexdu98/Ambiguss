@@ -29,7 +29,7 @@ class AimerPhrase
     private $dateCreation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Membre")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=false)
      */
     private $membre;
@@ -86,11 +86,11 @@ class AimerPhrase
     /**
      * Set membre
      *
-     * @param \AmbigussBundle\Entity\Membre $membre
+     * @param \UserBundle\Entity\Membre $membre
      *
      * @return AimerPhrase
      */
-    public function setMembre(\AmbigussBundle\Entity\Membre $membre)
+    public function setMembre(\UserBundle\Entity\Membre $membre)
     {
         $this->membre = $membre;
 
@@ -100,7 +100,7 @@ class AimerPhrase
     /**
      * Get membre
      *
-     * @return \AmbigussBundle\Entity\Membre
+     * @return \UserBundle\Entity\Membre
      */
     public function getMembre()
     {

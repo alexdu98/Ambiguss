@@ -57,7 +57,7 @@ class Reponse
     private $valeurGlose;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Membre")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
      */
     private $auteur;
 
@@ -80,7 +80,7 @@ class Reponse
     private $poidsReponse;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Niveau")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Niveau")
      * @ORM\JoinColumn(nullable=false)
      */
     private $niveau;
@@ -234,11 +234,11 @@ class Reponse
     /**
      * Set auteur
      *
-     * @param \AmbigussBundle\Entity\Membre $auteur
+     * @param \UserBundle\Entity\Membre $auteur
      *
      * @return Reponse
      */
-    public function setAuteur(\AmbigussBundle\Entity\Membre $auteur = null)
+    public function setAuteur(\UserBundle\Entity\Membre $auteur = null)
     {
         $this->auteur = $auteur;
 
@@ -248,7 +248,7 @@ class Reponse
     /**
      * Get auteur
      *
-     * @return \AmbigussBundle\Entity\Membre
+     * @return \UserBundle\Entity\Membre
      */
     public function getAuteur()
     {
@@ -330,11 +330,11 @@ class Reponse
     /**
      * Set niveau
      *
-     * @param \AmbigussBundle\Entity\Niveau $niveau
+     * @param \UserBundle\Entity\Niveau $niveau
      *
      * @return Reponse
      */
-    public function setNiveau(\AmbigussBundle\Entity\Niveau $niveau)
+    public function setNiveau(\UserBundle\Entity\Niveau $niveau)
     {
         $this->niveau = $niveau;
 
@@ -344,7 +344,7 @@ class Reponse
     /**
      * Get niveau
      *
-     * @return \AmbigussBundle\Entity\Niveau
+     * @return \UserBundle\Entity\Niveau
      */
     public function getNiveau()
     {

@@ -9,6 +9,3 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
     app.recaptcha:
         class: AppBundle\Recaptcha\Recaptcha
-    user.membre_provider:
-        class: UserBundle\Security\MembreProvider
-        arguments: ["@doctrine.orm.default_entity_manager"]

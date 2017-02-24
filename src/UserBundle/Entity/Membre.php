@@ -4,8 +4,11 @@ namespace UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Membre
@@ -665,6 +668,9 @@ class Membre implements UserInterface, \Serializable
 		return $this->getPseudo();
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function eraseCredentials(){}
 
 
@@ -672,6 +678,9 @@ class Membre implements UserInterface, \Serializable
 	 * IMPLEMENTS Serializable
 	 */
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function serialize(){
 		return serialize(array(
 			$this->id,
@@ -681,6 +690,9 @@ class Membre implements UserInterface, \Serializable
 		));
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function unserialize($serialized){
 		list (
 			$this->id,

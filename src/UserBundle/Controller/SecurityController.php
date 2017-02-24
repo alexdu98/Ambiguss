@@ -147,7 +147,7 @@ class SecurityController extends Controller
 			        }
 
 			        // rediriger vers la page de connexion
-			        return $this->redirectToRoute('user_connexion');
+			        return $this->redirectToRoute('connexion');
 		        }
 	        }
 	        $this->get('session')->getFlashBag()->add('erreur', "Captcha invalide.");

@@ -80,7 +80,6 @@ doctrine_migrations:
     namespace: Application\Migrations
     table_name: migration_versions
     name: Application Migrations
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -88,23 +87,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-# HWI/OAuth Configuration
-hwi_oauth:
-    connect:
-        account_connector: my.custom.user_provider
-    firewall_names:
-        - 'hwi_oauth_firewall_name'
-    fosub:
-        username_iterations: 30
-        properties:
-            twitter: "%twitter_id%"
-    resource_owners:
-        any_name:
-            type: twitter
-            client_id: "%twitter_key%"
-            client_secret: "%twitter_secret%"
-            options:
-                display: popup
-                auth_type: rerequest
-                csrf: true

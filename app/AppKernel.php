@@ -16,6 +16,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(), // Doctrine migration Bundle
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new AmbigussBundle\AmbigussBundle(),
             new UserBundle\UserBundle(),
             new JudgmentBundle\JudgmentBundle(),

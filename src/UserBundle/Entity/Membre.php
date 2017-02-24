@@ -5,6 +5,9 @@ namespace UserBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
@@ -29,10 +32,10 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="pseudo", type="string", length=32, nullable=true, unique=true)
+     * @ORM\Column(name="pseudo", type="string", length=32, unique=true)
      *
      * @Assert\Regex(
-     *     pattern = "#^$|^[a-zA-Z0-9_\.\\-]{3,32}$#",
+     *     pattern = "#^[a-zA-Z0-9_\.\\-]{3,32}$#",
      *     message = "Pseudo invalide. (3 à 32 caractères alphanumérique)"
      * )
      */
@@ -53,7 +56,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="mdp", type="string", length=72, nullable=true)
+     * @ORM\Column(name="mdp", type="string", length=72)
      *
      * UpperCase|LowerCase & Number|SpecialChar between 6 and 72 char (si je me suis pas trompé)
      * @Assert\Regex(
@@ -83,7 +86,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="sexe", type="string", length=8, nullable=true)
      *
      * @Assert\Regex(
-     *     pattern = "#^Homme$|^Femme$#",
+     *     pattern = "#Homme|Femme#",
      *     message = "Sexe invalide. (Homme ou Femme)"
      * )
      */
@@ -115,7 +118,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="cle_oubli_mdp", type="string", length=128, nullable=true, unique=true)
+     * @ORM\Column(name="cle_oubli_mdp", type="string", length=128, nullable=true)
      */
     private $cleOubliMdp;
 
@@ -124,10 +127,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="newsletter", type="boolean")
      *
-     * @Assert\Type(
-     *      type="bool"
-     * )
-     * @Assert\NotNull()
+     * @Assert\NotBlank
      */
     private $newsletter;
 
@@ -136,10 +136,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="banni", type="boolean")
      *
-     * @Assert\Type(
-     *      type="bool"
-     * )
-     * @Assert\NotNull()
+     * @Assert\NotBlank
      */
     private $banni;
 
@@ -158,32 +155,6 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @Assert\DateTime()
      */
     private $dateDeban;
-
-	/**
-	 * @var bool
-	 *
-	 * @ORM\Column(name="actif", type="boolean")
-	 *
-	 * @Assert\Type(
-	 *      type="bool"
-	 * )
-	 * @Assert\NotNull()
-	 */
-	private $actif;
-
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="id_facebook", type="string", length=255, nullable=true, unique=true)
-	 */
-	private $id_facebook;
-
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="id_twitter", type="string", length=255, nullable=true, unique=true)
-	 */
-	private $id_twitter;
 
     /**
      * @ORM\ManyToOne(targetEntity="Groupe")
@@ -212,8 +183,8 @@ class Membre implements AdvancedUserInterface, \Serializable
 		$this->pointsClassement = 0;
 		$this->credits = 0;
 		$this->newsletter = true;
-		$this->banni = false;
-		$this->actif = false;
+		$this->banni = true;
+		$this->commentaireBan = "En attente de la validation de l'email";
 		$this->membreRoles = new ArrayCollection();
 	}
 
@@ -563,78 +534,6 @@ class Membre implements AdvancedUserInterface, \Serializable
         return $this->dateDeban;
     }
 
-	/**
-	 * Set actif
-	 *
-	 * @param boolean $actif
-	 *
-	 * @return Membre
-	 */
-	public function setActif($actif)
-	{
-		$this->actif = $actif;
-
-		return $this;
-	}
-
-	/**
-	 * Get actif
-	 *
-	 * @return boolean
-	 */
-	public function getActif()
-	{
-		return $this->actif;
-	}
-
-	/**
-	 * Set idFacebook
-	 *
-	 * @param string $idFacebook
-	 *
-	 * @return Membre
-	 */
-	public function setIdFacebook($idFacebook)
-	{
-		$this->id_facebook = $idFacebook;
-
-		return $this;
-	}
-
-	/**
-	 * Get idFacebook
-	 *
-	 * @return string
-	 */
-	public function getIdFacebook()
-	{
-		return $this->id_facebook;
-	}
-
-	/**
-	 * Set idTwitter
-	 *
-	 * @param string $idTwitter
-	 *
-	 * @return Membre
-	 */
-	public function setIdTwitter($idTwitter)
-	{
-		$this->id_twitter = $idTwitter;
-
-		return $this;
-	}
-
-	/**
-	 * Get idTwitter
-	 *
-	 * @return string
-	 */
-	public function getIdTwitter()
-	{
-		return $this->id_twitter;
-	}
-
     /**
      * Set groupe
      *
@@ -721,7 +620,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 
 
 	/**
-	 * IMPLEMENTS AdvancedUserInterface
+	 * IMPLEMENTS UserInterface
 	 */
 
 	/**
@@ -771,41 +670,6 @@ class Membre implements AdvancedUserInterface, \Serializable
 
 	public function eraseCredentials(){}
 
-	/**
-	 * Check if user account has expired
-	 *
-	 * @return bool
-	 */
-	public function isAccountNonExpired(){
-		return true;
-	}
-
-	/**
-	 * Check if user is locked
-	 *
-	 * @return bool
-	 */
-	public function isAccountNonLocked(){
-		return !$this->getBanni();
-	}
-
-	/**
-	 * Check if user credentials has expired
-	 *
-	 * @return bool
-	 */
-	public function isCredentialsNonExpired(){
-		return true;
-	}
-
-	/**
-	 * Check if user is enabled
-	 *
-	 * @return bool
-	 */
-	public function isEnabled(){
-		return $this->getActif();
-	}
 
 	/**
 	 * IMPLEMENTS Serializable
@@ -816,9 +680,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 			$this->id,
 			$this->pseudo,
             $this->email,
-			$this->mdp,
-			$this->banni,
-			$this->actif
+			$this->mdp
 		));
 	}
 
@@ -828,8 +690,6 @@ class Membre implements AdvancedUserInterface, \Serializable
 			$this->pseudo,
             $this->email,
 			$this->mdp,
-			$this->banni,
-			$this->actif
 			) = unserialize($serialized);
 	}
 

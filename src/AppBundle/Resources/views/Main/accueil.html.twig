@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil{% endblock %}
-
+{% block titre %}<h1>Bienvenue sur Ambiguss</h1>{% endblock %}
 {% block contenu %}
-	<h1>TITRE</h1>
-	<p>CONTENU</p>
+	<div class="bulle">
+
+		<p><q> Un avocat se retrouve par terre </q><br/></p>
+		<p> Parle-t-on du fruit, de l'homme ou d'autre chose ?</p>
+		<p>À vous de le découvrire ;)<br/></p>
+		<p> <a href="{{ path('app_accueil') }}">Jouer</a></p> {# en attendant le path app_play#}
+
+		
+	</div>
+
+
 {% endblock %}

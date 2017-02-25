@@ -4,28 +4,53 @@
     #####################################################################
 */
 
+
 html{
-	height: 100%;
+	height: 155%;
 	--color-green: #A0D233;
 	--color-yellow: #FAFAD2;
 	--color-brown: #8B4513;
+	--color-black: #000000;
+	
+    
 }
+
 body{
 	display: table;
 	width: 100%;
 	height: 100%;
+	font-family: "MV Boli", "cursive";
+	font-size: 14px;
+	
+	background-color: #DBEBBB;
+	padding : 10px 20px;
+	border-radius: 5px;
+	box-shadow: 2px 0 0 grey; 
+
+
+}
+article{
+	background-image: url('/assets/images/bg2.png') ;
+	background-size: 100%;
+	background-repeat: no-repeat;
 }
 h1{
 	display: block;
 	font-size: 48px;
-	font-family: "Lobster", "cursive";
-	color: #A0D233;
-	text-shadow: 2px 2px 1px #EEE, 3px 3px 5px #000;
+	font-family: "MV Boli", "cursive";
+	color: var(--color-black);
+	
 	text-align: center;
 	margin-bottom: 15px;
 }
 h1:first-letter{
-	color: #333;
+	color: var(--color-black);
+}
+q{
+	font-size: 28px;
+}
+p a{
+	font-size: 28px;
 }
 a{
 	color: var(--color-brown);
@@ -48,15 +73,18 @@ a:hover{
 */
 
 nav{
-	background: var(--color-green) !important;
+	background: var(--color-yellow) !important;
 	color: var(--color-yellow) !important;
 }
 nav .navbar-brand{
 	margin-top: -7px;
+
 }
 nav .active a{
 	background: var(--color-yellow) !important;
+
 }
+
 
 /*
     #####################################################################
@@ -71,6 +99,8 @@ article > .container-fluid{
 	margin-bottom: 20px;
 }
 
+
+
 /*
     #####################################################################
     ############################### FOOTER ##############################
@@ -78,8 +108,8 @@ article > .container-fluid{
 */
 
 footer{
-	background: var(--color-green);
-	color: var(--color-yellow);
+	background: var(--color-yellow);
+	color: var(--color-brown);
 	box-shadow: 0 0 3px #444;
 }
 .divBottom{
@@ -117,6 +147,7 @@ footer{
 	background: #FFF;
 	color: #3b5998;
 }
+
 .btn-twitter{
 	padding: 5px 20px;
 	background: #1b95e0;
@@ -127,3 +158,51 @@ footer{
 	background: #FFF;
 	color: #1b95e0;
 }
+/* bulle */
+.bulle{
+  position:relative;
+  width:680px;
+  padding:50px 40px;
+  margin:1em auto 80px;
+  text-align:center;
+  color: var(--color-black) ;
+  background:#CEE59F;
+  -webkit-border-top-left-radius:220px 120px;
+  -webkit-border-top-right-radius:220px 120px;
+  -webkit-border-bottom-right-radius:220px 120px;
+  -webkit-border-bottom-left-radius:220px 120px;
+  -moz-border-radius:220px / 120px;
+  border-radius:220px / 120px;
+}
+
+.bulle p {font-size:1.25em;}
+
+
+
+@media screen and (min-width : 320px) and (max-width : 767px)
+{ /*mobiles */
+
+    article{width:auto; height:70%; background-image: url('/assets/images/bg480.png') ;}
+	h1{font-size: 18px;}   
+	.oval-thought{width:480px;}
+	p a,q{font-size:22px;}
+}
+
+@media screen and (min-width : 768px) and (max-width : 1024px)
+{ /* tablettes */
+    article{width:auto;background-image: url('/assets/images/bg768.png') ;}
+	h1{font-size: 22px;}  
+	
+}
+
+
+
+/* cas paysages revoir les résolutions
+
+@media only screen and (min-width : 480px) and (max-width : 767px) 
+{}
+
+@media screen and (min-width : 1024px) and (max-width : 2048px)  
+{}
+
+*/

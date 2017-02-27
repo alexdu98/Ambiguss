@@ -46,13 +46,6 @@ twig:
     form_themes:
         - 'bootstrap_3_layout.html.twig'
 
-# Assetic Configuration
-assetic:
-    debug:          '%kernel.debug%'
-    use_controller: '%kernel.debug%'
-    filters:
-        cssrewrite: ~
-
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -80,6 +73,7 @@ doctrine_migrations:
     namespace: Application\Migrations
     table_name: migration_versions
     name: Application Migrations
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"

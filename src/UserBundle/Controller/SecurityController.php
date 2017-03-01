@@ -158,8 +158,21 @@ class SecurityController extends Controller
         ));
     }
 
-	public function inscriptionConfirmationAction(Request $request)
+	public function inscriptionConfirmationAction(Request $request, $cle)
 	{
-		return $this->render('UserBundle:Security:inscription_confirmation.html.twig');
+		$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
+		$membre = $repository->findOneByCleOubliMdp($cle);
+		if($membre){
+			$membre->setCleOubliMdp(null);
+			$membre->setActif(true);
+
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($membre);
+			$em->flush();
+			return $this->render('UserBundle:Security:inscription_confirmation.html.twig');
+		}
+
+		throw $this->createNotFoundException();
+
 	}
 }

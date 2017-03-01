@@ -21,7 +21,7 @@ class SecurityController extends Controller
 	public function connexionAction(Request $request)
 	{
 		if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-			return $this->redirectToRoute('ambiguss_accueil');
+			return $this->redirectToRoute('app_accueil');
 		}
 
 		$authenticationUtils = $this->get('security.authentication_utils');

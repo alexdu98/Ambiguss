@@ -4,7 +4,7 @@ namespace UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
@@ -15,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields="pseudo", message="Ce pseudo existe déjà.")
  * @UniqueEntity(fields="email", message="Cette adresse mail existe déjà.")
  */
-class Membre implements UserInterface, \Serializable
+class Membre implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -153,6 +153,29 @@ class Membre implements UserInterface, \Serializable
      */
     private $dateDeban;
 
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="actif", type="boolean")
+	 *
+	 * @Assert\NotBlank
+	 */
+	private $actif;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="id_facebook", type="string", length=255, nullable=true)
+	 */
+	private $id_facebook;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="id_twitter", type="string", length=255, nullable=true)
+	 */
+	private $id_twitter;
+
     /**
      * @ORM\ManyToOne(targetEntity="Groupe")
      * @ORM\JoinColumn(nullable=false)
@@ -180,8 +203,8 @@ class Membre implements UserInterface, \Serializable
 		$this->pointsClassement = 0;
 		$this->credits = 0;
 		$this->newsletter = true;
-		$this->banni = true;
-		$this->commentaireBan = "En attente de la validation de l'email";
+		$this->banni = false;
+		$this->actif = false;
 		$this->membreRoles = new ArrayCollection();
 	}
 
@@ -531,6 +554,78 @@ class Membre implements UserInterface, \Serializable
         return $this->dateDeban;
     }
 
+	/**
+	 * Set actif
+	 *
+	 * @param boolean $actif
+	 *
+	 * @return Membre
+	 */
+	public function setActif($actif)
+	{
+		$this->actif = $actif;
+
+		return $this;
+	}
+
+	/**
+	 * Get actif
+	 *
+	 * @return boolean
+	 */
+	public function getActif()
+	{
+		return $this->actif;
+	}
+
+	/**
+	 * Set idFacebook
+	 *
+	 * @param string $idFacebook
+	 *
+	 * @return Membre
+	 */
+	public function setIdFacebook($idFacebook)
+	{
+		$this->id_facebook = $idFacebook;
+
+		return $this;
+	}
+
+	/**
+	 * Get idFacebook
+	 *
+	 * @return string
+	 */
+	public function getIdFacebook()
+	{
+		return $this->id_facebook;
+	}
+
+	/**
+	 * Set idTwitter
+	 *
+	 * @param string $idTwitter
+	 *
+	 * @return Membre
+	 */
+	public function setIdTwitter($idTwitter)
+	{
+		$this->id_twitter = $idTwitter;
+
+		return $this;
+	}
+
+	/**
+	 * Get idTwitter
+	 *
+	 * @return string
+	 */
+	public function getIdTwitter()
+	{
+		return $this->id_twitter;
+	}
+
     /**
      * Set groupe
      *
@@ -617,7 +712,7 @@ class Membre implements UserInterface, \Serializable
 
 
 	/**
-	 * IMPLEMENTS UserInterface
+	 * IMPLEMENTS AdvancedUserInterface
 	 */
 
 	/**
@@ -667,6 +762,41 @@ class Membre implements UserInterface, \Serializable
 
 	public function eraseCredentials(){}
 
+	/**
+	 * Check if user account has expired
+	 *
+	 * @return bool
+	 */
+	public function isAccountNonExpired(){
+		return true;
+	}
+
+	/**
+	 * Check if user is locked
+	 *
+	 * @return bool
+	 */
+	public function isAccountNonLocked(){
+		return !$this->getBanni();
+	}
+
+	/**
+	 * Check if user credentials has expired
+	 *
+	 * @return bool
+	 */
+	public function isCredentialsNonExpired(){
+		return true;
+	}
+
+	/**
+	 * Check if user is enabled
+	 *
+	 * @return bool
+	 */
+	public function isEnabled(){
+		return $this->getActif();
+	}
 
 	/**
 	 * IMPLEMENTS Serializable
@@ -677,7 +807,9 @@ class Membre implements UserInterface, \Serializable
 			$this->id,
 			$this->pseudo,
             $this->email,
-			$this->mdp
+			$this->mdp,
+			$this->banni,
+			$this->actif
 		));
 	}
 
@@ -687,6 +819,8 @@ class Membre implements UserInterface, \Serializable
 			$this->pseudo,
             $this->email,
 			$this->mdp,
+			$this->banni,
+			$this->actif
 			) = unserialize($serialized);
 	}
 

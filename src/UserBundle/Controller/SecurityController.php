@@ -46,7 +46,7 @@ class SecurityController extends Controller
 		));
 	}
 
-	public function inscriptionAction(Request $request)
+	public function inscriptionAction(Request $request, $provider = null)
 	{
         //créer l'objet membre
         $membre = new \UserBundle\Entity\Membre();
@@ -89,6 +89,59 @@ class SecurityController extends Controller
 
         // Si la requête est en POST
         if ($request->isMethod('POST')) {
+
+        	// FACEBOOK & TWITTER
+        	if(!empty($provider))
+        	{
+        		$data = json_decode($request->get('data'));
+
+        		$membre->setIdFacebook($data->id);
+        		$membre->setEmail($data->email);
+        		$sexe = $data->gender == "male" ? "Homme" : "Femme";
+        		$membre->setSexe($sexe);
+        		$membre->setActif(true);
+
+		        // Affecte le nouveau membre à un groupe
+		        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Groupe');
+		        $grp = $repository->findOneByNom('Membre');
+		        $membre->setGroupe($grp);
+
+		        // Affecte un niveau au nouveau membre
+		        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+		        $grp = $repository->findOneByTitre('Facile');
+		        $membre->setNiveau($grp);
+
+		        $validator = $this->get('validator');
+		        $erreurs = $validator->validate($membre);
+
+		        if(count($erreurs) > 0){
+		        	$messages = array();
+			        foreach($erreurs as $erreur){
+						$messages[] = $erreur->getPropertyPath() . " : " . $erreur->getMessage();
+		        	}
+			        return $this->json(array(
+			        	'nb' => count($erreurs),
+				        'erreur' => $messages
+			        ));
+		        }
+
+		        $em = $this->getDoctrine()->getManager();
+		        try{
+			        $em->persist($membre);
+			        $em->flush();
+		        }
+		        catch(Exception $e){
+			        return $this->json(array(
+				        'erreur' => $e
+			        ));
+		        }
+
+        		return $this->json(array(
+			        'data' => $request->get('data')
+		        ));
+	        }
+
+	        // AMBIGUSS
 	        $recaptcha = $this->get('app.recaptcha');
 	        if($recaptcha->check($request->request->get('g-recaptcha-response'))){
 		        $form->handleRequest($request);
@@ -112,9 +165,9 @@ class SecurityController extends Controller
 			        // Génère la clé pour la confirmation d'email et l'enregistre dans le champ cleOubliMdp
 			        $cleConfirmation = $membre->generateCle();
 
+			        // On enregistre le membre dans la base de données
+			        $em = $this->getDoctrine()->getManager();
 			        try{
-				        // On enregistre le membre dans la base de données
-				        $em = $this->getDoctrine()->getManager();
 				        $em->persist($membre);
 				        $em->flush();
 			        }

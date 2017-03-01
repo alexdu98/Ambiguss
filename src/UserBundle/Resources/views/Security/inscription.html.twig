@@ -9,32 +9,52 @@
 
 {% block contenu %}
 
-    <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+			<button class="btn btn-facebook btn-block" id="login-facebook">
+				<i class="fa fa-facebook" aria-hidden="true"></i>
+				S'inscrire avec Facebook
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+			<button class="btn btn-twitter btn-block" id="login-twitter">
+				<i class="fa fa-twitter" aria-hidden="true"></i>
+				S'inscrire avec Twitter
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+	    <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
 
-        {{ form_start(form) }}
+	        {{ form_start(form) }}
 
-	    {{ form_errors(form) }}
+		    {{ form_errors(form) }}
 
-	    {{ form_row(form.Pseudo) }}
+		    {{ form_row(form.Pseudo) }}
 
-	    {{ form_row(form.Mdp) }}
+		    {{ form_row(form.Mdp) }}
 
-	    {{ form_row(form.Email) }}
+		    {{ form_row(form.Email) }}
 
-	    {{ form_row(form.Newsletter) }}
+		    {{ form_row(form.Newsletter) }}
 
-	    {{ form_row(form.Conditions) }}
+		    {{ form_row(form.Conditions) }}
 
-	    <div class="form-group">
-		    <label class="control-label required">Captcha</label>
-		    <div class="g-recaptcha" data-sitekey="6LdIRhgTAAAAAETW0QglcOGfBb3cYMTlcYOkWozt"></div>
+		    <div class="form-group">
+			    <label class="control-label required">Captcha</label>
+			    <div class="g-recaptcha" data-sitekey="6LdIRhgTAAAAAETW0QglcOGfBb3cYMTlcYOkWozt"></div>
+		    </div>
+
+		    {{ form_widget(form.Valider) }}
+
+		    {{ form_rest(form) }}
+		    {{ form_end(form) }}
 	    </div>
-
-	    {{ form_widget(form.Valider) }}
-
-	    {{ form_rest(form) }}
-	    {{ form_end(form) }}
-    </div>
+	</div>
 
 {% endblock %}
 

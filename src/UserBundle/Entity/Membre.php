@@ -29,10 +29,10 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="pseudo", type="string", length=32, unique=true)
+     * @ORM\Column(name="pseudo", type="string", length=32, nullable=true, unique=true)
      *
      * @Assert\Regex(
-     *     pattern = "#^[a-zA-Z0-9_\.\\-]{3,32}$#",
+     *     pattern = "#^$|^[a-zA-Z0-9_\.\\-]{3,32}$#",
      *     message = "Pseudo invalide. (3 à 32 caractères alphanumérique)"
      * )
      */
@@ -53,7 +53,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="mdp", type="string", length=72)
+     * @ORM\Column(name="mdp", type="string", length=72, nullable=true)
      *
      * UpperCase|LowerCase & Number|SpecialChar between 6 and 72 char (si je me suis pas trompé)
      * @Assert\Regex(
@@ -83,7 +83,7 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="sexe", type="string", length=8, nullable=true)
      *
      * @Assert\Regex(
-     *     pattern = "#Homme|Femme#",
+     *     pattern = "#^Homme$|^Femme$#",
      *     message = "Sexe invalide. (Homme ou Femme)"
      * )
      */
@@ -115,7 +115,7 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="cle_oubli_mdp", type="string", length=128, nullable=true)
+     * @ORM\Column(name="cle_oubli_mdp", type="string", length=128, nullable=true, unique=true)
      */
     private $cleOubliMdp;
 
@@ -124,7 +124,10 @@ class Membre implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="newsletter", type="boolean")
      *
-     * @Assert\NotBlank
+     * @Assert\Type(
+     *      type="bool"
+     * )
+     * @Assert\NotNull()
      */
     private $newsletter;
 
@@ -133,7 +136,10 @@ class Membre implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="banni", type="boolean")
      *
-     * @Assert\NotBlank
+     * @Assert\Type(
+     *      type="bool"
+     * )
+     * @Assert\NotNull()
      */
     private $banni;
 
@@ -158,21 +164,24 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 *
 	 * @ORM\Column(name="actif", type="boolean")
 	 *
-	 * @Assert\NotBlank
+	 * @Assert\Type(
+	 *      type="bool"
+	 * )
+	 * @Assert\NotNull()
 	 */
 	private $actif;
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="id_facebook", type="string", length=255, nullable=true)
+	 * @ORM\Column(name="id_facebook", type="string", length=255, nullable=true, unique=true)
 	 */
 	private $id_facebook;
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="id_twitter", type="string", length=255, nullable=true)
+	 * @ORM\Column(name="id_twitter", type="string", length=255, nullable=true, unique=true)
 	 */
 	private $id_twitter;
 

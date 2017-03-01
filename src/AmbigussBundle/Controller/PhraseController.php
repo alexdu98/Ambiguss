@@ -24,7 +24,7 @@ class PhraseController extends Controller
 			//créer l'objet glose
 			$glose = new \AmbigussBundle\Entity\Glose();
 
-			$formMotBuilder = $this->get('form.factory')->createBuilder(MotAmbiguPhraseType::class, $mot_ambigu_phrase);
+			$formMotBuilder = $this->get('form.factory')->createBuilder(MotAmbiguPhraseType::class, $mot_ambigu_phrase)->add('Valider', SubmitType::class);
 			$formMot = $formMotBuilder->getForm();
 
 

@@ -20,8 +20,7 @@ class MotAmbiguPhraseType extends AbstractType
     {
         $builder->add('phrase', PhraseType::class, array('label' => "Entrez votre phrase"))
         ->add('valeurMotAmbigu', TextType::class, array('label' => "Quel est le mot ambigu de cette phrase ?"))
-        ->add('motAmbigu', MotAmbiguType::class)
-        ->add('Valider', SubmitType::class);
+        ->add('motAmbigu', MotAmbiguType::class);
     }
     
     /**

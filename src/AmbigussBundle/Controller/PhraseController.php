@@ -21,10 +21,13 @@ class PhraseController extends Controller
 			$phrase = new \AmbigussBundle\Entity\Phrase();
 			//créer l'objet mot_ambigu_phrase
 			$mot_ambigu_phrase = new \AmbigussBundle\Entity\MotAmbiguPhrase();
+            //créer l'objet mot_ambigu
+            $mot_ambigu = new \AmbigussBundle\Entity\MotAmbigu();
 			//créer l'objet glose
 			$glose = new \AmbigussBundle\Entity\Glose();
 
-			$formMotBuilder = $this->get('form.factory')->createBuilder(MotAmbiguPhraseType::class, $mot_ambigu_phrase)->add('Valider', SubmitType::class);
+			$formMotBuilder = $this->get('form.factory')->createBuilder(MotAmbiguPhraseType::class, $mot_ambigu_phrase)
+            ->add('Valider', SubmitType::class);
 			$formMot = $formMotBuilder->getForm();
 
 
@@ -32,6 +35,52 @@ class PhraseController extends Controller
         	return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
       			'formMot'=> $formMot->createView(),
     		));
+
+            if ($request->isMethod('POST')) {
+                $formMot->handleRequest($request);
+                if ($form->isValid()) {
+                    // Ordre d'ajout : phrase -> motAmbigu -> mot_ambigu_phrase  -> les gloses associé au mot ambigu
+
+                    $phrase->setAuteur(48); //A FAIRE Comment récupérer l'id de l'utilisateur
+                    try{
+                        // On enregistre la phrase dans la base de données
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($phrase);
+                        $em->flush();
+                    }
+                    catch(Exception $e){
+                        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion de la phrase");
+                    }
+
+                    //A FAIRE Si le mot ambigu phrase n'est pas déjà dans la bdd il faut créer un mot ambigu, sinon il faut chercher l'id du mot ambigu déjà présent 
+                    try{
+                        // On enregistre le mot ambigu dans la base de données
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($mot_ambigu);
+                        $em->flush();
+                    }
+                    catch(Exception $e){
+                        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du mot ambigu");
+                    }
+
+                    // Une fois qu'on a le mot ambigu on peut le lier au mot ambigu phrase et à la phrase
+                    $mot_ambigu_phrase->setMotAmbigu($mot_ambigu->getId());
+                    $mot_ambigu_phrase->setPhrase($phrase->getId());
+                    try{
+                        // On enregistre le mot ambigu phrase dans la base de données
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($mot_ambigu_phrase);
+                        $em->flush();
+                    }
+                    catch(Exception $e){
+                        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du mot ambigu phrase");
+                    }
+
+                    //A FAIRE On récupére les gloses pour les lié au mot ambigu
+
+                }
+
+            }
     	}
     	else{
     		return $this->render('AmbigussBundle:Phrase:add.html.twig', array(

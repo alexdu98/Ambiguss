@@ -3,6 +3,15 @@ user_inscription:
     defaults:
         _controller: UserBundle:Security:inscription
 
+user_inscription_provider:
+    path: /inscription/{provider}
+    defaults:
+        _controller: UserBundle:Security:inscription
+    requirements:
+        provider: "[a-z]*"
+    options:
+        expose: true
+
 user_inscription_confirmation:
     path: /inscription/confirmation/{cle}
     defaults:

@@ -33,17 +33,18 @@
 				<div class="alert alert-success">{{ flashMessage }}</div>
 			{% endfor %}
 			{% if error %}
-				<div class="alert alert-danger">{{ error.message }}</div>
+				<div class="alert alert-danger">{{ error.message|trans({}, 'connexion') }}</div>
 			{% endif %}
 
 			<form action="{{ path('user_connexion_verification') }}" method="post">
 				<div class="form-group">
 					<label for="username"> Pseudo :</label>
-					<input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
+					<input type="text" class="form-control" id="username" name="_username" value="{{ last_username
+					}}" required>
 				</div>
 				<div class="form-group">
 					<label for="password"> Mot de passe :</label>
-					<input type="password" class="form-control" id="password" name="_password">
+					<input type="password" class="form-control" id="password" name="_password" required>
 				</div>
 				<input type="submit" value="Connexion" class="btn btn-primary">
 			</form>

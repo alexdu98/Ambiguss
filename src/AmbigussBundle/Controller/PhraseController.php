@@ -35,17 +35,17 @@ class PhraseController extends Controller
             ));
 
 
-
-
             if ($request->isMethod('POST')) {
                 $formMot->handleRequest($request);
                 if ($formMot->isValid()) {
                     // Ordre d'ajout : phrase -> motAmbigu -> mot_ambigu_phrase  -> les gloses associé au mot ambigu
 
                     //recup de l'utilisateur courant
+
                     $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
                     $m = $repository->find($this->get('security.token_storage')->getToken()->getUser()->getId());
                     $phrase->setAuteur($m);
+
                     try{
                         // On enregistre la phrase dans la base de données
                         $em = $this->getDoctrine()->getManager();
@@ -58,9 +58,9 @@ class PhraseController extends Controller
 
                     //A FAIRE Si le mot ambigu phrase n'est pas déjà dans la bdd il faut créer un mot ambigu, sinon il faut chercher l'id du mot ambigu déjà présent 
                     $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
-                    $m = $repository->findOneBy(array('valeur' => $mot_ambigu));
+                    $m = $repository->findOneBy(array('valeur' => $mot_ambigu->getValeur()));
                     if ($m==null) {
-                        $m=$mot_ambigu;
+
                         try {
                             // On enregistre le mot ambigu dans la base de données
                             $em = $this->getDoctrine()->getManager();

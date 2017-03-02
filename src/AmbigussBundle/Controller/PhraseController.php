@@ -32,6 +32,7 @@ class PhraseController extends Controller
 
 
 
+
         	return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
       			'formMot'=> $formMot->createView(),
     		));
@@ -41,7 +42,7 @@ class PhraseController extends Controller
                 if ($form->isValid()) {
                     // Ordre d'ajout : phrase -> motAmbigu -> mot_ambigu_phrase  -> les gloses associé au mot ambigu
 
-                    $phrase->setAuteur(48); //A FAIRE Comment récupérer l'id de l'utilisateur
+                    $phrase->setAuteur($this->get('security.token_storage')->getToken()->getUser()->getId()); //A FAIRE Comment récupérer l'id de l'utilisateur
                     try{
                         // On enregistre la phrase dans la base de données
                         $em = $this->getDoctrine()->getManager();

@@ -8,6 +8,7 @@
 	{% if pasConnect is defined %}
 		{{ pasConnect }}
 	{% else %}
+		Welcome, {{ app.user.username }}
 		{{ form(formMot) }}
 		<a href="#" id="add_glose" class="btn btn-default">Ajouter une glose</a>
 

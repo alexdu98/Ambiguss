@@ -42,6 +42,7 @@ class PhraseController extends Controller
                 if ($form->isValid()) {
                     // Ordre d'ajout : phrase -> motAmbigu -> mot_ambigu_phrase  -> les gloses associé au mot ambigu
 
+                    //recup de l'utilisateur courant
                     $phrase->setAuteur($this->get('security.token_storage')->getToken()->getUser()->getId()); //A FAIRE Comment récupérer l'id de l'utilisateur
                     try{
                         // On enregistre la phrase dans la base de données

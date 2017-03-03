@@ -69,13 +69,14 @@ class PhraseController extends Controller
                         } catch (Exception $e) {
                             $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du mot ambigu");
                         }
-                        // Une fois qu'on a le mot ambigu on peut le lier au motambiguphrase  (table MotAmbiguPhrase)
+                        // Une fois qu'on a le mot ambigu on peut le lier au MotAmbiguPhrase  (table MotAmbiguPhrase)
                         $mot_ambigu_phrase->setMotAmbigu($mot_ambigu);
+                        // et lui rajouter les gloses
                     }
                     else{
                         $mot_ambigu_phrase->setMotAmbigu($m);
                     }
-                    // on ajoute la phrase a la table MotAmbiguPhrase 
+                    // on ajoute la phrase a la table MotAmbiguPhrase
                     $mot_ambigu_phrase->setPhrase($phrase);
                     try{
                         // On enregistre le mot ambigu phrase dans la base de données

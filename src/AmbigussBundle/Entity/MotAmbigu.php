@@ -3,6 +3,7 @@
 namespace AmbigussBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * MotAmbigu
@@ -51,8 +52,11 @@ class MotAmbigu
 
     /**
      * @ORM\ManyToMany(targetEntity="Glose", cascade={"persist"})
+     * @Assert\Count(
+     *      min = 2,
+     *      minMessage = "Vous devez spécidier au moins deux gloses avant de valider ")
      */
-    private $gloses;
+    private $gloses = array();
 
 
     /**

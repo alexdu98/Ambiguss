@@ -2,7 +2,37 @@
 
 {% block title %}Oubli de mot passe{% endblock %}
 
+{% block titre %}Formulaire de réinitialisation de mot de passe{% endblock %}
+
 {% block contenu %}
-	<h1>TITRE</h1>
-	<p>OUBLI MDP</p>
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
+			{% for flashMessage in app.session.flashbag.get('succes') %}
+				<div class="alert alert-success">{{ flashMessage }}</div>
+			{% endfor %}
+			{% for flashMessage in app.session.flashbag.get('erreur') %}
+				<div class="alert alert-danger">{{ flashMessage }}</div>
+			{% endfor %}
+
+			{{ form_start(form) }}
+
+			{{ form_errors(form) }}
+
+			{{ form_row(form.PseudoOuEmail) }}
+
+			<div class="form-group">
+				<label class="control-label required">Captcha</label>
+				<div class="g-recaptcha" data-sitekey="6LdIRhgTAAAAAETW0QglcOGfBb3cYMTlcYOkWozt"></div>
+			</div>
+
+			{{ form_widget(form.Valider) }}
+
+			{{ form_rest(form) }}
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}

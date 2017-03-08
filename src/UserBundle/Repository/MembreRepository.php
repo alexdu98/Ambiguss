@@ -10,4 +10,10 @@ namespace UserBundle\Repository;
  */
 class MembreRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findOneByPseudoOrEmail($pseudoOrEmail){
+		return $this->createQueryBuilder('m')
+			->where("m.pseudo = :pseudo")->setParameter("pseudo", $pseudoOrEmail)
+			->orWhere("m.email = :email")->setParameter("email", $pseudoOrEmail)
+			->getQuery()->getOneOrNullResult();
+	}
 }

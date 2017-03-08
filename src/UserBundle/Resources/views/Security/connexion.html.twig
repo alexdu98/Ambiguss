@@ -32,8 +32,11 @@
 			{% for flashMessage in app.session.flashbag.get('succes') %}
 				<div class="alert alert-success">{{ flashMessage }}</div>
 			{% endfor %}
-			{% if error %}
-				<div class="alert alert-danger">{{ error.message|trans({}, 'connexion') }}</div>
+			{% for flashMessage in app.session.flashbag.get('erreur') %}
+				<div class="alert alert-danger">{{ erreur.message|trans({}, 'connexion') }}</div>
+			{% endfor %}
+			{% if erreur %}
+				<div class="alert alert-danger">{{ erreur.message|trans({}, 'connexion') }}</div>
 			{% endif %}
 
 			<form action="{{ path('user_connexion_verification') }}" method="post">

@@ -42,7 +42,7 @@ class SecurityController extends Controller
 
 		return $this->render('UserBundle:Security:connexion.html.twig', array(
 			'last_username' => $authenticationUtils->getLastUsername(),
-			'error'         => $authenticationUtils->getLastAuthenticationError(),
+			'erreur'         => $authenticationUtils->getLastAuthenticationError(),
 		));
 	}
 
@@ -229,7 +229,139 @@ class SecurityController extends Controller
 
 	}
 
-	public function oubliMdpAction(Request $request){
-		return $this->render('UserBundle:Security:oubli_mdp.html.twig');
+	public function oubliMdpAction(Request $request)
+	{
+		$form = $this->get('form.factory')->createBuilder(FormType::class)
+		->add('PseudoOuEmail', TextType::class, array(
+			'attr' => array('placeholder' => 'Pseudo ou email'),
+			'invalid_message' => 'Pseudo invalide'
+		))
+		->add('Valider', SubmitType::class, array(
+			'attr' => array('class' => 'btn btn-primary'),
+		))
+		->getform();
+
+		// Si la requête est en POST
+		if ($request->isMethod('POST')) {
+			$recaptcha = $this->get('app.recaptcha');
+			if($recaptcha->check($request->request->get('g-recaptcha-response'))){
+				$form->handleRequest($request);
+				$data = $form->getData();
+				if($form->isValid()){
+
+					$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
+					$membre = $repository->findOneByPseudoOrEmail($data['PseudoOuEmail']);
+
+					// Génère la clé pour la réinitialisation de mot de passe et l'enregistre dans le champ cleOubliMdp
+					$cleConfirmation = $membre->generateCle();
+
+					// On enregistre le membre dans la base de données
+					$em = $this->getDoctrine()->getManager();
+					try{
+						$em->persist($membre);
+						$em->flush();
+					}
+					catch(Exception $e){
+						$this->get('session')->setFlash('erreur', "Erreur lors de la mise à jour du membre");
+					}
+
+					// Envoi de l'email confimation/validation
+					$message = \Swift_Message::newInstance()
+						->setSubject("[Ambiguss] Réinitialisation de mot de passe")
+						->setFrom(array(
+							"no-reply@ambiguss.calyxe.fr" => "Ambiguss"
+						))
+						->setTo(array(
+							$membre->getEmail() => $membre->getPseudo()
+						))
+						->setBody($this->renderView('emails/oubli_mdp.html.twig', array(
+							'titre'           => "Réinitialisation de mot de passe",
+							'pseudo'          => $membre->getPseudo(),
+							'cleConfirmation' => $cleConfirmation
+						)),
+							'text/html');
+
+					if($this->get('mailer')->send($message)){
+						$this->get('session')->getFlashBag()->add('succes', 'Veuillez cliquer sur le lien de réinitialisation de mot de passe envoyer par email.');
+					}
+					else{
+						$this->get('session')->getFlashBag()->add('erreur', "L'envoi de
+		                l'email de réinitialisation de mot de passe a échoué. Contactez un administrateur.");
+					}
+
+					// rediriger vers la page de connexion
+					return $this->render('UserBundle:Security:oubli_mdp.html.twig', array(
+						'form' => $form->createView()
+					));
+				}
+			}
+			$this->get('session')->getFlashBag()->add('erreur', "Captcha invalide.");
+		}
+
+		return $this->render('UserBundle:Security:oubli_mdp.html.twig', array(
+			'form' => $form->createView()
+		));
+	}
+
+	public function oubliMdpReinitialisationAction(Request $request, $cle)
+	{
+		$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
+		$membre = $repository->findOneByCleOubliMdp($cle);
+		if($membre){
+			$form = $this->get('form.factory')->createBuilder(FormType::class)
+				->add('Mdp', RepeatedType::class, array(
+					'type' => PasswordType::class,
+					'options' => array('attr' => array('class' => 'password-field')),
+					'first_options'  => array(
+						'label' => 'Mot de passe',
+						'attr' => array('placeholder' => 'Mot de passe')
+					),
+					'second_options' => array(
+						'label' => 'Confirmation du mot de passe',
+						'attr' => array('placeholder' => 'Confirmation du mot de passe')
+					),
+					'invalid_message' => 'Les mots de passe ne sont pas identiques.'
+				))
+				->add('Valider', SubmitType::class, array(
+					'attr' => array('class' => 'btn btn-primary'),
+				))
+				->getform();
+
+			// Si la requête est en POST
+			if ($request->isMethod('POST')) {
+				$form->handleRequest($request);
+				$data = $form->getData();
+				if($form->isValid()){
+					// Hash le Mdp
+					$encoder = $this->get('security.password_encoder');
+					$hash = $encoder->encodePassword($membre, $data['Mdp']);
+
+					$membre->setMdp($hash);
+					$membre->setCleOubliMdp(null);
+
+					// On enregistre le membre dans la base de données
+					$em = $this->getDoctrine()->getManager();
+					try{
+						$em->persist($membre);
+						$em->flush();
+					}
+					catch(Exception $e){
+						$this->get('session')->setFlash('erreur', "Erreur lors de la mise à jour du membre");
+					}
+
+					$this->get('session')->getFlashBag()->add('succes', 'Votre mot de passe a bien été modifié.');
+
+					// rediriger vers la page de connexion
+					return $this->redirectToRoute('user_connexion');
+				}
+			}
+
+			return $this->render('UserBundle:Security:oubli_mdp_reinitialisation.html.twig', array(
+				'form' => $form->createView()
+			));
+		}
+
+		throw $this->createNotFoundException();
+
 	}
 }

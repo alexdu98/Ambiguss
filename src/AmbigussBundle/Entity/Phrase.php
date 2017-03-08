@@ -24,7 +24,7 @@ class Phrase
     /**
      * @var string
      *
-     * @ORM\Column(name="contenu", type="string", length=512)
+     * @ORM\Column(name="contenu", type="string", length=1024)
      */
     private $contenu;
 

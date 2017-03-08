@@ -228,4 +228,8 @@ class SecurityController extends Controller
 		throw $this->createNotFoundException();
 
 	}
+
+	public function oubliMdpAction(Request $request){
+		return $this->render('UserBundle:Security:oubli_mdp.html.twig');
+	}
 }

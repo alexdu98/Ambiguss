@@ -10,8 +10,8 @@
 	{% else %}
 		Welcome, {{ app.user.username }}
 		{{ form(formMot) }}
-		
-
+		<a href="#" id="add_glose" class="btn btn-default">Ajouter une glose</a>
+		<a   class="btn btn-default">Ajouter un autre mot ambigu</a>
 
 		{# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
 		   mais si vous l'avez en local, changez simplement l'adresse. #}
@@ -21,31 +21,36 @@
 		<script type="text/javascript">
 		  $(document).ready(function() {
 		    // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-		    var $container = $('div#ajout_phrase_form_Mot_ambi_glose');
-		    var $containerGlose = $('div#ajout_phrase_form_Mot_ambi_glose___name___Gloses_du_mot');
+		    var $container = $('div#ambigussbundle_motambiguphrase_motAmbigu_gloses');
 
 		    // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-		    var index = 0;
-		    add_MotAmbi($container);
-
-		    var indexGlose = 0;
-
-
+		    var index = $container.find(':input').length;
 
 		    // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-		    $('#ajout_phrase_form_Autre_mot').click(function(e) {
-		      add_MotAmbi($container);
+		    $('#add_glose').click(function(e) {
+		      addGlose($container);
+
 		      e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 		      return false;
-		    });    
+		    });
 
-		    						// La fonction qui ajoute un formulaire pour un mot et ses gloses
-		    function add_MotAmbi($container) {
+		    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+		    if (index == 0) {
+		      addCategory($container);
+		    } else {
+		      // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
+		      $container.children('div').each(function() {
+		        addDeleteLink($(this));
+		      });
+		    }
+
+		    // La fonction qui ajoute un formulaire GloseType
+		    function addGlose($container) {
 		      // Dans le contenu de l'attribut « data-prototype », on remplace :
 		      // - le texte "__name__label__" qu'il contient par le label du champ
 		      // - le texte "__name__" qu'il contient par le numéro du champ
 		      var template = $container.attr('data-prototype')
-		        .replace(/__name__label__/g, 'Mot n°' + (index+1))
+		        .replace(/__name__label__/g, 'Glose n°' + (index+1))
 		        .replace(/__name__/g,        index)
 		      ;
 
@@ -55,14 +60,6 @@
 		      // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
 		      addDeleteLink($prototype);
 
-		      //On ajoute la fonction pour ajouter des gloses sur le bouton Ajouter Glose A FAIRE
-		     /* // On ajoute une nouvelle glose à chaque clic sur le bouton NE MARCHE PAS
-		    $('#ajout_phrase_form_Mot_ambi_glose___name___Gloses_du_mot').click(function(e){
-		    	add_Glose($containerGlose);
-		    	e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-		      	return false;
-		    });
-			*/
 		      // On ajoute le prototype modifié à la fin de la balise <div>
 		      $container.append($prototype);
 
@@ -70,10 +67,10 @@
 		      index++;
 		    }
 
-		    					// La fonction qui ajoute un lien de suppression d'une catégorie
+		    // La fonction qui ajoute un lien de suppression d'une catégorie
 		    function addDeleteLink($prototype) {
 		      // Création du lien
-		      var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot</a>');
+		      var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
 
 		      // Ajout du lien
 		      $prototype.append($deleteLink);
@@ -81,36 +78,12 @@
 		      // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
 		      $deleteLink.click(function(e) {
 		        $prototype.remove();
-		        index--;
+
 		        e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 		        return false;
 		      });
 		    }
 		  });
-
-		  						//function qui ajoute une glose
-		  	function add_Glose($containerGlose){
-		  		var template = $containerGlose.attr('data-prototype')
-		        .replace(/__name__label__/g, 'Glose n°' + (indexGlose+1))
-		        .replace(/__name__/g,        indexGlose)
-		      ;
-		      var $prototype = $(template);
-			  //addDeleteLinkGlose($prototype);
-		      $containerGlose.append($prototype);
-		      indexGlose++; 
-		  	}
-		  	/*					//function qui ajoute un lien de suppresion d'une glose
-		  	function addDeleteLinkGlose($prototype) {
-		  		var $deleteLinkGlose = $('<a href="#" class="btn btn-danger">Supprimer la glose</a>');
-		  		$prototype.append($deleteLinkGlose);
-		  		$deleteLinkGlose.click(function(e) {
-		        $prototype.remove();
-		        indexGlose--;
-		        e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-		        return false;
-		      });
-		  	}*/
-
 		</script>
 
 	{% endif %}

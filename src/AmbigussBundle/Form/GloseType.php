@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+
 
 class GloseType extends AbstractType
 {
@@ -14,7 +16,8 @@ class GloseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('valeur', TextType::class);
+        $builder->add('Valeur_glose', TextType::class);
+        //->add('Retirer_glose', ButtonType::class);
     }
     
     /**

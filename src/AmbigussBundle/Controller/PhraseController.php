@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Controller;
 
+use AmbigussBundle\Form\AjoutPhraseForm;
 use AmbigussBundle\Form\MotAmbiguPhraseType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,8 +27,14 @@ class PhraseController extends Controller
 			//créer l'objet glose
 			$glose = new \AmbigussBundle\Entity\Glose();
 
-			$formMotBuilder = $this->get('form.factory')->createBuilder(MotAmbiguPhraseType::class, $mot_ambigu_phrase)
-            ->add('Valider', SubmitType::class);
+            //1ére version avec formulaire imbriqué correspondant a des entite
+			//$formMotBuilder = $this->get('form.factory')->createBuilder(MotAmbiguPhraseType::class, $mot_ambigu_phrase)
+            //->add('Valider', SubmitType::class);
+            
+            //2éme version utilisant des formulaire non relié a des entite
+            $ajoutPhrase=null;
+            $formMotBuilder = $this->get('form.factory')->createBuilder(AjoutPhraseForm::class, $ajoutPhrase);
+            
 			$formMot = $formMotBuilder->getForm();
 
 

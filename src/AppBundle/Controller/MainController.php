@@ -25,4 +25,9 @@ class MainController extends Controller
     {
         return $this->render('AppBundle:Main:contact.html.twig');
     }
+
+	public function aProposAction()
+	{
+		return $this->render('AppBundle:Main:apropos.html.twig');
+	}
 }

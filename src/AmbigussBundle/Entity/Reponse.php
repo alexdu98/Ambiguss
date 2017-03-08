@@ -38,7 +38,7 @@ class Reponse
     /**
      * @var string
      *
-     * @ORM\Column(name="contenu_phrase", type="string", length=512)
+     * @ORM\Column(name="contenu_phrase", type="string", length=1024)
      */
     private $contenuPhrase;
 

@@ -29,3 +29,8 @@ user_connexion_verification:
 
 user_deconnexion:
     path: /deconnexion
+
+user_oubli_mdp:
+    path: /oubli-mdp
+    defaults:
+        _controller: UserBundle:Security:oubliMdp

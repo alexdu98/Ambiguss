@@ -28,6 +28,6 @@ class MainController extends Controller
 
 	public function aProposAction()
 	{
-		return $this->render('AppBundle:Main:apropos.html.twig');
+		return $this->render('AppBundle:Main:a_propos.html.twig');
 	}
 }

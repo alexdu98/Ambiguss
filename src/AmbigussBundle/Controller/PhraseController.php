@@ -7,6 +7,7 @@ use AmbigussBundle\Form\MotAmbiguPhraseType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -33,11 +34,15 @@ class PhraseController extends Controller
             
             //2éme version utilisant des formulaire non relié a des entite
             $ajoutPhrase=null;
-            $formMotBuilder = $this->get('form.factory')->createBuilder(AjoutPhraseForm::class, $ajoutPhrase);
-            
-			$formMot = $formMotBuilder->getForm();
-
-
+		    $formMot = $this->get('form.factory')->createBuilder(AjoutPhraseForm::class, $ajoutPhrase)
+		    ->add('Phrase', TextareaType::class, array(
+			    'attr' => array('placeholder' => 'Phrase'),
+			    'invalid_message' => 'Phrase invalide'
+		    ))
+		    ->add('Valider', SubmitType::class, array(
+			    'attr' => array('class' => 'btn btn-primary'),
+		    ))
+			->getForm();
 
 
             if ($request->isMethod('POST')) {

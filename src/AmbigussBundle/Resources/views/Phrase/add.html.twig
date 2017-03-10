@@ -3,10 +3,24 @@
 {% block title %}Creation de phrase{% endblock %}
 
 {% block contenu %}
-	<h3>Creation de phrase</h3>
+	<h1>Création d'une phrase</h1>
 
-		Welcome, {{ app.user.username }}
-		{{ form(formMot) }}
+	<div class="row">
+	    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3 well">
+			{{ form(formMot) }}
+
+		    {{ form_start(formMot) }}
+
+		    {{ form_errors(formMot) }}
+
+		    {{ form_row(formMot.Phrase) }}
+
+		    {{ form_widget(formMot.Valider) }}
+
+		    {{ form_rest(formMot) }}
+		    {{ form_end(formMot) }}
+		</div>
+	</div>
 
 {% endblock %}
 

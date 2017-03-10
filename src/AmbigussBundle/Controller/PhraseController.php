@@ -60,7 +60,7 @@ class PhraseController extends Controller
                         $em->flush();
                     }
                     catch(Exception $e){
-                        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion de la phrase");
+                        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
                     }
                     //recherche si le mot ambigu existe dans la table MotAmbigu
                     $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
@@ -74,7 +74,7 @@ class PhraseController extends Controller
                             $em->persist($mot_ambigu);
                             $em->flush();
                         } catch (Exception $e) {
-                            $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du mot ambigu");
+                            $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion du mot ambigu");
                         }
                         // Une fois qu'on a le mot ambigu on peut le lier au MotAmbiguPhrase  (table MotAmbiguPhrase)
                         $mot_ambigu_phrase->setMotAmbigu($mot_ambigu);
@@ -92,7 +92,7 @@ class PhraseController extends Controller
                         $em->flush();
                     }
                     catch(Exception $e){
-                        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du mot ambigu phrase");
+                        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion du mot ambigu phrase");
                     }
 
                     //A FAIRE On récupére les gloses pour les lié au mot ambigu
@@ -105,9 +105,8 @@ class PhraseController extends Controller
             ));
     	}
     	else{
-    		return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
-    			'pasConnect' => "Vous n'êtes pas connecté." 
-    			));
+		    $this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
+    		return $this->redirectToRoute('user_connexion');
     	}
     }
 }

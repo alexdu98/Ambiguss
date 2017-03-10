@@ -172,7 +172,7 @@ class SecurityController extends Controller
 				        $em->flush();
 			        }
 			        catch(Exception $e){
-				        $this->get('session')->setFlash('erreur', "Erreur lors de l'insertion du membre");
+				        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion du membre");
 			        }
 
 			        // Envoi de l'email confimation/validation
@@ -262,7 +262,7 @@ class SecurityController extends Controller
 						$em->flush();
 					}
 					catch(Exception $e){
-						$this->get('session')->setFlash('erreur', "Erreur lors de la mise à jour du membre");
+						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de la mise à jour du membre");
 					}
 
 					// Envoi de l'email confimation/validation
@@ -346,7 +346,7 @@ class SecurityController extends Controller
 						$em->flush();
 					}
 					catch(Exception $e){
-						$this->get('session')->setFlash('erreur', "Erreur lors de la mise à jour du membre");
+						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de la mise à jour du membre");
 					}
 
 					$this->get('session')->getFlashBag()->add('succes', 'Votre mot de passe a bien été modifié.');

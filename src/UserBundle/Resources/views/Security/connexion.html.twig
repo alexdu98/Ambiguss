@@ -33,7 +33,7 @@
 				<div class="alert alert-success">{{ flashMessage }}</div>
 			{% endfor %}
 			{% for flashMessage in app.session.flashbag.get('erreur') %}
-				<div class="alert alert-danger">{{ erreur.message|trans({}, 'connexion') }}</div>
+				<div class="alert alert-danger">{{ flashMessage }}</div>
 			{% endfor %}
 			{% if erreur %}
 				<div class="alert alert-danger">{{ erreur.message|trans({}, 'connexion') }}</div>

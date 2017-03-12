@@ -17,6 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "boostrap#^3.3.7"
+    "bootstrap": "boostrap#^3.3.7",
+    "rangyinputs": "^1.2.0"
   }
 }

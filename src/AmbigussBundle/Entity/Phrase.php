@@ -3,6 +3,7 @@
 namespace AmbigussBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Phrase
@@ -67,6 +68,11 @@ class Phrase
 	 */
 	private $modificateur;
 
+	/**
+	 * @ORM\ManyToMany(targetEntity="MotAmbigu", cascade={"persist"})
+	 */
+	private $motsAmbigus;
+
 
     /**
      * Constructor
@@ -76,6 +82,7 @@ class Phrase
         $this->dateCreation = new \DateTime();
         $this->signale = 0;
         $this->visible = 1;
+	    $this->motsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -255,4 +262,38 @@ class Phrase
     {
         return $this->modificateur;
     }
+
+	/**
+	 * Add mot Ambigu
+	 *
+	 * @param \AmbigussBundle\Entity\MotAmbigu $motAmbigu
+	 *
+	 * @return Phrase
+	 */
+	public function addMotAmbigu(\AmbigussBundle\Entity\MotAmbigu $motAmbigu)
+	{
+		$this->motsAmbigus[] = $motAmbigu;
+
+		return $this;
+	}
+
+	/**
+	 * Remove mot ambigu
+	 *
+	 * @param \AmbigussBundle\Entity\MotAmbigu $motAmbigu
+	 */
+	public function removeMotAmbigu(\AmbigussBundle\Entity\MotAmbigu $motAmbigu)
+	{
+		$this->motsAmbigus->removeElement($motAmbigu);
+	}
+
+	/**
+	 * Get mots ambigus
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getMotsAmbigus()
+	{
+		return $this->motsAmbigus;
+	}
 }

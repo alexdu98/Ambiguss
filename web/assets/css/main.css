@@ -11,6 +11,7 @@ html{
 	--color-yellow: #FAFAD2;
 	--color-brown: #8B4513;
 	--color-black: #000000;
+	--color-red: #C51B10;
 }
 
 body{
@@ -54,7 +55,12 @@ a:hover{
 .bg-yellow{
 	background: var(--color-yellow);
 }
-
+.color-red{
+	color: var(--color-red);
+}
+.amb-border{
+	border-bottom: 2px dashed var(--color-red);
+}
 
 /*
     #####################################################################

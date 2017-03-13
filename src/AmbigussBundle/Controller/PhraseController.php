@@ -20,6 +20,10 @@ class PhraseController extends Controller
             {
 	            $form->handleRequest($request);
                 $data = $form->getData();
+                var_dump($data); die();
+
+                // TODO : Trouver pourquoi on a pas les valeurs pour les mots ambigus / gloses
+
                 $phrase->setAuteur($this->getUser());
 
                 // On trouve les mots ambigus

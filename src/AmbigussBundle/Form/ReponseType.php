@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,7 +21,9 @@ class ReponseType extends AbstractType
 	            'disabled' => true,
 		        'attr' => array('class' => 'amb'),
 	        ))
-	        ->add('valeurGlose', TextType::class, array(
+	        ->add('valeurGlose', EntityType::class, array(
+		        'class'        => 'AmbigussBundle:Glose',
+		        'choice_label' => 'valeur',
 	            'label' => 'Glose'
             ));
     }

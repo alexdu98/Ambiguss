@@ -28,7 +28,8 @@
 
 		    <div class="form-group">
 			    <div id="ambigussbundle_phrase_reponse" data-prototype="
-					{{ include('AmbigussBundle:Reponse:add.html.twig', { 'form': form.reponse.vars.prototype })|e
+					{{ include('AmbigussBundle:Reponse:add.html.twig', { 'form': form.reponse.vars.prototype, 'select': form.reponse.vars.prototype.children.valeurGlose.vars.form
+			    })|e
 			    ('html_attr') }}">
 			    </div>
 		    </div>
@@ -98,7 +99,7 @@
 
 				var replaced = phrase.search(reg2) >= 0;
 				if(replaced) {
-					html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (num : __num__)' +
+					html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
 						'">__amb__</b>';
 					res = phrase.replace(reg2, function ($0, $1, $2) {
 						return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Recaptcha;
+namespace AppBundle\Services;
 
 class Recaptcha{
 

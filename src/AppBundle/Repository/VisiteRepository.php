@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class VisiteRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function checkVisite()
+	{
+		$visite = new \AppBundle\Entity\Visite();
+		$hoursBetween2Visites = 24;
+
+		$lastVisite = $this->createQueryBuilder('v')
+			->where("v.ip = :ip")->setParameter("ip", $visite->getIp())
+			->andWhere("v.userAgent = :userAgent")->setParameter("userAgent", $visite->getUserAgent())
+			->orderBy("v.dateVisite", 'DESC')
+			->setMaxResults(1)
+			->getQuery()->getOneOrNullResult();
+
+		$date1 = $lastVisite->getDateVisite()->getTimestamp();
+		$date2 = $visite->getDateVisite()->getTimestamp();
+		$hours = ($date2 - $date1) / 3600;
+
+		if($lastVisite == null || $hours >= $hoursBetween2Visites){
+			$em = $this->_em;
+			$em->persist($visite);
+			$em->flush();
+		}
+	}
 }

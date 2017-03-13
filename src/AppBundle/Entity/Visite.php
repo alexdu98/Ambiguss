@@ -28,6 +28,13 @@ class Visite
      */
     private $ip;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="user_agent", type="string", length=255)
+	 */
+	private $userAgent;
+
     /**
      * @var \DateTime
      *
@@ -41,6 +48,8 @@ class Visite
      */
     public function __construct()
     {
+    	$this->ip = $_SERVER['REMOTE_ADDR'];
+    	$this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->dateVisite = new \DateTime();
     }
 
@@ -77,6 +86,30 @@ class Visite
     {
         return $this->ip;
     }
+
+	/**
+	 * Set userAgent
+	 *
+	 * @param string $userAgent
+	 *
+	 * @return Visite
+	 */
+	public function setUserAgent($userAgent)
+	{
+		$this->userAgent = $userAgent;
+
+		return $this;
+	}
+
+	/**
+	 * Get userAgent
+	 *
+	 * @return string
+	 */
+	public function getUserAgent()
+	{
+		return $this->userAgent;
+	}
 
     /**
      * Set dateVisite

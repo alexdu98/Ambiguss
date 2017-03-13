@@ -68,12 +68,6 @@ class Reponse
     private $phrase;
 
     /**
-     * @ORM\ManyToOne(targetEntity="MotAmbiguPhrase")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $motAmbiguPhrase;
-
-    /**
      * @ORM\ManyToOne(targetEntity="PoidsReponse")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -277,30 +271,6 @@ class Reponse
     public function getPhrase()
     {
         return $this->phrase;
-    }
-
-    /**
-     * Set motAmbiguPhrase
-     *
-     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase
-     *
-     * @return Reponse
-     */
-    public function setMotAmbiguPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase)
-    {
-        $this->motAmbiguPhrase = $motAmbiguPhrase;
-
-        return $this;
-    }
-
-    /**
-     * Get motAmbiguPhrase
-     *
-     * @return \AmbigussBundle\Entity\MotAmbiguPhrase
-     */
-    public function getMotAmbiguPhrase()
-    {
-        return $this->motAmbiguPhrase;
     }
 
     /**

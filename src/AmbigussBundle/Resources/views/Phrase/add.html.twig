@@ -1,107 +1,145 @@
 {% extends 'theme2.html.twig' %}
 
-{% block title %}Creation de phrase{% endblock %}
+{% block title %}Création de phrase{% endblock %}
 
 {% block contenu %}
 	<h1>Création d'une phrase</h1>
 
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3 well">
-			{{ form(formMot) }}
 
-		    {{ form_start(formMot) }}
+		    {% for flashMessage in app.session.flashbag.get('succes') %}
+			    <div class="alert alert-success">{{ flashMessage }}</div>
+		    {% endfor %}
 
-		    {{ form_errors(formMot) }}
+		    {{ form_start(form) }}
 
-		    {{ form_row(formMot.Phrase) }}
+		    {{ form_errors(form) }}
 
-		    {{ form_widget(formMot.Valider) }}
+		    <div class="form-group">
+		        <div id="rendu" style="background: white; color: black; padding: 5px;" hidden></div>
+		    </div>
 
-		    {{ form_rest(formMot) }}
-		    {{ form_end(formMot) }}
+		    {{ form_row(form.contenu) }}
+
+		    <div class="form-group">
+			    <button type="button" class="btn btn-primary" id="addAmb">Le mot sélectionné est ambigu</button>
+		    </div>
+
+		    <div class="form-group">
+			    <div id="ambigussbundle_phrase_reponse" data-prototype="
+					{{ include('AmbigussBundle:Reponse:add.html.twig', { 'form': form.reponse.vars.prototype, 'select': form.reponse.vars.prototype.children.valeurGlose.vars.form
+			    })|e
+			    ('html_attr') }}">
+			    </div>
+		    </div>
+		    {% do form.reponse.setRendered %}
+
+		    {{ form_row(form.creer) }}
+
+		    {{ form_rest(form) }}
+		    {{ form_end(form) }}
+
 		</div>
 	</div>
 
 {% endblock %}
 
 {% block js %}
-	<script type="text/javascript">
-		$(document).ready(function() {
-			// On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-			var $container = $('div#ajout_phrase_form_Mot_ambi_glose');
-			var $containerGlose = $('div#ajout_phrase_form_Mot_ambi_glose___name___Gloses_du_mot');
-			// On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+	<script src="{{ asset('assets/vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
+	<script>
+		$(document).ready(function()
+		{
+			var startBaliseAmbigu = '<amb>';
+			var endBaliseAmbigu = '</amb>';
+			var endBaliseAmbiguEscape = '<\/amb>';
+			var reg = new RegExp(startBaliseAmbigu + '(.*?)' + endBaliseAmbiguEscape, 'g');
+			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbiguEscape, 'g');
+			var $container = $('div#ambigussbundle_phrase_reponse');
+			var textarea = $("textarea#{{ form.contenu.vars.id }}");
 			var index = 0;
-			add_MotAmbi($container);
-			var indexGlose = 0;
-			// On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-			$('#ajout_phrase_form_Autre_mot').click(function(e) {
-				add_MotAmbi($container);
-				e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-				return false;
+
+			// A chaque modification du textarea par le clacier
+			textarea.bind('input', function() {
+				updatePhrase();
+				updateRendu();
 			});
-			// La fonction qui ajoute un formulaire pour un mot et ses gloses
-			function add_MotAmbi($container) {
-				// Dans le contenu de l'attribut « data-prototype », on remplace :
-				// - le texte "__name__label__" qu'il contient par le label du champ
-				// - le texte "__name__" qu'il contient par le numéro du champ
-				var template = $container.attr('data-prototype')
-						.replace(/__name__label__/g, 'Mot n°' + (index+1))
-						.replace(/__name__/g,        index)
-					;
-				// On crée un objet jquery qui contient ce template
-				var $prototype = $(template);
-				// On ajoute au prototype un lien pour pouvoir supprimer la catégorie
-				addDeleteLink($prototype);
-				//On ajoute la fonction pour ajouter des gloses sur le bouton Ajouter Glose A FAIRE
-				/* // On ajoute une nouvelle glose à chaque clic sur le bouton NE MARCHE PAS
-				 $('#ajout_phrase_form_Mot_ambi_glose___name___Gloses_du_mot').click(function(e){
-				 add_Glose($containerGlose);
-				 e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-				 return false;
-				 });
-				 */
-				// On ajoute le prototype modifié à la fin de la balise <div>
-				$container.append($prototype);
-				// Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-				index++;
+
+			$("#addAmb").click(function () {
+				if((sel = textarea.getSelection()).text != '') {
+					textarea.val(
+						textarea.val().slice(0, sel.start)
+						+ '<amb>'
+						+ sel.text
+						+ '</amb>'
+						+ textarea.val().slice(sel.end)
+					);
+					updatePhrase();
+					updateRendu();
+				}
+			});
+
+			function updatePhrase(){
+				var phrase = textarea.val();
+				var replaced = phrase.search(reg) >= 0;
+				if(replaced) {
+					var temp = phrase.replace(reg, function ($0, $1) {
+						index++;
+						addReponse($container, $1);
+						return '<amb id="' + index + '">' + $1 + '</amb>';
+					});
+					textarea.val(temp);
+				}
 			}
-			// La fonction qui ajoute un lien de suppression d'une catégorie
+
+			function updateRendu(){
+				var phrase = textarea.val();
+				var rendu = $("#rendu");
+				var res = phrase;
+
+				var replaced = phrase.search(reg2) >= 0;
+				if(replaced) {
+					html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
+						'">__amb__</b>';
+					res = phrase.replace(reg2, function ($0, $1, $2) {
+						return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
+					});
+				}
+				rendu.empty().append(res);
+
+				if(rendu.html().length > 0)
+					rendu.show();
+				else
+					rendu.hide();
+			}
+
+			function addReponse($container, motAmbigu) {
+				var template = $container.attr('data-prototype')
+					.replace(/__name__label__/g, '')
+					.replace(/__name__/g, index)
+					.replace(/__id__/g, index);
+				var $prototype = $(template);
+				var amb = $prototype.find('.amb');
+				amb.val(motAmbigu.trim() + ' ' + amb.val());
+				addDeleteLink($prototype);
+				$container.append($prototype);
+			}
+
 			function addDeleteLink($prototype) {
-				// Création du lien
-				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot</a>');
-				// Ajout du lien
-				$prototype.append($deleteLink);
-				// Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+				$prototype.find(".deleteLink").append($deleteLink);
 				$deleteLink.click(function(e) {
+					var phrase = textarea.val();
+					var id = $prototype.attr('id').replace(/amb/, '');
+					var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+					textarea.val(phrase.replace(reg3, '$1'));
+					updateRendu();
 					$prototype.remove();
-					index--;
 					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 					return false;
 				});
 			}
+
 		});
-		//function qui ajoute une glose
-		function add_Glose($containerGlose){
-			var template = $containerGlose.attr('data-prototype')
-					.replace(/__name__label__/g, 'Glose n°' + (indexGlose+1))
-					.replace(/__name__/g,        indexGlose)
-				;
-			var $prototype = $(template);
-			//addDeleteLinkGlose($prototype);
-			$containerGlose.append($prototype);
-			indexGlose++;
-		}
-		/*					//function qui ajoute un lien de suppresion d'une glose
-		 function addDeleteLinkGlose($prototype) {
-		 var $deleteLinkGlose = $('<a href="#" class="btn btn-danger">Supprimer la glose</a>');
-		 $prototype.append($deleteLinkGlose);
-		 $deleteLinkGlose.click(function(e) {
-		 $prototype.remove();
-		 indexGlose--;
-		 e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-		 return false;
-		 });
-		 }*/
 	</script>
 {% endblock %}

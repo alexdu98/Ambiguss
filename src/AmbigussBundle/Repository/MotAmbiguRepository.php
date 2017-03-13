@@ -10,4 +10,16 @@ namespace AmbigussBundle\Repository;
  */
 class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findOneOrCreate($valeur)
+	{
+		$entity = $this->findOneByValeur($valeur);
+		if($entity == null){
+			$entity = new \AmbigussBundle\Entity\MotAmbigu();
+			$entity->setValeur($valeur);
+			$this->_em->persist($entity);
+			$this->_em->flush();
+		}
+		return $entity;
+	}
+
 }

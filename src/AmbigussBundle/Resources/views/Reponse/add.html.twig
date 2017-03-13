@@ -1,22 +1,19 @@
 <div class="container-fluid" id="amb__id__">
-	<div class="form-group row">
+	<div class="row">
 		<label class="control-label required">__name__label__</label>
 		<div id="ambigussbundle_phrase_reponse___name__" class="col-md-5">
-			<div class="form-group">
-				<label class="control-label required" for="ambigussbundle_phrase_reponse___name___valeurMotAmbigu">Mot
-					ambigu</label><input type="text" id="ambigussbundle_phrase_reponse___name___valeurMotAmbigu" name="ambigussbundle_phrase[reponse][__name__][valeurMotAmbigu]" disabled="disabled"
-						required="required" class="amb form-control" value="(num : __id__)"/>
-			</div>
+			<label class="control-label required" for="ambigussbundle_phrase_reponse___name___valeurMotAmbigu">Mot
+				ambigu</label>
+			<input type="text" id="ambigussbundle_phrase_reponse___name___valeurMotAmbigu" name="ambigussbundle_phrase[reponse][__name__][valeurMotAmbigu]" disabled="disabled" required="required" class="amb form-control" value="(id : __id__)"/>
 		</div>
+
 		<div class="col-md-5">
-			<div class="form-group">
-				<label class="control-label required" for="ambigussbundle_phrase_reponse___name___valeurGlose">Glose</label><input type="text" id="ambigussbundle_phrase_reponse___name___valeurGlose" name="ambigussbundle_phrase[reponse][__name__][valeurGlose]" required="required" class="form-control"/>
-			</div>
+			<label class="control-label required" for="ambigussbundle_phrase_reponse___name___valeurGlose">Glose</label>
+			{{ form_widget(select) }}
 		</div>
 		<div class="col-md-2">
-			<div class="form-group deleteLink">
-
-			</div>
+			<label class="control-label required"></label>
+			<div class="deleteLink"></div>
 		</div>
 	</div>
 </div>

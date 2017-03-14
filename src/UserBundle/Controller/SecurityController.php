@@ -15,6 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use UserBundle\Form\MembreOubliPassResetType;
+use UserBundle\Form\MembreOubliPassType;
+use UserBundle\Form\MembreType;
 
 class SecurityController extends Controller
 {
@@ -30,15 +33,7 @@ class SecurityController extends Controller
 		$membre = new \UserBundle\Entity\Membre();
 
 		//ajout des attributs qu'on veut afficher dans le formulaire
-		$form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
-			->add('Pseudo', TextType::class, array(
-				'attr' => array('placeholder' => 'Pseudo'),
-				'invalid_message' => 'Pseudo invalide'
-			))
-			->add('Connexion', SubmitType::class, array(
-				'attr' => array('class' => 'btn btn-primary'),
-			))
-			->getform();
+		$form = $this->get('form.factory')->createBuilder(FormType::class, $membre);
 
 		return $this->render('UserBundle:Security:connexion.html.twig', array(
 			'last_username' => $authenticationUtils->getLastUsername(),
@@ -52,40 +47,7 @@ class SecurityController extends Controller
         $membre = new \UserBundle\Entity\Membre();
 
         //ajout des attributs qu'on veut afficher dans le formulaire
-        $form = $this->get('form.factory')->createBuilder(FormType::class, $membre)
-            ->add('Pseudo', TextType::class, array(
-	            'attr' => array('placeholder' => 'Pseudo'),
-	            'invalid_message' => 'Pseudo invalide'
-            ))
-	        ->add('Mdp', RepeatedType::class, array(
-		        'type' => PasswordType::class,
-		        'options' => array('attr' => array('class' => 'password-field')),
-		        'first_options'  => array(
-			        'label' => 'Mot de passe',
-			        'attr' => array('placeholder' => 'Mot de passe')
-		        ),
-		        'second_options' => array(
-			        'label' => 'Confirmation du mot de passe',
-			        'attr' => array('placeholder' => 'Confirmation du mot de passe')
-		        ),
-		        'invalid_message' => 'Les mots de passe ne sont pas identiques.'
-	        ))
-            ->add('Email', EmailType::class, array(
-	            'attr' => array('placeholder' => 'Email')
-            ))
-            ->add('Newsletter', CheckboxType::class, array(
-	            'label' => "J'accepte de recevoir les newsletter du site",
-	            'required' => false
-            ))
-	        ->add('Conditions', CheckboxType::class, array(
-		        'label' => "J'accepte les CGU du site",
-		        'required' => true,
-		        'mapped' => false
-	        ))
-            ->add('Valider', SubmitType::class, array(
-	            'attr' => array('class' => 'btn btn-primary'),
-            ))
-            ->getform();
+        $form = $this->get('form.factory')->createBuilder(MembreType::class, $membre);
 
         // Si la requête est en POST
         if ($request->isMethod('POST')) {
@@ -130,7 +92,7 @@ class SecurityController extends Controller
 			        $em->persist($membre);
 			        $em->flush();
 		        }
-		        catch(Exception $e){
+		        catch(\Exception $e){
 			        return $this->json(array(
 				        'erreur' => $e
 			        ));
@@ -231,15 +193,7 @@ class SecurityController extends Controller
 
 	public function oubliMdpAction(Request $request)
 	{
-		$form = $this->get('form.factory')->createBuilder(FormType::class)
-		->add('PseudoOuEmail', TextType::class, array(
-			'attr' => array('placeholder' => 'Pseudo ou email'),
-			'invalid_message' => 'Pseudo invalide'
-		))
-		->add('Valider', SubmitType::class, array(
-			'attr' => array('class' => 'btn btn-primary'),
-		))
-		->getform();
+		$form = $this->get('form.factory')->createBuilder(MembreOubliPassType::class);
 
 		// Si la requête est en POST
 		if ($request->isMethod('POST')) {
@@ -308,24 +262,7 @@ class SecurityController extends Controller
 		$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
 		$membre = $repository->findOneByCleOubliMdp($cle);
 		if($membre){
-			$form = $this->get('form.factory')->createBuilder(FormType::class)
-				->add('Mdp', RepeatedType::class, array(
-					'type' => PasswordType::class,
-					'options' => array('attr' => array('class' => 'password-field')),
-					'first_options'  => array(
-						'label' => 'Mot de passe',
-						'attr' => array('placeholder' => 'Mot de passe')
-					),
-					'second_options' => array(
-						'label' => 'Confirmation du mot de passe',
-						'attr' => array('placeholder' => 'Confirmation du mot de passe')
-					),
-					'invalid_message' => 'Les mots de passe ne sont pas identiques.'
-				))
-				->add('Valider', SubmitType::class, array(
-					'attr' => array('class' => 'btn btn-primary'),
-				))
-				->getform();
+			$form = $this->get('form.factory')->createBuilder(MembreOubliPassResetType::class);
 
 			// Si la requête est en POST
 			if ($request->isMethod('POST')) {

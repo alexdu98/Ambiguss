@@ -41,3 +41,8 @@ user_oubli_mdp_reinitialisation:
         _controller: UserBundle:Security:oubliMdpReinitialisation
     requirements:
         cle: "[a-z0-9]+"
+
+user_profil:
+    path: /user/profil
+    defaults:
+        _controller: UserBundle:Utilisateur:Profil

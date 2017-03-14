@@ -53,25 +53,41 @@
 			var startBaliseAmbigu = '<amb>';
 			var endBaliseAmbigu = '</amb>';
 			var endBaliseAmbiguEscape = '<\/amb>';
+
+			// Regex pour avoir les contenus des balises <amb>
+			// Exemple : L'<amb>avocat</amb> mange des <amb>avocats</amb>.
+			// Donne : $1 = avocat, puis $1 = avocats
 			var reg = new RegExp(startBaliseAmbigu + '(.*?)' + endBaliseAmbiguEscape, 'g');
+			// Regex pour avoir les contenus des balises <amb> et leurs id
+			// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
+			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
 			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbiguEscape, 'g');
+
+			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
 			var $container = $('div#ambigussbundle_phrase_reponse');
+
+			// textarea où l'on écrit la phrase
 			var textarea = $("textarea#{{ form.contenu.vars.id }}");
+
+			// Pour numéroter le mot ambigu
 			var index = 0;
 
-			// A chaque modification du textarea par le clacier
+			// A chaque modification du textarea via le clavier
 			textarea.bind('input', function() {
 				updatePhrase();
 				updateRendu();
 			});
 
+			// Au clic sur le bouton ajout d'un mot ambigu
 			$("#addAmb").click(function () {
+				// S'il y a bien un mot séléctionné
 				if((sel = textarea.getSelection()).text != '') {
+					// On met à jour la valeur du textarea en entourant le mot séléctionné
 					textarea.val(
 						textarea.val().slice(0, sel.start)
-						+ '<amb>'
+						+ startBaliseAmbigu
 						+ sel.text
-						+ '</amb>'
+						+ endBaliseAmbigu
 						+ textarea.val().slice(sel.end)
 					);
 					updatePhrase();
@@ -79,59 +95,77 @@
 				}
 			});
 
+			// On met à jour le textarea
 			function updatePhrase(){
 				var phrase = textarea.val();
+				// Compte le nombre d'occurence de balise <amb>
 				var replaced = phrase.search(reg) >= 0;
+				// Si au moins 1
 				if(replaced) {
+					// On ajout dans la balise <amb> l'id du mot ambigu
 					var temp = phrase.replace(reg, function ($0, $1) {
 						index++;
 						addReponse($container, $1);
-						return '<amb id="' + index + '">' + $1 + '</amb>';
+						return '<amb id="' + index + '">' + $1 + endBaliseAmbigu;
 					});
 					textarea.val(temp);
 				}
 			}
 
+			// On met à jour l'affichage propre de la phrase
 			function updateRendu(){
 				var phrase = textarea.val();
 				var rendu = $("#rendu");
 				var res = phrase;
 
+				// Compte le nombre d'occurence de balise <amb id="">
 				var replaced = phrase.search(reg2) >= 0;
+				// Si au moins 1
 				if(replaced) {
 					html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
 						'">__amb__</b>';
+					// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
 					res = phrase.replace(reg2, function ($0, $1, $2) {
 						return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
 					});
 				}
 				rendu.empty().append(res);
 
+				// Si le rendu est vide, on cache la div
 				if(rendu.html().length > 0)
 					rendu.show();
 				else
 					rendu.hide();
 			}
 
+			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addReponse($container, motAmbigu) {
+				// On ajoute le nom unique et l'id
 				var template = $container.attr('data-prototype')
 					.replace(/__name__label__/g, '')
 					.replace(/__name__/g, index)
 					.replace(/__id__/g, index);
 				var $prototype = $(template);
+				// Trouve la balise qui à la class amb
 				var amb = $prototype.find('.amb');
+				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
 				amb.val(motAmbigu.trim() + ' ' + amb.val());
 				addDeleteLink($prototype);
 				$container.append($prototype);
 			}
 
+			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addDeleteLink($prototype) {
 				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
 				$prototype.find(".deleteLink").append($deleteLink);
+				// Au clic sur le bouton de suppression
 				$deleteLink.click(function(e) {
 					var phrase = textarea.val();
+					// On récupère l'id qui est dans l'attribut id (id="amb1"), en supprimant le amb
 					var id = $prototype.attr('id').replace(/amb/, '');
+					// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
 					var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+					// Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu
 					textarea.val(phrase.replace(reg3, '$1'));
 					updateRendu();
 					$prototype.remove();

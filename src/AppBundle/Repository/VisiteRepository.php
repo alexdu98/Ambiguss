@@ -22,14 +22,16 @@ class VisiteRepository extends \Doctrine\ORM\EntityRepository
 			->setMaxResults(1)
 			->getQuery()->getOneOrNullResult();
 
-		$date1 = $lastVisite->getDateVisite()->getTimestamp();
-		$date2 = $visite->getDateVisite()->getTimestamp();
-		$hours = ($date2 - $date1) / 3600;
+		if($lastVisite == null){
+			$date1 = $lastVisite->getDateVisite()->getTimestamp();
+			$date2 = $visite->getDateVisite()->getTimestamp();
+			$hours = ($date2 - $date1) / 3600;
 
-		if($lastVisite == null || $hours >= $hoursBetween2Visites){
-			$em = $this->_em;
-			$em->persist($visite);
-			$em->flush();
+			if($hours >= $hoursBetween2Visites){
+				$em = $this->_em;
+				$em->persist($visite);
+				$em->flush();
+			}
 		}
 	}
 }

@@ -29,8 +29,14 @@
 	<br>
 	<div class="row">
 	    <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
+		    {% for flashMessage in app.session.flashbag.get('succes') %}
+			    <div class="alert alert-success">{{ flashMessage }}</div>
+		    {% endfor %}
+		    {% for flashMessage in app.session.flashbag.get('erreur') %}
+			    <div class="alert alert-danger">{{ flashMessage }}</div>
+		    {% endfor %}
 
-	        {{ form_start(form) }}
+	        {{ form_start(form, {'attr': {'id': 'formInscription'}}) }}
 
 		    {{ form_errors(form) }}
 
@@ -44,11 +50,6 @@
 
 		    {{ form_row(form.Conditions) }}
 
-		    <div class="form-group">
-			    <label class="control-label required">Captcha</label>
-			    <div class="g-recaptcha" data-sitekey="6LdIRhgTAAAAAETW0QglcOGfBb3cYMTlcYOkWozt"></div>
-		    </div>
-
 		    {{ form_widget(form.Valider) }}
 
 		    {{ form_rest(form) }}
@@ -59,5 +60,11 @@
 {% endblock %}
 
 {% block js %}
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script>
+		// Fonction appelé par le script Recaptcha après un clic sur le bouton de validation
+		function onSubmit(token) {
+			document.getElementById("formInscription").submit();
+		}
+	</script>
 {% endblock %}

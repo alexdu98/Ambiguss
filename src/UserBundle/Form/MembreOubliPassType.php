@@ -21,7 +21,11 @@ class MembreOubliPassType extends AbstractType
 		        'invalid_message' => 'Pseudo invalide'
 	        ))
 	        ->add('Valider', SubmitType::class, array(
-		        'attr' => array('class' => 'btn btn-primary'),
+		        'attr' => array(
+		        	'class' => 'btn btn-primary g-recaptcha',
+		            'data-sitekey' => '6LcXBhkUAAAAAIMfOvKJODxXAhw-qG2VzGG2rppj',
+			        'data-callback' => 'onSubmit'
+		        ),
 	        ));
     }
     

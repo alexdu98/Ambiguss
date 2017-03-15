@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use UserBundle\Form\MembreConnexionType;
 use UserBundle\Form\MembreOubliPassResetType;
 use UserBundle\Form\MembreOubliPassType;
 use UserBundle\Form\MembreType;
@@ -33,9 +34,10 @@ class SecurityController extends Controller
 		$membre = new \UserBundle\Entity\Membre();
 
 		//ajout des attributs qu'on veut afficher dans le formulaire
-		$form = $this->get('form.factory')->createBuilder(FormType::class, $membre);
+		$form = $this->get('form.factory')->create(MembreConnexionType::class, $membre);
 
 		return $this->render('UserBundle:Security:connexion.html.twig', array(
+			'form' => $form->createView(),
 			'last_username' => $authenticationUtils->getLastUsername(),
 			'erreur'         => $authenticationUtils->getLastAuthenticationError(),
 		));

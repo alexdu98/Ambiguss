@@ -39,19 +39,29 @@
 				<div class="alert alert-danger">{{ erreur.message|trans({}, 'connexion') }}</div>
 			{% endif %}
 
-			<form action="{{ path('user_connexion_verification') }}" method="post">
-				<div class="form-group">
-					<label for="username"> Pseudo :</label>
-					<input type="text" class="form-control" id="username" name="_username" value="{{ last_username
-					}}" required>
+			{{ form_start(form, {action:path('user_connexion_verification')}) }}
+
+			{{ form_errors(form) }}
+
+			{{ form_row(form.Pseudo) }}
+
+			{{ form_row(form.Mdp) }}
+
+			<div class="row">
+				<div class="col-xs-6 col-sm-8">
+					{{ form_widget(form.KeepCo) }}
 				</div>
-				<div class="form-group">
-					<label for="password"> Mot de passe :</label>
-					<input type="password" class="form-control" id="password" name="_password" required>
+				<div class="col-xs-6 col-sm-4 text-right">
+					{{ form_widget(form.Connexion) }}
 				</div>
-				<input type="submit" value="Connexion" class="btn btn-primary">
-				<a href="{{ path('user_oubli_mdp') }}" class="pull-right">Mot de passe oublié ?</a>
-			</form>
+			</div>
+
+			{{ form_rest(form) }}
+			{{ form_end(form) }}
+			<br>
+			<div class="text-right">
+				<a href="{{ path('user_oubli_mdp') }}">Mot de passe oublié ?</a>
+			</div>
 		</div>
 	</div>
 

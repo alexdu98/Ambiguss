@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeu{% endblock %}
+{% block titre %}<h1>Let's Play !</h1>{% endblock %}
+{% block contenu %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3">
+            <div class="bulle">
+               <h3 id="result"></h3>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" id="valider">Valider</button>
+                </div>
+    {% block js %}
+
+                {% for Amb in motAmbigus %}
+
+                <script> // j'ai la phrase et les mots ambius qu'elle contient : pour chaque mots ambigu je l'entoure de <b></b>
+                    // pour que le mots apparaisse en gras (pour l'instant)
+
+                        var startBaliseAmbigu = '<b>';
+                        var endBaliseAmbigu = '</b>';
+
+                        var text="";
+                        var phrase= "{{ phrase }}"; // problème ici pourtant phrase est un string t'as une idée ?
+
+                        var mots= phrase.split(" ");
+
+                        for(var i=0; i < mots.length; i++) {
+
+                            if (mots[i].equals("{{ Amb.valeur }}")){
+                                text=text+startBaliseAmbigu+mots[i]+endBaliseAmbigu;
+
+                            }
+                            else { alert("f");
+                                text = text + mots[i]+" ";
+                            }
+
+                        }
+
+                        document.getElementById("result").innerHTML = text;
+
+
+                </script>
+
+                    {% endfor %}
+    {%  endblock %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

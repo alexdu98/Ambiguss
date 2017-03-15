@@ -3,7 +3,6 @@
 {% block title %}Jeu{% endblock %}
 {% block titre %}<h1>Let's Play !</h1>{% endblock %}
 {% block contenu %}
-
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3">
             <div class="bulle">
@@ -11,43 +10,41 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="valider">Valider</button>
                 </div>
-    {% block js %}
-
-                {% for Amb in motAmbigus %}
-
-                <script> // j'ai la phrase et les mots ambius qu'elle contient : pour chaque mots ambigu je l'entoure de <b></b>
-                    // pour que le mots apparaisse en gras (pour l'instant)
-
-                        var startBaliseAmbigu = '<b>';
-                        var endBaliseAmbigu = '</b>';
-
-                        var text="";
-                        var phrase= "{{ phrase }}"; // problème ici pourtant phrase est un string t'as une idée ?
-
-                        var mots= phrase.split(" ");
-
-                        for(var i=0; i < mots.length; i++) {
-
-                            if (mots[i].equals("{{ Amb.valeur }}")){
-                                text=text+startBaliseAmbigu+mots[i]+endBaliseAmbigu;
-
-                            }
-                            else { alert("f");
-                                text = text + mots[i]+" ";
-                            }
-
-                        }
-
-                        document.getElementById("result").innerHTML = text;
-
-
-                </script>
-
-                    {% endfor %}
-    {%  endblock %}
-
             </div>
         </div>
     </div>
-
 {% endblock %}
+{% block js %}
+
+	<script>
+		var startBaliseAmbigu = '<amb>';
+		var endBaliseAmbigu = '</amb>';
+		var endBaliseAmbiguEscape = '<\/amb>';
+
+		// Regex pour avoir les contenus des balises <amb> et leurs id
+		// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
+		// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
+		var reg2 = new RegExp('<amb id=\"([0-9]+)\">(.*?)' + endBaliseAmbiguEscape, 'g');
+
+		var phrase = "{{ phrase|raw }}";
+		var rendu = $("#result");
+		var res;
+
+		console.log(phrase);
+
+		// Compte le nombre d'occurence de balise <amb id="">
+		var replaced = phrase.search(reg2) >= 0;
+		// Si au moins 1
+		if(replaced) {
+			html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
+				'">__amb__</b>';
+			// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
+			res = phrase.replace(reg2, function ($0, $1, $2) {
+				return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
+			});
+		}
+
+		rendu.append(res);
+
+	</script>
+{%  endblock %}

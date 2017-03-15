@@ -3,6 +3,8 @@
 namespace UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,8 +19,21 @@ class MembreConnexionType extends AbstractType
     {
         $builder
 	        ->add('Pseudo', TextType::class, array(
-		        'attr' => array('placeholder' => 'Pseudo'),
+		        'attr' => array(
+		        	'placeholder' => 'Pseudo'
+		        ),
 		        'invalid_message' => 'Pseudo invalide'
+	        ))
+	        ->add('Mdp', PasswordType::class, array(
+		        'attr' => array(
+		        	'placeholder' => 'Mot de passe'
+		        ),
+		        'label' => 'Mot de passe'
+	        ))
+	        ->add('KeepCo', CheckboxType::class, array(
+		        'label' => 'Rester connecté',
+		        'mapped' => false,
+		        'required' => false
 	        ))
 	        ->add('Connexion', SubmitType::class, array(
 		        'attr' => array('class' => 'btn btn-primary'),

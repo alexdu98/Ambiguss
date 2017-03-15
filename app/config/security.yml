@@ -29,6 +29,8 @@ security:
       form_login:
         login_path: /connexion
         check_path: /connexion/verification
+        username_parameter: userbundle_membre[Pseudo]
+        password_parameter: userbundle_membre[Mdp]
       logout:
         path:       /deconnexion
         target:     /

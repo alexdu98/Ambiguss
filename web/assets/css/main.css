@@ -141,8 +141,8 @@ footer{
 }
 footer #footer-link{
 	background: #2d2d2d;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	color: #989494;
 }
 footer #footer-link ul{
@@ -159,8 +159,8 @@ footer #footer-link a:hover{
 }
 footer #footer-copyright{
 	background: var(--color-green);
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	color: var(--color-white);
 
 }

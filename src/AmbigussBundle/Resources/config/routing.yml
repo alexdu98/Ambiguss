@@ -26,3 +26,8 @@ ambiguss_phrase_delete:
         _controller: AmbigussBundle:Phrase:delete
     requirements:
             id: \d+
+
+ambiguss_game:
+    path: /ambiguss/jeu
+    defaults:
+        _controller: AmbigussBundle:Game:main

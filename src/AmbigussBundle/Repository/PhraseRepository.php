@@ -10,4 +10,18 @@ namespace AmbigussBundle\Repository;
  */
 class PhraseRepository extends \Doctrine\ORM\EntityRepository
 {
+   /* public function randomfind()
+    {
+        $max = $this->_em->createQuery("SELECT MAX(p.id)
+                                FROM Phrase:Item p")->getSingleScalarResult();
+
+        $sq = $this->_em->createQuery("SELECT *
+                               FROM Phrase
+                               "
+        )->setParameters(array('rand' => rand(0,$max)))
+            ->setMaxResults(1);
+
+
+        return $sq->getResult();
+    }*/
 }

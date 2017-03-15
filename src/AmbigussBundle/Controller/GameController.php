@@ -23,20 +23,18 @@ class GameController extends  Controller
         // recup de tous les id dans un array
         foreach ($results as $result){
             array_push($randlist,$result->getId());
-
         }
 
         // prendre un id au hasard parmi la liste d'id et récupère son contenu
         shuffle($randlist);
-        $phrase= $repository->find($randlist[0])->getContenu();
-        $phrase = preg_replace('#"#', '\"', $phrase);
+	    $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+        $pma = $repo->findByIdPhrase($randlist[0]);
+        $phrase = preg_replace('#"#', '\"', $pma[0]->getPhrase()->getContenu());
 
-        //on récupère les mots ambigus de la phrase
 
-        $motsambigus=$repository->find($randlist[0])->getMotsAmbigus();
         return $this->render('AmbigussBundle:Game:play.html.twig', array(
             'phrase' => $phrase,
-            'motAmbigus' => $motsambigus->getVAlues(),
+            'MotAmbiguPhrase' => $pma
         ));
     }
 

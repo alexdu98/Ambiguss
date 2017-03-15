@@ -29,6 +29,7 @@ class GameController extends  Controller
         // prendre un id au hasard parmi la liste d'id et récupère son contenu
         shuffle($randlist);
         $phrase= $repository->find($randlist[0])->getContenu();
+        $phrase = preg_replace('#"#', '\"', $phrase);
 
         //on récupère les mots ambigus de la phrase
 

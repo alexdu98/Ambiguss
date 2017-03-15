@@ -68,11 +68,6 @@ class Phrase
 	 */
 	private $modificateur;
 
-	/**
-	 * @ORM\ManyToMany(targetEntity="MotAmbigu", cascade={"persist"})
-	 */
-	private $motsAmbigus;
-
 
     /**
      * Constructor
@@ -262,38 +257,4 @@ class Phrase
     {
         return $this->modificateur;
     }
-
-	/**
-	 * Add mot Ambigu
-	 *
-	 * @param \AmbigussBundle\Entity\MotAmbigu $motAmbigu
-	 *
-	 * @return Phrase
-	 */
-	public function addMotAmbigu(\AmbigussBundle\Entity\MotAmbigu $motAmbigu)
-	{
-		$this->motsAmbigus[] = $motAmbigu;
-
-		return $this;
-	}
-
-	/**
-	 * Remove mot ambigu
-	 *
-	 * @param \AmbigussBundle\Entity\MotAmbigu $motAmbigu
-	 */
-	public function removeMotAmbigu(\AmbigussBundle\Entity\MotAmbigu $motAmbigu)
-	{
-		$this->motsAmbigus->removeElement($motAmbigu);
-	}
-
-	/**
-	 * Get mots ambigus
-	 *
-	 * @return \Doctrine\Common\Collections\Collection
-	 */
-	public function getMotsAmbigus()
-	{
-		return $this->motsAmbigus;
-	}
 }

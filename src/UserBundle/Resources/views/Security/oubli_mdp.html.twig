@@ -14,16 +14,11 @@
 				<div class="alert alert-danger">{{ flashMessage }}</div>
 			{% endfor %}
 
-			{{ form_start(form) }}
+			{{ form_start(form, {'attr': {'id': 'formOubliMdp'}}) }}
 
 			{{ form_errors(form) }}
 
 			{{ form_row(form.PseudoOuEmail) }}
-
-			<div class="form-group">
-				<label class="control-label required">Captcha</label>
-				<div class="g-recaptcha" data-sitekey="6LdIRhgTAAAAAETW0QglcOGfBb3cYMTlcYOkWozt"></div>
-			</div>
 
 			{{ form_widget(form.Valider) }}
 
@@ -34,5 +29,11 @@
 {% endblock %}
 
 {% block js %}
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script>
+		// Fonction appelé par le script Recaptcha après un clic sur le bouton de validation
+		function onSubmit(token) {
+			document.getElementById("formOubliMdp").submit();
+		}
+	</script>
 {% endblock %}

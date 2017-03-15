@@ -49,7 +49,7 @@ class SecurityController extends Controller
         $membre = new \UserBundle\Entity\Membre();
 
         //ajout des attributs qu'on veut afficher dans le formulaire
-        $form = $this->get('form.factory')->createBuilder(MembreType::class, $membre);
+        $form = $this->get('form.factory')->create(MembreType::class, $membre);
 
         // Si la requête est en POST
         if ($request->isMethod('POST')) {
@@ -107,7 +107,8 @@ class SecurityController extends Controller
 
 	        // AMBIGUSS
 	        $recaptcha = $this->get('app.recaptcha');
-	        if($recaptcha->check($request->request->get('g-recaptcha-response'))){
+        	$recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
+	        if($recap->succes){
 		        $form->handleRequest($request);
 		        if($form->isValid()){
 			        // Hash le Mdp
@@ -135,7 +136,7 @@ class SecurityController extends Controller
 				        $em->persist($membre);
 				        $em->flush();
 			        }
-			        catch(Exception $e){
+			        catch(\Exception $e){
 				        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion du membre");
 			        }
 
@@ -167,7 +168,13 @@ class SecurityController extends Controller
 			        return $this->redirectToRoute('user_connexion');
 		        }
 	        }
-	        $this->get('session')->getFlashBag()->add('erreur', "Captcha invalide.");
+	        else{
+		        $erreurStr = "";
+		        foreach($recap->erreurs as $erreur){
+			        $erreurStr .= $erreur;
+		        }
+		        $this->get('session')->getFlashBag()->add('erreur', $erreurStr);
+	        }
         }
 		// Pas de formulaire envoyé ou erreur
         return $this->render('UserBundle:Security:inscription.html.twig', array(
@@ -195,12 +202,13 @@ class SecurityController extends Controller
 
 	public function oubliMdpAction(Request $request)
 	{
-		$form = $this->get('form.factory')->createBuilder(MembreOubliPassType::class);
+		$form = $this->get('form.factory')->create(MembreOubliPassType::class);
 
 		// Si la requête est en POST
 		if ($request->isMethod('POST')) {
 			$recaptcha = $this->get('app.recaptcha');
-			if($recaptcha->check($request->request->get('g-recaptcha-response'))){
+			$recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
+			if($recap->succes){
 				$form->handleRequest($request);
 				$data = $form->getData();
 				if($form->isValid()){
@@ -217,7 +225,7 @@ class SecurityController extends Controller
 						$em->persist($membre);
 						$em->flush();
 					}
-					catch(Exception $e){
+					catch(\Exception $e){
 						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de la mise à jour du membre");
 					}
 
@@ -251,7 +259,13 @@ class SecurityController extends Controller
 					));
 				}
 			}
-			$this->get('session')->getFlashBag()->add('erreur', "Captcha invalide.");
+			else{
+				$erreurStr = "";
+				foreach($recap->erreurs as $erreur){
+					$erreurStr .= $erreur;
+				}
+				$this->get('session')->getFlashBag()->add('erreur', $erreurStr);
+			}
 		}
 
 		return $this->render('UserBundle:Security:oubli_mdp.html.twig', array(
@@ -264,7 +278,7 @@ class SecurityController extends Controller
 		$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
 		$membre = $repository->findOneByCleOubliMdp($cle);
 		if($membre){
-			$form = $this->get('form.factory')->createBuilder(MembreOubliPassResetType::class);
+			$form = $this->get('form.factory')->create(MembreOubliPassResetType::class);
 
 			// Si la requête est en POST
 			if ($request->isMethod('POST')) {
@@ -284,7 +298,7 @@ class SecurityController extends Controller
 						$em->persist($membre);
 						$em->flush();
 					}
-					catch(Exception $e){
+					catch(\Exception $e){
 						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de la mise à jour du membre");
 					}
 

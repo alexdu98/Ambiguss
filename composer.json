@@ -24,7 +24,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/migrations": "^1.5",
-        "friendsofsymfony/jsrouting-bundle": "^1.6"
+        "friendsofsymfony/jsrouting-bundle": "^1.6",
         "hwi/oauth-bundle": "^0.5.3"
     },
     "require-dev": {

@@ -85,15 +85,16 @@ swiftmailer:
 # HWI/OAuth Configuration
 hwi_oauth:
     connect:
-        account_connector: my.custom.user_provider
+        account_connector: user.membre_provider
     firewall_names:
-        - 'hwi_oauth_firewall_name'
-    fosub:
-        username_iterations: 30
-        properties:
-            twitter: "%twitter_id%"
+        - 'secured_area'
+    connect:
+        confirmation: true
+        registration_form_handler: my_registration_form_handler
+        registration_form: my_registration_form
+        account_connector: my_link_provider
     resource_owners:
-        any_name:
+        twitter:
             type: twitter
             client_id: "%twitter_key%"
             client_secret: "%twitter_secret%"

@@ -8,11 +8,12 @@
             <div class="bulle">
                <h3 id="result"></h3>
                 <div class="form-group">
+					{{ form(form)}}
                     <button type="button" class="btn btn-primary" id="valider">Valider</button>
-	                {{ dump(phrase) }}
-	                {% for motAmbigu in MotAmbiguPhrase %}
-	                    {{ dump(motAmbigu) }}
-	                {% endfor %}
+                   {{ dump(phrase) }}
+                    {#   {% for motAmbigu in MotAmbiguPhrase %}
+                         {{ dump(motAmbigu) }}
+                     {% endfor %}  #}
                 </div>
             </div>
         </div>

@@ -93,7 +93,7 @@ class GameController extends  Controller
             $reponse->setAuteur($this->getUser()); //Faire un utilisateur fantome pour reponse rentre sans etre connecte ?
             $reponse->setPhrase($randlist[0]);
             $reponse->setPoidsReponse(3); // id de la valeur +1
-            
+
 
             //ajout du/des reponses dans la bdd
 
@@ -105,7 +105,7 @@ class GameController extends  Controller
             $nb_vote;
 
             //calcul des points obtenu, un simple pourcentage pour commencer : si la reponse represente 75% de tout les votes -> + 75 point. 
-            $nb_point
+            $nb_point;
 
             return $this->render('AmbigussBundle:Game:after_play.html.twig', array (
                     'gloses' => $gloses,

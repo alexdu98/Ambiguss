@@ -29,7 +29,7 @@ class MotAmbiguPhrase
     private $ordre;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Phrase")
+	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Phrase", inversedBy="motsAmbigus")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $phrase;

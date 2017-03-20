@@ -8,12 +8,18 @@
             <div class="bulle">
                <h3 id="result"></h3>
                 <div class="form-group">
-					{{ form(form)}}
-                    <button type="button" class="btn btn-primary" id="valider">Valider</button>
-                   {{ dump(phrase) }}
-                    {#   {% for motAmbigu in MotAmbiguPhrase %}
-                         {{ dump(motAmbigu) }}
-                     {% endfor %}  #}
+	                {{ form_start(form) }}
+
+	                {{ form_errors(form) }}
+
+	                {% for ma in form.children %}
+		                {% if ma.vars.name matches '#^ma#' %}
+	                        {{ form_row(ma.children.valeur) }}
+	                    {% endif %}
+					{% endfor %}
+
+	                {{ form_rest(form) }}
+	                {{ form_end(form) }}
                 </div>
             </div>
         </div>
@@ -31,7 +37,7 @@
 		// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
 		var reg2 = new RegExp('<amb id=\"([0-9]+)\">(.*?)' + endBaliseAmbiguEscape, 'g');
 
-		var phrase = "{{ phrase|raw }}";
+		var phrase = "{{ phraseEscape|raw }}";
 		var rendu = $("#result");
 		var res;
 

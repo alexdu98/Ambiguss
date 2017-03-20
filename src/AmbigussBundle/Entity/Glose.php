@@ -67,6 +67,11 @@ class Glose
      */
     private $modificateur;
 
+	/**
+	 * @ORM\ManyToMany(targetEntity="AmbigussBundle\Entity\MotAmbigu", mappedBy="gloses")
+	 */
+    private $motsAmbigus;
+
 
     /**
      * Constructor
@@ -254,5 +259,39 @@ class Glose
     public function getModificateur()
     {
         return $this->modificateur;
+    }
+
+    /**
+     * Add motsAmbigus
+     *
+     * @param \AmbigussBundle\Entity\MotAmbigu $motsAmbigus
+     *
+     * @return Glose
+     */
+    public function addMotsAmbigus(\AmbigussBundle\Entity\MotAmbigu $motsAmbigus)
+    {
+        $this->motsAmbigus[] = $motsAmbigus;
+
+        return $this;
+    }
+
+    /**
+     * Remove motsAmbigus
+     *
+     * @param \AmbigussBundle\Entity\MotAmbigu $motsAmbigus
+     */
+    public function removeMotsAmbigus(\AmbigussBundle\Entity\MotAmbigu $motsAmbigus)
+    {
+        $this->motsAmbigus->removeElement($motsAmbigus);
+    }
+
+    /**
+     * Get motsAmbigus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMotsAmbigus()
+    {
+        return $this->motsAmbigus;
     }
 }

@@ -27,13 +27,13 @@
 		    </div>
 
 		    <div class="form-group">
-			    <div id="ambigussbundle_phrase_reponse" data-prototype="
-					{{ include('AmbigussBundle:Reponse:add.html.twig', { 'form': form.reponse.vars.prototype, 'select': form.reponse.vars.prototype.children.valeurGlose.vars.form
-			    })|e
+			    <div id="phrase_add_motsAmbigus" data-prototype="
+					{{ include('AmbigussBundle:Reponse:add.html.twig', { 'form': form.motsAmbigus.vars.prototype,
+				    'select':  form.motsAmbigus.vars.prototype.children.gloses.vars.form})|e
 			    ('html_attr') }}">
 			    </div>
 		    </div>
-		    {% do form.reponse.setRendered %}
+		    {% do form.motsAmbigus.setRendered %}
 
 		    {{ form_row(form.creer) }}
 
@@ -64,7 +64,7 @@
 			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbiguEscape, 'g');
 
 			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
-			var $container = $('div#ambigussbundle_phrase_reponse');
+			var $container = $('div#phrase_add_motsAmbigus');
 
 			// textarea où l'on écrit la phrase
 			var textarea = $("textarea#{{ form.contenu.vars.id }}");

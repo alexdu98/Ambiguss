@@ -62,12 +62,6 @@ class Reponse
     private $auteur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Phrase")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $phrase;
-
-    /**
      * @ORM\ManyToOne(targetEntity="PoidsReponse")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -84,6 +78,12 @@ class Reponse
      * @ORM\JoinColumn(nullable=false)
      */
     private $glose;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\MotAmbiguPhrase")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private $motAmbiguPhrase;
 
 
     /**
@@ -134,7 +134,7 @@ class Reponse
 	 *
 	 * @param \DateTime $dateReponse
 	 *
-	 * @return Newsletter
+	 * @return Reponse
 	 */
 	public function setDateReponse($dateReponse)
 	{
@@ -250,30 +250,6 @@ class Reponse
     }
 
     /**
-     * Set phrase
-     *
-     * @param \AmbigussBundle\Entity\Phrase $phrase
-     *
-     * @return Reponse
-     */
-    public function setPhrase(\AmbigussBundle\Entity\Phrase $phrase)
-    {
-        $this->phrase = $phrase;
-
-        return $this;
-    }
-
-    /**
-     * Get phrase
-     *
-     * @return \AmbigussBundle\Entity\Phrase
-     */
-    public function getPhrase()
-    {
-        return $this->phrase;
-    }
-
-    /**
      * Set poidsReponse
      *
      * @param \AmbigussBundle\Entity\PoidsReponse $poidsReponse
@@ -343,5 +319,29 @@ class Reponse
     public function getGlose()
     {
         return $this->glose;
+    }
+
+    /**
+     * Set motAmbiguPhrase
+     *
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase
+     *
+     * @return Reponse
+     */
+    public function setMotAmbiguPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase)
+    {
+        $this->motAmbiguPhrase = $motAmbiguPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Get motAmbiguPhrase
+     *
+     * @return \AmbigussBundle\Entity\MotAmbiguPhrase
+     */
+    public function getMotAmbiguPhrase()
+    {
+        return $this->motAmbiguPhrase;
     }
 }

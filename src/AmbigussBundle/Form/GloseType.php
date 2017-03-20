@@ -2,36 +2,36 @@
 
 namespace AmbigussBundle\Form;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class PhraseType extends AbstractType
+class GloseType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+	    //$glose = $options['data']['glose'];
         $builder
-	        ->add('contenu', TextareaType::class, array(
-	        	'label' => 'Phrase',
-		        'attr' => array('placeholder' => 'Phrase'),
-		        'invalid_message' => 'Phrase invalide'
+	        ->add('valeur', TextType::class, array(
+		        'label' => 'Glose',
+		        'attr' => array('placeholder' => 'Glose'),
+		        'invalid_message' => 'Glose invalide'
 	        ));
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AmbigussBundle\Entity\Phrase'
+            'data_class' => 'AmbigussBundle\Entity\Glose'
         ));
     }
 
@@ -40,7 +40,7 @@ class PhraseType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'ambigussbundle_phrase';
+        return 'ambigussbundle_glose';
     }
 
 

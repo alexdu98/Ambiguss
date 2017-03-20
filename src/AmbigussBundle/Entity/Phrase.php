@@ -68,6 +68,11 @@ class Phrase
 	 */
 	private $modificateur;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\MotAmbiguPhrase", mappedBy="phrase")
+	 */
+	private $motsAmbigus;
+
 
     /**
      * Constructor
@@ -256,5 +261,39 @@ class Phrase
     public function getModificateur()
     {
         return $this->modificateur;
+    }
+
+    /**
+     * Add motsAmbigus
+     *
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus
+     *
+     * @return Phrase
+     */
+    public function addMotsAmbigus(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus)
+    {
+        $this->motsAmbigus[] = $motsAmbigus;
+
+        return $this;
+    }
+
+    /**
+     * Remove motsAmbigus
+     *
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus
+     */
+    public function removeMotsAmbigus(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus)
+    {
+        $this->motsAmbigus->removeElement($motsAmbigus);
+    }
+
+    /**
+     * Get motsAmbigus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMotsAmbigus()
+    {
+        return $this->motsAmbigus;
     }
 }

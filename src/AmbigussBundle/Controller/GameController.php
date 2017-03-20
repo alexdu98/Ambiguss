@@ -145,13 +145,13 @@ class GameController extends  Controller
                 }
 
 
-            foreach ($g  as $glosesTable){
+            foreach ($reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
                 
                 $repo4=$this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
-                $compteur = $repo4->findByIdPMAetGloses($reponse->getmotAmbiguPhrase(),$g);
-                echo($compteur);
-            }
-		    // recuperation des glose dans un array
+                $compteur = $repo4->findByIdPMAetGloses($reponse->getmotAmbiguPhrase(),$g->getId());
+
+                    echo ($compteur[1]+"\n");
+            }	    // recuperation des glose dans un array
 		    $gloses = null;
 
 		    //recuperation du nombre de vote pour chaque glose, dans le contexte de la phrase

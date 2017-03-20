@@ -74,7 +74,7 @@ class Reponse
     private $niveau;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Glose")
+     * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Glose")
      * @ORM\JoinColumn(nullable=false)
      */
     private $glose;

@@ -14,9 +14,9 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
 	{
 		return $this->createQueryBuilder('r')
 			->innerJoin("r.motAmbiguPhrase", "map", "WITH", "r.motAmbiguPhrase = map.id")->addSelect("map")
-			->innerJoin("r.Glose", "g"," WITH","r.Glose=g.id")->addSelect("COUNT(g)")
+			//->innerJoin("r.glose", "g"," WITH","r.glose=g.id")->addSelect("count(g)")
 			->where("map.id = :Ambi")->setParameter("Ambi", $idPMA)
-			->andwhere("g.Valeur =: Gl"->setParameter("Gl"),$glose)
-			->getQuery()->getSingleScalarResult();
+			//->where("g.id = :Gl")->setParameter("Gl",$glose)
+			->getQuery()->getSingleResult();
 	}
 }

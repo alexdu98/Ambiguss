@@ -98,13 +98,13 @@ class GameController extends  Controller
 
 
 		    // recuperation des glose dans un array
-		    $gloses;
+		    $gloses = null;
 
 		    //recuperation du nombre de vote pour chaque glose, dans le contexte de la phrase
-		    $nb_vote;
+		    $nb_vote = null;
 
 		    //calcul des points obtenu, un simple pourcentage pour commencer : si la reponse represente 75% de tout les votes -> + 75 point.
-		    $nb_point;
+		    $nb_point = null;
 
 		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array (
 			    'gloses' => $gloses,

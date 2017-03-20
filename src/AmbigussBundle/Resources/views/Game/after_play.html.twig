@@ -6,10 +6,17 @@
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3">
             <div class="bulle">
-               <h3 id="result"></h3>
+               <h3 id="result">
+                <p> Bravos vous venez de gagner {{ nb_point }} points !</p>
+                {% for g in gloses %}
+
+                       <p>{{ g.valeur }} : {{ nb_vote[g.valeur]}} votes</p>
+
+                {% endfor %}</h3>
+                <div class="form-group">
+                    <a href="{{ path('ambiguss_game') }}" class="btn btn-primary" id="rejouer">Rejouer</a>
 
 
-               <button type="button" class="btn btn-primary" id="rejouer">Rejouer</button>
 
             </div>
         </div>

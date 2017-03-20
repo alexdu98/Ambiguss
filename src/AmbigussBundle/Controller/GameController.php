@@ -67,6 +67,7 @@ class GameController extends  Controller
 	    $glosesTable = array();
 
         foreach ($pma  as $map){
+            // ne sert a rien
 			$gloses = array();
 	        foreach ($map->getmotAmbigu()->getGloses() as $g) {
 		        $gloses[$g->getValeur()] = $g->getValeur();
@@ -138,31 +139,34 @@ class GameController extends  Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($reponse);
                     $em->flush();
-                    $this->get('session')->getFlashBag()->add('succes', "La réponse a bien été ajoutée");
+                    //$this->get('session')->getFlashBag()->add('succes', "La réponse a bien été ajoutée");
                 }
                 catch(Exception $e){
-                    $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
+                   // $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
                 }
 
-
+                $hash= array();
             foreach ($reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
                 
                 $repo4=$this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
                 $compteur = $repo4->findByIdPMAetGloses($reponse->getmotAmbiguPhrase(),$g->getId());
+                $hash[$g->getValeur()]= $compteur[1];
 
-                    echo ($compteur[1]+"\n");
-            }	    // recuperation des glose dans un array
-		    $gloses = null;
+            }
 
-		    //recuperation du nombre de vote pour chaque glose, dans le contexte de la phrase
-		    $nb_vote = null;
 
 		    //calcul des points obtenu, un simple pourcentage pour commencer : si la reponse represente 75% de tout les votes -> + 75 point.
-		    $nb_point = null;
+		    $total=0;
+            foreach ($reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g)
+                $total=$total+$hash[$g->getValeur()];
+
+            $nb_point = ($hash[$reponse->getValeurGlose()]/$total)*100;
+
+            //ajout des points a l'utilisateur en bd)
 
 		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array (
-			    'gloses' => $gloses,
-			    'nb_vote' => $nb_vote,
+			    'gloses' => $reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses(), // tableau de gloses
+			    'nb_vote' => $hash, // hashmap de type [glose -> nbvotes]
 			    'nb_point' => $nb_point
 		    ));
 	    }

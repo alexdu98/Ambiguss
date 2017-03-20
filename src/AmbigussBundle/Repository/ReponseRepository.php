@@ -10,4 +10,13 @@ namespace AmbigussBundle\Repository;
  */
 class ReponseRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findByIdPMAetGloses($idPMA,$glose)
+	{
+		return $this->createQueryBuilder('r')
+			->innerJoin("r.motAmbiguPhrase", "map", "WITH", "r.motAmbiguPhrase = map.id")->addSelect("map")
+			->innerJoin("r.Glose", "g"," WITH","r.Glose=g.id")->addSelect("COUNT(g)")
+			->where("map.id = :Ambi")->setParameter("Ambi", $idPMA)
+			->andwhere("g.Valeur =: Gl"->setParameter("Gl"),$glose)
+			->getQuery()->getSingleScalarResult();
+	}
 }

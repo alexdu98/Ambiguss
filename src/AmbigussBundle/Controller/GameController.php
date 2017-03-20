@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -25,23 +26,40 @@ class GameController extends  Controller
     public function mainAction(Request $request)
     {
 
-        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-        //$rnd=rand(1,15);
-        $randlist = array();
-        $results = $repository->findall();
-        // recup de tous les id dans un array
-        foreach ($results as $result){
-            array_push($randlist,$result->getId());
+        if ($request->getMethod() != 'POST') {
+
+            $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+            //$rnd=rand(1,15);
+            $randlist = array();
+            $results = $repository->findall();
+            // recup de tous les id dans un array
+            foreach ($results as $result){
+                array_push($randlist,$result->getId());
+            }
+
+            // prendre un id au hasard parmi la liste d'id et récupère son contenu
+            shuffle($randlist);
+    	    $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+    	    $repo2 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+
+    	    $phraseOBJ = $repo->find($randlist[0]);
+    		$pma = $repo2->findByIdPhrase($randlist[0]);
+            $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
+        
         }
+        else{
+            //var_dump($request);
+            $tab = $request->request->get("form");
+            $id_phrase_recup = $tab["ma1"]["id_phrase"];
+            //var_dump($id_phrase_recup);
 
-        // prendre un id au hasard parmi la liste d'id et récupère son contenu
-        shuffle($randlist);
-	    $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-	    $repo2 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+            $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+            $repo2 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
 
-	    $phraseOBJ = $repo->find($randlist[0]);
-		$pma = $repo2->findByIdPhrase($randlist[0]);
-        $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
+            $phraseOBJ = $repo->find($id_phrase_recup);
+            $pma = $repo2->findByIdPhrase($id_phrase_recup);
+            $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
+        }
 
 	    $bigformBuilder = $this->createFormBuilder();
 
@@ -69,7 +87,10 @@ class GameController extends  Controller
 		        'query_builder' => function(GloseRepository $repo) use ($ma){
 	        		return $repo->findGlosesValueLinkedByMotAmbiguValue($ma);
 	        }
-	        ));
+	        ))
+            ->add('id_phrase',HiddenType::class, array(
+            'data'=>$phraseOBJ->getId()
+            ));
 
             $bigformBuilder->add($formBuilder);
             $i++;
@@ -85,18 +106,51 @@ class GameController extends  Controller
 
 	    if ($form->isSubmitted() && $form->isValid()){
 		    $data = $form->getData();
-		    var_dump($data);
+		    //var_dump($data);
 
 		    //construction de la / des reponses
 		    $reponse = new \AmbigussBundle\Entity\Reponse();
-		    $reponse->setAuteur($this->getUser()); //Faire un utilisateur fantome pour reponse rentre sans etre connecte ?
-		    $reponse->setPhrase($randlist[0]);
-		    $reponse->setPoidsReponse(3); // id de la valeur +1
-
+            //Auteur
+		    $reponse->setAuteur($this->getUser()); //Faire un utilisateur fantome pour reponse rentre sans etre connecte 
+            //Poid reponse
+            $repo3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:PoidsReponse');
+		    $reponse->setPoidsReponse($repo3->find(3)); // id de la valeur +1
+            //Niveau
+            $repo3 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+            $reponse->setNiveau($repo3->find(1)); //facile
+            //id glose (pour ma1, faire un une boucle après)
+            $tab = $request->request->get("form");
+            $id_ma = $tab["ma1"]["valeur"];
+            $repo3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+            $reponse->setGlose($repo3->find($id_ma));
+            //contenu phrase
+            //var_dump($phraseOBJ->getContenu());
+            $reponse->setContenuPhrase($phraseOBJ->getContenu());
+            //valeur mot ambigu
+            $reponse->setValeurMotAmbigu($pma[0]->getmotAmbigu()->getValeur());
+            //valeur mot ambigi phrase id
+            $reponse->setMotAmbiguPhrase($pma[0]);
+            //valeur glose
+            $reponse->setValeurGlose($repo3->find($id_ma)->getValeur());
 
 		    //ajout du/des reponses dans la bdd
+            try{
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($reponse);
+                    $em->flush();
+                    $this->get('session')->getFlashBag()->add('succes', "La réponse a bien été ajoutée");
+                }
+                catch(Exception $e){
+                    $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
+                }
 
 
+            foreach ($g  as $glosesTable){
+                
+                $repo4=$this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
+                $compteur = $repo4->findByIdPMAetGloses($reponse->getmotAmbiguPhrase(),$g);
+                echo($compteur);
+            }
 		    // recuperation des glose dans un array
 		    $gloses = null;
 

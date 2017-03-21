@@ -13,10 +13,7 @@ class MotAmbiguPhraseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-	        ->add('ordre')
-	        ->add('phrase', PhraseType::class)
-	        ->add('motAmbigu', MotAmbiguType::class);
+        $builder->add('ordre')->add('phrase')->add('motAmbigu');
     }
     
     /**

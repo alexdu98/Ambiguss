@@ -2,13 +2,9 @@
 
 namespace AmbigussBundle\Form;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class PhraseType extends AbstractType
 {
@@ -17,14 +13,9 @@ class PhraseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-	        ->add('contenu', TextareaType::class, array(
-	        	'label' => 'Phrase',
-		        'attr' => array('placeholder' => 'Phrase'),
-		        'invalid_message' => 'Phrase invalide'
-	        ));
+        $builder->add('contenu')->add('dateCreation')->add('dateModification')->add('signale')->add('visible')->add('auteur')->add('modificateur');
     }
-
+    
     /**
      * {@inheritdoc}
      */

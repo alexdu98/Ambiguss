@@ -52,10 +52,7 @@ class MotAmbigu
 
     /**
      * @ORM\ManyToMany(targetEntity="Glose", inversedBy="motsAmbigus", cascade={"persist"})
-     * @Assert\Count(
-     *      min = 2,
-     *      minMessage = "Vous devez spécidier au moins deux gloses avant de valider ")
-     */
+	 */
     private $gloses = array();
 
 

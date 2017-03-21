@@ -4,24 +4,25 @@
 {% block titre %}<h1>Let's Play !</h1>{% endblock %}
 {% block contenu %}
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3">
-            <div class="bulle">
-               <h3 id="result"></h3>
-                <div class="form-group">
-	                {{ form_start(form) }}
+        <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 bulle">
 
-	                {{ form_errors(form) }}
+	        {% for flashMessage in app.session.flashbag.get('succes') %}
+		        <div class="alert alert-success">{{ flashMessage }}</div>
+	        {% endfor %}
+	        {% for flashMessage in app.session.flashbag.get('erreur') %}
+		        <div class="alert alert-danger">{{ flashMessage }}</div>
+	        {% endfor %}
 
-	                {% for ma in form.children %}
-		                {% if ma.vars.name matches '#^ma#' %}
-	                        {{ form_row(ma.children.valeur) }}
-	                    {% endif %}
-					{% endfor %}
+           <h3 id="result"></h3>
 
-	                {{ form_rest(form) }}
-	                {{ form_end(form) }}
-                </div>
-            </div>
+            {{ form_start(form) }}
+
+            {{ form_errors(form) }}
+
+            {{ form_row(form.reponses) }}
+
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
@@ -41,6 +42,9 @@
 		var rendu = $("#result");
 		var res;
 
+		// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
+		var $container = $('div#ambigussbundle_game_reponses');
+
 		console.log(phrase);
 
 		// Compte le nombre d'occurence de balise <amb id="">
@@ -53,6 +57,30 @@
 			res = phrase.replace(reg2, function ($0, $1, $2) {
 				return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
 			});
+		}
+
+		var motsAmbigus = $.parseJSON('{{ motsAmbigus | raw }}');
+
+		var index = 1;
+
+		for(ma in motsAmbigus){
+			console.log(motsAmbigus[ma]);
+			addReponse($container, motsAmbigus[ma]);
+		}
+
+		// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
+		function addReponse($container, motAmbigu) {
+			// On ajoute le nom unique et l'id
+			var template = $container.attr('data-prototype')
+				.replace(/__name__label__/g, '')
+				.replace(/__name__/g, index)
+				.replace(/__id__/g, index);
+			var $prototype = $(template);
+			// Trouve la balise qui à la class amb
+			var idMotAmbiguPhrase = $prototype.find('.idMotAmbiguPhrase');
+			idMotAmbiguPhrase.val(motAmbigu[1]);
+			$container.append($prototype);
+			index++;
 		}
 
 		rendu.append(res);

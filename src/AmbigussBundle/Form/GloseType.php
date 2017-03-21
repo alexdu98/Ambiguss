@@ -2,9 +2,6 @@
 
 namespace AmbigussBundle\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,13 +13,7 @@ class GloseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-	    //$glose = $options['data']['glose'];
-        $builder
-	        ->add('valeur', TextType::class, array(
-		        'label' => 'Glose',
-		        'attr' => array('placeholder' => 'Glose'),
-		        'invalid_message' => 'Glose invalide'
-	        ));
+        $builder->add('valeur')->add('dateCreation')->add('dateModification')->add('signale')->add('visible')->add('auteur')->add('modificateur')->add('motsAmbigus');
     }
     
     /**

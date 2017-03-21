@@ -11,6 +11,9 @@
 		    {% for flashMessage in app.session.flashbag.get('succes') %}
 			    <div class="alert alert-success">{{ flashMessage }}</div>
 		    {% endfor %}
+		    {% for flashMessage in app.session.flashbag.get('erreur') %}
+			    <div class="alert alert-danger">{{ flashMessage }}</div>
+		    {% endfor %}
 
 		    {{ form_start(form) }}
 
@@ -26,14 +29,7 @@
 			    <button type="button" class="btn btn-primary" id="addAmb">Le mot sélectionné est ambigu</button>
 		    </div>
 
-		    <div class="form-group">
-			    <div id="phrase_add_motsAmbigus" data-prototype="
-					{{ include('AmbigussBundle:Reponse:add.html.twig', { 'form': form.motsAmbigus.vars.prototype,
-				    'select':  form.motsAmbigus.vars.prototype.children.gloses.vars.form})|e
-			    ('html_attr') }}">
-			    </div>
-		    </div>
-		    {% do form.motsAmbigus.setRendered %}
+		    {{ form_row(form.motsAmbigus) }}
 
 		    {{ form_row(form.creer) }}
 
@@ -150,6 +146,8 @@
 				var amb = $prototype.find('.amb');
 				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
 				amb.val(motAmbigu.trim() + ' ' + amb.val());
+				amb.prev().html(amb.prev().html() + ' (id : ' + index + ')');
+				$prototype.attr('id', 'amb' + index);
 				addDeleteLink($prototype);
 				$container.append($prototype);
 			}
@@ -157,7 +155,7 @@
 			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addDeleteLink($prototype) {
 				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
-				$prototype.find(".deleteLink").append($deleteLink);
+				$prototype.append($deleteLink);
 				// Au clic sur le bouton de suppression
 				$deleteLink.click(function(e) {
 					var phrase = textarea.val();

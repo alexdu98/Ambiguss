@@ -3,6 +3,7 @@
 namespace AmbigussBundle\Controller;
 
 use AmbigussBundle\Entity\MotAmbiguPhrase;
+use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\PhraseAddType;
 use AmbigussBundle\Form\PhraseType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +30,7 @@ class PhraseController extends Controller
                 // On trouve les mots ambigus
                 $mots_ambigu = array();
                 preg_match_all('#<amb id="([0-9]+)">(.*?)<\/amb>#', $data->getContenu(), $mots_ambigu, PREG_SET_ORDER);
-                // Il faudra penser à refaire l'ordre !
+
 	            /*
 	             * $mots_ambigu[0] contient un array du premier match
 	             * $mots_ambigu[1] contient un array du deuxieme match
@@ -39,26 +40,51 @@ class PhraseController extends Controller
 	             * $mots_ambigu[][2] contient le mot ambigu
 	             */
                 $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
-                foreach($mots_ambigu as $mot_ambigu)
+                foreach($mots_ambigu as $key => $mot_ambigu)
                 {
+
 	                // Soit on le trouve dans la BD soit on l'ajoute
 	                $mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu[2]);
 
 	                $map = new MotAmbiguPhrase();
-	                $map->setOrdre($mot_ambigu[1]);
+	                $map->setOrdre($key + 1);
 	                $map->setPhrase($phrase);
 	                $map->setMotAmbigu($mot_ambigu_OBJ);
 
-					$phrase->addMotsAmbigus($map);
+					$phrase->addMotsAmbigusPhrase($map);
                 }
-
-                // On a pas la glose car gloses mapped false dans MotAmbiguTypen mais si true, erreur au post
-                var_dump($phrase->getMotsAmbigus()->get(3)->getMotAmbigu()->getGloses());
 
 	            try{
 		            $em = $this->getDoctrine()->getManager();
 		            $em->persist($phrase);
 		            $em->flush();
+
+		            $repository1 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:PoidsReponse');
+		            $repository2 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+		            $repository3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+
+		            $reorder = array_values($request->request->get('phrase_add')['motsAmbigus']);
+
+		            foreach($phrase->getMotsAmbigusPhrase() as $map){
+		            	$rep = new Reponse();
+		            	$rep->setContenuPhrase($phrase->getContenu());
+		            	$rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
+		            	// -1 car l'ordre commence à 1 et le reorder à 0
+		            	$glose = $repository3->find($reorder[$map->getOrdre() - 1]['gloses']);
+		            	$rep->setValeurGlose($glose->getValeur());
+		            	$rep->setAuteur($this->getUser());
+			            $rep->setPoidsReponse($repository1->findOneByPoidsReponse(0));
+			            $rep->setNiveau($repository2->findOneByTitre('Facile'));
+			            $rep->setGlose($glose);
+			            $rep->setMotAmbiguPhrase($map);
+
+			            $map->getMotAmbigu()->addGlose($glose);
+
+			            $em->persist($map);
+			            $em->persist($rep);
+			            $em->flush();
+		            }
+
 		            $this->get('session')->getFlashBag()->add('succes', "La phrase a bien été ajoutée");
 		            // Réinitialise le formulaire
 		            $phrase = new \AmbigussBundle\Entity\Phrase();

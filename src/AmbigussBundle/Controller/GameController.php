@@ -9,172 +9,103 @@
 namespace AmbigussBundle\Controller;
 
 
-use AmbigussBundle\Form\ReponseType;
-use AmbigussBundle\Repository\GloseRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AmbigussBundle\Entity\Game;
+use AmbigussBundle\Form\GameType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Request;
-
 
 class GameController extends  Controller
 {
     public function mainAction(Request $request)
     {
 
-        if ($request->getMethod() != 'POST') {
+        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
 
-            $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-            //$rnd=rand(1,15);
-            $randlist = array();
-            $results = $repository->findall();
-            // recup de tous les id dans un array
-            foreach ($results as $result){
-                array_push($randlist,$result->getId());
-            }
-
-            // prendre un id au hasard parmi la liste d'id et récupère son contenu
-            shuffle($randlist);
-    	    $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-    	    $repo2 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
-
-    	    $phraseOBJ = $repo->find($randlist[0]);
-    		$pma = $repo2->findByIdPhrase($randlist[0]);
-            $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
-        
-        }
-        else{
-            //var_dump($request);
-            $tab = $request->request->get("form");
-            $id_phrase_recup = $tab["ma1"]["id_phrase"];
-            //var_dump($id_phrase_recup);
-
-            $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-            $repo2 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
-
-            $phraseOBJ = $repo->find($id_phrase_recup);
-            $pma = $repo2->findByIdPhrase($id_phrase_recup);
-            $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
+        $randlist = array();
+        $results = $repository->findall();
+        // recup de tous les id dans un array
+        foreach ($results as $result){
+            array_push($randlist, $result->getId());
         }
 
-	    $bigformBuilder = $this->createFormBuilder();
+        // prendre un id au hasard parmi la liste d'id et récupère son contenu
+        shuffle($randlist);
 
-        $i = 1;
-	    $glosesTable = array();
+	    $phraseOBJ = $repository->find($randlist[0]);
+        $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
 
-        foreach ($pma  as $map){
-            // ne sert a rien
-			$gloses = array();
-	        foreach ($map->getmotAmbigu()->getGloses() as $g) {
-		        $gloses[$g->getValeur()] = $g->getValeur();
-	        }
-	        $glosesTable[] = $gloses;
-
-	        $ma = $map->getmotAmbigu()->getValeur();
-
-        	$formBuilder = $this->get('form.factory')->createNamedBuilder('ma' . $i, FormType::class);
-	        $formBuilder->add('valeur', EntityType::class , array(
-	        	'class' => 'AmbigussBundle\Entity\Glose',
-		        'choice_label' =>  'valeur',
-		        'required'    => false,
-		        'placeholder' => "Choisissez une glose",
-		        'label' => $ma,
-		        'empty_data'  => null,
-		        'mapped' => false,
-		        'query_builder' => function(GloseRepository $repo) use ($ma){
-	        		return $repo->findGlosesValueLinkedByMotAmbiguValue($ma);
-	        }
-	        ))
-            ->add('id_phrase',HiddenType::class, array(
-            'data'=>$phraseOBJ->getId()
-            ));
-
-            $bigformBuilder->add($formBuilder);
-            $i++;
-        }
-
-	    $bigformBuilder->add('Valider', SubmitType::class, array(
-	    	'attr' => array('class' => 'btn btn-primary')
+	    $game = new Game();
+	    $form = $this->get('form.factory')->create(GameType::class, $game);
+	    $form->add('valider', SubmitType::class, array(
+	    	'label' => 'Valider',
+		    'attr' => array('class' => 'btn btn-primary')
 	    ));
-
-        $form = $bigformBuilder->getForm();
 
 	    $form->handleRequest($request);
 
 	    if ($form->isSubmitted() && $form->isValid()){
 		    $data = $form->getData();
-		    //var_dump($data);
 
-		    //construction de la / des reponses
-		    $reponse = new \AmbigussBundle\Entity\Reponse();
-            //Auteur
-		    $reponse->setAuteur($this->getUser()); //Faire un utilisateur fantome pour reponse rentre sans etre connecte 
-            //Poid reponse
-            $repo3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:PoidsReponse');
-		    $reponse->setPoidsReponse($repo3->find(3)); // id de la valeur +1
-            //Niveau
-            $repo3 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
-            $reponse->setNiveau($repo3->find(1)); //facile
-            //id glose (pour ma1, faire un une boucle après)
-            $tab = $request->request->get("form");
-            $id_ma = $tab["ma1"]["valeur"];
-            $repo3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
-            $reponse->setGlose($repo3->find($id_ma));
-            //contenu phrase
-            //var_dump($phraseOBJ->getContenu());
-            $reponse->setContenuPhrase($phraseOBJ->getContenu());
-            //valeur mot ambigu
-            $reponse->setValeurMotAmbigu($pma[0]->getmotAmbigu()->getValeur());
-            //valeur mot ambigi phrase id
-            $reponse->setMotAmbiguPhrase($pma[0]);
-            //valeur glose
-            $reponse->setValeurGlose($repo3->find($id_ma)->getValeur());
+		    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+		    $repository2 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:PoidsReponse');
+		    $repository3 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
 
-		    //ajout du/des reponses dans la bdd
-            try{
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($reponse);
-                    $em->flush();
-                    //$this->get('session')->getFlashBag()->add('succes', "La réponse a bien été ajoutée");
-                }
-                catch(Exception $e){
-                   // $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
-                }
+		    $em = $this->getDoctrine()->getManager();
+		    foreach($data->reponses as $key => $rep){
+			    $rep->setMotAmbiguPhrase($repository->find($request->request->get('ambigussbundle_game')
+			                                               ['reponses'][$key]['idMotAmbiguPhrase']));
+			    $rep->setContenuPhrase($rep->getMotAmbiguPhrase()->getPhrase()->getContenu());
+			    $rep->setValeurMotAmbigu($rep->getMotAmbiguPhrase()->getMotAmbigu()->getValeur());
+			    $rep->setValeurGlose($rep->getGlose()->getValeur());
+			    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+				    $rep->setAuteur($this->getUser());
+			    }
+			    $rep->setPoidsReponse($repository2->findOneByPoidsReponse(1));
+			    $rep->setNiveau($repository3->findOneByTitre('Facile'));
 
-                $hash= array();
-            foreach ($reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
-                
-                $repo4=$this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
-                $compteur = $repo4->findByIdPMAetGloses($reponse->getmotAmbiguPhrase(),$g->getId());
-                $hash[$g->getValeur()]= $compteur[1];
+			    $em->persist($rep);
+		    }
+		    try{
+			    $em->flush();
+			    $this->get('session')->getFlashBag()->add('succes', "La réponse a bien été ajoutée");
+		    }
+		    catch(\Exception $e){
+			    $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la réponse");
+		    }
 
-            }
-
-
-		    //calcul des points obtenu, un simple pourcentage pour commencer : si la reponse represente 75% de tout les votes -> + 75 point.
-		    $total=0;
-            foreach ($reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g)
-                $total=$total+$hash[$g->getValeur()];
-
-            $nb_point = ($hash[$reponse->getValeurGlose()]/$total)*100;
-
-            //ajout des points a l'utilisateur en bd)
+		    $hash = array();
+		    $nb_point = 0;
+		    $total = 0;
+		    $repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
+		    foreach($data->reponses as $rep){
+		    	$ar = array();
+			    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
+				    $compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
+				    $ar[$g->getValeur()] = $compteur[1];
+				    $total = $total + $ar[$g->getValeur()];
+				    //$nb_point = $nb_point + (($compteur[1] / $total) * 100);
+			    }
+			    $hash[$rep->getValeurMotAmbigu()] = $ar;
+		    }
 
 		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array (
-			    'gloses' => $reponse->getMotAmbiguPhrase()->getMotAmbigu()->getGloses(), // tableau de gloses
-			    'nb_vote' => $hash, // hashmap de type [glose -> nbvotes]
+		    	'phrase' => $phraseOBJ->getContenu(),
+			    'stats' => $hash, // hashmap de type [motAmbigu => [glose -> nbvotes]]
 			    'nb_point' => $nb_point
 		    ));
 	    }
 
+	    $motsAmbigus = array();
+	    for($i = 0; $i < $phraseOBJ->getMotsAmbigusPhrase()->count(); $i++){
+			$motsAmbigus[] = array($phraseOBJ->getMotsAmbigusPhrase()->get($i)->getMotAmbigu()->getValeur(),
+			                       $phraseOBJ->getMotsAmbigusPhrase()->get($i)->getId());
+	    }
+
         return $this->render('AmbigussBundle:Game:play.html.twig', array(
-            'phrase' => $phraseOBJ,
-            'phraseEscape' => $phraseEscape,
             'form' => $form->createView(),
+            'motsAmbigus' => json_encode($motsAmbigus),
+            'phraseEscape' => $phraseEscape
         ));
     }
 

@@ -1,7 +1,5 @@
 <?php
-
 namespace AmbigussBundle\Form;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -23,7 +21,7 @@ class PhraseAddType extends AbstractType
 				'invalid_message' => 'Phrase invalide'
 			))
 			->add('motsAmbigus', CollectionType::class, array(
-				'entry_type' => MotAmbiguType::class,
+				'entry_type' => MotAmbiguAddPhraseType::class,
 				'allow_add' => true,
 				'allow_delete' => true,
 				'label' =>  false,
@@ -33,12 +31,10 @@ class PhraseAddType extends AbstractType
 				'attr' => array('class' => 'btn btn-primary'),
 			));
 	}
-
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
 			'data_class' => 'AmbigussBundle\Entity\Phrase'
 		));
 	}
-
 }

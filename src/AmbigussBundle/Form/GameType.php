@@ -2,18 +2,27 @@
 
 namespace AmbigussBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PoidsReponseType extends AbstractType
+class GameType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('poidsReponse');
+        $builder
+            ->add('reponses', CollectionType::class, array(
+            	'entry_type' => ReponseGameType::class,
+	            'allow_add' => true,
+	            'allow_delete' => true,
+	            'label' => false
+            ));
     }
     
     /**
@@ -22,7 +31,7 @@ class PoidsReponseType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AmbigussBundle\Entity\PoidsReponse'
+            'data_class' => 'AmbigussBundle\Entity\Game'
         ));
     }
 
@@ -31,7 +40,7 @@ class PoidsReponseType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'ambigussbundle_poidsreponse';
+        return 'ambigussbundle_game';
     }
 
 

@@ -69,9 +69,9 @@ class Phrase
 	private $modificateur;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\MotAmbiguPhrase", mappedBy="phrase")
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\MotAmbiguPhrase", mappedBy="phrase", cascade={"persist"})
 	 */
-	private $motsAmbigus;
+	private $motsAmbigusPhrase;
 
 
     /**
@@ -264,36 +264,36 @@ class Phrase
     }
 
     /**
-     * Add motsAmbigus
+     * Add motsAmbigusPhrase
      *
-     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase
      *
      * @return Phrase
      */
-    public function addMotsAmbigus(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus)
+    public function addMotsAmbigusPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase)
     {
-        $this->motsAmbigus[] = $motsAmbigus;
+        $this->motsAmbigusPhrase[] = $motsAmbigusPhrase;
 
         return $this;
     }
 
     /**
-     * Remove motsAmbigus
+     * Remove motsAmbigusPhrase
      *
-     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase
      */
-    public function removeMotsAmbigus(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigus)
+    public function removeMotsAmbigusPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase)
     {
-        $this->motsAmbigus->removeElement($motsAmbigus);
+        $this->motsAmbigusPhrase->removeElement($motsAmbigusPhrase);
     }
 
     /**
-     * Get motsAmbigus
+     * Get motsAmbigusPhrase
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMotsAmbigus()
+    public function getMotsAmbigusPhrase()
     {
-        return $this->motsAmbigus;
+        return $this->motsAmbigusPhrase;
     }
 }

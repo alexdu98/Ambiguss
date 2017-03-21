@@ -15,24 +15,9 @@
     </head>
     <body>
 	    <header class="page-row">
-		    <nav class="navbar navbar-default navbar-static-top" id="nav-login">
-			    <div class="container-fluid">
-				    <div class="col-md-10 col-md-offset-1 text-right">
-					    <ul>
-						    {% if app.user %}
-							    <li><a href="{{ path('user_profil') }}">{{ app.user.pseudo|capitalize }}</a></li> •
-							    <li><a href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
-						    {% else %}
-							    <li><a href="{{ path('user_inscription') }}">S'inscrire</a></li>
-							    <li><a href="{{ path('user_connexion') }}">Se connecter</a></li>
-						    {% endif %}
-					    </ul>
-				    </div>
-			    </div>
-		    </nav>
 		    <nav class="navbar navbar-default navbar-static-top" id="nav-main">
 			    <div class="container-fluid">
-				    <div class="row">
+				    <div class="row row-eq-heigh">
 					    <div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-1">
 						    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 							    <span class="sr-only">Toggle navigation</span>
@@ -46,7 +31,7 @@
 						    </a>
 					    </div>
 					    <div class="clearfix visible-xs-block"></div>
-					    <div class="col-xs-12 col-sm-9 col-md-8">
+					    <div class="col-xs-12 col-sm-9 col-md-4">
 						    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							    <ul class="nav navbar-nav">
 								    <li>
@@ -54,7 +39,8 @@
 								    </li>
 								    {% if app.user %}
 									    <li>
-										    <a href="{{ path('ambiguss_phrase') }}">Phrase<span class="sr-only">(current)
+										    <a href="{{ path('ambiguss_phrase') }}">Créer<span class="sr-only">
+												    (current)
 											    </span></a>
 									    </li>
 								    {% endif %}
@@ -73,6 +59,17 @@
 							    </ul>
 						    </div>
 					    </div>
+					    <div class="col-md-4 text-right">
+						    <ul>
+							    {% if app.user %}
+								    <li><a href="{{ path('user_profil') }}">{{ app.user.pseudo|capitalize }}</a></li> •
+								    <li><a href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
+							    {% else %}
+								    <li><a href="{{ path('user_inscription') }}">S'inscrire</a></li>
+								    <li><a href="{{ path('user_connexion') }}">Se connecter</a></li>
+							    {% endif %}
+						    </ul>
+					    </div>
 				    </div>
 			    </div>
 		    </nav>
@@ -90,28 +87,14 @@
 	    <footer class="page-row">
 		    <div class="container-fluid">
 			    <div class="row" id="footer-link">
-				    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-					    <div class="container-fluid">
-						    <div class="row">
-							    <div class="col-xs-6 col-sm-6">
-								    <h4>Informations</h4>
-								    <ul>
-									    <li><a href="{{ path('app_mentions') }}">Mentions légales</a></li>
-									    <li><a href="{{ path('app_conditions') }}">Conditions d'utilisation</a></li>
-								    </ul>
-							    </div>
-							    <div class="col-xs-6 col-sm-6">
-								    <h4>À propos</h4>
-								    <ul>
-									    <li><a href="{{ path('app_apropos') }}">Ambiguss</a></li>
-									    <li><a href="{{ path('app_contact') }}">Contact</a></li>
-								    </ul>
-							    </div>
-						    </div>
-					    </div>
+				    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 text-center">
+
+					    <a href="{{ path('app_mentions') }}">Mentions légales</a>&emsp;
+					    <a href="{{ path('app_conditions') }}">Conditions d'utilisation</a>&emsp;
+					    <a href="{{ path('app_apropos') }}">À propos d'Ambiguss</a>&emsp;
+					    <a href="{{ path('app_contact') }}">Contact</a>
+
 				    </div>
-			    </div>
-			    <div class="row" id="footer-copyright">
 				    <div class="col-xs-6 col-sm-6 col-xs-offset-3 col-sm-offset-3 text-center" id="copyright">
 					    • <a href="{{ path('app_accueil') }}">Ambiguss</a> © {{ "now" | date("Y") }} •
 				    </div>

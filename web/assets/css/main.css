@@ -62,6 +62,9 @@ a:hover{
 .amb-border{
 	border-bottom: 2px dashed var(--color-red);
 }
+.row-eq-height{
+	display: flex;
+}
 
 /*
     #####################################################################
@@ -110,7 +113,7 @@ nav li:not(.divider){
 	padding: 5px 10px;
 }
 nav li a{
-	color: var(--color-white);
+	color: var(--color-green);
 }
 
 

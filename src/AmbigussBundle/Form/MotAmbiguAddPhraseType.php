@@ -24,7 +24,7 @@ class MotAmbiguAddPhraseType extends AbstractType
 			->add('gloses', EntityType::class, array(
 				'class' => 'AmbigussBundle\Entity\Glose',
 				'choice_label' => 'valeur',
-				'label' =>  'Glose',
+				'label' =>  'Choisissez la glose associée',
 				'mapped' => false
 			));
 	}

@@ -16,8 +16,8 @@ class PhraseAddType extends AbstractType
 	{
 		$builder
 			->add('contenu', TextareaType::class, array(
-				'label' => 'Phrase',
-				'attr' => array('placeholder' => 'Phrase'),
+				'label' => false,
+				'attr' => array('placeholder' => 'Saisissez votre phrase'),
 				'invalid_message' => 'Phrase invalide'
 			))
 			->add('motsAmbigus', CollectionType::class, array(

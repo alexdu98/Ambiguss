@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% set modalId = 'addGloseModal' %}
+
 {% block title %}Jeu{% endblock %}
 {% block titre %}<h1>Let's Play !</h1>{% endblock %}
 {% block contenu %}
@@ -25,6 +27,7 @@
             {{ form_end(form) }}
         </div>
     </div>
+	{{ include('modal.html.twig', {'modalId': modalId, 'modalTitre': 'Ajouter une glose'}) }}
 {% endblock %}
 {% block js %}
 
@@ -74,13 +77,31 @@
 			var template = $container.attr('data-prototype')
 				.replace(/__name__label__/g, '')
 				.replace(/__name__/g, index)
+				.replace(/__glose__/g, motAmbigu[0])
 				.replace(/__id__/g, index);
 			var $prototype = $(template);
 			// Trouve la balise qui à la class amb
 			var idMotAmbiguPhrase = $prototype.find('.idMotAmbiguPhrase');
 			idMotAmbiguPhrase.val(motAmbigu[1]);
+			addAddGloseLink($prototype, motAmbigu[0]);
 			$container.append($prototype);
 			index++;
+		}
+
+		// Ajoute le bouton pour ajouter une glose
+		function addAddGloseLink($prototype, motAmbigu) {
+			var $addLink = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ modalId }}">Ajouter une glose</button>');
+			$prototype.append($addLink);
+			// Au clic sur le bouton de suppression
+			$addLink.click(function(e) {
+				$.ajax('{{ path('ambiguss_glose_add') }}', { motAmbigu: motAmbigu })
+					.done(function(data){
+						$('.modal-body').html(data);
+					});
+				$('#{{ modalId }}').modal('show');
+				e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+				return false;
+			});
 		}
 
 		rendu.append(res);

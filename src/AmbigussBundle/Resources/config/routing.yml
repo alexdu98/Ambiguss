@@ -31,3 +31,8 @@ ambiguss_game:
     path: /ambiguss/jeu
     defaults:
         _controller: AmbigussBundle:Game:main
+
+ambiguss_glose_add:
+    path: /ambiguss/glose/add
+    defaults:
+        _controller: AmbigussBundle:API:addGlose

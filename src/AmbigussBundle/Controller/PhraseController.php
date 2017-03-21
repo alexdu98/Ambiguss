@@ -90,7 +90,7 @@ class PhraseController extends Controller
 		            $phrase = new \AmbigussBundle\Entity\Phrase();
 		            $form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
 	            }
-	            catch(Exception $e){
+	            catch(\Exception $e){
 		            $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
 	            }
             }

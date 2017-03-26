@@ -15,5 +15,6 @@
 /.idea/
 /access.log
 /error.log
-/backup/*
-!/backup/.gitkeep
+/backup
+/ambiguss.log
+/dumpBD.default

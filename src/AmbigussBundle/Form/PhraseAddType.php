@@ -15,12 +15,13 @@ class PhraseAddType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('contenu', TextareaType::class, array(
-				'label' => false,
-				'attr' => array('placeholder' => 'Saisissez votre phrase'),
-				'invalid_message' => 'Phrase invalide'
-			))
-			->add('motsAmbigus', CollectionType::class, array(
+			->remove('dateCreation')
+			->remove('dateModification')
+			->remove('signale')
+			->remove('visible')
+			->remove('auteur')
+			->remove('modificateur')
+			->add('motsAmbigusPhrase', CollectionType::class, array(
 				'entry_type' => MotAmbiguAddPhraseType::class,
 				'allow_add' => true,
 				'allow_delete' => true,
@@ -31,10 +32,8 @@ class PhraseAddType extends AbstractType
 				'attr' => array('class' => 'btn btn-primary'),
 			));
 	}
-	public function configureOptions(OptionsResolver $resolver)
-	{
-		$resolver->setDefaults(array(
-			'data_class' => 'AmbigussBundle\Entity\Phrase'
-		));
+
+	public function getParent(){
+		return PhraseType::class;
 	}
 }

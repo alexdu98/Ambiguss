@@ -26,6 +26,7 @@ class PhraseController extends Controller
                 $data = $form->getData();
 
                 $phrase->setAuteur($this->getUser());
+                $phrase->removeMotsAmbigusPhrase();
 
                 // On trouve les mots ambigus
                 $mots_ambigu = array();
@@ -42,16 +43,18 @@ class PhraseController extends Controller
                 $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
                 foreach($mots_ambigu as $key => $mot_ambigu)
                 {
-
 	                // Soit on le trouve dans la BD soit on l'ajoute
 	                $mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu[2]);
+	                $phrase->setContenu(preg_replace('#<amb id="'.$mot_ambigu[1].'">(.*?)<\/amb>#', '<amb id="'.($key+1)
+	                                                                                                             .'">$1</amb>',
+		                $phrase->getContenu()));
 
 	                $map = new MotAmbiguPhrase();
 	                $map->setOrdre($key + 1);
 	                $map->setPhrase($phrase);
 	                $map->setMotAmbigu($mot_ambigu_OBJ);
 
-					$phrase->addMotsAmbigusPhrase($map);
+					$phrase->addMotAmbiguPhrase($map);
                 }
 
 	            try{
@@ -63,7 +66,7 @@ class PhraseController extends Controller
 		            $repository2 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
 		            $repository3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
 
-		            $reorder = array_values($request->request->get('phrase_add')['motsAmbigus']);
+		            $reorder = array_values($request->request->get('phrase_add')['motsAmbigusPhrase']);
 
 		            foreach($phrase->getMotsAmbigusPhrase() as $map){
 		            	$rep = new Reponse();
@@ -73,15 +76,17 @@ class PhraseController extends Controller
 		            	$glose = $repository3->find($reorder[$map->getOrdre() - 1]['gloses']);
 		            	$rep->setValeurGlose($glose->getValeur());
 		            	$rep->setAuteur($this->getUser());
-			            $rep->setPoidsReponse($repository1->findOneByPoidsReponse(0));
+			            $rep->setPoidsReponse($repository1->findOneByPoidsReponse(1));
 			            $rep->setNiveau($repository2->findOneByTitre('Facile'));
 			            $rep->setGlose($glose);
 			            $rep->setMotAmbiguPhrase($map);
 
-			            $map->getMotAmbigu()->addGlose($glose);
+			            if(!$map->getMotAmbigu()->getGloses()->contains($glose))
+			                $map->getMotAmbigu()->addGlose($glose);
 
 			            $em->persist($map);
 			            $em->persist($rep);
+
 			            $em->flush();
 		            }
 
@@ -91,7 +96,7 @@ class PhraseController extends Controller
 		            $form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
 	            }
 	            catch(\Exception $e){
-		            $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase");
+		            $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase" . $e);
 	            }
             }
             return $this->render('AmbigussBundle:Phrase:add.html.twig', array(

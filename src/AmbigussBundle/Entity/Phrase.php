@@ -82,7 +82,7 @@ class Phrase
         $this->dateCreation = new \DateTime();
         $this->signale = 0;
         $this->visible = 1;
-	    $this->motsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
+	    $this->motsAmbigusPhrase = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -264,28 +264,36 @@ class Phrase
     }
 
     /**
-     * Add motsAmbigusPhrase
+     * Add motAmbiguPhrase
      *
-     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase
      *
      * @return Phrase
      */
-    public function addMotsAmbigusPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase)
+    public function addMotAmbiguPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase)
     {
-        $this->motsAmbigusPhrase[] = $motsAmbigusPhrase;
+        $this->motsAmbigusPhrase[] = $motAmbiguPhrase;
 
         return $this;
     }
 
     /**
-     * Remove motsAmbigusPhrase
+     * Remove motAmbiguPhrase
      *
-     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase
      */
-    public function removeMotsAmbigusPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase)
+    public function removeMotAmbiguPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motAmbiguPhrase)
     {
-        $this->motsAmbigusPhrase->removeElement($motsAmbigusPhrase);
+        $this->motsAmbigusPhrase->removeElement($motAmbiguPhrase);
     }
+
+	/**
+	 * Remove motsAmbigusPhrase
+	 */
+	public function removeMotsAmbigusPhrase()
+	{
+		$this->motsAmbigusPhrase = new \Doctrine\Common\Collections\ArrayCollection();
+	}
 
     /**
      * Get motsAmbigusPhrase

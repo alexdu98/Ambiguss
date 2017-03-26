@@ -29,7 +29,7 @@
 			    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
 		    </div>
 
-		    {{ form_row(form.motsAmbigus) }}
+		    {{ form_row(form.motsAmbigusPhrase) }}
 
 		    {{ form_row(form.creer) }}
 
@@ -60,7 +60,7 @@
 			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbiguEscape, 'g');
 
 			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
-			var $container = $('div#phrase_add_motsAmbigus');
+			var $container = $('div#phrase_add_motsAmbigusPhrase');
 
 			// textarea où l'on écrit la phrase
 			var textarea = $("textarea#{{ form.contenu.vars.id }}");

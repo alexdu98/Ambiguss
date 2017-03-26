@@ -10,8 +10,9 @@ namespace AmbigussBundle\Repository;
  */
 class GloseRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function findGlosesValueLinkedByMotAmbiguValue($valeurMA){
-		return $this->createQueryBuilder('g')
-			->innerJoin("g.motsAmbigus", "ma", "WITH", "ma.valeur = :valeurMA")->setParameter('valeurMA', $valeurMA);
+	public function findGlosesValueByMotAmbiguValue($valeurMA){
+		return $this->createQueryBuilder('g')->select('g.id, g.valeur')
+			->innerJoin("g.motsAmbigus", "ma", "WITH", "ma.valeur = :valeurMA")->setParameter('valeurMA', $valeurMA)
+			->getQuery()->getResult();
 	}
 }

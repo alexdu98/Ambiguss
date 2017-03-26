@@ -36,3 +36,8 @@ ambiguss_glose_add:
     path: /ambiguss/glose/add
     defaults:
         _controller: AmbigussBundle:API:addGlose
+
+ambiguss_glose_get_by_motambigu:
+    path: /ambiguss/glose/getByMotAmbigu
+    defaults:
+        _controller: AmbigussBundle:API:getGlosesByMotAmbigu

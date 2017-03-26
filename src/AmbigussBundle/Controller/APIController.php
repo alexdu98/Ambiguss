@@ -48,6 +48,14 @@ class APIController extends Controller{
 				'form' => $form->createView(),
 			));
 		}
+
+		throw $this->createNotFoundException();
+	}
+
+	public function getGlosesByMotAmbiguAction(Request $request){
+		$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+		$gloses = $repository->findGlosesValueByMotAmbiguValue($request->request->get('motAmbigu'));
+		return $this->json($gloses);
 	}
 
 }

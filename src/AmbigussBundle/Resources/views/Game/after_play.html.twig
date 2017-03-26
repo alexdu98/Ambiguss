@@ -12,16 +12,34 @@
                 <div class="alert alert-danger">{{ flashMessage }}</div>
 	        {% endfor %}
 
-	        <h3 id="result">Bravos vous venez de gagner {{ nb_point }} points !</h3>
-	        <p>{{ phrase }}</p>
-	        {% for key,value in stats %}
-		        <ul>{{ key }}
-			        {% for g, ma in value %}
-						<li>{{ g ~ ' ' ~ ma }} votes</li>
-			        {% endfor %}
-		        </ul>
+	        <h3 id="result">
+		        {% transchoice nb_point %}
+		            {0} Malheureusement, vous n'avez pas gagné de point. |
+		            {1} Bravo, vous avez gagné 1 point. |]1,
+		            Inf[ Félicitation, vous avez gagné %nb_point% points !
+		        {% endtranschoice %}
+	        </h3>
+	        {% if app.user is null %}
+		        <a href="{{ path('user_connexion') }}">Connectez-vous</a> pour enregistrer vos parties !
 		        <br>
-	        {% endfor %}
+	        {% endif %}
+	        <br>
+	        <p>{{ phrase|raw }}</p>
+	        <div class="text-left">
+		        <ul>
+		        {% for key, value in stats %}
+			        <li>{{ key }} :
+				        {% for g, ma in value %}
+							{{ g ~ ' ' ~ ma }}
+					        {% transchoice ma %}
+					            {0}vote|{1}vote|]1,Inf[votes
+					        {% endtranschoice %}
+					        {% if loop.last %}.{% else %},{% endif %}
+				        {% endfor %}
+			        </li>
+		        {% endfor %}
+		        </ul>
+	        </div>
 
             <a href="{{ path('ambiguss_game') }}" class="btn btn-primary">Rejouer</a>
         </div>

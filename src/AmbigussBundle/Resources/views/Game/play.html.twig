@@ -48,8 +48,6 @@
 		// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
 		var $container = $('div#ambigussbundle_game_reponses');
 
-		console.log(phrase);
-
 		// Compte le nombre d'occurence de balise <amb id="">
 		var replaced = phrase.search(reg2) >= 0;
 		// Si au moins 1
@@ -67,7 +65,6 @@
 		var index = 1;
 
 		for(ma in motsAmbigus){
-			console.log(motsAmbigus[ma]);
 			addReponse($container, motsAmbigus[ma]);
 		}
 

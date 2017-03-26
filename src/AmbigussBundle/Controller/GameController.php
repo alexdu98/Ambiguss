@@ -66,40 +66,48 @@ class GameController extends  Controller
 
 			    $em->persist($rep);
 		    }
-		    try{
-			    $em->flush();
-			    $this->get('session')->getFlashBag()->add('succes', "La réponse a bien été ajoutée");
-		    }
-		    catch(\Exception $e){
-			    $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la réponse");
-		    }
 
 		    $hash = array();
-		    $nb_point = 0;
-		    $total = 0;
+		    $nb_points = 0;
 		    $repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
 		    foreach($data->reponses as $rep){
 		    	$ar = array();
+			    $total = 0;
 			    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
 				    $compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
 				    $ar[$g->getValeur()] = $compteur[1];
 				    $total = $total + $ar[$g->getValeur()];
-				    //$nb_point = $nb_point + (($compteur[1] / $total) * 100);
 			    }
+			    $nb_points = $nb_points + (($ar[$rep->getValeurGlose()] / $total) * 100);
 			    $hash[$rep->getValeurMotAmbigu()] = $ar;
 		    }
 
+		    // Met à jour le nombre de points du joueur
+		    if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+			    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
+			    $em->persist($this->getUser());
+		    }
+
+		    try{
+			    $em->flush();
+		    }
+		    catch(\Exception $e){
+			    $this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
+		    }
+
 		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array (
-		    	'phrase' => $phraseOBJ->getContenu(),
+		    	'phrase' => $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML(),
 			    'stats' => $hash, // hashmap de type [motAmbigu => [glose -> nbvotes]]
-			    'nb_point' => $nb_point
+			    'nb_point' => ceil($nb_points)
 		    ));
 	    }
 
+	    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+		$motsAmbigusPhrase = $repository->findByIdPhrase($phraseOBJ->getId());
 	    $motsAmbigus = array();
 	    for($i = 0; $i < $phraseOBJ->getMotsAmbigusPhrase()->count(); $i++){
 			$motsAmbigus[] = array($phraseOBJ->getMotsAmbigusPhrase()->get($i)->getMotAmbigu()->getValeur(),
-			                       $phraseOBJ->getMotsAmbigusPhrase()->get($i)->getId());
+			                       $motsAmbigusPhrase[$i]->getId());
 	    }
 
         return $this->render('AmbigussBundle:Game:play.html.twig', array(

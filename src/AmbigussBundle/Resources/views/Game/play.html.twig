@@ -82,7 +82,7 @@
 			idMotAmbiguPhrase.val(motAmbigu[1]);
 			addAddGloseLink($prototype, motAmbigu[0]);
 			$container.append($prototype);
-			//getGloses($prototype, motsAmbigus[ma]);
+			getGloses($prototype, motsAmbigus[ma]);
 			index++;
 		}
 
@@ -107,6 +107,7 @@
 		function getGloses($prototype, motAmbigu) {
 			$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu[0]}, function (data) {
 				var select = $prototype.find('select');
+				select.empty().append('<option>Choississez une glose</option>');
 				$.each(data, function(index){
 					select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
 				})

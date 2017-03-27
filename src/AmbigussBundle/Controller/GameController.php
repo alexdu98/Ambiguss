@@ -85,6 +85,13 @@ class GameController extends  Controller
 		    // Met à jour le nombre de points du joueur
 		    if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
 			    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
+                $this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
+
+                $repNiveau = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+                $scoreNiveauSuivant = $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1)->getPointsClassementMin();
+                if($this->getUser()->getPointsClassement() >= $scoreNiveauSuivant ){
+                    $this->getUser()->setNiveau( $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1) );
+                }
 			    $em->persist($this->getUser());
 		    }
 

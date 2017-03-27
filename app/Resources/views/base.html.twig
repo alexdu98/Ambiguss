@@ -62,7 +62,9 @@
 					    <div class="col-md-4 text-right">
 						    <ul>
 							    {% if app.user %}
-								    <li><a href="{{ path('user_profil') }}">{{ app.user.pseudo|capitalize }}</a></li> •
+							    	<li> Points : {{ app.user.pointsClassement|capitalize }} </li>
+								    <li> Crédits : {{ app.user.Credits|capitalize }} </li>
+								    <li><a href="{{ path('user_profil') }}">{{ app.user.pseudo|capitalize }} </a></li> •
 								    <li><a href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
 							    {% else %}
 								    <li><a href="{{ path('user_inscription') }}">S'inscrire</a></li>

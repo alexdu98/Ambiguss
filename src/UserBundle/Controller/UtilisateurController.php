@@ -13,6 +13,14 @@ class UtilisateurController extends Controller
 			return $this->redirectToRoute('user_connexion');
 		}
 
-		return $this->render('UserBundle:Utilisateur:profil.html.twig');
+		$score = $this->getUser()->getPointsClassement();
+		$credit = $this->getUser()->getCredits();
+		$niveau = $this->getUser()->getNiveau()->getTitre();
+
+		return $this->render('UserBundle:Utilisateur:profil.html.twig', array(
+                'score' => $score,
+                'credit' => $credit,
+                'niveau' => $niveau,
+            ));
 	}
 }

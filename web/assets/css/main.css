@@ -65,6 +65,16 @@ a:hover{
 .row-eq-height{
 	display: flex;
 }
+#loading{
+	margin: 0 auto 10px;
+	display: block;
+	width: 32px;
+	height: 32px;
+}
+.ui-autocomplete-loading{
+	background: url('../images/loading.gif') no-repeat right center;
+	background-size: 20px 20px;
+}
 
 /*
     #####################################################################

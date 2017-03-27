@@ -6,7 +6,7 @@
 {% block titre %}<h1>Let's Play !</h1>{% endblock %}
 {% block contenu %}
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 bulle">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
 
 	        {% for flashMessage in app.session.flashbag.get('succes') %}
 		        <div class="alert alert-success">{{ flashMessage }}</div>
@@ -15,13 +15,19 @@
 		        <div class="alert alert-danger">{{ flashMessage }}</div>
 	        {% endfor %}
 
-           <h3 id="result"></h3>
+           <h3 id="result"></h3><br>
 
             {{ form_start(form) }}
 
             {{ form_errors(form) }}
 
-            {{ form_row(form.reponses) }}
+	        <div class="form-group">
+		        <div id="ambigussbundle_game_reponses" data-prototype="
+	                {{ include('AmbigussBundle:Game:reponse.prot.html.twig', {form: form.reponses.vars.prototype})|e
+		        ('html_attr') }}
+	                "></div>
+		        {% do form.reponses.setRendered %}
+	        </div>
 
             {{ form_rest(form) }}
             {{ form_end(form) }}
@@ -32,87 +38,135 @@
 {% block js %}
 
 	<script>
-		var startBaliseAmbigu = '<amb>';
-		var endBaliseAmbigu = '</amb>';
-		var endBaliseAmbiguEscape = '<\/amb>';
+		$(document).ready(function() {
+			var startBaliseAmbigu = '<amb>';
+			var endBaliseAmbigu = '</amb>';
+			var endBaliseAmbiguEscape = '<\/amb>';
 
-		// Regex pour avoir les contenus des balises <amb> et leurs id
-		// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
-		// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
-		var reg2 = new RegExp('<amb id=\"([0-9]+)\">(.*?)' + endBaliseAmbiguEscape, 'g');
+			// Regex pour avoir les contenus des balises <amb> et leurs id
+			// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
+			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
+			var reg2 = new RegExp('<amb id=\"([0-9]+)\">(.*?)' + endBaliseAmbiguEscape, 'g');
 
-		var phrase = "{{ phraseEscape|raw }}";
-		var rendu = $("#result");
-		var res;
+			var phrase = "{{ phraseEscape|raw }}";
+			var rendu = $("#result");
+			var res;
 
-		// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
-		var $container = $('div#ambigussbundle_game_reponses');
+			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
+			var $container = $('div#ambigussbundle_game_reponses');
 
-		// Compte le nombre d'occurence de balise <amb id="">
-		var replaced = phrase.search(reg2) >= 0;
-		// Si au moins 1
-		if(replaced) {
-			html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
-				'">__amb__</b>';
-			// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
-			res = phrase.replace(reg2, function ($0, $1, $2) {
-				return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
-			});
-		}
+			// Compte le nombre d'occurence de balise <amb id="">
+			var replaced = phrase.search(reg2) >= 0;
+			// Si au moins 1
+			if (replaced) {
+				html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
+					'">__amb__</b>';
+				// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
+				res = phrase.replace(reg2, function ($0, $1, $2) {
+					return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
+				});
+			}
 
-		var motsAmbigus = $.parseJSON('{{ motsAmbigus | raw }}');
+			var motsAmbigus = $.parseJSON('{{ motsAmbigus | raw }}');
 
-		var index = 1;
+			var index = 1;
 
-		for(ma in motsAmbigus){
-			addReponse($container, motsAmbigus[ma]);
-		}
+			for (ma in motsAmbigus) {
+				addReponse($container, motsAmbigus[ma]);
+			}
 
-		// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
-		function addReponse($container, motAmbigu) {
-			// On ajoute le nom unique et l'id
-			var template = $container.attr('data-prototype')
-				.replace(/__name__label__/g, '')
-				.replace(/__name__/g, index)
-				.replace(/__glose__/g, motAmbigu[0])
-				.replace(/__id__/g, index);
-			var $prototype = $(template);
-			// Trouve la balise qui à la class amb
-			var idMotAmbiguPhrase = $prototype.find('.idMotAmbiguPhrase');
-			idMotAmbiguPhrase.val(motAmbigu[1]);
-			addAddGloseLink($prototype, motAmbigu[0]);
-			$container.append($prototype);
-			getGloses($prototype, motsAmbigus[ma]);
-			index++;
-		}
+			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
+			function addReponse($container, motAmbigu) {
+				// On ajoute le nom unique et l'id
+				var template = $container.attr('data-prototype')
+					.replace(/__name__label__/g, '')
+					.replace(/__name__/g, index)
+					.replace(/__glose__/g, motAmbigu[0])
+					.replace(/__id__/g, index);
+				var $prototype = $(template);
+				// Trouve la balise qui à la class amb
+				var idMotAmbiguPhrase = $prototype.find('.idMotAmbiguPhrase');
+				idMotAmbiguPhrase.val(motAmbigu[1]);
+				addAddGloseLink($prototype, motAmbigu[0]);
+				$container.append($prototype);
+				getGloses($prototype, motsAmbigus[ma]);
+				index++;
+			}
 
-		// Ajoute le bouton pour ajouter une glose
-		function addAddGloseLink($prototype, motAmbigu) {
-			var $addLink = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ modalId }}">Ajouter une glose</button>');
-			$prototype.append($addLink);
-			// Au clic sur le bouton de suppression
-			$addLink.click(function(e) {
-				$.ajax('{{ path('ambiguss_glose_add') }}', { motAmbigu: motAmbigu })
-					.done(function(data){
-						$('.modal-body').html(data);
-					});
-				$('#{{ modalId }}').modal('show');
-				e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-				return false;
-			});
-		}
+			// Ajoute le bouton pour ajouter une glose
+			function addAddGloseLink($prototype, motAmbigu) {
+				var $addLink = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{
+				modalId }}">Ajouter une glose</button>');
+				$prototype.find('.addGloseLink').append($addLink);
+				var modalBody = $('.modal-body');
+				// Au clic sur le bouton de suppression
+				{% if app.user is empty %}
+					modalBody.html('<div class="alert alert-danger">Il faut être connecté pour ajouter une glose</div>');
+				{% endif %}
+				$addLink.click(function (e) {
+					$.ajax('{{ path('ambiguss_glose_add') }}', {motAmbigu: motAmbigu})
+						.done(function (data) {
+							// Remplit la modal par le formulaire d'ajout d'une glose
+							modalBody.empty().append(data);
+							modalBody.find('#glose_add_motAmbigu').val(motAmbigu);
 
-		rendu.append(res);
+							// Autocomplete le champ
+							var input = modalBody.find('#glose_add_valeur');
+							input.autocomplete({
+								minLength: 1,
+								appendTo: '#{{ modalId }}',
+								source : function(request, response){
+									$.getJSON('{{ path('ambiguss_glose_get_autocomplete') }}?term=' + request.term, function(data){
+										input.parent().append('<div id="resnul" hidden>Aucun résultat</div>');
+										if(data.length === 0){
+											input.parent().find('#resnul').show();
+										}else{
+											input.parent().find('#resnul').hide();
+										}
+										response($.map(data, function(item){
+											return item.valeur;
+										}));
+									});
+								}
+							});
 
-		function getGloses($prototype, motAmbigu) {
-			$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu[0]}, function (data) {
-				var select = $prototype.find('select');
-				select.empty().append('<option>Choississez une glose</option>');
-				$.each(data, function(index){
-					select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
-				})
-			}, "json");
-		}
+							// Envoi le formulaire via ajax
+							modalBody.find('form[name="glose_add"]').ajaxForm({
+								beforeSubmit: function(arr, form, opt){
+									// On affiche l'image laoder
+									$(form).after('<img src="{{ asset('assets/images/loading.gif') }}" id="loading">');
+								},
+								// Quand la réponse Ajax sera reçu, on appelle ce callback
+								'success' : function(data, status, xhr, form){
+									$(form).next().remove();
+									if(data.status) {
+										$prototype.find('select').append('<option value="' + data.glose.id + '">' + data.glose.valeur + '</option>');
+										$('#{{ modalId }}').modal('hide');
+									}else{
+										$(form).after('<div class="alert alert-danser">Erreur</div>')
+									}
+								}
+							});
+						});
+					$('#{{ modalId }}').modal('show');
+					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+					return false;
+				});
+			}
 
+
+
+			rendu.append(res);
+
+			function getGloses($prototype, motAmbigu) {
+				$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu[0]}, function (data) {
+					var select = $prototype.find('select');
+					select.empty().append('<option>Choississez une glose</option>');
+					$.each(data, function (index) {
+						select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
+					})
+				}, "json");
+			}
+		});
 	</script>
 {%  endblock %}

@@ -21,7 +21,7 @@ ambiguss_phrase_edit:
             id: \d+
 
 ambiguss_phrase_delete:
-    path: /ambiguss/phrase/delete{id}
+    path: /ambiguss/phrase/delete/{id}
     defaults:
         _controller: AmbigussBundle:Phrase:delete
     requirements:
@@ -31,6 +31,11 @@ ambiguss_game:
     path: /ambiguss/jeu
     defaults:
         _controller: AmbigussBundle:Game:main
+
+ambiguss_glose_get_autocomplete:
+    path: /ambiguss/glose/get/autocomplete
+    defaults:
+        _controller: AmbigussBundle:API:autocompleteGlose
 
 ambiguss_glose_add:
     path: /ambiguss/glose/add

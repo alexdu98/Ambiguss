@@ -8,6 +8,7 @@
 
 namespace AmbigussBundle\Controller;
 
+use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Form\GloseAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,9 @@ class APIController extends Controller{
 				$glose = $repository->findOneOrCreate($data);
 
 				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
-				$motAmbigu = $repository->findOneByValeur($request->request->get('glose_add')['motAmbigu']);
+				$motAmbigu = new MotAmbigu();
+				$motAmbigu->setValeur($request->request->get('glose_add')['motAmbigu']);
+				$motAmbigu = $repository->findOneOrCreate($motAmbigu);
 
 				$motAmbigu->addGlose($glose);
 

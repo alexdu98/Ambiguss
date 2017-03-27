@@ -18,7 +18,7 @@ class MotAmbiguAddPhraseType extends AbstractType
 		$builder
 			->add('valeur', TextType::class, array(
 				'label' => 'Mot ambigu',
-				'attr' => array('placeholder' => 'Mot ambigu', 'class' => 'amb', 'readonly' => 'true', 'style'=> 'width : auto', 'max_lenght' => 100000),
+				'attr' => array('placeholder' => 'Mot ambigu', 'class' => 'amb', 'readonly' => 'true'),
 				'invalid_message' => 'Mot ambigu invalide',
 			))
 			->add('gloses', EntityType::class, array(
@@ -26,14 +26,12 @@ class MotAmbiguAddPhraseType extends AbstractType
 				'choice_label' => 'valeur',
 				'label' =>  'Choisissez la glose associée',
 				'mapped' => false,
-				'attr' => array( 'style' => 'width : auto')
 			))
 			->add('poidsReponse', EntityType::class, array(
 				'class' => 'AmbigussBundle\Entity\PoidsReponse',
-				'choice_label' => 'poidsReponse',
+				'choice_label' => 'label',
 				'label' =>  'Choississez le poids de cette glose',
 				'mapped' => false,
-				'attr' => array( 'style' => 'width : 60px')
 				)
 			);
 	}

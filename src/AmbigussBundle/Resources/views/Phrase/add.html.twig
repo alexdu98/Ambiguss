@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% set modalId = 'addGloseModal' %}
+
 {% block title %}Création de phrase{% endblock %}
 
 {% block contenu %}
@@ -30,10 +32,9 @@
 		    </div>
 {# {{ dump(form.motsAmbigusPhrase) }} #}
 		    <div class="form-group">
-		    	<div id="phrase_add_motsAmbigusPhrase" 
-
-		    data-prototype= {{ include('AmbigussBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype, 'gloses': form.motsAmbigusPhrase.vars.prototype.children.gloses.vars.form , 'poidsReponse': form.motsAmbigusPhrase.vars.prototype.children.poidsReponse.vars.form  }) |e ('html_attr') }}" >
-
+		    	<div id="phrase_add_motsAmbigusPhrase" data-prototype="
+					{{ include('AmbigussBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}
+				">
 		    	</div>
 		    </div>
 		    {% do form.motsAmbigusPhrase.setRendered %}
@@ -45,7 +46,7 @@
 
 		</div>
 	</div>
-
+	{{ include('modal.html.twig', {'modalId': modalId, 'modalTitre': 'Ajouter une glose'}) }}
 {% endblock %}
 
 {% block js %}
@@ -156,12 +157,14 @@
 				amb.prev().html(amb.prev().html() + ' (id : ' + index + ')');
 				$prototype.attr('id', 'amb' + index);
 				addDeleteLink($prototype);
+				addAddGloseLink($prototype, motAmbigu);
+				getGloses($prototype, motAmbigu);
 				$container.append($prototype);
 			}
 
 			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addDeleteLink($prototype) {
-				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot ambigu</a>');
 				$prototype.find('.deleteLink').append($deleteLink);
 
 				// Au clic sur le bouton de suppression
@@ -178,6 +181,80 @@
 					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 					return false;
 				});
+			}
+
+			// Ajoute le bouton pour ajouter une glose
+			function addAddGloseLink($prototype, motAmbigu) {
+				var $addLink = $('<button type="button" style="margin-top:5px;" class="btn btn-primary" ' +
+					'data-toggle="modal" ' +
+					'data-target="#{{
+				modalId }}">Ajouter une glose</button>');
+				$prototype.find('.addGloseLink').append($addLink);
+				var modalBody = $('.modal-body');
+				// Au clic sur le bouton de suppression
+				{% if app.user is empty %}
+				modalBody.html('<div class="alert alert-danger">Il faut être connecté pour ajouter une glose</div>');
+				{% endif %}
+				$addLink.click(function (e) {
+					$.ajax('{{ path('ambiguss_glose_add') }}', {motAmbigu: motAmbigu})
+						.done(function (data) {
+							// Remplit la modal par le formulaire d'ajout d'une glose
+							modalBody.empty().append(data);
+							modalBody.find('#glose_add_motAmbigu').val(motAmbigu);
+
+							// Autocomplete le champ
+							var input = modalBody.find('#glose_add_valeur');
+							input.autocomplete({
+								minLength: 1,
+								appendTo: '#{{ modalId }}',
+								source : function(request, response){
+									$.getJSON('{{ path('ambiguss_glose_get_autocomplete') }}?term=' + request.term, function(data){
+										input.parent().append('<div id="resnul" hidden>Aucun résultat</div>');
+										if(data.length === 0){
+											input.parent().find('#resnul').show();
+										}else{
+											input.parent().find('#resnul').hide();
+										}
+										response($.map(data, function(item){
+											return item.valeur;
+										}));
+									});
+								}
+							});
+
+							// Envoi le formulaire via ajax
+							modalBody.find('form[name="glose_add"]').ajaxForm({
+								beforeSubmit: function(arr, form, opt){
+									// On affiche l'image laoder
+									$(form).after('<img src="{{ asset('assets/images/loading.gif') }}" id="loading">');
+								},
+								// Quand la réponse Ajax sera reçu, on appelle ce callback
+								'success' : function(data, status, xhr, form){
+									$(form).next().remove();
+									if(data.status) {
+										$prototype.find('select.gloses').append('<option value="' + data.glose.id +
+											'">' + data.glose.valeur + '</option>');
+										$('#{{ modalId }}').modal('hide');
+									}else{
+										$(form).after('<div class="alert alert-danser">Erreur</div>')
+									}
+								}
+							});
+						});
+					$('#{{ modalId }}').modal('show');
+					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+					return false;
+				});
+			}
+
+			function getGloses($prototype, motAmbigu) {
+				$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu}, function (data) {
+					var select = $prototype.find('select.gloses');
+					select.append('<option>Choississez une glose</option>');
+					$.each(data, function (index) {
+						select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
+					})
+				}, "json");
 			}
 
 		});

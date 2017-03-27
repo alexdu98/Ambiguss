@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Controller;
 
+use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Entity\MotAmbiguPhrase;
 use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\PhraseAddType;
@@ -44,7 +45,9 @@ class PhraseController extends Controller
                 foreach($mots_ambigu as $key => $mot_ambigu)
                 {
 	                // Soit on le trouve dans la BD soit on l'ajoute
-	                $mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu[2]);
+	                $mot_ambigu_OBJ = new MotAmbigu();
+	                $mot_ambigu_OBJ->setValeur($mot_ambigu[2]);
+	                $mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu_OBJ);
 	                $phrase->setContenu(preg_replace('#<amb id="'.$mot_ambigu[1].'">(.*?)<\/amb>#', '<amb id="'.($key+1)
 	                                                                                                             .'">$1</amb>',
 		                $phrase->getContenu()));
@@ -76,7 +79,7 @@ class PhraseController extends Controller
 		            	$glose = $repository3->find($reorder[$map->getOrdre() - 1]['gloses']);
 		            	$rep->setValeurGlose($glose->getValeur());
 		            	$rep->setAuteur($this->getUser());
-			            $rep->setPoidsReponse($repository1->findOneByPoidsReponse(1));
+			            $rep->setPoidsReponse($repository1->find($reorder[$map->getOrdre() - 1]['poidsReponse']));
 			            $rep->setNiveau($repository2->findOneByTitre('Facile'));
 			            $rep->setGlose($glose);
 			            $rep->setMotAmbiguPhrase($map);

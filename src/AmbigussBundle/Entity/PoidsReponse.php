@@ -28,6 +28,13 @@ class PoidsReponse
      */
     private $poidsReponse;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="label", type="string", length=32, unique=true)
+	 */
+    private $label;
+
 
     /**
      * Get id
@@ -62,5 +69,29 @@ class PoidsReponse
     {
         return $this->poidsReponse;
     }
+
+	/**
+	 * Set label
+	 *
+	 * @param string $label
+	 *
+	 * @return PoidsReponse
+	 */
+	public function setLabel($label)
+	{
+		$this->label = $label;
+
+		return $this;
+	}
+
+	/**
+	 * Get label
+	 *
+	 * @return string
+	 */
+	public function getLabel()
+	{
+		return $this->label;
+	}
 }
 

@@ -46,3 +46,8 @@ ambiguss_glose_get_by_motambigu:
     path: /ambiguss/glose/getByMotAmbigu
     defaults:
         _controller: AmbigussBundle:API:getGlosesByMotAmbigu
+
+ambiguss_classement_general:
+    path: /ambiguss/classement/general
+    defaults:
+        _controller: AmbigussBundle:Classement:classementGeneral

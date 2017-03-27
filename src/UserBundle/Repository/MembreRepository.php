@@ -16,4 +16,10 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 			->orWhere("m.email = :email")->setParameter("email", $pseudoOrEmail)
 			->getQuery()->getOneOrNullResult();
 	}
+
+	public function getClassementGeneral($limit){
+		return $this->createQueryBuilder('m')->select('m.pseudo, m.dateInscription, m.pointsClassement, m.credits')
+			->orderBy('m.pointsClassement', 'DESC')
+			->getQuery()->getResult();
+	}
 }

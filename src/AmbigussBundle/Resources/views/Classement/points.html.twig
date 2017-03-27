@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classement{% endblock %}
+{% block titre %}Classement général{% endblock %}
+
+{% block contenu %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+			{% for row in classement %}
+				{{ loop.index }}. {{ row.pseudo }} ({{ row.dateInscription|date("d/m/Y") }}) : {{ row.pointsClassement
+			}} points	/ {{ row
+			.credits }}
+				crédits<br>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

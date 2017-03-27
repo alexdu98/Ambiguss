@@ -15,7 +15,7 @@
 			    <div class="alert alert-danger">{{ flashMessage }}</div>
 		    {% endfor %}
 
-		    {{ form_start(form) }}
+		    {{ form_start(form , {'form-type' : 'horizontal', 'attr' : {'class' : 'from-horizontal'}}) }}
 
 		    {{ form_errors(form) }}
 
@@ -28,8 +28,15 @@
 		    <div class="form-group">
 			    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
 		    </div>
+{# {{ dump(form.motsAmbigusPhrase) }} #}
+		    <div class="form-group">
+		    	<div id="phrase_add_motsAmbigusPhrase" 
 
-		    {{ form_row(form.motsAmbigusPhrase) }}
+		    data-prototype= {{ include('AmbigussBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype, 'gloses': form.motsAmbigusPhrase.vars.prototype.children.gloses.vars.form , 'poidsReponse': form.motsAmbigusPhrase.vars.prototype.children.poidsReponse.vars.form  }) |e ('html_attr') }}" >
+
+		    	</div>
+		    </div>
+		    {% do form.motsAmbigusPhrase.setRendered %}
 
 		    {{ form_row(form.creer) }}
 
@@ -155,7 +162,8 @@
 			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addDeleteLink($prototype) {
 				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
-				$prototype.append($deleteLink);
+				$prototype.find('.deleteLink').append($deleteLink);
+
 				// Au clic sur le bouton de suppression
 				$deleteLink.click(function(e) {
 					var phrase = textarea.val();

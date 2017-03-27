@@ -1,0 +1,24 @@
+<div class='form-group'>
+	<label class='control-label required'>
+	__name__label__</label>
+	<div id='container-fluid phrase_add_motsAmbigusPhrase___name__'>
+		<div class="row">
+			<div class='col-md-2'>
+			
+				<label class='control-label required' for='phrase_add_motsAmbigusPhrase___name___valeur'>Mot ambigu</label>
+				<input type='text' id='phrase_add_motsAmbigusPhrase___name___valeur' name='phrase_add[motsAmbigusPhrase][__name__][valeur]' required='required' placeholder='Mot ambigu' class='amb form-control' readonly='true' style='width : auto' max_lenght='100000' />
+			</div>
+			<div class='col-md-2'>
+				<label class='control-label required' for='phrase_add_motsAmbigusPhrase___name___gloses'>Choisissez la glose associée</label>
+				{{ form_widget(gloses) }}
+			</div>
+			<div class='col-md-3'>
+				<label class='control-label required' for='phrase_add_motsAmbigusPhrase___name___poidsReponse'>Choississez le poids de cette glose</label>
+				{{ form_widget(poidsReponse)}}
+			</div>
+			<div class='col-md-2 deleteLink'>
+				
+			</div>
+		</div>
+	</div>
+</div>

@@ -15,12 +15,20 @@ use Symfony\Component\Serializer\Serializer;
 
 class APIController extends Controller{
 
+	public function autocompleteGloseAction(Request $request){
+		$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+		$gloses = $repository->findByValeurAutoComplete($request->get('term'));
+
+		return $this->json($gloses);
+	}
+
 	public function addGloseAction(Request $request){
 		if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
 			$glose = new \AmbigussBundle\Entity\Glose();
-			$form = $this->get('form.factory')->create(GloseAddType::class, $glose);
-
+			$form = $this->get('form.factory')->create(GloseAddType::class, $glose, array('action' =>
+				                                                                              $this->generateUrl
+				                                                                              ('ambiguss_glose_add')));
 			$form->handleRequest($request);
 
 			if ($form->isSubmitted() && $form->isValid()){
@@ -28,17 +36,32 @@ class APIController extends Controller{
 
 				$data->setAuteur($this->getUser());
 
-				$serializer = $this->get('fos_js_routing.serializer');
+				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+				$glose = $repository->findOneOrCreate($data);
+
+				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
+				$motAmbigu = $repository->findOneByValeur($request->request->get('glose_add')['motAmbigu']);
+
+				$motAmbigu->addGlose($glose);
 
 				try{
 					$em = $this->getDoctrine()->getManager();
-					$em->persist($data);
+					$em->persist($motAmbigu);
 					$em->flush();
 
-					/**
-					 * TODO : Supprimer l'utilisateur avant de sérialisé la glose (mdp)
-					 */
-					return $this->json(array('status' => 'succes', 'glose' => $serializer->serialize($data, 'json')));
+					$res = array(
+						'id' => $glose->getId(),
+						'valeur' => $glose->getValeur()
+					);
+					return $this->json(array('status' => 'succes', 'glose' => $res));
+				}
+				// Si la liaison motAmbigu-glose est déjà faite
+				catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e){
+					$res = array(
+						'id' => $glose->getId(),
+						'valeur' => $glose->getValeur()
+					);
+					return $this->json(array('status' => 'succes', 'glose' => $res));
 				}
 				catch(\Exception $e){
 					return $this->json(array('status' => 'erreur', 'message' => $e));

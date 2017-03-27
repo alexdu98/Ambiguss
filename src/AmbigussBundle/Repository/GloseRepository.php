@@ -15,4 +15,21 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 			->innerJoin("g.motsAmbigus", "ma", "WITH", "ma.valeur = :valeurMA")->setParameter('valeurMA', $valeurMA)
 			->getQuery()->getResult();
 	}
+
+	public function findByValeurAutoComplete($valeur){
+		return $this->createQueryBuilder('g')->select('g.valeur')
+			->where('g.valeur LIKE :valeur')->setParameter('valeur', $valeur . '%')
+			->getQuery()->getResult();
+	}
+
+	public function findOneOrCreate($glose)
+	{
+		$entity = $this->findOneByValeur($glose->getValeur());
+		if($entity == null){
+			$this->_em->persist($glose);
+			$this->_em->flush();
+			return $glose;
+		}
+		return $entity;
+	}
 }

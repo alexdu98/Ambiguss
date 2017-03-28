@@ -126,11 +126,21 @@ class GameController extends  Controller
 			                       $motsAmbigusPhrase[$i]->getId());
 	    }
 
+	        // récupérer tous les likes d'un utilisateur
+	    $rep=$this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
+        $likesUser = $rep->findBymembre($this->getUser());
+        $likesArray = array();
+        foreach ($likesUser as $like){
+            array_push($likesArray, $like->getPhrase()->getId());
+        }
+
+
         return $this->render('AmbigussBundle:Game:play.html.twig', array(
             'form' => $form->createView(),
             'phrase_id' => $phraseOBJ->getId(),
             'motsAmbigus' => json_encode($motsAmbigus),
-            'phraseEscape' => $phraseEscape
+            'phraseEscape' => $phraseEscape,
+            'likes' => $likesArray
         ));
     }
 

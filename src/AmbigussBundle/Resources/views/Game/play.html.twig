@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set modalId = 'addGloseModal' %}
+{% set trouve = 0 %}
 
 {% block title %}Jeu{% endblock %}
 {% block titre %}<h1>Jouons !</h1>{% endblock %}
@@ -17,12 +18,23 @@
 
             <h3 id="result"></h3>
 	        {% if app.user %}
-		        <div class="">
-			        <button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-				        J'aime
-				        cette
-				        phrase</button>
-		        </div>
+				{% for like in likes if phrase_id == like %}
+                    {% set trouve = 1 %}
+					<div class="">
+							<button id="phraseLike" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i>
+								Je n'aime
+								plus cette phrase</button>
+						</div>
+
+				{% endfor %}
+				{%  if trouve==0 %}
+					<div class="">
+						<button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+							J'aime
+							cette
+							phrase</button>
+					</div>
+				{% endif %}
 	        {% endif %}
 	        <br>
 

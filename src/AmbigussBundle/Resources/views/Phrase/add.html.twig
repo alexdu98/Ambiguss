@@ -126,7 +126,7 @@
 				var replaced = phrase.search(reg2) >= 0;
 				// Si au moins 1
 				if(replaced) {
-					html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
+					html = '<b num="__num__" class="color-red" title="Ce mot est ambigu (id : __num__)' +
 						'">__amb__</b>';
 					// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
 					res = phrase.replace(reg2, function ($0, $1, $2) {
@@ -156,8 +156,8 @@
 				amb.val(motAmbigu.trim() + ' ' + amb.val());
 				amb.prev().html(amb.prev().html() + ' (id : ' + index + ')');
 				$prototype.attr('id', 'amb' + index);
-				addDeleteLink($prototype);
 				addAddGloseLink($prototype, motAmbigu);
+				addDeleteLink($prototype);
 				getGloses($prototype, motAmbigu);
 				$container.append($prototype);
 			}
@@ -185,7 +185,7 @@
 
 			// Ajoute le bouton pour ajouter une glose
 			function addAddGloseLink($prototype, motAmbigu) {
-				var $addLink = $('<button type="button" style="margin-top:5px;" class="btn btn-primary" ' +
+				var $addLink = $('<button type="button" style="margin-right:3px;" class="btn btn-primary" ' +
 					'data-toggle="modal" ' +
 					'data-target="#{{
 				modalId }}">Ajouter une glose</button>');
@@ -250,7 +250,7 @@
 			function getGloses($prototype, motAmbigu) {
 				$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu}, function (data) {
 					var select = $prototype.find('select.gloses');
-					select.append('<option>Choississez une glose</option>');
+					select.append('<option value>Choississez une glose</option>');
 					$.each(data, function (index) {
 						select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
 					})

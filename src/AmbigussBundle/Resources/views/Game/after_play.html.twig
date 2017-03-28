@@ -14,7 +14,7 @@
 
 	        <h3 id="result">
 		        {% transchoice nb_point %}
-		            {0} Malheureusement, vous n'avez pas gagné de point. |
+		            {0} Désolé, vous n'avez pas gagné de point. |
 		            {1} Bravo, vous avez gagné 1 point. |]1,
 		            Inf[ Félicitation, vous avez gagné %nb_point% points !
 		        {% endtranschoice %}
@@ -24,23 +24,25 @@
 		        <br>
 	        {% endif %}
 	        <br>
-	        <p>{{ phrase|raw }}</p>
+	        <p><span class="color-green">La phrase était :</span><br> {{ phrase|raw }}</p>
 	        <div class="text-center">
-		        <ul>
+		        <ul><span class="color-green">Les votes précédents étaient :</span>
 		        {% for key, value in stats %}
-			        <li>{{ key }} :
+			        <li class="not-list">{{ key }} :
 				        {% for g, ma in value %}
-							{{ g ~ ' ' ~ ma }}
-					        {% transchoice ma %}
-					            {0}vote|{1}vote|]1,Inf[votes
-					        {% endtranschoice %}
-					        {% if loop.last %}.{% else %},{% endif %}
+					        {% if ma.isSelected %}
+						        <b>{% endif %}{{ g ~ ' ' ~ ma.nbVotes }}
+									{% transchoice ma.nbVotes %}
+										{0}vote|{1}vote|]1,Inf[votes
+									{% endtranschoice %}
+					        {% if ma.isSelected %}</b>{% endif %}
+							{% if loop.last %}.{% else %},{% endif %}
 				        {% endfor %}
 			        </li>
 		        {% endfor %}
 		        </ul>
 	        </div>
-
+	        <br>
             <a href="{{ path('ambiguss_game') }}" class="btn btn-primary">Rejouer</a>
         </div>
     </div>

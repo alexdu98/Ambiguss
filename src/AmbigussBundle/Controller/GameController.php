@@ -75,10 +75,19 @@ class GameController extends  Controller
 			    $total = 0;
 			    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
 				    $compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
-				    $ar[$g->getValeur()] = $compteur[1];
-				    $total = $total + $ar[$g->getValeur()];
+				    $isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
+				    $ar2 = array('nbVotes' => $compteur['nbVotes'], 'isSelected' => $isSelected);
+				    $ar[$g->getValeur()] = $ar2;
+				    $total = $total + $ar[$g->getValeur()]['nbVotes'];
 			    }
-			    $nb_points = $nb_points + (($ar[$rep->getValeurGlose()] / $total) * 100);
+			    // Trie le tableau des gloses dans l'ordre décroissant du nombre de réponses
+			    uasort($ar, function($a, $b){
+				    if ($a['nbVotes'] == $b['nbVotes']) {
+					    return 0;
+				    }
+				    return ($a['nbVotes'] > $b['nbVotes']) ? -1 : 1;
+			    });
+			    $nb_points = $nb_points + (($ar[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
 			    $hash[$rep->getValeurMotAmbigu()] = $ar;
 		    }
 
@@ -119,6 +128,7 @@ class GameController extends  Controller
 
         return $this->render('AmbigussBundle:Game:play.html.twig', array(
             'form' => $form->createView(),
+            'phrase_id' => $phraseOBJ->getId(),
             'motsAmbigus' => json_encode($motsAmbigus),
             'phraseEscape' => $phraseEscape
         ));

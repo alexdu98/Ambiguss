@@ -310,6 +310,6 @@ class Phrase
      */
 
     public function getContenuHTML(){
-    	return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b class="color-red amb-border" title="Ce mot est ambigu (id : $1)">$2</b>', $this->getContenu());
+    	return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b class="color-red" title="Ce mot est ambigu (id : $1)">$2</b>', $this->getContenu());
     }
 }

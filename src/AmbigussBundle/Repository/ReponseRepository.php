@@ -14,7 +14,7 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
 	{
 		return $this->createQueryBuilder('r')
 			->innerJoin("r.motAmbiguPhrase", "map", "WITH", "r.motAmbiguPhrase = map.id")->addSelect("map")
-			->innerJoin("r.glose", "g"," WITH","r.glose=g.id")->addSelect("count(g)")
+			->innerJoin("r.glose", "g"," WITH","r.glose=g.id")->addSelect("count(g) as nbVotes")
 			->where("map.id = :Ambi")->setParameter("Ambi", $idPMA)
 			->andwhere("g.id = :Gl")->setParameter("Gl",$glose)
 			->getQuery()->getSingleResult();

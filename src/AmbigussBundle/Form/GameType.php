@@ -21,7 +21,8 @@ class GameType extends AbstractType
             	'entry_type' => ReponseGameType::class,
 	            'allow_add' => true,
 	            'allow_delete' => true,
-	            'label' => false
+	            'label' => false,
+                'required' => true,
             ));
     }
     

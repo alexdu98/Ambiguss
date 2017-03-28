@@ -1,5 +1,6 @@
 <?php
 namespace AmbigussBundle\Form;
+use AmbigussBundle\Repository\PoidsReponseRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
@@ -26,13 +27,18 @@ class MotAmbiguAddPhraseType extends AbstractType
 				'choice_label' => 'valeur',
 				'label' =>  'Choisissez la glose associée',
 				'mapped' => false,
+			    'required' => true
 			))
 			->add('poidsReponse', EntityType::class, array(
 				'class' => 'AmbigussBundle\Entity\PoidsReponse',
 				'choice_label' => 'label',
 				'label' =>  'Choississez le poids de cette glose',
 				'mapped' => false,
-				)
+			    'required' => true,
+			    'query_builder' => function(PoidsReponseRepository $rep){
+					return $rep->createQueryBuilder('pr')->orderBy('pr.ordre');
+			    }
+			)
 			);
 	}
 

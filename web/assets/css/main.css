@@ -59,8 +59,8 @@ a:hover{
 .color-red{
 	color: var(--color-red);
 }
-.amb-border{
-	border-bottom: 2px dashed var(--color-red);
+.color-green{
+	color: var(--color-green);
 }
 .row-eq-height{
 	display: flex;
@@ -74,6 +74,9 @@ a:hover{
 .ui-autocomplete-loading{
 	background: url('../images/loading.gif') no-repeat right center;
 	background-size: 20px 20px;
+}
+.not-list{
+	list-style-type: none;
 }
 
 /*
@@ -248,6 +251,6 @@ footer h4{
 .bulle p {
 	font-size:1.25em;
 }
-.bulle a:hover{
+.bulle a:not(.btn):hover{
 	color: var(--color-green);
 }

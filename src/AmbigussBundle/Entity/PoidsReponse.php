@@ -35,6 +35,13 @@ class PoidsReponse
 	 */
     private $label;
 
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="ordre", type="smallint", unique=true)
+	 */
+	private $ordre;
+
 
     /**
      * Get id
@@ -92,6 +99,30 @@ class PoidsReponse
 	public function getLabel()
 	{
 		return $this->label;
+	}
+
+	/**
+	 * Set ordre
+	 *
+	 * @param integer $ordre
+	 *
+	 * @return PoidsReponse
+	 */
+	public function setOrdre($ordre)
+	{
+		$this->ordre = $ordre;
+
+		return $this;
+	}
+
+	/**
+	 * Get ordre
+	 *
+	 * @return int
+	 */
+	public function getOrdre()
+	{
+		return $this->ordre;
 	}
 }
 

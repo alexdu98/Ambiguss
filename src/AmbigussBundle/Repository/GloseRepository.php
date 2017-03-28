@@ -13,6 +13,7 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 	public function findGlosesValueByMotAmbiguValue($valeurMA){
 		return $this->createQueryBuilder('g')->select('g.id, g.valeur')
 			->innerJoin("g.motsAmbigus", "ma", "WITH", "ma.valeur = :valeurMA")->setParameter('valeurMA', $valeurMA)
+			->orderBy("g.valeur")
 			->getQuery()->getResult();
 	}
 

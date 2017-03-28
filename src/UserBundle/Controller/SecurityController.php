@@ -157,7 +157,7 @@ class SecurityController extends Controller
 			        'text/html');
 
 			        if($this->get('mailer')->send($message)){
-				        $this->get('session')->getFlashBag()->add('succes', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyer par email.');
+				        $this->get('session')->getFlashBag()->add('succes', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyé par email.');
 			        }
 			        else{
 				        $this->get('session')->getFlashBag()->add('erreur', "Inscription réussie, mais l'envoi de
@@ -193,7 +193,11 @@ class SecurityController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($membre);
 			$em->flush();
-			return $this->render('UserBundle:Security:inscription_confirmation.html.twig');
+
+			$this->get('session')->getFlashBag()->add('succes', "Inscription confirmé. Vous pouvez maintenant vous connecter.");
+
+			// rediriger vers la page de connexion
+			return $this->redirectToRoute('user_connexion');
 		}
 
 		throw $this->createNotFoundException();

@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Controller;
 
+use AmbigussBundle\Entity\AimerPhrase;
 use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Entity\MotAmbiguPhrase;
 use AmbigussBundle\Entity\Reponse;
@@ -111,5 +112,31 @@ class PhraseController extends Controller
 		    $this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
     		return $this->redirectToRoute('user_connexion');
     	}
+    }
+
+    public function likeAction(Request $request, $id){
+	    $rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
+	    $rep1 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+
+	    $phrase = $rep1->find($id);
+
+	    $aimerPhrase = new AimerPhrase();
+	    $aimerPhrase->setPhrase($phrase);
+	    $aimerPhrase->setMembre($this->getUser());
+
+	    $em = $this->getDoctrine()->getManager();
+	    $action = null;
+	    if($temp = $rep->findOneBy(array('phrase' => $phrase, 'membre' => $this->getUser()))){
+		    $aimerPhrase = $em->getReference('AmbigussBundle:AimerPhrase', $temp->getId());
+		    $em->remove($aimerPhrase);
+		    $action = 'delete';
+	    }
+	    else{
+		    $em->persist($aimerPhrase);
+		    $action = 'add';
+	    }
+	    $em->flush();
+
+	    return $this->json(array('status' => 'succes', 'action' => $action));
     }
 }

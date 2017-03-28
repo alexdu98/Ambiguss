@@ -55,10 +55,11 @@ class Membre implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="mdp", type="string", length=72, nullable=true)
      *
-     * UpperCase|LowerCase & Number|SpecialChar between 6 and 72 char (si je me suis pas trompé)
-     * @Assert\Regex(
-     *     pattern = "#(?=^.{6,72}$)((?=.*\d)|(?=.*\W+))(?![.\n])((?=.*[A-Z])|(?=.*[a-z])).*$#",
-     *     message = "Mot de passe invalide. (alphabétique et numérique ou spécial de 6 à 72 caractères)"
+     * @Assert\Length(
+     *     min="6",
+     *     max="72",
+     *     minMessage="Le mot de passe doit faire au moins 6 caractères.",
+     *     maxMessage="Le mot de passe doit faire 72 caractères maximum."
      * )
      */
     private $mdp;

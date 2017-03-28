@@ -18,14 +18,14 @@ ambiguss_phrase_edit:
     defaults:
         _controller: AmbigussBundle:Phrase:edit
     requirements:
-            id: \d+
+        id: \d+
 
 ambiguss_phrase_delete:
     path: /ambiguss/phrase/delete/{id}
     defaults:
         _controller: AmbigussBundle:Phrase:delete
     requirements:
-            id: \d+
+        id: \d+
 
 ambiguss_game:
     path: /ambiguss/jeu
@@ -51,3 +51,10 @@ ambiguss_classement_general:
     path: /ambiguss/classement/general
     defaults:
         _controller: AmbigussBundle:Classement:classementGeneral
+
+ambiguss_phrase_like:
+    path: /ambiguss/phrase/like/{id}
+    defaults:
+        _controller: AmbigussBundle:Phrase:like
+    requirements:
+        id: \d+

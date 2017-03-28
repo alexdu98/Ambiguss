@@ -3,7 +3,7 @@
 {% set modalId = 'addGloseModal' %}
 
 {% block title %}Jeu{% endblock %}
-{% block titre %}<h1>Let's Play !</h1>{% endblock %}
+{% block titre %}<h1>Jouons !</h1>{% endblock %}
 {% block contenu %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
@@ -15,7 +15,16 @@
 		        <div class="alert alert-danger">{{ flashMessage }}</div>
 	        {% endfor %}
 
-           <h3 id="result"></h3><br>
+            <h3 id="result"></h3>
+	        {% if app.user %}
+		        <div class="">
+			        <button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+				        J'aime
+				        cette
+				        phrase</button>
+		        </div>
+	        {% endif %}
+	        <br>
 
             {{ form_start(form) }}
 
@@ -28,6 +37,13 @@
 	                "></div>
 		        {% do form.reponses.setRendered %}
 	        </div>
+			<br>
+
+	        <div class="form-group">
+		        {{ form_widget(form.valider) }}
+		        <a href="{{ path('ambiguss_game') }}" class="btn btn-default">Passer cette
+			        phrase</a>
+	        </div>
 
             {{ form_rest(form) }}
             {{ form_end(form) }}
@@ -36,7 +52,6 @@
 	{{ include('modal.html.twig', {'modalId': modalId, 'modalTitre': 'Ajouter une glose'}) }}
 {% endblock %}
 {% block js %}
-
 	<script>
 		$(document).ready(function() {
 			var startBaliseAmbigu = '<amb>';
@@ -59,7 +74,7 @@
 			var replaced = phrase.search(reg2) >= 0;
 			// Si au moins 1
 			if (replaced) {
-				html = '<b num="__num__" class="color-red amb-border" title="Ce mot est ambigu (id : __num__)' +
+				html = '<b num="__num__" class="color-red" title="Ce mot est ambigu (id : __num__)' +
 					'">__amb__</b>';
 				// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
 				res = phrase.replace(reg2, function ($0, $1, $2) {
@@ -154,19 +169,35 @@
 				});
 			}
 
-
-
 			rendu.append(res);
 
 			function getGloses($prototype, motAmbigu) {
 				$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu[0]}, function (data) {
 					var select = $prototype.find('select');
-					select.empty().append('<option>Choississez une glose</option>');
+					select.empty().append('<option value>Choississez une glose</option>');
 					$.each(data, function (index) {
 						select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
 					})
 				}, "json");
 			}
+
+			$("#phraseLike").click(function(){
+				var boutonLike = $(this);
+				$.getJSON('{{ path('ambiguss_phrase_like', {'id':phrase_id}) }}', function(data){
+					if(data.status === 'succes'){
+						if(data.action === 'add'){
+							boutonLike.removeClass('btn-primary').addClass('btn-danger').html('<i class="fa ' +
+								'fa-thumbs-down" ' +
+								'aria-hidden="true"></i> Je n\'aime ' +
+								'plus cette phrase');
+						}else{
+							boutonLike.removeClass('btn-danger').addClass('btn-primary').html('<i class="fa ' +
+								'fa-thumbs-up" ' +
+								'aria-hidden="true"></i> J\'aime cette phrase');
+						}
+					}
+				});
+			})
 		});
 	</script>
 {%  endblock %}

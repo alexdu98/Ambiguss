@@ -21,7 +21,7 @@ class GameController extends  Controller
     {
 
         $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-
+        //recup toutes les phrases
         $randlist = array();
         $results = $repository->findall();
         // recup de tous les id dans un array
@@ -29,11 +29,35 @@ class GameController extends  Controller
             array_push($randlist, $result->getId());
         }
 
-        // prendre un id au hasard parmi la liste d'id et récupère son contenu
-        shuffle($randlist);
+        /* recup des phrases ciblées (phrases qui n'ont pas encore été jouées par le user*/
+        // 1.recup des phrases jouées
+        $repositoryRep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
+        $rep = $repositoryRep->findDistinctReponse($this->getUser()->getId()) ; // recup des réponses d'un joueur
 
-	    $phraseOBJ = $repository->find($randlist[0]);
+        //2.recup des Id des phrases jouées
+        $arrayIdUsed= array();
+        foreach ($rep as $r){
+            $ph=$repository->findOneBycontenu($r);
+            array_push($arrayIdUsed, $ph->getId());
+        }
+        //3. recup des Id des phrases non jouées ( en enlevant les instances de arrayIdUsed de randlis(contient tous les id)
+        $arrayIdUnused= $this->getUnusedId($randlist,$arrayIdUsed);
+
+        //4. verifier que la liste n'est pas vide, si c'est le cas afficher toutes les phrase et ajouter la mention "déjà jouée"
+        if(count($arrayIdUnused)==0)
+        {
+            //prendre un id au hasard parmi la liste de tous les id et récupère son contenu
+            shuffle($randlist);
+            $phraseOBJ = $repository->find($randlist[0]);
+        }
+        //5. prendre un id au hasard parmi la liste d'unUsed Id puis récuperer son contenu
+        else{
+            shuffle($arrayIdUnused);
+            $phraseOBJ = $repository->find($arrayIdUnused[0]);
+        }
         $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
+
+
 
 	    $game = new Game();
 	    $form = $this->get('form.factory')->create(GameType::class, $game);
@@ -144,4 +168,22 @@ class GameController extends  Controller
         ));
     }
 
+    public function getUnusedId($allId, $usedId){
+        $unusedId= array();
+        $find=0;
+        foreach($allId as $A){
+            foreach ($usedId as $U){
+                if ($A== $U){
+                    $find=1;
+                }
+            }
+            if($find==0){
+                array_push($unusedId, $A);
+            }
+            else{
+                $find=0;
+            }
+        }
+        return $unusedId;
+}
 }

@@ -19,4 +19,13 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
 			->andwhere("g.id = :Gl")->setParameter("Gl",$glose)
 			->getQuery()->getSingleResult();
 	}
+    public function findDistinctReponse($idUser)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('DISTINCT r.contenuPhrase')
+            ->innerJoin("r.auteur", "aut", "WITH", "r.auteur = aut.id")
+            ->where("aut.id = :idUser")->setParameter("idUser", $idUser)
+            ->getQuery()->getResult();
+
+    }
 }

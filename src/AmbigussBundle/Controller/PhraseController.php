@@ -135,7 +135,7 @@ class PhraseController extends Controller
 		    $em->persist($aimerPhrase);
 		    $action = 'add';
 		    //ajout 5 points de crédit
-            $this->getUser()->setCredits($this->getUser()->getCredits()+5);
+            $this->getUser()->setCredits($this->getUser()->getCredits() + 5);
 
 	    }
 	    $em->flush();

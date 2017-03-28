@@ -31,33 +31,38 @@ class GameController extends  Controller
 
         /* recup des phrases ciblées (phrases qui n'ont pas encore été jouées par le user*/
         // 1.recup des phrases jouées
-        $repositoryRep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
-        $rep = $repositoryRep->findDistinctReponse($this->getUser()->getId()) ; // recup des réponses d'un joueur
+	    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+	        $repositoryRep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
+	        $rep = $repositoryRep->findDistinctReponse($this->getUser()->getId()) ; // recup des réponses d'un joueur
 
-        //2.recup des Id des phrases jouées
-        $arrayIdUsed= array();
-        foreach ($rep as $r){
-            $ph=$repository->findOneBycontenu($r);
-            array_push($arrayIdUsed, $ph->getId());
-        }
-        //3. recup des Id des phrases non jouées ( en enlevant les instances de arrayIdUsed de randlis(contient tous les id)
-        $arrayIdUnused= $this->getUnusedId($randlist,$arrayIdUsed);
+	        //2.recup des Id des phrases jouées
+	        $arrayIdUsed = array();
+	        foreach ($rep as $r){
+	            $ph = $repository->findOneBycontenu($r);
+	            array_push($arrayIdUsed, $ph->getId());
+	        }
+	        //3. recup des Id des phrases non jouées ( en enlevant les instances de arrayIdUsed de randlis(contient tous les id)
+	        $arrayIdUnused = $this->getUnusedId($randlist,$arrayIdUsed);
 
-        //4. verifier que la liste n'est pas vide, si c'est le cas afficher toutes les phrase et ajouter la mention "déjà jouée"
-        if(count($arrayIdUnused)==0)
-        {
-            //prendre un id au hasard parmi la liste de tous les id et récupère son contenu
-            shuffle($randlist);
-            $phraseOBJ = $repository->find($randlist[0]);
-        }
-        //5. prendre un id au hasard parmi la liste d'unUsed Id puis récuperer son contenu
-        else{
-            shuffle($arrayIdUnused);
-            $phraseOBJ = $repository->find($arrayIdUnused[0]);
-        }
+	        //4. verifier que la liste n'est pas vide, si c'est le cas afficher toutes les phrase et ajouter la mention "déjà jouée"
+	        if(count($arrayIdUnused)==0)
+	        {
+	            //prendre un id au hasard parmi la liste de tous les id et récupère son contenu
+	            shuffle($randlist);
+	            $phraseOBJ = $repository->find($randlist[0]);
+	        }
+	        //5. prendre un id au hasard parmi la liste d'unUsed Id puis récuperer son contenu
+	        else{
+	            shuffle($arrayIdUnused);
+	            $phraseOBJ = $repository->find($arrayIdUnused[0]);
+	        }
+	    }
+	    else{
+		    shuffle($randlist);
+		    $phraseOBJ = $repository->find($randlist[0]);
+	    }
+
         $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
-
-
 
 	    $game = new Game();
 	    $form = $this->get('form.factory')->create(GameType::class, $game);
@@ -150,13 +155,15 @@ class GameController extends  Controller
 			                       $motsAmbigusPhrase[$i]->getId());
 	    }
 
-	        // récupérer tous les likes d'un utilisateur
-	    $rep=$this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
-        $likesUser = $rep->findBymembre($this->getUser());
-        $likesArray = array();
-        foreach ($likesUser as $like){
-            array_push($likesArray, $like->getPhrase()->getId());
-        }
+	    // récupérer tous les likes d'un utilisateur
+	    $likesArray = array();
+	    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+		    $rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
+		    $likesUser = $rep->findBymembre($this->getUser());
+		    foreach($likesUser as $like){
+			    array_push($likesArray, $like->getPhrase()->getId());
+		    }
+	    }
 
 
         return $this->render('AmbigussBundle:Game:play.html.twig', array(

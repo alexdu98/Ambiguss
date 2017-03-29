@@ -144,11 +144,11 @@ class GameController extends  Controller
 			    $this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
 		    }
 
-		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array (
-		    	'phrase' => $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML(),
-			    'stats' => $hash, // hashmap de type [motAmbigu => [glose -> nbvotes]]
-			    'nb_point' => ceil($nb_points)
-		    ));
+		    $this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
+		    $this->get('session')->getFlashBag()->add('stats', $hash);
+		    $this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
+
+		    return $this->redirectToRoute('ambiguss_game_result');
 	    }
 
 	    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
@@ -177,6 +177,21 @@ class GameController extends  Controller
             'phraseEscape' => $phraseEscape,
             'likes' => $likesArray
         ));
+    }
+
+    public function resultatAction(Request $request){
+	    $phrase = $this->get('session')->getFlashBag()->get('phrase');
+	    $stats = $this->get('session')->getFlashBag()->get('stats');
+	    $nb_points = $this->get('session')->getFlashBag()->get('nb_points');
+
+    	if(!empty($phrase) && !empty($stats) && !empty($nb_points)){
+		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
+			    'phrase'   => $phrase[0],
+			    'stats'    => $stats[0],
+			    'nb_point' => $nb_points[0]
+		    ));
+	    }
+	    throw $this->createNotFoundException();
     }
 
     public function getUnusedId($allId, $usedId){

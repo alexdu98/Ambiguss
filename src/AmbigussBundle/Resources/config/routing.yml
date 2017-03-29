@@ -32,6 +32,11 @@ ambiguss_game:
     defaults:
         _controller: AmbigussBundle:Game:main
 
+ambiguss_game_result:
+    path: /ambiguss/jeu/resultat
+    defaults:
+        _controller: AmbigussBundle:Game:resultat
+
 ambiguss_glose_get_autocomplete:
     path: /ambiguss/glose/get/autocomplete
     defaults:

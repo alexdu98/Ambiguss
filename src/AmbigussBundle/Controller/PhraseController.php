@@ -6,6 +6,7 @@ use AmbigussBundle\Entity\AimerPhrase;
 use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Entity\MotAmbiguPhrase;
 use AmbigussBundle\Entity\Reponse;
+use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
 use AmbigussBundle\Form\PhraseType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -70,7 +71,12 @@ class PhraseController extends Controller
 		            $repository2 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
 		            $repository3 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
 
-		            $reorder = array_values($request->request->get('phrase_add')['motsAmbigusPhrase']);
+		            if(!empty($request->request->get('phrase_add')['motsAmbigusPhrase'])){
+			            $reorder = array_values($request->request->get('phrase_add')['motsAmbigusPhrase']);
+		            }
+		            else{
+		            	throw new Exception("Il faut au moins 1 mot ambigu dans la phrase");
+		            }
 
 		            foreach($phrase->getMotsAmbigusPhrase() as $map){
 		            	$rep = new Reponse();
@@ -95,16 +101,25 @@ class PhraseController extends Controller
 		            }
 
 		            $this->get('session')->getFlashBag()->add('succes', "La phrase a bien été ajoutée");
+		            $this->get('session')->getFlashBag()->add('phrase', $phrase);
+
 		            // Réinitialise le formulaire
 		            $phrase = new \AmbigussBundle\Entity\Phrase();
 		            $form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
 	            }
 	            catch(\Exception $e){
-		            $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase" . $e);
+		            $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " .
+		                                                                $e->getMessage());
 	            }
             }
+
+		    $glose = new \AmbigussBundle\Entity\Glose();
+            $addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array('action' =>
+	                                                                                                  $this->generateUrl
+	                                                                                                  ('ambiguss_glose_add')));
             return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
                 'form' => $form->createView(),
+                'addGloseForm' => $addGloseForm->createView()
             ));
     	}
     	else

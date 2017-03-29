@@ -32,15 +32,6 @@ h1{
 	text-align: center;
 	margin-bottom: 15px;
 }
-h1:first-letter{
-	color: var(--color-black);
-}
-q{
-	font-size: 28px;
-}
-p a{
-	font-size: 28px;
-}
 a{
 	color: var(--color-brown);
 	transition-duration: 0.5s;
@@ -77,6 +68,10 @@ a:hover{
 }
 .not-list{
 	list-style-type: none;
+}
+*::selection{
+	background: var(--color-green);
+	color: #FFF;
 }
 
 /*
@@ -247,9 +242,6 @@ footer h4{
 	background: var(--color-yellow);
 	border-radius: 220px / 120px;
 	box-shadow: 0 0 5px rgba(160, 210, 51, .5);
-}
-.bulle p {
-	font-size:1.25em;
 }
 .bulle a:not(.btn):hover{
 	color: var(--color-green);

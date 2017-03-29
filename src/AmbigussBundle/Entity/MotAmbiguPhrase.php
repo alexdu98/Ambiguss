@@ -40,6 +40,11 @@ class MotAmbiguPhrase
 	 */
 	private $motAmbigu;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\Reponse", mappedBy="motAmbiguPhrase")
+	 */
+	private $reponses;
+
 
     /**
      * Get id
@@ -121,5 +126,46 @@ class MotAmbiguPhrase
     public function getMotAmbigu()
     {
         return $this->motAmbigu;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \AmbigussBundle\Entity\Reponse $reponse
+     *
+     * @return MotAmbiguPhrase
+     */
+    public function addReponse(\AmbigussBundle\Entity\Reponse $reponse)
+    {
+        $this->reponses[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \AmbigussBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\AmbigussBundle\Entity\Reponse $reponse)
+    {
+        $this->reponses->removeElement($reponse);
+    }
+
+    /**
+     * Get reponses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
     }
 }

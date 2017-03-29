@@ -41,6 +41,8 @@ ambiguss_glose_get_autocomplete:
     path: /ambiguss/glose/get/autocomplete
     defaults:
         _controller: AmbigussBundle:API:autocompleteGlose
+    options:
+            expose: true
 
 ambiguss_glose_add:
     path: /ambiguss/glose/add
@@ -51,6 +53,8 @@ ambiguss_glose_get_by_motambigu:
     path: /ambiguss/glose/getByMotAmbigu
     defaults:
         _controller: AmbigussBundle:API:getGlosesByMotAmbigu
+    options:
+        expose: true
 
 ambiguss_classement_general:
     path: /ambiguss/classement/general

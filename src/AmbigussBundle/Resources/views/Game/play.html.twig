@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% set modalId = 'addGloseModal' %}
 {% set trouve = 0 %}
 
 {% block title %}Jeu{% endblock %}
@@ -10,9 +9,16 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
 
 	        {% if app.user is null %}
-		        <b><a href="{{ path('user_connexion') }}">Connectez-vous</a> pour enregistrer vos parties et avoir accès
-		                                                                  à toutes les fonctionnalités !</b>
-		        <br>
+	            <p class="text-success">
+			        <b>
+				        <a href="{{ path('user_connexion') }}">Connectez-vous</a>
+				        pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
+			        </b>
+		        </p>
+	        {% endif %}
+
+	        {% if alreadyPlayed %}
+	            <p class="text-warning">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
 	        {% endif %}
 
 	        {% for flashMessage in app.session.flashbag.get('succes') %}
@@ -67,13 +73,10 @@
             {{ form_end(form) }}
         </div>
     </div>
-	{{ include('modal.html.twig', {'modalId': modalId, 'modalTitre': 'Ajouter une glose'}) }}
 {% endblock %}
 {% block js %}
 	<script>
 		$(document).ready(function() {
-			var startBaliseAmbigu = '<amb>';
-			var endBaliseAmbigu = '</amb>';
 			var endBaliseAmbiguEscape = '<\/amb>';
 
 			// Regex pour avoir les contenus des balises <amb> et leurs id
@@ -100,6 +103,8 @@
 				});
 			}
 
+			rendu.append(res);
+
 			var motsAmbigus = $.parseJSON('{{ motsAmbigus | raw }}');
 
 			var index = 1;
@@ -120,83 +125,20 @@
 				// Trouve la balise qui à la class amb
 				var idMotAmbiguPhrase = $prototype.find('.idMotAmbiguPhrase');
 				idMotAmbiguPhrase.val(motAmbigu[1]);
-				addAddGloseLink($prototype, motAmbigu[0]);
+				addAddGloseButton($prototype, motAmbigu[0], addGloseButtonIsClicked);
+				getGloses($prototype.find('select.gloses'), motAmbigu[0]);
 				$container.append($prototype);
-				getGloses($prototype, motsAmbigus[ma]);
 				index++;
 			}
 
-			// Ajoute le bouton pour ajouter une glose
-			function addAddGloseLink($prototype, motAmbigu) {
-				var $addLink = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{
-				modalId }}">Ajouter une glose</button>');
-				$prototype.find('.addGloseLink').append($addLink);
-				var modalBody = $('.modal-body');
-				// Au clic sur le bouton de suppression
+			function addGloseButtonIsClicked(event){
+				setModalTitle('Ajouter une glose');
 				{% if app.user is empty %}
-					modalBody.html('<div class="alert alert-danger">Il faut être connecté pour ajouter une glose</div>');
+				messageNeedConnectionModal();
+				{% else %}
+				setModalBody('{{ include('AmbigussBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
+				addGloseModal(event);
 				{% endif %}
-				$addLink.click(function (e) {
-					$.ajax('{{ path('ambiguss_glose_add') }}', {motAmbigu: motAmbigu})
-						.done(function (data) {
-							// Remplit la modal par le formulaire d'ajout d'une glose
-							modalBody.empty().append(data);
-							modalBody.find('#glose_add_motAmbigu').val(motAmbigu);
-
-							// Autocomplete le champ
-							var input = modalBody.find('#glose_add_valeur');
-							input.autocomplete({
-								minLength: 1,
-								appendTo: '#{{ modalId }}',
-								source : function(request, response){
-									$.getJSON('{{ path('ambiguss_glose_get_autocomplete') }}?term=' + request.term, function(data){
-										input.parent().append('<div id="resnul" hidden>Aucun résultat</div>');
-										if(data.length === 0){
-											input.parent().find('#resnul').show();
-										}else{
-											input.parent().find('#resnul').hide();
-										}
-										response($.map(data, function(item){
-											return item.valeur;
-										}));
-									});
-								}
-							});
-
-							// Envoi le formulaire via ajax
-							modalBody.find('form[name="glose_add"]').ajaxForm({
-								beforeSubmit: function(arr, form, opt){
-									// On affiche l'image laoder
-									$(form).after('<img src="{{ asset('assets/images/loading.gif') }}" id="loading">');
-								},
-								// Quand la réponse Ajax sera reçu, on appelle ce callback
-								'success' : function(data, status, xhr, form){
-									$(form).next().remove();
-									if(data.status) {
-										$prototype.find('select').append('<option value="' + data.glose.id + '">' + data.glose.valeur + '</option>');
-										$('#{{ modalId }}').modal('hide');
-									}else{
-										$(form).after('<div class="alert alert-danser">Erreur</div>')
-									}
-								}
-							});
-						});
-					$('#{{ modalId }}').modal('show');
-					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-					return false;
-				});
-			}
-
-			rendu.append(res);
-
-			function getGloses($prototype, motAmbigu) {
-				$.post('{{ path('ambiguss_glose_get_by_motambigu') }}', {motAmbigu: motAmbigu[0]}, function (data) {
-					var select = $prototype.find('select');
-					select.empty().append('<option value>Choississez une glose</option>');
-					$.each(data, function (index) {
-						select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
-					})
-				}, "json");
 			}
 
 			$("#phraseLike").click(function(){

@@ -4,7 +4,7 @@
 {% block titre %}<h1>Résultat de la partie</h1>{% endblock %}
 {% block contenu %}
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 bulle">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
 	        {% for flashMessage in app.session.flashbag.get('succes') %}
                 <div class="alert alert-success">{{ flashMessage }}</div>
 	        {% endfor %}
@@ -12,25 +12,33 @@
                 <div class="alert alert-danger">{{ flashMessage }}</div>
 	        {% endfor %}
 
-	        <h3 id="result">
-		        {% transchoice nb_point %}
-		            {0} Désolé, vous n'avez pas gagné de point. |
-		            {1} Bravo, vous avez gagné 1 point. |]1,
-		            Inf[ Félicitation, vous avez gagné %nb_point% points !
-		        {% endtranschoice %}
-	        </h3>
 	        {% if app.user is null %}
-		       <b><a href="{{ path('user_connexion') }}">Connectez-vous</a> pour enregistrer vos parties et
-		                                                                         avoir accès
-		                                                                  à toutes les fonctionnalités !</b>
-		        <br>
+		        <p class="text-success">
+			        <b>
+				        <a href="{{ path('user_connexion') }}">Connectez-vous</a>
+				        pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
+			        </b>
+		        </p>
 	        {% endif %}
+
+	        <h3 id="result">
+		        {% if app.user %}
+			        {% transchoice nb_point %}
+				        {0} Dommage, vous n'avez pas gagné de point cette fois. |
+				        {1} Bravo, vous avez gagné 1 point. |]1,
+				        Inf[ Félicitation, vous avez gagné %nb_point% points !
+			        {% endtranschoice %}
+		        {% else %}
+			        Vous n'êtes pas connecté, vous ne gagnez donc pas de points
+		        {% endif %}
+	        </h3>
+			<br>
+	        <h4><span class="color-green">La phrase était :</span><br> {{ phrase|raw }}</h4>
 	        <br>
-	        <p><span class="color-green">La phrase était :</span><br> {{ phrase|raw }}</p>
 	        <div class="text-center">
-		        <ul><span class="color-green">Les votes précédents étaient :</span>
+		        <ul><h4><span class="color-green">Les votes précédents étaient :</span></h4>
 		        {% for ordre, ma in stats %}
-			        <li class="not-list">{{ ma.valeurMA }} ({{ ordre }}) :
+			        <li class="not-list"><b>{{ ma.valeurMA }}</b> ({{ ordre }}) :
 				        {% for valeurGlose, res in ma.gloses %}
 					        {% if res.isSelected %}<b>{% endif %}
 					            {{ valeurGlose ~ ' ' ~ res.nbVotes }}
@@ -41,6 +49,9 @@
 							{% if loop.last %}.{% else %},{% endif %}
 				        {% endfor %}
 			        </li>
+			        {% if not loop.last %}
+			            <hr>
+			        {% endif %}
 		        {% endfor %}
 		        </ul>
 	        </div>

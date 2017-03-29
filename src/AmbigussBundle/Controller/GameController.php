@@ -11,6 +11,7 @@ namespace AmbigussBundle\Controller;
 
 use AmbigussBundle\Entity\Game;
 use AmbigussBundle\Form\GameType;
+use AmbigussBundle\Form\GloseAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,46 +22,30 @@ class GameController extends  Controller
     {
 
         $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-        //recup toutes les phrases
-        $randlist = array();
-        $results = $repository->findall();
-        // recup de tous les id dans un array
-        foreach ($results as $result){
-            array_push($randlist, $result->getId());
-        }
+	    $repmap = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
 
-        /* recup des phrases ciblées (phrases qui n'ont pas encore été jouées par le user*/
-        // 1.recup des phrases jouées
+	    $phrases = null;
 	    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-	        $repositoryRep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
-	        $rep = $repositoryRep->findDistinctReponse($this->getUser()->getId()) ; // recup des réponses d'un joueur
-
-	        //2.recup des Id des phrases jouées
-	        $arrayIdUsed = array();
-	        foreach ($rep as $r){
-	            $ph = $repository->findOneBycontenu($r);
-	            array_push($arrayIdUsed, $ph->getId());
-	        }
-	        //3. recup des Id des phrases non jouées ( en enlevant les instances de arrayIdUsed de randlis(contient tous les id)
-	        $arrayIdUnused = $this->getUnusedId($randlist,$arrayIdUsed);
-
-	        //4. verifier que la liste n'est pas vide, si c'est le cas afficher toutes les phrase et ajouter la mention "déjà jouée"
-	        if(count($arrayIdUnused)==0)
-	        {
-	            //prendre un id au hasard parmi la liste de tous les id et récupère son contenu
-	            shuffle($randlist);
-	            $phraseOBJ = $repository->find($randlist[0]);
-	        }
-	        //5. prendre un id au hasard parmi la liste d'unUsed Id puis récuperer son contenu
-	        else{
-	            shuffle($arrayIdUnused);
-	            $phraseOBJ = $repository->find($arrayIdUnused[0]);
-	        }
+		    $phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser());
 	    }
 	    else{
-		    shuffle($randlist);
-		    $phraseOBJ = $repository->find($randlist[0]);
+		    $date = new \DateTime();
+		    // Date d'il y a 3 jours
+		    $date = $date->getTimestamp() - (3600 * 24 * 30);
+		    $phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date);
 	    }
+
+	    // Si toutes les phrases ont été joués
+	    $allPhrasesPlayed = false;
+	    if(empty($phrases)){
+		    $allPhrasesPlayed = true;
+			$phrases = $repmap->findIdPhrasesByLessNumberReponse(25);
+	    }
+
+	    // Rend une clé au hasard
+	    $phrase_id = array_rand($phrases);
+
+	    $phraseOBJ = $repository->find($phrases[$phrase_id][1]);
 
         $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
 
@@ -97,9 +82,11 @@ class GameController extends  Controller
 		    }
 
 		    $hash = array();
+		    $map = array();
 		    $nb_points = 0;
 		    $repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
 		    foreach($data->reponses as $rep){
+		    	$map[] = $rep->getMotAmbiguPhrase()->getId();
 		    	$gloses = array();
 			    $total = 0;
 			    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
@@ -120,21 +107,25 @@ class GameController extends  Controller
 			    	'valeurMA' => $rep->getValeurMotAmbigu(),
 				    'gloses' => $gloses
 			    );
-			    $nb_points = $nb_points + (($gloses[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
+			    if($total > 0)
+			        $nb_points = $nb_points + (($gloses[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
 			    $hash[$rep->getMotAmbiguPhrase()->getOrdre()] = $resMA;
 		    }
 
-		    // Met à jour le nombre de points du joueur
-		    if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-			    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
-                $this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
+		    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+			    $rep = $repo4->findBy(array('motAmbiguPhrase' => $map, 'auteur' => $this->getUser()));
+			    // Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points
+		    	if(!$rep){
+				    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
+				    $this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
 
-                $repNiveau = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
-                $scoreNiveauSuivant = $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1)->getPointsClassementMin();
-                if($this->getUser()->getPointsClassement() >= $scoreNiveauSuivant ){
-                    $this->getUser()->setNiveau( $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1) );
-                }
-			    $em->persist($this->getUser());
+				    $repNiveau = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+				    $scoreNiveauSuivant = $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1)->getPointsClassementMin();
+				    if($this->getUser()->getPointsClassement() >= $scoreNiveauSuivant){
+					    $this->getUser()->setNiveau($repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1));
+				    }
+				    $em->persist($this->getUser());
+			    }
 		    }
 
 		    try{
@@ -169,13 +160,19 @@ class GameController extends  Controller
 		    }
 	    }
 
+	    $glose = new \AmbigussBundle\Entity\Glose();
+	    $addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array('action' =>
+		                                                                                          $this->generateUrl
+		                                                                                          ('ambiguss_glose_add')));
 
         return $this->render('AmbigussBundle:Game:play.html.twig', array(
             'form' => $form->createView(),
             'phrase_id' => $phraseOBJ->getId(),
             'motsAmbigus' => json_encode($motsAmbigus),
             'phraseEscape' => $phraseEscape,
-            'likes' => $likesArray
+            'likes' => $likesArray,
+            'alreadyPlayed' => $allPhrasesPlayed,
+            'addGloseForm' => $addGloseForm->createView()
         ));
     }
 

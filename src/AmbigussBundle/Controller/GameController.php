@@ -100,24 +100,28 @@ class GameController extends  Controller
 		    $nb_points = 0;
 		    $repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
 		    foreach($data->reponses as $rep){
-		    	$ar = array();
+		    	$gloses = array();
 			    $total = 0;
 			    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
 				    $compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
 				    $isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
 				    $ar2 = array('nbVotes' => $compteur['nbVotes'], 'isSelected' => $isSelected);
-				    $ar[$g->getValeur()] = $ar2;
-				    $total = $total + $ar[$g->getValeur()]['nbVotes'];
+				    $gloses[$g->getValeur()] = $ar2;
+				    $total = $total + $gloses[$g->getValeur()]['nbVotes'];
 			    }
 			    // Trie le tableau des gloses dans l'ordre décroissant du nombre de réponses
-			    uasort($ar, function($a, $b){
+			    uasort($gloses, function($a, $b){
 				    if ($a['nbVotes'] == $b['nbVotes']) {
 					    return 0;
 				    }
 				    return ($a['nbVotes'] > $b['nbVotes']) ? -1 : 1;
 			    });
-			    $nb_points = $nb_points + (($ar[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
-			    $hash[$rep->getValeurMotAmbigu()] = $ar;
+			    $resMA = array(
+			    	'valeurMA' => $rep->getValeurMotAmbigu(),
+				    'gloses' => $gloses
+			    );
+			    $nb_points = $nb_points + (($gloses[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
+			    $hash[$rep->getMotAmbiguPhrase()->getOrdre()] = $resMA;
 		    }
 
 		    // Met à jour le nombre de points du joueur

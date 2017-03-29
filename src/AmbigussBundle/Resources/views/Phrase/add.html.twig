@@ -1,6 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% set modalId = 'addGloseModal' %}
+{% set modalIdHelpAddPhrase = 'helpAddPhraseModal' %}
+{% set modalIdAddGlose = 'addGloseModal' %}
+
+{% set modalBodyHelpAddPhrase = '
+<ol>
+	<li>Écrivez votre phrase complète dans le champ dédié.</li>
+	<li>
+		Séléctionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot séléctionné ambigu".
+		Cela a pour effet d\'entourer le mot par les balises amb avec un numéro, et d\'afficher le mot en
+		rouge dans le champ de rendu.<br>
+		Cela créé aussi une nouvelle ligne dans le formulaire afin que vous puissiez choisir la glose de ce mot ambigu.
+	</li>
+	<li>Choisissez une glose* pour ce mot ambigu, et indiqué si celle-ci est juste, fausse, ou
+	que vous ne savez pas.</li>
+	<li>Répétez les points 2 et 3 pour chaque mot ambigu de votre phrase.</li>
+</ol>
+<div class="alert alert-info">Si vous vous êtes trompé pour un mot ambigu, vous pouvez le supprimer à l\'aide du bouton
+"Supprimer le mot
+ambigu".</div>
+<p>* Si aucune glose ne vous est proposée, ou que celles-ci ne vous satisfont pas, vous pouvez en ajouter avec le
+bouton "Ajouter une glose".</p>
+' %}
 
 {% block title %}Création de phrase{% endblock %}
 
@@ -9,6 +30,11 @@
 
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
+
+		    <div class="form-group">
+		        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{
+		    modalIdHelpAddPhrase }}">Comment créer une phrase ?</button>
+		    </div>
 
 		    {% for flashMessage in app.session.flashbag.get('succes') %}
 			    <div class="alert alert-success">{{ flashMessage }}</div>
@@ -30,7 +56,7 @@
 		    <div class="form-group">
 			    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
 		    </div>
-{# {{ dump(form.motsAmbigusPhrase) }} #}
+
 		    <div class="form-group">
 		    	<div id="phrase_add_motsAmbigusPhrase" data-prototype="
 					{{ include('AmbigussBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}
@@ -46,7 +72,12 @@
 
 		</div>
 	</div>
-	{{ include('modal.html.twig', {'modalId': modalId, 'modalTitre': 'Ajouter une glose'}) }}
+	{{ include('modal.html.twig', {'modalSize': 'modal-lg', 'modalId': modalIdHelpAddPhrase, 'modalTitre': 'Comment
+	créer une
+	phrase
+	 ?',
+		'modalBody': modalBodyHelpAddPhrase}) }}
+	{{ include('modal.html.twig', {'modalId': modalIdAddGlose, 'modalTitre': 'Ajouter une glose'}) }}
 {% endblock %}
 
 {% block js %}
@@ -188,7 +219,7 @@
 				var $addLink = $('<button type="button" style="margin-right:3px;" class="btn btn-primary" ' +
 					'data-toggle="modal" ' +
 					'data-target="#{{
-				modalId }}">Ajouter une glose</button>');
+				modalIdAddGlose }}">Ajouter une glose</button>');
 				$prototype.find('.addGloseLink').append($addLink);
 				var modalBody = $('.modal-body');
 				// Au clic sur le bouton de suppression
@@ -206,7 +237,7 @@
 							var input = modalBody.find('#glose_add_valeur');
 							input.autocomplete({
 								minLength: 1,
-								appendTo: '#{{ modalId }}',
+								appendTo: '#{{ modalIdAddGlose }}',
 								source : function(request, response){
 									$.getJSON('{{ path('ambiguss_glose_get_autocomplete') }}?term=' + request.term, function(data){
 										input.parent().append('<div id="resnul" hidden>Aucun résultat</div>');
@@ -234,14 +265,14 @@
 									if(data.status) {
 										$prototype.find('select.gloses').append('<option value="' + data.glose.id +
 											'">' + data.glose.valeur + '</option>');
-										$('#{{ modalId }}').modal('hide');
+										$('#{{ modalIdAddGlose }}').modal('hide');
 									}else{
 										$(form).after('<div class="alert alert-danser">Erreur</div>')
 									}
 								}
 							});
 						});
-					$('#{{ modalId }}').modal('show');
+					$('#{{ modalIdAddGlose }}').modal('show');
 					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 					return false;
 				});

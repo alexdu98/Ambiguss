@@ -9,6 +9,12 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
 
+	        {% if app.user is null %}
+		        <b><a href="{{ path('user_connexion') }}">Connectez-vous</a> pour enregistrer vos parties et avoir accès
+		                                                                  à toutes les fonctionnalités !</b>
+		        <br>
+	        {% endif %}
+
 	        {% for flashMessage in app.session.flashbag.get('succes') %}
 		        <div class="alert alert-success">{{ flashMessage }}</div>
 	        {% endfor %}

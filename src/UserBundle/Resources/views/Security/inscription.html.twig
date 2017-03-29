@@ -50,6 +50,12 @@
 
 		    {{ form_row(form.Conditions) }}
 
+
+		    <div id='recaptcha' class="g-recaptcha"
+				    data-sitekey="6LcXBhkUAAAAAIMfOvKJODxXAhw-qG2VzGG2rppj"
+				    data-callback="onSubmit"
+				    data-size="invisible"></div>
+
 		    {{ form_widget(form.Valider) }}
 
 		    {{ form_rest(form) }}
@@ -62,9 +68,87 @@
 {% block js %}
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	<script>
-		// Fonction appelé par le script Recaptcha après un clic sur le bouton de validation
+		// Ne pas supprimé, callback recaptcha
 		function onSubmit(token) {
-			document.getElementById("formInscription").submit();
+			$('#formInscription').submit();
 		}
+
+		function validate(event) {
+			event.preventDefault();
+			var erreurs = [];
+
+			var pseudo = $('#userbundle_membre_Pseudo');
+			if (pseudo.val() === '') {
+				erreurs.push('pseudo');
+				pseudo.next().remove();
+				pseudo.after('<span class="color-red">Vous devez indiquer un pseudo</span>');
+			}
+			else{
+				pseudo.next().remove();
+			}
+
+			var mdpf = $('#userbundle_membre_Mdp_first');
+			if (mdpf.val() === '') {
+				erreurs.push('mdpf');
+				mdpf.next().remove();
+				mdpf.after('<span class="color-red">Vous devez indiquer un mot de passe</span>');
+			}
+			else{
+				mdpf.next().remove();
+			}
+
+			var mdps = $('#userbundle_membre_Mdp_second');
+			if (mdps.val() === '') {
+				erreurs.push('mdps');
+				mdps.next().remove();
+				mdps.after('<span class="color-red">Vous devez indiquer une confirmation de mot de passe</span>');
+			}
+			else if(mdpf.val() !== mdps.val()){
+				erreurs.push('mdpeq');
+				mdps.next().remove();
+				mdps.after('<span class="color-red">Les mots de passe doivent être identiques</span>');
+			}
+			else if(!mdpf.val().match(/.{6,72}/)){
+				erreurs.push('mdpreg');
+				mdps.next().remove();
+				mdps.after('<span class="color-red">Le mot de passe doit faire entre 6 et 72 caractères</span>');
+			}
+			else{
+				mdps.next().remove();
+			}
+
+			var email = $('#userbundle_membre_Email');
+			if (email.val() === '') {
+				erreurs.push('email');
+				email.next().remove();
+				email.after('<span class="color-red">Vous devez indiquer un email</span>');
+			}
+			else{
+				email.next().remove();
+			}
+
+			var conditions = $('#userbundle_membre_Conditions');
+			if (!conditions.is(':checked')) {
+				erreurs.push('conditions');
+				conditions.next().remove();
+				conditions.after('<span class="color-red" style="float:right;margin-left:3px;">Vous devez accepter ' +
+					'les CGU' +
+					'</span>');
+			}
+			else{
+				conditions.next().remove();
+			}
+
+			if(erreurs.length === 0) {
+				grecaptcha.execute();
+			}
+		}
+
+		function onload() {
+			var element = document.getElementById('userbundle_membre_Valider');
+			element.onclick = validate;
+		}
+
+		onload();
 	</script>
 {% endblock %}

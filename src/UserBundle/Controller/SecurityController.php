@@ -104,76 +104,73 @@ class SecurityController extends Controller
 			        'data' => $request->get('data')
 		        ));
 	        }
-
 	        // AMBIGUSS
-	        $recaptcha = $this->get('app.recaptcha');
-        	$recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
-	        if($recap->succes){
-		        $form->handleRequest($request);
-		        if($form->isValid()){
-			        // Hash le Mdp
-			        $encoder = $this->get('security.password_encoder');
-			        $hash = $encoder->encodePassword($membre, $membre->getMdp());
+	        else{
+		        $recaptcha = $this->get('app.recaptcha');
+		        $recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
+		        if($recap->succes){
+			        $form->handleRequest($request);
+			        if($form->isValid()){
+				        $membre = $form->getData();
+				        // Hash le Mdp
+				        $encoder = $this->get('security.password_encoder');
+				        $hash = $encoder->encodePassword($membre, $membre->getMdp());
 
-			        $membre->setMdp($hash);
+				        $membre->setMdp($hash);
 
-			        // Affecte le nouveau membre à un groupe
-			        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Groupe');
-			        $grp = $repository->findOneByNom('Membre');
-			        $membre->setGroupe($grp);
+				        // Affecte le nouveau membre à un groupe
+				        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Groupe');
+				        $grp = $repository->findOneByNom('Membre');
+				        $membre->setGroupe($grp);
 
-			        // Affecte un niveau au nouveau membre
-			        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
-			        $grp = $repository->findOneByTitre('Facile');
-			        $membre->setNiveau($grp);
+				        // Affecte un niveau au nouveau membre
+				        $repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+				        $grp = $repository->findOneByTitre('Facile');
+				        $membre->setNiveau($grp);
 
-			        // Génère la clé pour la confirmation d'email et l'enregistre dans le champ cleOubliMdp
-			        $cleConfirmation = $membre->generateCle();
+				        // Génère la clé pour la confirmation d'email et l'enregistre dans le champ cleOubliMdp
+				        $cleConfirmation = $membre->generateCle();
 
-			        // On enregistre le membre dans la base de données
-			        $em = $this->getDoctrine()->getManager();
-			        try{
-				        $em->persist($membre);
-				        $em->flush();
-			        }
-			        catch(\Exception $e){
-				        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion du membre");
-			        }
+				        // On enregistre le membre dans la base de données
+				        $em = $this->getDoctrine()->getManager();
+				        try{
+					        $em->persist($membre);
+					        $em->flush();
+				        }
+				        catch(\Exception $e){
+					        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion du membre");
+				        }
 
-			        // Envoi de l'email confimation/validation
-			        $message = \Swift_Message::newInstance()
-				        ->setSubject("[Ambiguss] Confirmation d'inscription")
-				        ->setFrom(array(
-					        "no-reply@ambiguss.calyxe.fr" => "Ambiguss"
-				        ))
-				        ->setTo(array(
-					        $membre->getEmail() => $membre->getPseudo()
-				        ))
-				        ->setBody($this->renderView('emails/inscription.html.twig', array(
+				        // Envoi de l'email confimation/validation
+				        $message = \Swift_Message::newInstance()->setSubject("[Ambiguss] Confirmation d'inscription")->setFrom(array(
+						        "no-reply@ambiguss.calyxe.fr" => "Ambiguss"
+					        ))->setTo(array(
+						        $membre->getEmail() => $membre->getPseudo()
+					        ))->setBody($this->renderView('emails/inscription.html.twig', array(
 						        'titre'           => "Confirmation d'inscription",
 						        'pseudo'          => $membre->getPseudo(),
 						        'cleConfirmation' => $cleConfirmation
-		                )),
-			        'text/html');
+					        )), 'text/html');
 
-			        if($this->get('mailer')->send($message)){
-				        $this->get('session')->getFlashBag()->add('succes', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyé par email.');
-			        }
-			        else{
-				        $this->get('session')->getFlashBag()->add('erreur', "Inscription réussie, mais l'envoi de
+				        if($this->get('mailer')->send($message)){
+					        $this->get('session')->getFlashBag()->add('succes', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyé par email.');
+				        }
+				        else{
+					        $this->get('session')->getFlashBag()->add('erreur', "Inscription réussie, mais l'envoi de
 		                l'email de confirmation a échoué. Contactez un administrateur.");
-			        }
+				        }
 
-			        // rediriger vers la page de connexion
-			        return $this->redirectToRoute('user_connexion');
+				        // rediriger vers la page de connexion
+				        return $this->redirectToRoute('user_connexion');
+			        }
 		        }
-	        }
-	        else{
-		        $erreurStr = "";
-		        foreach($recap->erreurs as $erreur){
-			        $erreurStr .= $erreur;
+		        else{
+			        $erreurStr = "";
+			        foreach($recap->erreurs as $erreur){
+				        $erreurStr .= $erreur;
+			        }
+			        $this->get('session')->getFlashBag()->add('erreur', $erreurStr);
 		        }
-		        $this->get('session')->getFlashBag()->add('erreur', $erreurStr);
 	        }
         }
 		// Pas de formulaire envoyé ou erreur

@@ -29,7 +29,7 @@ class MembreType extends AbstractType
 		        'options' => array('attr' => array('class' => 'password-field')),
 		        'first_options'  => array(
 			        'label' => 'Mot de passe',
-			        'attr' => array('placeholder' => 'Mot de passe')
+			        'attr' => array('placeholder' => 'Mot de passe', 'pattern' => '.{6,72}'),
 		        ),
 		        'second_options' => array(
 			        'label' => 'Confirmation du mot de passe',

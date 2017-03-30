@@ -66,7 +66,12 @@ class GameController extends  Controller
 		    $repository3 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
 
 		    $em = $this->getDoctrine()->getManager();
+		    $valid = true;
 		    foreach($data->reponses as $key => $rep){
+		    	if(!$rep->getGlose()){
+		    		$valid = false;
+		    		break;
+			    }
 			    $rep->setMotAmbiguPhrase($repository->find($request->request->get('ambigussbundle_game')
 			                                               ['reponses'][$key]['idMotAmbiguPhrase']));
 			    $rep->setContenuPhrase($rep->getMotAmbiguPhrase()->getPhrase()->getContenu());
@@ -81,70 +86,83 @@ class GameController extends  Controller
 			    $em->persist($rep);
 		    }
 
-		    $hash = array();
-		    $map = array();
-		    $nb_points = 0;
-		    $repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
-		    foreach($data->reponses as $rep){
-		    	$map[] = $rep->getMotAmbiguPhrase()->getId();
-		    	$gloses = array();
-			    $total = 0;
-			    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
-				    $compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
-				    $isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
-				    $ar2 = array('nbVotes' => $compteur['nbVotes'], 'isSelected' => $isSelected);
-				    $gloses[$g->getValeur()] = $ar2;
-				    $total = $total + $gloses[$g->getValeur()]['nbVotes'];
-			    }
-			    // Trie le tableau des gloses dans l'ordre décroissant du nombre de réponses
-			    uasort($gloses, function($a, $b){
-				    if ($a['nbVotes'] == $b['nbVotes']) {
-					    return 0;
+		    // Si tous les mots ambigus ont une glose associée
+		    if($valid){
+			    $hash = array();
+			    $map = array();
+			    $nb_points = 0;
+			    $repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
+			    foreach($data->reponses as $rep){
+				    $map[] = $rep->getMotAmbiguPhrase()->getId();
+				    $gloses = array();
+				    $total = 0;
+				    foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
+					    $compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
+					    $isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
+					    $ar2 = array(
+						    'nbVotes'    => $compteur['nbVotes'],
+						    'isSelected' => $isSelected
+					    );
+					    $gloses[$g->getValeur()] = $ar2;
+					    $total = $total + $gloses[$g->getValeur()]['nbVotes'];
 				    }
-				    return ($a['nbVotes'] > $b['nbVotes']) ? -1 : 1;
-			    });
-			    $resMA = array(
-			    	'valeurMA' => $rep->getValeurMotAmbigu(),
-				    'gloses' => $gloses
-			    );
-			    if($total > 0)
-			        $nb_points = $nb_points + (($gloses[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
-			    $hash[$rep->getMotAmbiguPhrase()->getOrdre()] = $resMA;
-		    }
-
-		    $alreadyPlayed = false;
-		    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-			    $rep = $repo4->findBy(array('motAmbiguPhrase' => $map, 'auteur' => $this->getUser()));
-			    // Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points
-		    	if(!$rep){
-				    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
-				    $this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
-
-				    $repNiveau = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
-				    $scoreNiveauSuivant = $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1)->getPointsClassementMin();
-				    if($this->getUser()->getPointsClassement() >= $scoreNiveauSuivant){
-					    $this->getUser()->setNiveau($repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1));
+				    // Trie le tableau des gloses dans l'ordre décroissant du nombre de réponses
+				    uasort($gloses, function($a, $b){
+					    if($a['nbVotes'] == $b['nbVotes']){
+						    return 0;
+					    }
+					    return ($a['nbVotes'] > $b['nbVotes']) ? -1 : 1;
+				    });
+				    $resMA = array(
+					    'valeurMA' => $rep->getValeurMotAmbigu(),
+					    'gloses'   => $gloses
+				    );
+				    if($total > 0){
+					    $nb_points = $nb_points + (($gloses[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
 				    }
-				    $em->persist($this->getUser());
+				    $hash[$rep->getMotAmbiguPhrase()->getOrdre()] = $resMA;
 			    }
-			    else{
-		    		$alreadyPlayed = true;
+
+			    $alreadyPlayed = false;
+			    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+				    $rep = $repo4->findBy(array(
+					    'motAmbiguPhrase' => $map,
+					    'auteur'          => $this->getUser()
+				    ));
+				    // Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points
+				    if(!$rep){
+					    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
+					    $this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
+
+					    $repNiveau = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+					    $scoreNiveauSuivant = $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1)->getPointsClassementMin();
+					    if($this->getUser()->getPointsClassement() >= $scoreNiveauSuivant){
+						    $this->getUser()->setNiveau($repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1));
+					    }
+					    $em->persist($this->getUser());
+				    }
+				    else{
+					    $alreadyPlayed = true;
+				    }
 			    }
-		    }
 
-		    try{
-			    $em->flush();
-		    }
-		    catch(\Exception $e){
-			    $this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
-		    }
+			    try{
+				    $em->flush();
+			    }
+			    catch(\Exception $e){
+				    $this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
+			    }
 
-		    $this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
-		    $this->get('session')->getFlashBag()->add('stats', $hash);
-		    $this->get('session')->getFlashBag()->add('alreadyPlayed', $alreadyPlayed);
-		    $this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
+			    $this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
+			    $this->get('session')->getFlashBag()->add('stats', $hash);
+			    $this->get('session')->getFlashBag()->add('alreadyPlayed', $alreadyPlayed);
+			    $this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
 
-		    return $this->redirectToRoute('ambiguss_game_result');
+			    return $this->redirectToRoute('ambiguss_game_result');
+		    }
+		    else{
+			    $this->get('session')->getFlashBag()->add('erreur', "Tous les mots ambigus doivent avoir une glose");
+		    }
 	    }
 
 	    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');

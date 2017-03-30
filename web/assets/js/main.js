@@ -42,6 +42,7 @@ $('#modal').on('hidden.bs.modal', cleanModal);
 function getGloses(select, motAmbigu) {
 	var url = Routing.generate('ambiguss_glose_get_by_motambigu');
 	$.post(url, {motAmbigu: motAmbigu}, function (data) {
+		select.find('option').remove();
 		select.append('<option value>Choississez une glose</option>');
 		$.each(data, function (index) {
 			select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')

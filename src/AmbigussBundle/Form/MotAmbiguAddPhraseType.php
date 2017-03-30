@@ -19,13 +19,13 @@ class MotAmbiguAddPhraseType extends AbstractType
 		$builder
 			->add('valeur', TextType::class, array(
 				'label' => 'Mot ambigu',
-				'attr' => array('placeholder' => 'Mot ambigu', 'class' => 'amb', 'readonly' => 'true'),
+				'attr' => array('placeholder' => 'Mot ambigu', 'class' => 'amb'),
 				'invalid_message' => 'Mot ambigu invalide',
 			))
 			->add('gloses', EntityType::class, array(
 				'class' => 'AmbigussBundle\Entity\Glose',
 				'choice_label' => 'valeur',
-				'label' =>  'Choisissez la glose associée',
+				'label' =>  'Glose associée',
 				'mapped' => false,
 			    'required' => true
 			))

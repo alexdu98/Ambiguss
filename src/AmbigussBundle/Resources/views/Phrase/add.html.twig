@@ -157,13 +157,23 @@
 				// Trouve la balise qui à la class amb
 				var amb = $prototype.find('.amb');
 				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
-				amb.val(motAmbigu.trim() + ' ' + amb.val());
-				amb.prev().html(amb.prev().html() + ' (id : ' + index + ')');
+				amb.val(motAmbigu.trim());
 				$prototype.attr('id', 'amb' + index);
 				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
 				addDeleteLink($prototype);
+				$prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
 				getGloses($prototype.find('select.gloses'), motAmbigu);
 				$container.append($prototype);
+			}
+
+			function updateMotAmbiguInPhrase(event){
+				var phrase = textarea.val();
+				// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
+				var reg3 = new RegExp('<amb id="' + event.data.id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+				// Met à jour le mot ambigu dans la phrase
+				textarea.val(phrase.replace(reg3, '<amb id="' + event.data.id + '">'+ $(event.target).val() + endBaliseAmbiguEscape));
+				updateRendu();
+				getGloses($(event.target).parent().next().find('select.gloses'), $(event.target).val());
 			}
 
 			function addGloseButtonIsClicked(event){

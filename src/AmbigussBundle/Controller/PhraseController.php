@@ -85,6 +85,9 @@ class PhraseController extends Controller
 		            	$rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
 		            	// -1 car l'ordre commence à 1 et le reorder à 0
 		            	$glose = $repository3->find($reorder[$map->getOrdre() - 1]['gloses']);
+			            if(!$glose){
+				            throw new \Exception("Tous les mots ambigus doivent avoir une glose");
+			            }
 		            	$rep->setValeurGlose($glose->getValeur());
 		            	$rep->setAuteur($this->getUser());
 			            $rep->setPoidsReponse($repository1->find($reorder[$map->getOrdre() - 1]['poidsReponse']));

@@ -7,7 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Jugement
  *
- * @ORM\Table(name="jugement")
+ * @ORM\Table(name="jugement", indexes={
+ *     @ORM\Index(name="IDX_JUGEMENT_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_JUGEMENT_DATEDELIBERATION", columns={"date_deliberation"}),
+ *     @ORM\Index(name="IDX_JUGEMENT_IDOBJET", columns={"id_objet"})
+ * })
  * @ORM\Entity(repositoryClass="JudgmentBundle\Repository\JugementRepository")
  */
 class Jugement

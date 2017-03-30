@@ -10,7 +10,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Membre
  *
- * @ORM\Table(name="membre")
+ * @ORM\Table(name="membre", indexes={
+ *     @ORM\Index(name="IDX_MEMBRE_POINTSCLASSEMENT", columns={"points_classement"}),
+ *     @ORM\Index(name="IDX_MEMBRE_CREDITS", columns={"credits"})
+ * })
  * @ORM\Entity(repositoryClass="UserBundle\Repository\MembreRepository")
  * @UniqueEntity(fields="pseudo", message="Ce pseudo existe déjà.")
  * @UniqueEntity(fields="email", message="Cette adresse mail existe déjà.")
@@ -32,8 +35,8 @@ class Membre implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="pseudo", type="string", length=32, nullable=true, unique=true)
      *
      * @Assert\Regex(
-     *     pattern = "#^$|^[a-zA-Z0-9_\.\\-]{3,32}$#",
-     *     message = "Pseudo invalide. (3 à 32 caractères alphanumérique)"
+     *     pattern = "#^$|^[a-zA-Z0-9-_]{3,32}$#",
+     *     message = "Pseudo invalide. (3 à 32 caractères alphanumérique (- et _ autorisé))"
      * )
      */
     private $pseudo;

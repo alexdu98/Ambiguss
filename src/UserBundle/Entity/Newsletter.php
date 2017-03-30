@@ -7,7 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Newsletter
  *
- * @ORM\Table(name="newsletter")
+ * @ORM\Table(name="newsletter", indexes={
+ *     @ORM\Index(name="IDX_NEWSLETTER_CIBLE", columns={"cible"}),
+ *     @ORM\Index(name="IDX_NEWSLETTER_SUJET", columns={"sujet"}),
+ *     @ORM\Index(name="IDX_NEWSLETTER_DATEENVOI", columns={"date_envoi"})
+ * })
  * @ORM\Entity(repositoryClass="UserBundle\Repository\NewsletterRepository")
  */
 class Newsletter

@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Visite
  *
- * @ORM\Table(name="visite")
+ * @ORM\Table(name="visite", indexes={
+ *     @ORM\Index(name="IDX_VISITE_IP", columns={"ip"}),
+ *     @ORM\Index(name="IDX_VISITE_DATEVISITE", columns={"date_visite"})
+ * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VisiteRepository")
  */
 class Visite

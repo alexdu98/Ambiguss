@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Jeton
  *
- * @ORM\Table(name="jeton")
+ * @ORM\Table(name="jeton", indexes={
+ *     @ORM\Index(name="IDX_JETON_IP", columns={"ip"}),
+ *     @ORM\Index(name="IDX_JETON_DATECREATION", columns={"date_creation"})
+ * })
  * @ORM\Entity(repositoryClass="UserBundle\Repository\JetonRepository")
  */
 class Jeton

@@ -21,7 +21,7 @@ class MembreType extends AbstractType
     {
         $builder
 	        ->add('Pseudo', TextType::class, array(
-		        'attr' => array('placeholder' => 'Pseudo'),
+		        'attr' => array('placeholder' => 'Pseudo', 'pattern' => '^[a-zA-Z0-9-_]{3,32}$'),
 		        'invalid_message' => 'Pseudo invalide'
 	        ))
 	        ->add('Mdp', RepeatedType::class, array(
@@ -29,7 +29,7 @@ class MembreType extends AbstractType
 		        'options' => array('attr' => array('class' => 'password-field')),
 		        'first_options'  => array(
 			        'label' => 'Mot de passe',
-			        'attr' => array('placeholder' => 'Mot de passe', 'pattern' => '.{6,72}'),
+			        'attr' => array('placeholder' => 'Mot de passe', 'pattern' => '^.{6,72}$'),
 		        ),
 		        'second_options' => array(
 			        'label' => 'Confirmation du mot de passe',

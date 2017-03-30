@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SuccesMembre
  *
- * @ORM\Table(name="succes_membre")
+ * @ORM\Table(name="succes_membre", indexes={
+ *     @ORM\Index(name="IDX_SUCCESMEMBRE_DATECREATION", columns={"date_creation"})
+ * })
  * @ORM\Entity(repositoryClass="UserBundle\Repository\SuccesMembreRepository")
  */
 class SuccesMembre

@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Historique
  *
- * @ORM\Table(name="historique")
+ * @ORM\Table(name="historique", indexes={
+ *     @ORM\Index(name="IDX_HISTORIQUE_DATEACTION", columns={"date_action"})
+ * })
  * @ORM\Entity(repositoryClass="UserBundle\Repository\HistoriqueRepository")
  */
 class Historique

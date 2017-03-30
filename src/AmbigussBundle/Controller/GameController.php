@@ -165,14 +165,12 @@ class GameController extends  Controller
 		    }
 	    }
 
-	    $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
-		$motsAmbigusPhrase = $repository->findByIdPhrase($phraseOBJ->getId());
 	    $motsAmbigus = array();
-	    for($i = 0; $i < $phraseOBJ->getMotsAmbigusPhrase()->count(); $i++){
+	    foreach($phraseOBJ->getMotsAmbigusPhrase() as $key => $map){
 			$motsAmbigus[] = array(
-				$phraseOBJ->getMotsAmbigusPhrase()->get($i)->getMotAmbigu()->getValeur(),
-				$motsAmbigusPhrase[$i]->getId(),
-			    $phraseOBJ->getMotsAmbigusPhrase()->get($i)->getOrdre()
+				$map->getMotAmbigu()->getValeur(),
+				$map->getId(),
+				$map->getOrdre()
 			);
 	    }
 

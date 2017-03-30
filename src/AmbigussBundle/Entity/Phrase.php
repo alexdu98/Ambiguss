@@ -361,8 +361,57 @@ class Phrase
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getLikesPhrase()
-    {
-        return $this->likesPhrase;
+    public function getLikesPhrase(){
+	    return $this->likesPhrase;
+    }
+
+	/**
+	 * Check if phrase is valid
+	 */
+    public function isValid(){
+
+    	// Pas d'autres balises html que <amb> et </amb>
+    	if($this->getContenu() != strip_tags($this->getContenu(), '<amb>'))
+		    return array('succes' => false, 'message' => 'Il ne faut que des balises <amb> et </amb>');
+
+    	// Le même nombre de balise ouvrante et fermante
+		$ambOuv = $ambFer = null;
+	    $regexOuv = '#\<amb id\="([0-9]+)"\>#';
+	    $regexFer = '#\</amb\>#';
+	    preg_match_all($regexOuv, $this->getContenu(), $ambOuv, PREG_SET_ORDER);
+	    preg_match_all($regexFer, $this->getContenu(), $ambFer, PREG_SET_ORDER);
+	    if(count($ambOuv) != count($ambFer))
+		    return array('succes' => false, 'message' => 'Il n\'y a pas le même nom de balise <amb> et </amb>');
+
+	    $mots_ambigu = array();
+	    $regex = '#\<amb id\="([0-9]+)"\>(.*?)\</amb\>#'; // Faux bug, ne pas toucher
+	    preg_match_all($regex, $this->getContenu(), $mots_ambigu, PREG_SET_ORDER);
+
+	    // Au moins 1 mot ambigu
+	    if(empty($mots_ambigu))
+	    	return array('succes' => false, 'message' => 'Il faut au moins 1 mot ambigu');
+
+	    // Pas de balise imbriquée
+	    foreach($mots_ambigu as $ma){
+	    	if($ma[2] != strip_tags($ma[2]))
+			    return array('succes' => false, 'message' => 'Il ne faut pas de balise imbriquée');
+	    }
+
+	    // Pas de mot ambigu avec le même id
+	    $temp = array();
+	    foreach($mots_ambigu as $ma){
+			$temp[$ma[1]] = null;
+	    }
+	    if(count($temp) !== count($mots_ambigu))
+	    	return array('succes' => false, 'message' => 'Les mots ambigus doivent avoir des identifiants différents');
+
+		// Réordonne les id
+		foreach($mots_ambigu as $key => $ma){
+			$regex = '#\<amb id\="' . $ma[1] . '"\>'. $ma[2] .'\</amb\>#';
+			$newContenu = preg_replace($regex, '<amb id="' . ($key + 1) . '">' . $ma[2] . '</amb>', $this->getContenu());
+			$this->setContenu($newContenu);
+		}
+
+	    return array('succes' => true, 'motsAmbigus' => $mots_ambigu);
     }
 }

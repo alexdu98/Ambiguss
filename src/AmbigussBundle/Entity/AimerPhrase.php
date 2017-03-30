@@ -43,7 +43,7 @@ class AimerPhrase
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="likesPhrase")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
 	 */
 	private $phrase;
 

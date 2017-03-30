@@ -125,19 +125,18 @@ class GameController extends  Controller
 
 			    $alreadyPlayed = false;
 			    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-				    $rep = $repo4->findBy(array(
+				    $repo = $repo4->findBy(array(
 					    'motAmbiguPhrase' => $map,
 					    'auteur'          => $this->getUser()
 				    ));
 				    // Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points
-				    if(!$rep){
+				    if(!$repo){
 					    $this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
 					    $this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
 
-					    $repNiveau = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
-					    $scoreNiveauSuivant = $repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1)->getPointsClassementMin();
-					    if($this->getUser()->getPointsClassement() >= $scoreNiveauSuivant){
-						    $this->getUser()->setNiveau($repNiveau->findOneById($this->getUser()->getNiveau()->getId() + 1));
+					    $niveauSuivant = $this->getUser()->getNiveau()->getNiveauParent();
+					    if($niveauSuivant != null && $this->getUser()->getPointsClassement() >= $niveauSuivant->getPointsClassementMin()){
+						    $this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 					    }
 					    $em->persist($this->getUser());
 				    }

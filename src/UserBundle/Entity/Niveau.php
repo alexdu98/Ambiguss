@@ -35,6 +35,13 @@ class Niveau
      */
     private $pointsClassementMin;
 
+	/**
+	 * @var int
+	 *
+	 * @ORM\OneToOne(targetEntity="Niveau")
+	 */
+    private $niveauParent;
+
 
     /**
      * Get id
@@ -93,5 +100,28 @@ class Niveau
     {
         return $this->pointsClassementMin;
     }
-}
 
+    /**
+     * Set niveauParent
+     *
+     * @param \UserBundle\Entity\Niveau $niveauParent
+     *
+     * @return Niveau
+     */
+    public function setNiveauParent(\UserBundle\Entity\Niveau $niveauParent = null)
+    {
+        $this->niveauParent = $niveauParent;
+
+        return $this;
+    }
+
+    /**
+     * Get niveauParent
+     *
+     * @return \UserBundle\Entity\Niveau
+     */
+    public function getNiveauParent()
+    {
+        return $this->niveauParent;
+    }
+}

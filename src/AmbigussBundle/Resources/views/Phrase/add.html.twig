@@ -79,7 +79,7 @@
 		{
 			var startBaliseAmbigu = '<amb>';
 			var endBaliseAmbigu = '</amb>';
-			var endBaliseAmbiguEscape = '<\/amb>';
+			var endBaliseAmbiguEscape = '</amb>';
 
 			// Regex pour avoir les contenus des balises <amb>
 			// Exemple : L'<amb>avocat</amb> mange des <amb>avocats</amb>.
@@ -88,13 +88,16 @@
 			// Regex pour avoir les contenus des balises <amb> et leurs id
 			// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
 			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
-			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbiguEscape, 'g');
+			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbigu, 'g');
 
 			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
 			var $container = $('div#phrase_add_motsAmbigusPhrase');
 
 			// textarea où l'on écrit la phrase
 			var textarea = $("textarea#{{ form.contenu.vars.id }}");
+
+			// On commence par enlevé les balises (au cas ou il y avait eu une erreur)
+			textarea.val(textarea.val().replace(reg2, "$2"));
 
 			// Pour numéroter le mot ambigu
 			var index = 0;
@@ -176,7 +179,7 @@
 				// Trouve la balise qui à la class amb
 				var amb = $prototype.find('.amb');
 				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
-				amb.val(motAmbigu.trim());
+				amb.val(motAmbigu);
 				$prototype.attr('id', 'amb' + index);
 				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
 				addDeleteLink($prototype);

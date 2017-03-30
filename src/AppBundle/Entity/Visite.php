@@ -34,7 +34,7 @@ class Visite
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="user_agent", type="string", length=255)
+	 * @ORM\Column(name="user_agent", type="string", length=255, nullable=true)
 	 */
 	private $userAgent;
 

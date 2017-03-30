@@ -83,7 +83,7 @@ class Reponse
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\MotAmbiguPhrase", inversedBy="reponses")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
 	 */
 	private $motAmbiguPhrase;
 

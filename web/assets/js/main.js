@@ -71,7 +71,6 @@ function addAddGloseButton(prototype, motAmbigu, fonction) {
  */
 function addGloseModal(event) {
 
-	console.log(event.data);
 	// Ajoute le mot ambigu dans le formulaire
 	$('#modal-body').find('#glose_add_motAmbigu').val(event.data.motAmbigu);
 

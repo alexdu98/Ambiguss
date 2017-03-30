@@ -13,7 +13,7 @@ class AuthentificationListener{
 		$this->em = $em;
 	}
 
-	public function onAuthentificationSuccess(InteractiveLoginEvent  $event){
+	public function onAuthentificationSuccess(InteractiveLoginEvent $event){
 		$membre = $event->getAuthenticationToken()->getUser();
 		$membre->setDateConnexion(new \DateTime());
 

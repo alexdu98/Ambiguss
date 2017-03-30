@@ -198,4 +198,13 @@ class Jeton
     {
         return $this->membre;
     }
+
+    /**
+     * AUTRES
+     */
+
+    public function generateCle(){
+    	$cle = hash('sha256', uniqid(rand(), true) . 'U9U0JOyjge*&*Y7!');
+    	$this->setCle($cle);
+    }
 }

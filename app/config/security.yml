@@ -26,6 +26,12 @@ security:
       pattern: ^/
       anonymous: true
       provider:     main
+      remember_me:
+        secret: '%secret%'
+        lifetime: 604800 # 7 jours
+        path: /
+        name: jeton
+        remember_me_parameter: 'userbundle_membre[KeepCo]'
       form_login:
         login_path: /connexion
         check_path: /connexion/verification

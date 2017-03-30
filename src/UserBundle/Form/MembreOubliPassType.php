@@ -18,7 +18,8 @@ class MembreOubliPassType extends AbstractType
         $builder
 	        ->add('PseudoOuEmail', TextType::class, array(
 		        'attr' => array('placeholder' => 'Pseudo ou email'),
-		        'invalid_message' => 'Pseudo invalide'
+		        'invalid_message' => 'Pseudo invalide',
+	            'mapped' => false
 	        ))
 	        ->add('Valider', SubmitType::class, array(
 		        'attr' => array(

@@ -2,6 +2,7 @@
 
 namespace AmbigussBundle\Controller;
 
+use AmbigussBundle\AmbigussBundle;
 use AmbigussBundle\Entity\AimerPhrase;
 use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Entity\MotAmbiguPhrase;
@@ -135,11 +136,9 @@ class PhraseController extends Controller
     	}
     }
 
-    public function likeAction(Request $request, $id){
-	    $rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
-	    $rep1 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+    public function likeAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase){
 
-	    $phrase = $rep1->find($id);
+	    $rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
 
 	    $aimerPhrase = new AimerPhrase();
 	    $aimerPhrase->setPhrase($phrase);

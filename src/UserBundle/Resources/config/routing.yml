@@ -13,11 +13,11 @@ user_inscription_provider:
         expose: true
 
 user_inscription_confirmation:
-    path: /inscription/confirmation/{cle}
+    path: /inscription/confirmation/{cleOubliMdp}
     defaults:
         _controller: UserBundle:Security:inscriptionConfirmation
     requirements:
-        cle: "[a-z0-9]+"
+        cle: "[a-zA-Z0-9]+"
 
 user_connexion:
     path: /connexion
@@ -36,11 +36,11 @@ user_oubli_mdp:
         _controller: UserBundle:Security:oubliMdp
 
 user_oubli_mdp_reinitialisation:
-    path: /oubli-mdp/reinitialisation/{cle}
+    path: /oubli-mdp/reinitialisation/{cleOubliMdp}
     defaults:
         _controller: UserBundle:Security:oubliMdpReinitialisation
     requirements:
-        cle: "[a-z0-9]+"
+        cle: "[a-zA-Z0-9]+"
 
 user_profil:
     path: /user/profil

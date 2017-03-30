@@ -18,7 +18,7 @@ class MembreOubliPassResetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-	        ->add('Mdp', RepeatedType::class, array(
+	        ->add('mdp', RepeatedType::class, array(
 		        'type' => PasswordType::class,
 		        'options' => array('attr' => array('class' => 'password-field')),
 		        'first_options'  => array(

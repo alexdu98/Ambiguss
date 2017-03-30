@@ -112,6 +112,7 @@ class GameController extends  Controller
 			    $hash[$rep->getMotAmbiguPhrase()->getOrdre()] = $resMA;
 		    }
 
+		    $alreadyPlayed = false;
 		    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
 			    $rep = $repo4->findBy(array('motAmbiguPhrase' => $map, 'auteur' => $this->getUser()));
 			    // Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points
@@ -126,6 +127,9 @@ class GameController extends  Controller
 				    }
 				    $em->persist($this->getUser());
 			    }
+			    else{
+		    		$alreadyPlayed = true;
+			    }
 		    }
 
 		    try{
@@ -137,6 +141,7 @@ class GameController extends  Controller
 
 		    $this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
 		    $this->get('session')->getFlashBag()->add('stats', $hash);
+		    $this->get('session')->getFlashBag()->add('alreadyPlayed', $alreadyPlayed);
 		    $this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
 
 		    return $this->redirectToRoute('ambiguss_game_result');
@@ -146,8 +151,11 @@ class GameController extends  Controller
 		$motsAmbigusPhrase = $repository->findByIdPhrase($phraseOBJ->getId());
 	    $motsAmbigus = array();
 	    for($i = 0; $i < $phraseOBJ->getMotsAmbigusPhrase()->count(); $i++){
-			$motsAmbigus[] = array($phraseOBJ->getMotsAmbigusPhrase()->get($i)->getMotAmbigu()->getValeur(),
-			                       $motsAmbigusPhrase[$i]->getId());
+			$motsAmbigus[] = array(
+				$phraseOBJ->getMotsAmbigusPhrase()->get($i)->getMotAmbigu()->getValeur(),
+				$motsAmbigusPhrase[$i]->getId(),
+			    $phraseOBJ->getMotsAmbigusPhrase()->get($i)->getOrdre()
+			);
 	    }
 
 	    // récupérer tous les likes d'un utilisateur
@@ -179,12 +187,14 @@ class GameController extends  Controller
     public function resultatAction(Request $request){
 	    $phrase = $this->get('session')->getFlashBag()->get('phrase');
 	    $stats = $this->get('session')->getFlashBag()->get('stats');
+	    $alreadyPlayed = $this->get('session')->getFlashBag()->get('alreadyPlayed');
 	    $nb_points = $this->get('session')->getFlashBag()->get('nb_points');
 
     	if(!empty($phrase) && !empty($stats) && !empty($nb_points)){
 		    return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
 			    'phrase'   => $phrase[0],
 			    'stats'    => $stats[0],
+			    'alreadyPlayed' => $alreadyPlayed,
 			    'nb_point' => $nb_points[0]
 		    ));
 	    }

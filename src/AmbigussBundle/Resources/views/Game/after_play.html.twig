@@ -23,11 +23,15 @@
 
 	        <h3 id="result">
 		        {% if app.user %}
-			        {% transchoice nb_point %}
-				        {0} Dommage, vous n'avez pas gagné de point cette fois. |
-				        {1} Bravo, vous avez gagné 1 point. |]1,
-				        Inf[ Félicitation, vous avez gagné %nb_point% points !
-			        {% endtranschoice %}
+			        {% if alreadyPlayed %}
+				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.
+			        {% else %}
+				        {% transchoice nb_point %}
+					        {0} Dommage, vous n'avez pas gagné de point cette fois. |
+					        {1} Bravo, vous avez gagné 1 point. |]1,
+					        Inf[ Félicitation, vous avez gagné %nb_point% points !
+				        {% endtranschoice %}
+			        {% endif %}
 		        {% else %}
 			        Vous n'êtes pas connecté, vous ne gagnez donc pas de points
 		        {% endif %}

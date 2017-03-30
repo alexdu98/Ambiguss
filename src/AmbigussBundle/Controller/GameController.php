@@ -26,20 +26,20 @@ class GameController extends  Controller
 
 	    $phrases = null;
 	    if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-		    $phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser());
+		    $phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser(), 100);
 	    }
 	    else{
 		    $date = new \DateTime();
 		    // Date d'il y a 3 jours
 		    $date = $date->getTimestamp() - (3600 * 24 * 30);
-		    $phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date);
+		    $phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date, 100);
 	    }
 
 	    // Si toutes les phrases ont été joués
 	    $allPhrasesPlayed = false;
 	    if(empty($phrases)){
 		    $allPhrasesPlayed = true;
-			$phrases = $repmap->findIdPhrasesByLessNumberReponse(25);
+		    $phrases = $repmap->findAllIdPhrases();
 	    }
 
 	    // Rend une clé au hasard

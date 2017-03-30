@@ -58,7 +58,7 @@ class Phrase
     private $visible;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre", inversedBy="phrases")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
@@ -72,6 +72,11 @@ class Phrase
 	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\MotAmbiguPhrase", mappedBy="phrase", cascade={"persist"})
 	 */
 	private $motsAmbigusPhrase;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\AimerPhrase", mappedBy="phrase", cascade={"persist"})
+	 */
+	private $likesPhrase;
 
 
     /**
@@ -311,5 +316,53 @@ class Phrase
 
     public function getContenuHTML(){
     	return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b class="color-red" title="Ce mot est ambigu (id : $1)">$2</b>', $this->getContenu());
+    }
+
+    /**
+     * Add motsAmbigusPhrase
+     *
+     * @param \AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase
+     *
+     * @return Phrase
+     */
+    public function addMotsAmbigusPhrase(\AmbigussBundle\Entity\MotAmbiguPhrase $motsAmbigusPhrase)
+    {
+        $this->motsAmbigusPhrase[] = $motsAmbigusPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Add likesPhrase
+     *
+     * @param \AmbigussBundle\Entity\AimerPhrase $likesPhrase
+     *
+     * @return Phrase
+     */
+    public function addLikesPhrase(\AmbigussBundle\Entity\AimerPhrase $likesPhrase)
+    {
+        $this->likesPhrase[] = $likesPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Remove likesPhrase
+     *
+     * @param \AmbigussBundle\Entity\AimerPhrase $likesPhrase
+     */
+    public function removeLikesPhrase(\AmbigussBundle\Entity\AimerPhrase $likesPhrase)
+    {
+        $this->likesPhrase->removeElement($likesPhrase);
+    }
+
+    /**
+     * Get likesPhrase
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLikesPhrase()
+    {
+        return $this->likesPhrase;
     }
 }

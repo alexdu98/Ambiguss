@@ -203,6 +203,11 @@ class Membre implements AdvancedUserInterface, \Serializable
      */
     private $membreRoles;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\Phrase", mappedBy="auteur")
+	 */
+    private $phrases;
+
 
 	/**
 	 * Constructor
@@ -848,5 +853,39 @@ class Membre implements AdvancedUserInterface, \Serializable
         $cle = hash('sha256', uniqid(rand(), true) . "N1TDf^%PEc!G*s$");
         $this->setCleOubliMdp($cle);
         return $cle;
+    }
+
+    /**
+     * Add phrase
+     *
+     * @param \AmbigussBundle\Entity\Phrase $phrase
+     *
+     * @return Membre
+     */
+    public function addPhrase(\AmbigussBundle\Entity\Phrase $phrase)
+    {
+        $this->phrases[] = $phrase;
+
+        return $this;
+    }
+
+    /**
+     * Remove phrase
+     *
+     * @param \AmbigussBundle\Entity\Phrase $phrase
+     */
+    public function removePhrase(\AmbigussBundle\Entity\Phrase $phrase)
+    {
+        $this->phrases->removeElement($phrase);
+    }
+
+    /**
+     * Get phrases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPhrases()
+    {
+        return $this->phrases;
     }
 }

@@ -15,7 +15,7 @@ class ClassementController extends Controller{
 
 	public function classementGeneralAction(){
 		$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
-		$classement = $repository->getClassementGeneral(20);
+		$classement = $repository->getClassementGeneral(50);
 
 		return $this->render('AmbigussBundle:Classement:points.html.twig', array (
 			'classement' => $classement,

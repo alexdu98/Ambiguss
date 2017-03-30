@@ -10,22 +10,24 @@ namespace AmbigussBundle\Repository;
  */
 class ReponseRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function findByIdPMAetGloses($idPMA,$glose)
+
+	/**
+	 * Retourne un tableau avec le nombre de votes pour la glose donnée
+	 * @param $idPMA
+	 * @param $glose
+	 *
+	 * @return mixed
+	 */
+	public function findByIdPMAetGloses($idPMA, $glose)
 	{
 		return $this->createQueryBuilder('r')
-			->innerJoin("r.motAmbiguPhrase", "map", "WITH", "r.motAmbiguPhrase = map.id")->addSelect("map")
-			->innerJoin("r.glose", "g"," WITH","r.glose=g.id")->addSelect("count(g) as nbVotes")
+			->innerJoin("r.motAmbiguPhrase", "map", "WITH", "r.motAmbiguPhrase = map.id")
+			->innerJoin("r.glose", "g", "WITH", "r.glose = g.id")->Select("count(g) as nbVotes")
+			->innerJoin("r.poidsReponse", "pr", "WITH", "r.poidsReponse = pr.id")
 			->where("map.id = :Ambi")->setParameter("Ambi", $idPMA)
-			->andwhere("g.id = :Gl")->setParameter("Gl",$glose)
+			->andwhere("g.id = :Gl")->setParameter("Gl", $glose)
+			->andWhere("pr.poidsReponse = 1")
 			->getQuery()->getSingleResult();
 	}
-    public function findDistinctReponse($idUser)
-    {
-        return $this->createQueryBuilder('r')
-            ->select('DISTINCT r.contenuPhrase')
-            ->innerJoin("r.auteur", "aut", "WITH", "r.auteur = aut.id")
-            ->where("aut.id = :idUser")->setParameter("idUser", $idUser)
-            ->getQuery()->getResult();
 
-    }
 }

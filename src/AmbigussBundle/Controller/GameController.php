@@ -216,23 +216,4 @@ class GameController extends  Controller
 	    }
 	    throw $this->createNotFoundException();
     }
-
-    public function getUnusedId($allId, $usedId){
-        $unusedId= array();
-        $find=0;
-        foreach($allId as $A){
-            foreach ($usedId as $U){
-                if ($A== $U){
-                    $find=1;
-                }
-            }
-            if($find==0){
-                array_push($unusedId, $A);
-            }
-            else{
-                $find=0;
-            }
-        }
-        return $unusedId;
-}
 }

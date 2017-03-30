@@ -139,25 +139,27 @@ class PhraseController extends Controller
     public function likeAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase){
 
 	    $rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
+	    $aimerPhrase = $rep->findOneBy(array('phrase' => $phrase, 'membre' => $this->getUser()));
 
-	    $aimerPhrase = new AimerPhrase();
-	    $aimerPhrase->setPhrase($phrase);
-	    $aimerPhrase->setMembre($this->getUser());
-
-	    $em = $this->getDoctrine()->getManager();
 	    $action = null;
-	    if($temp = $rep->findOneBy(array('phrase' => $phrase, 'membre' => $this->getUser()))){
-		    $aimerPhrase = $em->getReference('AmbigussBundle:AimerPhrase', $temp->getId());
-		    $em->remove($aimerPhrase);
-		    $action = 'delete';
+	    if(!$aimerPhrase){
+		    $aimerPhrase = new AimerPhrase();
+		    $aimerPhrase->setPhrase($phrase)->setMembre($this->getUser());
+		    //ajout 5 points de crédit
+		    $this->getUser()->setCredits($this->getUser()->getCredits() + 5);
+		    $action = 'add';
+	    }
+	    elseif($aimerPhrase->getActive() === false){
+		    $aimerPhrase->setActive(true);
+		    $action = 'add';
 	    }
 	    else{
-		    $em->persist($aimerPhrase);
-		    $action = 'add';
-		    //ajout 5 points de crédit
-            $this->getUser()->setCredits($this->getUser()->getCredits() + 5);
-
+		    $aimerPhrase->setActive(false);
+		    $action = 'delete';
 	    }
+
+	    $em = $this->getDoctrine()->getManager();
+	    $em->persist($aimerPhrase);
 	    $em->flush();
 
 	    return $this->json(array('status' => 'succes', 'action' => $action));

@@ -28,6 +28,13 @@ class AimerPhrase
      */
     private $dateCreation;
 
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="active", type="boolean")
+	 */
+    private $active;
+
     /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=false)
@@ -47,6 +54,7 @@ class AimerPhrase
 	public function __construct()
 	{
 		$this->dateCreation = new \DateTime();
+		$this->active = true;
 	}
 
 	/**
@@ -82,6 +90,30 @@ class AimerPhrase
     {
         return $this->dateCreation;
     }
+
+	/**
+	 * Set active
+	 *
+	 * @param boolean $active
+	 *
+	 * @return AimerPhrase
+	 */
+	public function setActive($active)
+	{
+		$this->active = $active;
+
+		return $this;
+	}
+
+	/**
+	 * Get active
+	 *
+	 * @return bool
+	 */
+	public function getActive()
+	{
+		return $this->active;
+	}
 
     /**
      * Set membre

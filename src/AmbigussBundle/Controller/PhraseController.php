@@ -24,6 +24,7 @@ class PhraseController extends Controller
 
 		    $form->handleRequest($request);
 
+		    $newPhrase = null;
             if ($form->isSubmitted() && $form->isValid())
             {
                 $data = $form->getData();
@@ -91,6 +92,8 @@ class PhraseController extends Controller
 			            $rep->setGlose($glose);
 			            $rep->setMotAmbiguPhrase($map);
 
+			            $map->addReponse($rep);
+
 			            if(!$map->getMotAmbigu()->getGloses()->contains($glose))
 			                $map->getMotAmbigu()->addGlose($glose);
 
@@ -100,8 +103,7 @@ class PhraseController extends Controller
 			            $em->flush();
 		            }
 
-		            $this->get('session')->getFlashBag()->add('succes', "La phrase a bien été ajoutée");
-		            $this->get('session')->getFlashBag()->add('phrase', $phrase);
+		            $newPhrase = $phrase;
 
 		            // Réinitialise le formulaire
 		            $phrase = new \AmbigussBundle\Entity\Phrase();
@@ -119,6 +121,7 @@ class PhraseController extends Controller
 	                                                                                                  ('ambiguss_glose_add')));
             return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
                 'form' => $form->createView(),
+                'newPhrase' => $newPhrase,
                 'addGloseForm' => $addGloseForm->createView()
             ));
     	}

@@ -15,6 +15,25 @@
 			        phrase ?</button>
 		    </div>
 
+		    {% if newPhrase is not null %}
+			    <div class="alert alert-success alert-dismissible fade in" role="alert">
+				    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+				    La phrase a bien été ajoutée.
+				    <h3 id="result" class="text-center">
+			            {{ newPhrase.contenuHTML|raw }}
+				    </h3>
+				    <div class="text-center">
+					    {% for map in newPhrase.motsAmbigusPhrase %}
+				            <b>{{ map.getMotAmbigu.getValeur }}</b> ({{ map.getOrdre }}) :
+							{% for reponse in map.reponses %}
+								{{ reponse.valeurGlose }}
+							{% endfor %}
+						    <br>
+			            {% endfor %}
+				    </div>
+			    </div>
+		    {% endif %}
+
 		    {% for flashMessage in app.session.flashbag.get('succes') %}
 			    <div class="alert alert-success">{{ flashMessage }}</div>
 		    {% endfor %}

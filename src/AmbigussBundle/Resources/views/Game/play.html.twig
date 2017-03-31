@@ -28,26 +28,41 @@
 		        <div class="alert alert-danger">{{ flashMessage }}</div>
 	        {% endfor %}
 
-            <h3 id="result"></h3>
-	        {% if app.user %}
-				{% for like in likes if phrase_id == like %}
-                    {% set trouve = 1 %}
-					<div class="">
-							<button id="phraseLike" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i>
-								Je n'aime
-								plus cette phrase</button>
-						</div>
+				<h3 id="result"></h3>
+				<div class="form-group">
+					{% if app.user %}
+						{% for like in likes if phrase_id == like %}
+							{% set trouve = 1 %}
+									<button id="phraseLike" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i>
+										Je n'aime
+										plus cette phrase</button>
+						{% endfor %}
+						{%  if trouve==0 %}
+								<button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+									J'aime
+									cette
+									phrase</button>
+						{% endif %}
+					{% endif %}
 
-				{% endfor %}
-				{%  if trouve==0 %}
-					<div class="">
-						<button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-							J'aime
+                    {% if signal==1 %}
+					<button id="phraseSignal0" class="btn btn-danger btn-xs" disabled><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+						Phrase déjà signalée </button>
+                    {% else %}
+
+						{% if signal==0 %}
+						<button id="phraseSignal" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+							Je signale
 							cette
 							phrase</button>
-					</div>
-				{% endif %}
-	        {% endif %}
+						{% else %}
+						<button id="phraseSignal" class="btn btn-danger btn-xs" ><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+							Phrase
+							signalée</button>
+						{% endif %}
+					{% endif %}
+				</div>
+
 	        <br>
 
             {{ form_start(form) }}
@@ -73,6 +88,7 @@
             {{ form_end(form) }}
         </div>
     </div>
+
 {% endblock %}
 {% block js %}
 	<script>
@@ -159,6 +175,24 @@
 					}
 				});
 			})
+
+            $("#phraseSignal").click(function(){
+                var boutonSignal = $(this);
+                $.getJSON('{{ path('ambiguss_phrase_signal', {'id':phrase_id}) }}', function(data){
+                    if(data.status === 'succes') {
+                        if (data.action === 'signal') {
+                            boutonSignal.html('<i class="glyphicon ' +
+                                'glyphicon-exclamation-signn" ' +
+                                'aria-hidden="true"></i> Phrase signalée');
+                        }
+                        else{
+                            boutonSignal.html('<i class="glyphicon ' +
+                                'glyphicon-exclamation-signn" ' +
+                                'aria-hidden="true"></i> Je signale cette phrase');
+                        }}
+
+                });
+            })
 		});
 	</script>
 {%  endblock %}

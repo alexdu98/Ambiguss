@@ -120,6 +120,7 @@ class PhraseController extends Controller{
 			$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
 				'action' => $this->generateUrl('ambiguss_glose_add')
 			));
+
 			return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
 				'form'         => $form->createView(),
 				'newPhrase'    => $newPhrase,
@@ -158,12 +159,34 @@ class PhraseController extends Controller{
 		}
 
 		$em = $this->getDoctrine()->getManager();
-		$em->persist($aimerPhrase);
-		$em->flush();
+        $em->persist($aimerPhrase);
+        $em->flush();
 
 		return $this->json(array(
 			'status' => 'succes',
 			'action' => $action
 		));
 	}
+
+	public function SignalAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
+    {
+        if ($phrase->getSignale() == 0) {
+            $phrase->setSignale(1);
+            $action ='signal';
+            // TODO : Créer le jugement
+    }
+        else{
+            $phrase->setSignale(0);
+            $action='cancel';
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($phrase);
+        $em->flush();
+
+        return $this->json(array(
+            'status' => 'succes',
+            'action' => $action
+        ));
+
+    }
 }

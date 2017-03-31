@@ -47,6 +47,9 @@ class GameController extends  Controller
 
 	    $phraseOBJ = $repository->find($phrases[$phrase_id][1]);
 
+	    // recup champ signal
+        $signal=$phraseOBJ->getSignale();
+
         $phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
 
 	    $game = new Game();
@@ -195,6 +198,7 @@ class GameController extends  Controller
             'phraseEscape' => $phraseEscape,
             'likes' => $likesArray,
             'alreadyPlayed' => $allPhrasesPlayed,
+            'signal' =>$signal,
             'addGloseForm' => $addGloseForm->createView()
         ));
     }

@@ -67,3 +67,9 @@ ambiguss_phrase_like:
         _controller: AmbigussBundle:Phrase:like
     requirements:
         id: \d+
+ambiguss_phrase_signal:
+    path: /ambiguss/phrase/signal/{id}
+    defaults:
+        _controller: AmbigussBundle:Phrase:signal
+    requirements:
+        id: \d+

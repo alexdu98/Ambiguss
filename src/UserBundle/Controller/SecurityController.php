@@ -54,7 +54,31 @@ class SecurityController extends Controller{
 
 			// FACEBOOK & TWITTER
 			if(!empty($provider)){
+				$res = new \stdClass();
+				$res->succes = false;
+
+				// Récupère les données du formulaire
 				$data = json_decode($request->get('data'));
+
+				// Vérifie qu'il n'est pas déjà inscrit
+				$repoUser = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
+				$membre = null;
+
+				if($provider == "facebook"){
+					$membre = $repoUser->findOneByIdFacebook($data->id);
+					if($membre != null)
+						;
+				}
+				else if($provider == "twitter"){
+
+				}
+				else{
+					$res->messages[] = 'Provider inconnu';
+				}
+
+
+
+
 
 				$membre->setIdFacebook($data->id);
 				$membre->setEmail($data->email);

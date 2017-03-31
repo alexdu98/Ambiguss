@@ -134,18 +134,22 @@ $(document).ready(function () {
 		$.getScript('//connect.facebook.net/fr_FR/sdk.js', function () {
 			FB.init({
 				appId: '1793610560900722',
-				version: 'v2.8'
+				version: 'v2.8',
+				status: true
 			});
 
 			FB.getLoginStatus(function (response) {
 				if (response.status === 'connected') {
-					FB.login(function (response) {
+					//alert('Already connected, redirect to login page to create token.');
+					/*FB.login(function (response) {
 						if (response.authResponse) {
 							FB.api('/me', {fields: 'id, email, gender'}, function (response) {
 								saveFacebookUser(response);
 							});
 						}
-					}, {scope: 'public_profile, email'});
+					}, {scope: 'public_profile, email'});*/
+					redirectLoginFacebook = Routing.generate('hwi_oauth_service_redirect', {service: 'facebook'});
+					document.location = redirectLoginFacebook;
 				}
 				else {
 					FB.login(function (response) {
@@ -153,6 +157,10 @@ $(document).ready(function () {
 							FB.api('/me', {fields: 'id, email, gender'}, function (response) {
 								saveFacebookUser(response);
 							});
+							alert('Connected successfuly');
+						}
+						else{
+							alert('Cancelled.');
 						}
 					}, {scope: 'public_profile, email'});
 				}

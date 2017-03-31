@@ -180,14 +180,14 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 *
 	 * @ORM\Column(name="id_facebook", type="string", length=255, nullable=true, unique=true)
 	 */
-	private $id_facebook;
+	private $idFacebook;
 
 	/**
 	 * @var string
 	 *
 	 * @ORM\Column(name="id_twitter", type="string", length=255, nullable=true, unique=true)
 	 */
-	private $id_twitter;
+	private $idTwitter;
 
     /**
      * @ORM\ManyToOne(targetEntity="Groupe")
@@ -605,7 +605,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
 	public function setIdFacebook($idFacebook)
 	{
-		$this->id_facebook = $idFacebook;
+		$this->idFacebook = $idFacebook;
 
 		return $this;
 	}
@@ -617,7 +617,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
 	public function getIdFacebook()
 	{
-		return $this->id_facebook;
+		return $this->idFacebook;
 	}
 
 	/**
@@ -629,7 +629,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
 	public function setIdTwitter($idTwitter)
 	{
-		$this->id_twitter = $idTwitter;
+		$this->idTwitter = $idTwitter;
 
 		return $this;
 	}
@@ -641,7 +641,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
 	public function getIdTwitter()
 	{
-		return $this->id_twitter;
+		return $this->idTwitter;
 	}
 
     /**

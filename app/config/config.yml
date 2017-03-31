@@ -81,3 +81,32 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+# HWI/OAuth Configuration
+hwi_oauth:
+    http_client:
+        verify_peer: false
+    firewall_names:
+        - 'secured_area'
+    #connect:
+        #confirmation: true
+        #registration_form_handler: my_registration_form_handler
+        #registration_form: "my_registration_form"
+        #account_connector: user.membre_provider
+    resource_owners:
+        facebook:
+            type: facebook
+            client_id: "1793610560900722"
+            client_secret: "d3f6abe32f32c5a53429d7f4e5952626"
+            options:
+                display: popup
+                auth_type: rerequest
+                csrf: true
+        twitter:
+            type: twitter
+            client_id: "VqbMLkxF8aHcyF5KCaUyl5sIW"
+            client_secret: "gjUijxrRY2ceLcFyDqmHqNOtZzYjrYNIPJNhXg7089DbscjS6q"
+            options:
+                display: popup
+                auth_type: rerequest
+                csrf: true

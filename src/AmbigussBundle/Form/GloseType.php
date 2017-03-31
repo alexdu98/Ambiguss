@@ -15,7 +15,7 @@ class GloseType extends AbstractType
     {
         $builder->add('valeur')->add('dateCreation')->add('dateModification')->add('signale')->add('visible')->add('auteur')->add('modificateur')->add('motsAmbigus');
     }
-    
+
     /**
      * {@inheritdoc}
      */

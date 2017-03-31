@@ -15,7 +15,7 @@ class MotAmbiguPhraseType extends AbstractType
     {
         $builder->add('ordre')->add('phrase')->add('motAmbigu');
     }
-    
+
     /**
      * {@inheritdoc}
      */

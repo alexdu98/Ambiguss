@@ -26,7 +26,7 @@
 					    {% for map in newPhrase.motsAmbigusPhrase %}
 				            <b>{{ map.getMotAmbigu.getValeur }}</b> ({{ map.getOrdre }}) :
 							{% for reponse in map.reponses %}
-								{{ reponse.valeurGlose }}
+								{{ reponse.valeurGlose }} -> {{ reponse.poidsReponse.label }}
 							{% endfor %}
 						    <br>
 			            {% endfor %}

@@ -40,19 +40,9 @@ class MembreProvider implements UserProviderInterface, HWIOAuth\OAuthAwareUserPr
 	 * {@inheritdoc}
 	 */
 	public function loadUserByUsername($username){
-		$membre = $this->em->getRepository('UserBundle:Membre')->findOneByPseudo($username);
+		$membre = $this->em->getRepository('UserBundle:Membre')->findOneBy(array('pseudo' => $username));
 		if($membre != null){
-			if($membre->getBanni() == 1){
-				if($membre->getDateConnexion() == null)
-					throw new LockedException('Votre compte est verrouillé. Merci de cliquer sur le lien envoyé par
-					email à l\'adresse "%s".', $membre->getEmail());
-				else
-					throw new DisabledException('Votre compte est banni pour le motif suivant "%s".',
-						$membre->getCommentaireBan());
-			}
-			else{
-				return $membre;
-			}
+			return $membre;
 		}
 		throw new UsernameNotFoundException(sprintf('Le pseudo "%s" n\'existe pas.', $username));
 	}
@@ -85,7 +75,7 @@ class MembreProvider implements UserProviderInterface, HWIOAuth\OAuthAwareUserPr
 	{
 		$pseudo = $response->getUsername();
 
-		$membre = $this->em->findOneByPseudo($pseudo);
+		$membre = $this->em->getRepository('UserBundle:Membre')->findOneBy(array('pseudo' => $pseudo));
 
 		if (null === $membre || null === $pseudo) {
 			throw new AccountNotLinkedException(sprintf('Le pseudo "%s" n\'a pas été trouvé.', $pseudo));

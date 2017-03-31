@@ -1,14 +1,39 @@
-hwi_oauth_redirect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-    prefix:   /connect
+#hwi_oauth_redirect:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+#    prefix:   /connect
+
+hwi_oauth_service_redirect:
+    path: /connect/{service}
+    defaults:
+        _controller: HWIOAuthBundle:Connect:redirectToService
+    options:
+        expose: true
+
+#hwi_oauth_connect:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+#    prefix:   /connect
+
+hwi_oauth_connect_service:
+    path: /connect/service/{service}
+    defaults:
+        _controller: HWIOAuthBundle:Connect:connectService
+
+hwi_oauth_connect_registration:
+    path: /connect/registration/{key}
+    defaults:
+        _controller: HWIOAuthBundle:Connect:registration
+
+#hwi_oauth_login:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+#    prefix:   /login
 
 hwi_oauth_connect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
-    prefix:   /connect
+    path: /login/
+    defaults:
+        _controller: HWIOAuthBundle:Connect:connect
 
-hwi_oauth_login:
-    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
-    prefix:   /login
+facebook_login:
+    path: /login/check-facebook
 
 twitter_login:
     path: /login/check-twitter

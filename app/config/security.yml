@@ -42,17 +42,18 @@ security:
       logout:
         path:       /deconnexion
         target:     /
+    # A mettre avant le main pour HWI
     secured_area:
       anonymous: ~
       oauth:
         resource_owners:
-          twitter:           "/login/check-twitter"
+          facebook:   "/login/check-facebook"
+          twitter:    "/login/check-twitter"
         login_path:        /login
         use_forward:       false
         failure_path:      /login
-
         oauth_user_provider:
-            service: user.membre_provider
+          service: user.membre_provider
 
   access_control:
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}

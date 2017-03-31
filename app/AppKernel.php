@@ -16,13 +16,13 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(), // Doctrine migration Bundle
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new AmbigussBundle\AmbigussBundle(),
             new UserBundle\UserBundle(),
             new JudgmentBundle\JudgmentBundle(),
             new CommentBundle\CommentBundle(),
             new AppBundle\AppBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

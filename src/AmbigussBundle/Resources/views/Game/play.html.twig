@@ -177,7 +177,6 @@
 			})
 
             $("#phraseSignal").click(function(){
-
                 var boutonSignal = $(this);
                 setModalTitle('Signaler une partie');
                 setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig',
@@ -188,15 +187,11 @@
 
                 $.getJSON('{{ path('ambiguss_phrase_signal', {'id':phrase_id}) }}', function(data){
                     if(data.status === 'succes') {
-						if (data.action === 'signal') {
-                            boutonSignal.html('<i class="glyphicon ' +
-                                'glyphicon-exclamation-signn" ' +
-                                'aria-hidden="true"></i> Phrase signalée');
+                        if (data.action === 'signal') {
+                            boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Phrase signalée');
                         }
                         else{
-                            boutonSignal.html('<i class="glyphicon ' +
-                                'glyphicon-exclamation-signn" ' +
-                                'aria-hidden="true"></i> Je signale cette phrase');
+                            boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Je signale cette phrase');
                         }}
 
                 });

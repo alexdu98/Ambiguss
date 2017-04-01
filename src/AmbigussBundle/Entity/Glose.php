@@ -57,7 +57,7 @@ class Glose
     private $visible;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre", inversedBy="gloses")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;

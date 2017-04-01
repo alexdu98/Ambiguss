@@ -73,6 +73,9 @@ a:hover{
 	background: var(--color-green);
 	color: #FFF;
 }
+hr{
+	border-top: 1px solid var(--color-green);
+}
 
 /*
     #####################################################################

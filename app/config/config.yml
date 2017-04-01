@@ -12,10 +12,13 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    # Phrase
     costCreatePhraseCredits: 200
     gainCreatePhrasePoints: 100
     gainLikePhraseCredits: 5
     gainPerLikePhrasePoints: 25
+    # Classement
+    maxResultForClassementGeneral : 100
 
 
 framework:

@@ -211,6 +211,11 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
     private $phrases;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\Glose", mappedBy="auteur")
+	 */
+    private $gloses;
+
 
 	/**
 	 * Constructor
@@ -916,5 +921,39 @@ class Membre implements AdvancedUserInterface, \Serializable
 	    if($this->credits < 0)
 		    $this->credits = 0;
 	    return $this;
+    }
+
+    /**
+     * Add glose
+     *
+     * @param \AmbigussBundle\Entity\Glose $glose
+     *
+     * @return Membre
+     */
+    public function addGlose(\AmbigussBundle\Entity\Glose $glose)
+    {
+        $this->gloses[] = $glose;
+
+        return $this;
+    }
+
+    /**
+     * Remove glose
+     *
+     * @param \AmbigussBundle\Entity\Glose $glose
+     */
+    public function removeGlose(\AmbigussBundle\Entity\Glose $glose)
+    {
+        $this->gloses->removeElement($glose);
+    }
+
+    /**
+     * Get gloses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGloses()
+    {
+        return $this->gloses;
     }
 }

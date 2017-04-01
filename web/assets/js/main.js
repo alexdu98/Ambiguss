@@ -36,17 +36,19 @@ $('#modal').on('hidden.bs.modal', cleanModal);
 
 /**
  * Récupère les gloses d'un mot ambigu et les en <option> d'un <select>
- * @param prototype
+ * @param select
  * @param motAmbigu
  */
 function getGloses(select, motAmbigu) {
+	select.html('<option value>Choississez une glose</option>');
+	// Empêche la sélection pendant le chargement
+	select.attr('disabled', 'disabled').addClass('loading');
 	var url = Routing.generate('ambiguss_glose_get_by_motambigu');
 	$.post(url, {motAmbigu: motAmbigu}, function (data) {
-		select.find('option').remove();
-		select.append('<option value>Choississez une glose</option>');
 		$.each(data, function (index) {
-			select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>')
-		})
+			select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>');
+		});
+		select.removeAttr('disabled').removeClass('loading');
 	}, "json");
 }
 
@@ -82,7 +84,7 @@ function addGloseModal(event) {
 		source: function (request, response) {
 			var url = Routing.generate('ambiguss_glose_get_autocomplete');
 			$.getJSON(url + '?term=' + request.term, function (data) {
-				input.parent().append('<div id="resnul" hidden>Aucune glose déjà existante à vous proposer</div>');
+				input.parent().append('<div id="resnul" class="text-danger" hidden>Aucune glose déjà existante à vous proposer</div>');
 				if (data.length === 0) {
 					input.parent().find('#resnul').show();
 				} else {
@@ -108,12 +110,23 @@ function addGloseModal(event) {
 			$(form).next().remove();
 			if (data.status) {
 				// On ajoute la nouvelle glose à la liste des gloses du select
-				event.data.prototype.find('select.gloses').append('<option value="' + data.glose.id +
-					'">' + data.glose.valeur + '</option>');
+				select = event.data.prototype.find('select.gloses');
+				motAmbigu = $(select).next().val();
+				$("select.gloses").each(function () {
+					// Ajout la glose dans tous les select avec la même valeur de mot ambigu
+					if ($(this).next().val() === motAmbigu) {
+						$(this).append('<option value="' + data.glose.id + '">' + data.glose.valeur + '</option>');
+					}
+				});
 				// On referme la modale
-				$('#modal').modal('hide');
+				$(form).after(
+					'<div class="alert alert-success alert-dismissible fade in" role="alert">'
+					+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+					+ 'Glose ajoutée</div>'
+				);
+				$(form).clearForm();
 			} else {
-				$(form).after('<div class="alert alert-danser">Erreur</div>')
+				$(form).after('<div class="alert alert-danser">Erreur</div>');
 			}
 		},
 		error: function(){

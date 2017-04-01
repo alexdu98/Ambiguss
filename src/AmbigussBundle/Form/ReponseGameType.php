@@ -6,7 +6,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReponseGameType extends AbstractType
 {
@@ -28,13 +27,19 @@ class ReponseGameType extends AbstractType
 		        'class' => 'AmbigussBundle\Entity\Glose',
 		        'choice_label' => 'valeur',
 		        'label' => '__glose__',
-	            'required' => true
+		        'required' => true,
+		        'attr' => array('class' => 'gloses'),
 	        ))
 	        ->remove('motAmbiguPhrase')
             ->add('idMotAmbiguPhrase', HiddenType::class, array(
             	'attr' => array('class' => 'idMotAmbiguPhrase'),
 	            'mapped' => false
-            ));
+            ))
+	        ->add('motAmbigu', HiddenType::class, array(
+		        'attr' => array('disabled' => true),
+		        'mapped' => false,
+		        'data' => '__motAmbigu__',
+	        ));
     }
     
     public function getParent(){

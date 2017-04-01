@@ -1,14 +1,16 @@
 <div class="form-group row">
 	<div id="ambigussbundle_game_reponses___name__">
 		<div class="col-md-2 col-md-offset-2 text-right">
-			<label class="control-label required" for="ambigussbundle_game_reponses___name___glose">__glose__ (__ordre__)</label>
+			<label class="control-label required" for="ambigussbundle_game_reponses___name___glose"><span class="color-red">__motAmbigu__</span>
+				<small>(__ordre__)</small>
+			</label>
 		</div>
 		<div class="col-md-4">
-			<select id="ambigussbundle_game_reponses___name___glose" name="ambigussbundle_game[reponses][__name__][glose]" class="form-control
-			gloses" required></select>
+			{{ form_widget(form.glose) }}
+			{{ form_widget(form.motAmbigu) }}
 		</div>
 		<div class="col-md-2 addGloseButton">
 		</div>
-		<input type="hidden" id="ambigussbundle_game_reponses___name___idMotAmbiguPhrase" name="ambigussbundle_game[reponses][__name__][idMotAmbiguPhrase]" class="idMotAmbiguPhrase"/>
+		{{ form_widget(form.idMotAmbiguPhrase) }}
 	</div>
 </div>

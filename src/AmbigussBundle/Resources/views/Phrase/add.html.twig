@@ -23,7 +23,8 @@
 				    </h3>
 				    <div class="text-center">
 					    {% for map in newPhrase.motsAmbigusPhrase %}
-				            <b>{{ map.getMotAmbigu.getValeur }}</b> ({{ map.getOrdre }}) :
+						    <b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
+						    <small>({{ map.getOrdre }})</small> :
 							{% for reponse in map.reponses %}
 								{{ reponse.valeurGlose }} -> {{ reponse.poidsReponse.label }}
 							{% endfor %}

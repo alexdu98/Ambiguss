@@ -2,12 +2,10 @@
 namespace AmbigussBundle\Form;
 use AmbigussBundle\Repository\PoidsReponseRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MotAmbiguAddPhraseType extends AbstractType
 {
@@ -27,19 +25,23 @@ class MotAmbiguAddPhraseType extends AbstractType
 				'choice_label' => 'valeur',
 				'label' =>  'Glose associée',
 				'mapped' => false,
-			    'required' => true
+				'required' => true,
+				'attr' => array(
+					'class' => 'gloses',
+					'required' => 'required',
+				),
 			))
 			->add('poidsReponse', EntityType::class, array(
 				'class' => 'AmbigussBundle\Entity\PoidsReponse',
 				'choice_label' => 'label',
 				'label' =>  'Choississez le poids de cette glose',
 				'mapped' => false,
-			    'required' => true,
-			    'query_builder' => function(PoidsReponseRepository $rep){
+				'required' => true,
+				'attr' => array('required' => 'required'),
+				'query_builder' => function(PoidsReponseRepository $rep){
 					return $rep->createQueryBuilder('pr')->orderBy('pr.ordre');
 			    }
-			)
-			);
+			));
 	}
 
 	/**

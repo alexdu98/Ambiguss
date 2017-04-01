@@ -3,7 +3,6 @@
 namespace AmbigussBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Phrase
@@ -101,27 +100,13 @@ class Phrase
     }
 
     /**
-     * Set contenu
+     * Get dateCreation
      *
-     * @param string $contenu
-     *
-     * @return Phrase
+     * @return \DateTime
      */
-    public function setContenu($contenu)
+	public function getDateCreation()
     {
-        $this->contenu = $contenu;
-
-        return $this;
-    }
-
-    /**
-     * Get contenu
-     *
-     * @return string
-     */
-    public function getContenu()
-    {
-        return $this->contenu;
+	    return $this->dateCreation;
     }
 
     /**
@@ -139,13 +124,13 @@ class Phrase
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+	public function getDateModification()
     {
-        return $this->dateCreation;
+	    return $this->dateModification;
     }
 
     /**
@@ -163,13 +148,13 @@ class Phrase
     }
 
     /**
-     * Get dateModification
+     * Get signale
      *
-     * @return \DateTime
+     * @return bool
      */
-    public function getDateModification()
+	public function getSignale()
     {
-        return $this->dateModification;
+	    return $this->signale;
     }
 
     /**
@@ -187,13 +172,13 @@ class Phrase
     }
 
     /**
-     * Get signale
+     * Get visible
      *
      * @return bool
      */
-    public function getSignale()
+	public function getVisible()
     {
-        return $this->signale;
+	    return $this->visible;
     }
 
     /**
@@ -211,13 +196,13 @@ class Phrase
     }
 
     /**
-     * Get visible
+     * Get auteur
      *
-     * @return bool
+     * @return \UserBundle\Entity\Membre
      */
-    public function getVisible()
+	public function getAuteur()
     {
-        return $this->visible;
+	    return $this->auteur;
     }
 
     /**
@@ -235,13 +220,13 @@ class Phrase
     }
 
     /**
-     * Get auteur
+     * Get modificateur
      *
      * @return \UserBundle\Entity\Membre
      */
-    public function getAuteur()
+	public function getModificateur()
     {
-        return $this->auteur;
+	    return $this->modificateur;
     }
 
     /**
@@ -256,16 +241,6 @@ class Phrase
         $this->modificateur = $modificateur;
 
         return $this;
-    }
-
-    /**
-     * Get modificateur
-     *
-     * @return \UserBundle\Entity\Membre
-     */
-    public function getModificateur()
-    {
-        return $this->modificateur;
     }
 
     /**
@@ -317,6 +292,30 @@ class Phrase
     public function getContenuHTML(){
     	return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b class="color-red" title="Ce mot est ambigu (id : $1)">$2</b>', $this->getContenu());
     }
+
+	/**
+	 * Get contenu
+	 *
+	 * @return string
+	 */
+	public function getContenu()
+	{
+		return $this->contenu;
+	}
+
+	/**
+	 * Set contenu
+	 *
+	 * @param string $contenu
+	 *
+	 * @return Phrase
+	 */
+	public function setContenu($contenu)
+	{
+		$this->contenu = $contenu;
+
+		return $this;
+	}
 
     /**
      * Add motsAmbigusPhrase
@@ -384,7 +383,7 @@ class Phrase
 		    return array('succes' => false, 'message' => 'Il n\'y a pas le même nom de balise <amb> et </amb>');
 
 	    $mots_ambigu = array();
-	    $regex = '#\<amb id\="([0-9]+)"\>(.*?)\</amb\>#'; // Faux bug, ne pas toucher
+	    $regex = '#\<amb id\="([0-9]+)"\>(.*?)\</amb\>#'; // Faux bug d'affichage PHPStorm, ne pas toucher
 	    preg_match_all($regex, $this->getContenu(), $mots_ambigu, PREG_SET_ORDER);
 
 	    // Au moins 1 mot ambigu
@@ -395,6 +394,16 @@ class Phrase
 	    foreach($mots_ambigu as $ma){
 	    	if($ma[2] != strip_tags($ma[2]))
 			    return array('succes' => false, 'message' => 'Il ne faut pas de balise imbriquée');
+	    }
+
+	    // Mot mal sélectionné
+	    preg_match_all('#[a-zA-Z]\<amb|amb\>[a-zA-Z]#', $this->getContenu(), $arr, PREG_SET_ORDER);
+	    if(!empty($arr))
+	    {
+		    return array(
+			    'succes' => false,
+			    'message' => 'Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être une lettre).',
+		    );
 	    }
 
 	    // Pas de mot ambigu avec le même id

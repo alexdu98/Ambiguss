@@ -2,13 +2,11 @@
 	<div id='phrase_add_motsAmbigusPhrase___name__' class="row row-eq-height">
 		<div class='form-group col-md-2'>
 			<label class='control-label required' for='phrase_add_motsAmbigusPhrase___name___valeur'>Mot ambigu (__id__)</label>
-			<input type='text' id='phrase_add_motsAmbigusPhrase___name___valeur' name='phrase_add[motsAmbigusPhrase][__name__][valeur]' required='required' placeholder='Mot ambigu' class='amb form-control' />
+			{{ form_widget(form.children.valeur) }}
 		</div>
 		<div class='form-group col-md-3'>
 			<label class='control-label required' for='phrase_add_motsAmbigusPhrase___name___gloses'>Glose associée</label>
-			<select id="phrase_add_motsAmbigusPhrase___name___gloses"
-					name="phrase_add[motsAmbigusPhrase][__name__][gloses]" class="form-control gloses" required>
-			</select>
+			{{ form_widget(form.children.gloses) }}
 		</div>
 		<div class='form-group col-md-3'>
 			<label class='control-label required' for='phrase_add_motsAmbigusPhrase___name___poidsReponse' required>Choississez le poids de cette glose</label>

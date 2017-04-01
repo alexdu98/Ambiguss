@@ -2,16 +2,13 @@
 
 namespace AmbigussBundle\Controller;
 
-use AmbigussBundle\AmbigussBundle;
 use AmbigussBundle\Entity\AimerPhrase;
 use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Entity\MotAmbiguPhrase;
 use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
-use AmbigussBundle\Form\PhraseType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class PhraseController extends Controller{
@@ -32,6 +29,7 @@ class PhraseController extends Controller{
 
 				// Vérifie que la phrase soit bien formée
 				$res = $phrase->isValid();
+
 				if($res['succes'] === true){
 
 					$mots_ambigu = $res['motsAmbigus'];
@@ -62,8 +60,10 @@ class PhraseController extends Controller{
 					$phrase->getAuteur()->updateCredits(-$this->getParameter('costCreatePhraseCredits'));
 					$phrase->getAuteur()->updatePoints($this->getParameter('gainCreatePhrasePoints'));
 
+					$em = $this->getDoctrine()->getManager();
+					$em->getConnection()->beginTransaction();
 					try{
-						$em = $this->getDoctrine()->getManager();
+
 						$em->persist($phrase);
 						$em->flush();
 
@@ -104,6 +104,8 @@ class PhraseController extends Controller{
 							$em->flush();
 						}
 
+						$em->getConnection()->commit();
+
 						$newPhrase = $phrase;
 
 						// Réinitialise le formulaire
@@ -111,6 +113,7 @@ class PhraseController extends Controller{
 						$form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
 					}
 					catch(\Exception $e){
+						$em->getConnection()->rollBack();
 						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $e->getMessage());
 					}
 				}

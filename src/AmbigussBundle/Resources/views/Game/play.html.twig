@@ -126,20 +126,20 @@
 			}
 
 			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
-			function addReponse($container, motAmbigu) {
+			function addReponse($container, motAmbiguPhrase) {
 				// On ajoute le nom unique et l'id
 				var template = $container.attr('data-prototype')
 					.replace(/__name__label__/g, '')
 					.replace(/__name__/g, index)
-					.replace(/__glose__/g, motAmbigu[0])
-					.replace(/__ordre__/g, motAmbigu[2])
+					.replace(/__motAmbigu__/g, motAmbiguPhrase[0].trim())
+					.replace(/__ordre__/g, motAmbiguPhrase[2])
 					.replace(/__id__/g, index);
 				var $prototype = $(template);
 				// Trouve la balise qui à la class amb
 				var idMotAmbiguPhrase = $prototype.find('.idMotAmbiguPhrase');
-				idMotAmbiguPhrase.val(motAmbigu[1]);
-				addAddGloseButton($prototype, motAmbigu[0], addGloseButtonIsClicked);
-				getGloses($prototype.find('select.gloses'), motAmbigu[0]);
+				idMotAmbiguPhrase.val(motAmbiguPhrase[1]);
+				addAddGloseButton($prototype, motAmbiguPhrase[0], addGloseButtonIsClicked);
+				getGloses($prototype.find('select.gloses'), motAmbiguPhrase[0]);
 				$container.append($prototype);
 				index++;
 			}

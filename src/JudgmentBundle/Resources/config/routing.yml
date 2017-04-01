@@ -1,3 +1,9 @@
 judgment_homepage:
-    path:     /
-    defaults: { _controller: JudgmentBundle:Main:index }
+    path: /jugement
+    defaults:
+        _controller: JudgmentBundle:Main:index
+
+jugement_add:
+    path: /jugement/add
+    defaults:
+        _controller: JudgmentBundle:API:addJugement

@@ -12,10 +12,9 @@ use AmbigussBundle\Entity\Game;
 use AmbigussBundle\Form\GameType;
 use AmbigussBundle\Form\GloseAddType;
 use JudgmentBundle\Entity\Jugement;
+use JudgmentBundle\Form\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-use UserBundle\Entity\Niveau;
 
 class GameController extends Controller{
 
@@ -195,10 +194,10 @@ class GameController extends Controller{
 			'action' => $this->generateUrl('ambiguss_glose_add')
 		));
 
-		//jugement (cas signalement)
-		$jug = new \JudgmentBundle\Entity\Jugement();
-		$addJugementForm = $this->get('form.factory')->create(JudgmentBundle\Form\JugementAddType::class, $jug, array(
-			'action' => $this->generateUrl('ambiguss_jugement_add')
+		// jugement (cas signalement)
+		$jug = new Jugement();
+		$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
+			'action' => $this->generateUrl('jugement_add')
 		));
 
 		return $this->render('AmbigussBundle:Game:play.html.twig', array(

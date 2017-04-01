@@ -18,7 +18,9 @@ parameters:
     gainLikePhraseCredits: 5
     gainPerLikePhrasePoints: 25
     # Classement
-    maxResultForClassementGeneral : 100
+    maxResultForClassementGeneral: 100
+    # Jugement
+    dureeDeliberationSecondes: 432000 # 5 jours
 
 
 framework:

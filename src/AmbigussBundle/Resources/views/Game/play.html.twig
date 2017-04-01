@@ -174,27 +174,38 @@
 						}
 					}
 				});
-			})
+			});
 
             $("#phraseSignal").click(function(){
                 var boutonSignal = $(this);
                 setModalTitle('Signaler une partie');
-                setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig',
-                {'form': addJugementForm})|e('js') }}');
+                setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
                 $("#modal").modal("show");
-// TODO : récup if success pour appeller $.getJSON(' path('ambiguss_phrase_signal'....
 
-
-                $.getJSON('{{ path('ambiguss_phrase_signal', {'id':phrase_id}) }}', function(data){
-                    if(data.status === 'succes') {
-                        if (data.action === 'signal') {
-                            boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Phrase signalée');
-                        }
-                        else{
-                            boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Je signale cette phrase');
-                        }}
-
-                });
+				// On envoit le formulaire par ajax
+				$('form[name="jugement_add"]').ajaxForm({
+					beforeSubmit: function (arr, form, opt) {
+						// On affiche l'image laoding en attendant la réponse
+						$(form).after('<img src="' + urlImageLoading + '" id="loading">');
+					},
+					// Quand la réponse Ajax sera reçu, on appelle ce callback
+					success: function (data, status, xhr, form) {
+						if(data.succes) {
+							if (data.action === 'signale') {
+								boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Phrase signalée');
+							}
+							else{
+								boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Je signale cette phrase');
+							}
+						}
+					},
+					error: function(){
+						loading = $("#loading");
+						next = loading.prev().nextAll();
+						loading.before('<span class="text-danger">Erreur (pas encore implémenté)</span>');
+						next.remove();
+					}
+				});
             })
 		});
 	</script>

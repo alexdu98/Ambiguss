@@ -103,7 +103,7 @@ function addGloseModal(event) {
 			$(form).after('<img src="' + urlImageLoading + '" id="loading">');
 		},
 		// Quand la réponse Ajax sera reçu, on appelle ce callback
-		'success': function (data, status, xhr, form) {
+		success: function (data, status, xhr, form) {
 			// On supprime l'image loading
 			$(form).next().remove();
 			if (data.status) {
@@ -115,6 +115,12 @@ function addGloseModal(event) {
 			} else {
 				$(form).after('<div class="alert alert-danser">Erreur</div>')
 			}
+		},
+		error: function(){
+			loading = $("#loading");
+			next = loading.prev().nextAll();
+			loading.before('<span class="text-danger">Erreur</span>');
+			next.remove();
 		}
 	});
 }

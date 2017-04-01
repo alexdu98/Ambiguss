@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% set trouve = 0 %}
-
 {% block title %}Jeu{% endblock %}
 {% block titre %}<h1>Jouons !</h1>{% endblock %}
 {% block contenu %}
@@ -31,17 +29,15 @@
 				<h3 id="result"></h3>
 				<div class="form-group">
 					{% if app.user %}
-						{% for like in likes if phrase_id == like %}
-							{% set trouve = 1 %}
-									<button id="phraseLike" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i>
-										Je n'aime
-										plus cette phrase</button>
-						{% endfor %}
-						{%  if trouve==0 %}
-								<button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-									J'aime
-									cette
-									phrase</button>
+						{% if liked %}
+							<button id="phraseLike" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i>
+								Je n'aime
+								plus cette phrase</button>
+						{% else %}
+							<button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+								J'aime
+								cette
+								phrase</button>
 						{% endif %}
 					{% endif %}
 

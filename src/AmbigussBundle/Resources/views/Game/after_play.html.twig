@@ -42,7 +42,7 @@
 	        <div class="text-center">
 		        <ul><h4><span class="color-green">Les votes précédents étaient :</span></h4>
 		        {% for ordre, ma in stats %}
-			        <li class="not-list"><b>{{ ma.valeurMA }}</b> ({{ ordre }}) :
+			        <li class="not-list"><b class="color-red">{{ ma.valeurMA }}</b> ({{ ordre }}) :
 				        {% for valeurGlose, res in ma.gloses %}
 					        {% if res.isSelected %}<b>{% endif %}
 					            {{ valeurGlose ~ ' ' ~ res.nbVotes }}
@@ -53,9 +53,6 @@
 							{% if loop.last %}.{% else %},{% endif %}
 				        {% endfor %}
 			        </li>
-			        {% if not loop.last %}
-			            <hr>
-			        {% endif %}
 		        {% endfor %}
 		        </ul>
 	        </div>

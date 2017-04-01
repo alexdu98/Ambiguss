@@ -6,6 +6,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,7 +24,11 @@ class GameType extends AbstractType
 	            'allow_delete' => true,
 	            'label' => false,
                 'required' => true,
-            ));
+            ))
+	        ->add('valider', SubmitType::class, array(
+		        'label' => 'Valider',
+		        'attr' => array('class' => 'btn btn-primary')
+	        ));
     }
     
     /**

@@ -73,3 +73,7 @@ ambiguss_phrase_signal:
         _controller: AmbigussBundle:Phrase:signal
     requirements:
         id: \d+
+ambiguss_jugement_add:
+    path: /ambiguss/jugement/add
+    defaults:
+        _controller: AmbigussBundle:API:addJugement

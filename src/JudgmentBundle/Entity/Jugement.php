@@ -309,7 +309,7 @@ class Jugement
     /**
      * Get juge
      *
-     * @return \UserBundle\Bundle\Entity\Membre
+     * @return \UserBundle\Entity\Membre
      */
     public function getJuge()
     {

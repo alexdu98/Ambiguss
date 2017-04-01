@@ -51,7 +51,7 @@
                     {% else %}
 
 						{% if signal==0 %}
-						<button id="phraseSignal" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+						<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
 							Je signale
 							cette
 							phrase</button>
@@ -177,10 +177,18 @@
 			})
 
             $("#phraseSignal").click(function(){
+
                 var boutonSignal = $(this);
+                setModalTitle('Signaler une partie');
+                setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig',
+                {'form': addJugementForm})|e('js') }}');
+                $("#modal").modal("show");
+// TODO : récup if success pour appeller $.getJSON(' path('ambiguss_phrase_signal'....
+
+
                 $.getJSON('{{ path('ambiguss_phrase_signal', {'id':phrase_id}) }}', function(data){
                     if(data.status === 'succes') {
-                        if (data.action === 'signal') {
+						if (data.action === 'signal') {
                             boutonSignal.html('<i class="glyphicon ' +
                                 'glyphicon-exclamation-signn" ' +
                                 'aria-hidden="true"></i> Phrase signalée');

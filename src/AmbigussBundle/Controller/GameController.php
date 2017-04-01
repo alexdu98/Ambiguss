@@ -12,6 +12,7 @@ namespace AmbigussBundle\Controller;
 use AmbigussBundle\Entity\Game;
 use AmbigussBundle\Form\GameType;
 use AmbigussBundle\Form\GloseAddType;
+use JudgmentBundle\Entity\Jugement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -188,8 +189,14 @@ class GameController extends  Controller
 
 	    $glose = new \AmbigussBundle\Entity\Glose();
 	    $addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array('action' =>
-		                                                                                          $this->generateUrl
-		                                                                                          ('ambiguss_glose_add')));
+            $this->generateUrl
+            ('ambiguss_glose_add')));
+
+	    //jugement ( cas signalement)
+        $jug= new \JudgmentBundle\Entity\Jugement();
+        $addJugementForm = $this->get('form.factory')->create(\JudgmentBundle\Form\JugementAddType::class, $jug, array('action' =>
+            $this->generateUrl
+            ('ambiguss_jugement_add')));
 
         return $this->render('AmbigussBundle:Game:play.html.twig', array(
             'form' => $form->createView(),
@@ -199,7 +206,8 @@ class GameController extends  Controller
             'likes' => $likesArray,
             'alreadyPlayed' => $allPhrasesPlayed,
             'signal' =>$signal,
-            'addGloseForm' => $addGloseForm->createView()
+            'addGloseForm' => $addGloseForm->createView(),
+            'addJugementForm' => $addJugementForm->createView()
         ));
     }
 

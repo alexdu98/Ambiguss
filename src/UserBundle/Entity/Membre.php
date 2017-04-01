@@ -891,4 +891,30 @@ class Membre implements AdvancedUserInterface, \Serializable
     {
         return $this->phrases;
     }
+
+	/**
+	 * Met à jour le nombre de points
+	 * @param $points
+	 *
+	 * @return $this
+	 */
+    public function updatePoints($points){
+    	$this->pointsClassement += $points;
+    	if($this->pointsClassement < 0)
+		    $this->pointsClassement = 0;
+    	return $this;
+    }
+
+	/**
+	 * Met à jour le nombre de crédits
+	 * @param $credits
+	 *
+	 * @return $this
+	 */
+    public function updateCredits($credits){
+	    $this->credits += $credits;
+	    if($this->credits < 0)
+		    $this->credits = 0;
+	    return $this;
+    }
 }

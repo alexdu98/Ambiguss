@@ -73,8 +73,8 @@
 								    <li><a href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
 								    <br>
 								    <div>
-									    Points : {{ app.user.pointsClassement|capitalize }} |
-									    Crédits : {{ app.user.Credits|capitalize }}
+									    Points : <span id="points">{{ app.user.pointsClassement|capitalize }}</span> |
+									    Crédits : <span id="credits">{{ app.user.Credits|capitalize }}</span>
 								    </div>
 							    {% else %}
 								    <li><a href="{{ path('user_inscription') }}">S'inscrire</a></li>

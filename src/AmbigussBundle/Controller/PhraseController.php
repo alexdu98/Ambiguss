@@ -59,6 +59,9 @@ class PhraseController extends Controller{
 						$phrase->addMotAmbiguPhrase($map);
 					}
 
+					$phrase->getAuteur()->updateCredits(-$this->getParameter('costCreatePhraseCredits'));
+					$phrase->getAuteur()->updatePoints($this->getParameter('gainCreatePhrasePoints'));
+
 					try{
 						$em = $this->getDoctrine()->getManager();
 						$em->persist($phrase);
@@ -124,6 +127,9 @@ class PhraseController extends Controller{
 			return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
 				'form'         => $form->createView(),
 				'newPhrase'    => $newPhrase,
+				'costCreatePhraseCredits' => $this->getParameter('costCreatePhraseCredits'),
+				'gainCreatePhrasePoints' => $this->getParameter('gainCreatePhrasePoints'),
+				'gainPerLikePhrasePoints' => $this->getParameter('gainPerLikePhrasePoints'),
 				'addGloseForm' => $addGloseForm->createView()
 			));
 		}
@@ -142,20 +148,24 @@ class PhraseController extends Controller{
 		));
 
 		$action = NULL;
+		$creditsGain = null;
 		if(!$aimerPhrase){
+			$creditsGain = $this->getParameter('gainLikePhraseCredits');
 			$aimerPhrase = new AimerPhrase();
 			$aimerPhrase->setPhrase($phrase)->setMembre($this->getUser());
-			//ajout 5 points de crédit
-			$this->getUser()->setCredits($this->getUser()->getCredits() + 5);
-			$action = 'add';
+			// ajoute 5 crédits au membre
+			$this->getUser()->updateCredits($creditsGain);
+			// ajoute 25 points au créateur
+			$aimerPhrase->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
+			$action = 'like';
 		}
 		elseif($aimerPhrase->getActive() === false){
 			$aimerPhrase->setActive(true);
-			$action = 'add';
+			$action = 'relike';
 		}
 		else{
 			$aimerPhrase->setActive(false);
-			$action = 'delete';
+			$action = 'unlike';
 		}
 
 		$em = $this->getDoctrine()->getManager();
@@ -164,7 +174,8 @@ class PhraseController extends Controller{
 
 		return $this->json(array(
 			'status' => 'succes',
-			'action' => $action
+			'action' => $action,
+		    'credits' => $creditsGain
 		));
 	}
 

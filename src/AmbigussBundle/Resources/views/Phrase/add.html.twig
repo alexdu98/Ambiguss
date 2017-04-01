@@ -8,6 +8,11 @@
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
 
+		    {% if app.user.credits < costCreatePhraseCredits %}
+		        <div class="alert alert-danger">
+					Vous n'avez pas assez de crédits pour créer une phrase ({{ app.user.credits }}/{{ costCreatePhraseCredits }}).
+		        </div>
+		    {% endif %}
 
 		    {% if newPhrase is not null %}
 			    <div class="alert alert-success alert-dismissible fade in" role="alert">
@@ -55,14 +60,16 @@
 				">
 		    	</div>
 		    </div>
-
 		    {% do form.motsAmbigusPhrase.setRendered %}
 
-		    {{ form_row(form.creer) }}
+		    {% if app.user.credits < costCreatePhraseCredits %}
+			    {% do form.creer.setRendered %}
+		    {% else %}
+			    {{ form_row(form.creer) }}
+		    {% endif %}
 
+		    {{ form_rest(form) }}
 
-
-            {{ form_rest(form) }}
 		    {{ form_end(form) }}
 
 		</div>
@@ -254,6 +261,12 @@
 						+ '* Si aucune glose ne vous est proposée, ou que celles-ci ne vous satisfont pas, vous pouvez '
 						+ 'en ajouter avec le bouton "Ajouter une glose".'
 					+ '</p>'
+					+ '<div class="alert alert-info">'
+						+ 'La création d\'une phrase '
+						+ '<b>coûte {{ costCreatePhraseCredits }} crédits</b>, '
+						+ '<b>rapporte {{ gainCreatePhrasePoints }} points</b>, '
+						+ 'et <b>{{ gainPerLikePhrasePoints }} points supplémentaires par like</b>.<br>'
+					+ '</div>'
 				);
 			}
 

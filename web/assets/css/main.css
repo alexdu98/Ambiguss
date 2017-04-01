@@ -200,6 +200,13 @@ footer h4{
 .page-row-expanded{
 	height: 100%;
 }
+button.infobulle{
+	border: none;
+	background: none;
+}
+button.infobulle img{
+	width: 100px;
+}
 
 
 /*

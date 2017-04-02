@@ -3,7 +3,6 @@
 namespace AmbigussBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * MotAmbigu
@@ -43,12 +42,30 @@ class MotAmbigu
      */
     private $dateModification;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="active", type="boolean")
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="signale", type="boolean")
+	 */
+	private $signale;
+
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="visible", type="boolean")
      */
-    private $active;
+	private $visible;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre", inversedBy="motsAmbigus")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private $auteur;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+	 */
+	private $modificateur;
 
     /**
      * @ORM\ManyToMany(targetEntity="Glose", inversedBy="motsAmbigus", cascade={"persist"})
@@ -62,7 +79,9 @@ class MotAmbigu
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-	    $this->active = 1;
+	    $this->signale = 0;
+	    $this->visible = 1;
+	    $this->auteur = new \Doctrine\Common\Collections\ArrayCollection();
 	    $this->gloses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -75,6 +94,16 @@ class MotAmbigu
     {
         return $this->id;
     }
+
+	/**
+	 * Get valeur
+	 *
+	 * @return string
+	 */
+	public function getValeur()
+	{
+		return $this->valeur;
+	}
 
     /**
      * Set valeur
@@ -91,13 +120,13 @@ class MotAmbigu
     }
 
     /**
-     * Get valeur
+     * Get dateCreation
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getValeur()
+	public function getDateCreation()
     {
-        return $this->valeur;
+	    return $this->dateCreation;
     }
 
     /**
@@ -115,13 +144,13 @@ class MotAmbigu
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+	public function getDateModification()
     {
-        return $this->dateCreation;
+	    return $this->dateModification;
     }
 
     /**
@@ -139,37 +168,27 @@ class MotAmbigu
     }
 
     /**
-     * Get dateModification
-     *
-     * @return \DateTime
-     */
-    public function getDateModification()
-    {
-        return $this->dateModification;
-    }
-
-    /**
-     * Set active
-     *
-     * @param boolean $active
-     *
-     * @return MotAmbigu
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
-     * Get active
+     * Get visible
      *
      * @return bool
      */
-    public function getActive()
+	public function getVisible()
     {
-        return $this->active;
+	    return $this->visible;
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     *
+     * @return MotAmbigu
+     */
+	public function setVisible($visible)
+    {
+	    $this->visible = $visible;
+
+        return $this;
     }
 
     /**
@@ -205,4 +224,76 @@ class MotAmbigu
     {
         return $this->gloses;
     }
+
+	/**
+	 * Get signale
+	 *
+	 * @return boolean
+	 */
+	public function getSignale()
+	{
+		return $this->signale;
+	}
+
+	/**
+	 * Set signale
+	 *
+	 * @param boolean $signale
+	 *
+	 * @return MotAmbigu
+	 */
+	public function setSignale($signale)
+	{
+		$this->signale = $signale;
+
+		return $this;
+	}
+
+	/**
+	 * Get auteur
+	 *
+	 * @return \UserBundle\Entity\Membre
+	 */
+	public function getAuteur()
+	{
+		return $this->auteur;
+	}
+
+	/**
+	 * Set auteur
+	 *
+	 * @param \UserBundle\Entity\Membre $auteur
+	 *
+	 * @return MotAmbigu
+	 */
+	public function setAuteur(\UserBundle\Entity\Membre $auteur)
+	{
+		$this->auteur = $auteur;
+
+		return $this;
+	}
+
+	/**
+	 * Get modificateur
+	 *
+	 * @return \UserBundle\Entity\Membre
+	 */
+	public function getModificateur()
+	{
+		return $this->modificateur;
+	}
+
+	/**
+	 * Set modificateur
+	 *
+	 * @param \UserBundle\Entity\Membre $modificateur
+	 *
+	 * @return MotAmbigu
+	 */
+	public function setModificateur(\UserBundle\Entity\Membre $modificateur = null)
+	{
+		$this->modificateur = $modificateur;
+
+		return $this;
+	}
 }

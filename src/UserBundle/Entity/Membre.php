@@ -4,9 +4,10 @@ namespace UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * Membre
  *
@@ -216,6 +217,11 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
     private $gloses;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\MotAmbigu", mappedBy="auteur")
+	 */
+	private $motsAmbigus;
+
 
 	/**
 	 * Constructor
@@ -228,7 +234,9 @@ class Membre implements AdvancedUserInterface, \Serializable
 		$this->newsletter = true;
 		$this->banni = false;
 		$this->actif = false;
-		$this->membreRoles = new ArrayCollection();
+		$this->phrases = new ArrayCollection();
+		$this->gloses = new ArrayCollection();
+		$this->motsAmbigus = new ArrayCollection();
 	}
 
     /**
@@ -242,27 +250,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set pseudo
-     *
-     * @param string $pseudo
-     *
-     * @return Membre
-     */
-    public function setPseudo($pseudo)
-    {
-        $this->pseudo = $pseudo;
-
-        return $this;
-    }
-
-    /**
-     * Get pseudo
+     * Get email
      *
      * @return string
      */
-    public function getPseudo()
+	public function getEmail()
     {
-        return $this->pseudo;
+	    return $this->email;
     }
 
     /**
@@ -280,37 +274,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get email
+     * Get dateInscription
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getEmail()
+	public function getDateInscription()
     {
-        return $this->email;
-    }
-
-    /**
-     * Set mdp
-     *
-     * @param string $mdp
-     *
-     * @return Membre
-     */
-    public function setMdp($mdp)
-    {
-        $this->mdp = $mdp;
-
-        return $this;
-    }
-
-    /**
-     * Get mdp
-     *
-     * @return string
-     */
-    public function getMdp()
-    {
-        return $this->mdp;
+	    return $this->dateInscription;
     }
 
     /**
@@ -328,13 +298,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get dateInscription
+     * Get dateConnexion
      *
      * @return \DateTime
      */
-    public function getDateInscription()
+	public function getDateConnexion()
     {
-        return $this->dateInscription;
+	    return $this->dateConnexion;
     }
 
     /**
@@ -352,13 +322,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get dateConnexion
+     * Get sexe
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getDateConnexion()
+	public function getSexe()
     {
-        return $this->dateConnexion;
+	    return $this->sexe;
     }
 
     /**
@@ -376,13 +346,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get sexe
+     * Get dateNaissance
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getSexe()
+	public function getDateNaissance()
     {
-        return $this->sexe;
+	    return $this->dateNaissance;
     }
 
     /**
@@ -400,13 +370,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get dateNaissance
+     * Get pointsClassement
      *
-     * @return \DateTime
+     * @return int
      */
-    public function getDateNaissance()
+	public function getPointsClassement()
     {
-        return $this->dateNaissance;
+	    return $this->pointsClassement;
     }
 
     /**
@@ -424,13 +394,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get pointsClassement
+     * Get credits
      *
      * @return int
      */
-    public function getPointsClassement()
+	public function getCredits()
     {
-        return $this->pointsClassement;
+	    return $this->credits;
     }
 
     /**
@@ -448,13 +418,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get credits
+     * Get cleOubliMdp
      *
-     * @return int
+     * @return string
      */
-    public function getCredits()
+	public function getCleOubliMdp()
     {
-        return $this->credits;
+	    return $this->cleOubliMdp;
     }
 
     /**
@@ -472,13 +442,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get cleOubliMdp
+     * Get newsletter
      *
-     * @return string
+     * @return bool
      */
-    public function getCleOubliMdp()
+	public function getNewsletter()
     {
-        return $this->cleOubliMdp;
+	    return $this->newsletter;
     }
 
     /**
@@ -496,37 +466,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get newsletter
+     * Get commentaireBan
      *
-     * @return bool
+     * @return string
      */
-    public function getNewsletter()
+	public function getCommentaireBan()
     {
-        return $this->newsletter;
-    }
-
-    /**
-     * Set banni
-     *
-     * @param boolean $banni
-     *
-     * @return Membre
-     */
-    public function setBanni($banni)
-    {
-        $this->banni = $banni;
-
-        return $this;
-    }
-
-    /**
-     * Get banni
-     *
-     * @return bool
-     */
-    public function getBanni()
-    {
-        return $this->banni;
+	    return $this->commentaireBan;
     }
 
     /**
@@ -544,13 +490,13 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get commentaireBan
+     * Get dateDeban
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getCommentaireBan()
+	public function getDateDeban()
     {
-        return $this->commentaireBan;
+	    return $this->dateDeban;
     }
 
     /**
@@ -567,38 +513,14 @@ class Membre implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-    /**
-     * Get dateDeban
-     *
-     * @return \DateTime
-     */
-    public function getDateDeban()
-    {
-        return $this->dateDeban;
-    }
-
 	/**
-	 * Set actif
+	 * Get idFacebook
 	 *
-	 * @param boolean $actif
-	 *
-	 * @return Membre
+	 * @return string
 	 */
-	public function setActif($actif)
+	public function getIdFacebook()
 	{
-		$this->actif = $actif;
-
-		return $this;
-	}
-
-	/**
-	 * Get actif
-	 *
-	 * @return boolean
-	 */
-	public function getActif()
-	{
-		return $this->actif;
+		return $this->idFacebook;
 	}
 
 	/**
@@ -616,13 +538,13 @@ class Membre implements AdvancedUserInterface, \Serializable
 	}
 
 	/**
-	 * Get idFacebook
+	 * Get idTwitter
 	 *
 	 * @return string
 	 */
-	public function getIdFacebook()
+	public function getIdTwitter()
 	{
-		return $this->idFacebook;
+		return $this->idTwitter;
 	}
 
 	/**
@@ -640,37 +562,13 @@ class Membre implements AdvancedUserInterface, \Serializable
 	}
 
 	/**
-	 * Get idTwitter
+	 * Get niveau
 	 *
-	 * @return string
+	 * @return \UserBundle\Entity\Niveau
 	 */
-	public function getIdTwitter()
-	{
-		return $this->idTwitter;
-	}
-
-    /**
-     * Set groupe
-     *
-     * @param \UserBundle\Entity\Groupe $groupe
-     *
-     * @return Membre
-     */
-    public function setGroupe(\UserBundle\Entity\Groupe $groupe)
+	public function getNiveau()
     {
-        $this->groupe = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Get groupe
-     *
-     * @return \UserBundle\Entity\Groupe
-     */
-    public function getGroupe()
-    {
-        return $this->groupe;
+	    return $this->niveau;
     }
 
     /**
@@ -688,55 +586,30 @@ class Membre implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Get niveau
+     * Add membreRole
      *
-     * @return \UserBundle\Entity\Niveau
+     * @param \UserBundle\Entity\MembreRole $membreRole
+     *
+     * @return Membre
      */
-    public function getNiveau()
-    {
-        return $this->niveau;
-    }
-
-    /**     
-     * Add membreRole       
-     *      
-     * @param \UserBundle\Entity\MembreRole $membreRole
-     *      
-     * @return Membre       
-     */     
     public function addMembreRole(\UserBundle\Entity\MembreRole $membreRole)
-    {       
-        $this->membreRoles[] = $membreRole;     
-        
-        $membreRole->setMembre($this);      
-        
-        return $this;       
-    }       
-        
-    /**     
-     * Remove membreRole        
-     *      
-     * @param \UserBundle\Entity\MembreRole $membreRole
-     */     
-    public function removeMembreRole(\UserBundle\Entity\MembreRole $membreRole)
-    {       
-        $this->membreRoles->removeElement($membreRole);     
-    }       
-        
-    /**     
-     * Get membreRoles      
-     *      
-     * @return \Doctrine\Common\Collections\Collection      
-     */     
-    public function getMembreRoles()        
-    {       
-        return $this->membreRoles;      
-    }
+    {
+	    $this->membreRoles[] = $membreRole;
 
+	    $membreRole->setMembre($this);
+
+	    return $this;
+    }
 
 	/**
-	 * IMPLEMENTS AdvancedUserInterface
+	 * Remove membreRole
+	 *
+     * @param \UserBundle\Entity\MembreRole $membreRole
 	 */
+    public function removeMembreRole(\UserBundle\Entity\MembreRole $membreRole)
+    {
+	    $this->membreRoles->removeElement($membreRole);
+    }
 
 	/**
 	 * Get roles (droits)
@@ -751,9 +624,43 @@ class Membre implements AdvancedUserInterface, \Serializable
 
         foreach ($this->getMembreRoles() as $membreRole) {
             $roles[] = $membreRole->getRole()->getNom();
-        }       
+        }
 
         return $roles;
+	}
+
+	/**
+	 * Get groupe
+	 *
+	 * @return \UserBundle\Entity\Groupe
+	 */
+	public function getGroupe()
+	{
+		return $this->groupe;
+	}
+
+	/**
+	 * Set groupe
+	 *
+	 * @param \UserBundle\Entity\Groupe $groupe
+	 *
+	 * @return Membre
+	 */
+	public function setGroupe(\UserBundle\Entity\Groupe $groupe)
+	{
+		$this->groupe = $groupe;
+
+		return $this;
+	}
+
+	/**
+	 * Get membreRoles
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getMembreRoles()
+	{
+		return $this->membreRoles;
 	}
 
 	/**
@@ -765,10 +672,34 @@ class Membre implements AdvancedUserInterface, \Serializable
 		return $this->getMdp();
 	}
 
-    /** 
-     * Get salt 
-     *  
-     * @return null (no use with BCryptEncoder) 
+	/**
+	 * Get mdp
+	 *
+	 * @return string
+	 */
+	public function getMdp()
+	{
+		return $this->mdp;
+	}
+
+	/**
+	 * Set mdp
+	 *
+	 * @param string $mdp
+	 *
+	 * @return Membre
+	 */
+	public function setMdp($mdp)
+	{
+		$this->mdp = $mdp;
+
+		return $this;
+	}
+
+	/**
+	 * Get salt
+	 *
+	 * @return null (no use with BCryptEncoder)
      */
 	public function getSalt(){
 		return null;
@@ -782,6 +713,34 @@ class Membre implements AdvancedUserInterface, \Serializable
 	public function getUsername(){
 		return $this->getPseudo();
 	}
+
+	/**
+	 * Get pseudo
+	 *
+	 * @return string
+	 */
+	public function getPseudo()
+	{
+		return $this->pseudo;
+	}
+
+	/**
+	 * Set pseudo
+	 *
+	 * @param string $pseudo
+	 *
+	 * @return Membre
+	 */
+	public function setPseudo($pseudo)
+	{
+		$this->pseudo = $pseudo;
+
+		return $this;
+	}
+
+	/**
+	 * IMPLEMENTS AdvancedUserInterface
+	 */
 
 	public function eraseCredentials(){}
 
@@ -804,6 +763,30 @@ class Membre implements AdvancedUserInterface, \Serializable
 	}
 
 	/**
+	 * Get banni
+	 *
+	 * @return bool
+	 */
+	public function getBanni()
+	{
+		return $this->banni;
+	}
+
+	/**
+	 * Set banni
+	 *
+	 * @param boolean $banni
+	 *
+	 * @return Membre
+	 */
+	public function setBanni($banni)
+	{
+		$this->banni = $banni;
+
+		return $this;
+	}
+
+	/**
 	 * Check if user credentials has expired
 	 *
 	 * @return bool
@@ -819,6 +802,30 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
 	public function isEnabled(){
 		return $this->getActif();
+	}
+
+	/**
+	 * Get actif
+	 *
+	 * @return boolean
+	 */
+	public function getActif()
+	{
+		return $this->actif;
+	}
+
+	/**
+	 * Set actif
+	 *
+	 * @param boolean $actif
+	 *
+	 * @return Membre
+	 */
+	public function setActif($actif)
+	{
+		$this->actif = $actif;
+
+		return $this;
 	}
 
 	/**
@@ -956,4 +963,38 @@ class Membre implements AdvancedUserInterface, \Serializable
     {
         return $this->gloses;
     }
+
+	/**
+	 * Add motsAmbigus
+	 *
+	 * @param \AmbigussBundle\Entity\MotAmbigu $motsAmbigus
+	 *
+	 * @return Membre
+	 */
+	public function addMotsAmbigus(\AmbigussBundle\Entity\MotAmbigu $motsAmbigus)
+	{
+		$this->motsAmbigus[] = $motsAmbigus;
+
+		return $this;
+	}
+
+	/**
+	 * Remove motsAmbigus
+	 *
+	 * @param \AmbigussBundle\Entity\MotAmbigu $motsAmbigus
+	 */
+	public function removeMotsAmbigus(\AmbigussBundle\Entity\MotAmbigu $motsAmbigus)
+	{
+		$this->motsAmbigus->removeElement($motsAmbigus);
+	}
+
+	/**
+	 * Get motsAmbigus
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getMotsAmbigus()
+	{
+		return $this->motsAmbigus;
+	}
 }

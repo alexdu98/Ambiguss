@@ -47,6 +47,7 @@ class PhraseController extends Controller{
 						// Soit on le trouve dans la BD soit on l'ajoute
 						$mot_ambigu_OBJ = new MotAmbigu();
 						$mot_ambigu_OBJ->setValeur($mot_ambigu[2]);
+						$mot_ambigu_OBJ->setAuteur($this->getUser());
 						$mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu_OBJ);
 
 						$map = new MotAmbiguPhrase();

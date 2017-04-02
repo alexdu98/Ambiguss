@@ -47,6 +47,7 @@ class APIController extends Controller
 				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
 				$motAmbigu = new MotAmbigu();
 				$motAmbigu->setValeur($request->request->get('glose_add')['motAmbigu']);
+				$motAmbigu->setAuteur($this->getUser());
 				$motAmbigu = $repository->findOneOrCreate($motAmbigu);
 
 				$motAmbigu->addGlose($glose);

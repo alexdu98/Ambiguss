@@ -77,7 +77,7 @@ class Reponse
 
     /**
      * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Glose")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $glose;
 
@@ -107,6 +107,16 @@ class Reponse
         return $this->id;
     }
 
+	/**
+	 * Get ip
+	 *
+	 * @return string
+	 */
+	public function getIp()
+	{
+		return $this->ip;
+	}
+
     /**
      * Set ip
      *
@@ -121,15 +131,15 @@ class Reponse
         return $this;
     }
 
-    /**
-     * Get ip
-     *
-     * @return string
-     */
-    public function getIp()
-    {
-        return $this->ip;
-    }
+	/**
+	 * Get dateReponse
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateReponse()
+	{
+		return $this->dateReponse;
+	}
 
 	/**
 	 * Set dateReponse
@@ -146,13 +156,13 @@ class Reponse
 	}
 
 	/**
-	 * Get dateReponse
+	 * Get contenuPhrase
 	 *
-	 * @return \DateTime
+	 * @return string
 	 */
-	public function getDateReponse()
+	public function getContenuPhrase()
 	{
-		return $this->dateReponse;
+		return $this->contenuPhrase;
 	}
 
     /**
@@ -170,13 +180,13 @@ class Reponse
     }
 
     /**
-     * Get contenuPhrase
+     * Get valeurMotAmbigu
      *
      * @return string
      */
-    public function getContenuPhrase()
+	public function getValeurMotAmbigu()
     {
-        return $this->contenuPhrase;
+	    return $this->valeurMotAmbigu;
     }
 
     /**
@@ -194,13 +204,13 @@ class Reponse
     }
 
     /**
-     * Get valeurMotAmbigu
+     * Get valeurGlose
      *
      * @return string
      */
-    public function getValeurMotAmbigu()
+	public function getValeurGlose()
     {
-        return $this->valeurMotAmbigu;
+	    return $this->valeurGlose;
     }
 
     /**
@@ -218,13 +228,13 @@ class Reponse
     }
 
     /**
-     * Get valeurGlose
+     * Get auteur
      *
-     * @return string
+     * @return \UserBundle\Entity\Membre
      */
-    public function getValeurGlose()
+	public function getAuteur()
     {
-        return $this->valeurGlose;
+	    return $this->auteur;
     }
 
     /**
@@ -242,13 +252,13 @@ class Reponse
     }
 
     /**
-     * Get auteur
+     * Get poidsReponse
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AmbigussBundle\Entity\PoidsReponse
      */
-    public function getAuteur()
+	public function getPoidsReponse()
     {
-        return $this->auteur;
+	    return $this->poidsReponse;
     }
 
     /**
@@ -266,13 +276,13 @@ class Reponse
     }
 
     /**
-     * Get poidsReponse
+     * Get niveau
      *
-     * @return \AmbigussBundle\Entity\PoidsReponse
+     * @return \UserBundle\Entity\Niveau
      */
-    public function getPoidsReponse()
+	public function getNiveau()
     {
-        return $this->poidsReponse;
+	    return $this->niveau;
     }
 
     /**
@@ -290,13 +300,13 @@ class Reponse
     }
 
     /**
-     * Get niveau
+     * Get glose
      *
-     * @return \UserBundle\Entity\Niveau
+     * @return \AmbigussBundle\Entity\Glose
      */
-    public function getNiveau()
+	public function getGlose()
     {
-        return $this->niveau;
+	    return $this->glose;
     }
 
     /**
@@ -314,13 +324,13 @@ class Reponse
     }
 
     /**
-     * Get glose
+     * Get motAmbiguPhrase
      *
-     * @return \AmbigussBundle\Entity\Glose
+     * @return \AmbigussBundle\Entity\MotAmbiguPhrase
      */
-    public function getGlose()
+	public function getMotAmbiguPhrase()
     {
-        return $this->glose;
+	    return $this->motAmbiguPhrase;
     }
 
     /**
@@ -335,15 +345,5 @@ class Reponse
         $this->motAmbiguPhrase = $motAmbiguPhrase;
 
         return $this;
-    }
-
-    /**
-     * Get motAmbiguPhrase
-     *
-     * @return \AmbigussBundle\Entity\MotAmbiguPhrase
-     */
-    public function getMotAmbiguPhrase()
-    {
-        return $this->motAmbiguPhrase;
     }
 }

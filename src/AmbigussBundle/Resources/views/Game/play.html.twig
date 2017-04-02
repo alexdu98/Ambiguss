@@ -30,16 +30,12 @@
 	        <h5>par <a href="#">{{ auteur.pseudo }}</a></h5>
 				<div class="form-group">
 					{% if app.user %}
-						{% if liked %}
-							<button id="phraseLike" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i>
-								Je n'aime
-								plus cette phrase</button>
-						{% else %}
-							<button id="phraseLike" class="btn btn-primary btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-								J'aime
-								cette
-								phrase</button>
-						{% endif %}
+						<button id="phraseLike" class="btn btn-{% if liked %}primary{% else %}default{% endif %} btn-xs">
+							<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+							J'aime
+							cette
+							phrase
+						</button>
 					{% endif %}
 
                     {% if signal==1 %}
@@ -160,18 +156,13 @@
 				$.getJSON('{{ path('ambiguss_phrase_like', {'id':phrase_id}) }}', function(data){
 					if(data.status === 'succes'){
 						if(data.action === 'like' || data.action === 'relike'){
-							boutonLike.removeClass('btn-primary').addClass('btn-danger').html('<i class="fa ' +
-								'fa-thumbs-down" ' +
-								'aria-hidden="true"></i> Je n\'aime ' +
-								'plus cette phrase');
+							boutonLike.removeClass('btn-default').addClass('btn-primary');
 							if(data.action === 'like'){
 								credits = $("#credits");
 								credits.html(parseInt(credits.html()) + data.credits);
 							}
 						}else{
-							boutonLike.removeClass('btn-danger').addClass('btn-primary').html('<i class="fa ' +
-								'fa-thumbs-up" ' +
-								'aria-hidden="true"></i> J\'aime cette phrase');
+							boutonLike.removeClass('btn-primary').addClass('btn-default');
 						}
 					}
 				});

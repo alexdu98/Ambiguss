@@ -74,3 +74,8 @@ ambiguss_phrase_signal:
         _controller: AmbigussBundle:Phrase:signal
     requirements:
         id: \d+
+
+ambiguss_export:
+    path: /ambiguss/export
+    defaults:
+        _controller: AmbigussBundle:Export:main

@@ -1,16 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}À propos{% endblock %}
+{% block titre %}À propos{% endblock %}
 
 {% block contenu %}
-	<h1>À propos</h1>
-	<p>
-		Ambiguss est un site web réalisé dans le cadre d'un TER (Travail d'Étude et de Recherche) de master informatique.<br>
-		Il permet de produire des corpus de phrases annontées sémantiquement, perettant ainsi d'identifier le sens
-		correct d'un mot.
-		<!-- PAS DE NOM SVP -->
-	</p>
-	<p>
-		Le site est actuellement dans sa version : ... (toujours en développement)
-	</p>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="bulle">
+				<p class="color-red">
+					<b>Le site est en cours de développement.</b>
+				</p>
+				<p>
+					Ambiguss est un site web réalisé dans le cadre d'un TER (Travail d'Étude et de Recherche) de master informatique.<br>
+					Il permet de produire des corpus de phrases annontées sémantiquement, perettant ainsi d'identifier le sens
+					correct d'un mot.
+				</p>
+				<p>
+					Il s'agit d'un GWAP (Game With A Pupose => Jeu avec un but). Dans notre cas pour faire de la désambiguisation lexicale.<br>
+					Ce type de jeu est très utilisé dans le milieu scientifique car il permet d'acquérir des données utiles, tout en étant ludique.
+				</p>
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,42 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Mentions{% endblock %}
+{% block titre %}Mentions légales{% endblock %}
 
 {% block contenu %}
-	<h1>Mentions légales</h1>
-
-	<h3>Éditeur</h3>
-	<p>Ambiguss (admin@ambiguss.dev)</p>
-	<hr>
-
-	<h3>Responsable légal</h3>
-	<p>Directeur de la publication : Ambiguss (admin@ambiguss.dev)</p>
-	<p>Responsable technique : Ambiguss (admin@ambiguss.dev)</p>
-	<hr>
-
-	<h3>Hébergeur</h3>
-	<p>Ambiguss (admin@ambiguss.dev)</p>
-	<hr>
-
-	<h3>Informations</h3>
-	<p>
-		Conformément à la loi "Informatique et libertés" du 6 janvier 1978 modifiée en 2004, vous bénéficiez d’un droit d’accès et de rectification aux informations qui vous concernent, que vous pouvez exercer en vous adressant à l'administration de Ambiguss (admin@ambiguss.dev).<br>
-		Vous pouvez également, pour des motifs légitimes, vous opposer au traitement des données vous concernant.
-	</p>
-	<hr>
-
-	<h3>Cookies</h3>
-	<p>
-		Un cookie est une suite d'informations envoyée par un site Internet à un ordinateur sous la forme d’un petit fichier de données.<br>
-		Les cookies sont utiles pour faciliter la personnalisation de votre accès à nos services en ligne. Ils peuvent être utilisés pour une authentification, une session, stocker une information spécifique comme les préférences sur un site ou le contenu d'un panier d'achat électronique.<br>
-		Le stockage des cookies se fait par le biais du navigateur Web utilisé par l’internaute.<br>
-		Il existe deux types de cookies :<br>
-		<ul>
-			<li>les cookies de session sont supprimés de votre ordinateur lorsque vous fermez votre navigateur.</li>
-			<li>les cookies permanents restent stockés sur votre ordinateur après la fermeture du navigateur.</li>
-		</ul>
-		Les cookies sont cependant anonymes et ne sont en aucun cas utilisés pour collecter des informations personnelles.
-	</p>
-	<hr>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="bulle">
+				<h3>Éditeur</h3>
+				<p>Ambiguss (admin@ambiguss.dev)</p>
+				<hr>
+				<h3>Responsable légal</h3>
+				<p>Directeur de la publication : Ambiguss (admin@ambiguss.dev)</p>
+				<p>Responsable technique : Ambiguss (admin@ambiguss.dev)</p>
+				<hr>
+				<h3>Hébergeur</h3>
+				<p>Ambiguss (admin@ambiguss.dev)</p>
+				<hr>
+				<h3>Informations</h3>
+				<p>
+					Conformément à la loi "Informatique et libertés" du 6 janvier 1978 modifiée en 2004, vous bénéficiez d’un droit d’accès et de
+					rectification aux informations qui vous concernent, que vous pouvez exercer en vous adressant à l'administration de Ambiguss
+					(admin@ambiguss.dev).<br>
+					Vous pouvez également, pour des motifs légitimes, vous opposer au traitement des données vous concernant.
+				</p>
+				<hr>
+				<h3>Cookies</h3>
+				<p>
+					Un cookie est une suite d'informations envoyée par un site Internet à un ordinateur sous la forme d’un petit fichier de
+					données.<br>
+					Les cookies sont utiles pour faciliter la personnalisation de votre accès à nos services en ligne. Ils peuvent être utilisés pour
+					une authentification, une session, stocker une information spécifique comme les préférences sur un site ou le contenu d'un panier
+					d'achat électronique.<br>
+					Le stockage des cookies se fait par le biais du navigateur Web utilisé par l’internaute.<br>
+					Il existe deux types de cookies :<br>
+				<ul>
+					<li>les cookies de session sont supprimés de votre ordinateur lorsque vous fermez votre navigateur.</li>
+					<li>les cookies permanents restent stockés sur votre ordinateur après la fermeture du navigateur.</li>
+				</ul>
+				Les cookies sont cependant anonymes et ne sont en aucun cas utilisés pour collecter des informations personnelles.
+				</p>
+				<hr>
+			</div>
+		</div>
+	</div>
 
 {% endblock %}

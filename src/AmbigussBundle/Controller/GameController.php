@@ -125,6 +125,7 @@ class GameController extends Controller{
 				}
 
 				$this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
+				$this->get('session')->getFlashBag()->add('auteur', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur());
 				$this->get('session')->getFlashBag()->add('stats', $hash);
 				$this->get('session')->getFlashBag()->add('alreadyPlayed', $alreadyPlayed);
 				$this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
@@ -208,6 +209,7 @@ class GameController extends Controller{
 			'liked'         => $liked,
 			'alreadyPlayed' => $allPhrasesPlayed,
 			'signal'        => $signal,
+			'auteur' => $phraseOBJ->getAuteur(),
 			'addGloseForm'  => $addGloseForm->createView(),
 			'addJugementForm' => $addJugementForm->createView()
 		));
@@ -215,13 +217,16 @@ class GameController extends Controller{
 
 	public function resultatAction(Request $request){
 		$phrase = $this->get('session')->getFlashBag()->get('phrase');
+		$auteur = $this->get('session')->getFlashBag()->get('auteur');
 		$stats = $this->get('session')->getFlashBag()->get('stats');
 		$alreadyPlayed = $this->get('session')->getFlashBag()->get('alreadyPlayed');
 		$nb_points = $this->get('session')->getFlashBag()->get('nb_points');
 
-		if(!empty($phrase) && !empty($stats) && !empty($nb_points)){
+		if(!empty($phrase) && !empty($auteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
+		{
 			return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
 				'phrase'        => $phrase[0],
+				'auteur' => $auteur[0],
 				'stats'         => $stats[0],
 				'alreadyPlayed' => $alreadyPlayed[0],
 				'nb_point'      => $nb_points[0]

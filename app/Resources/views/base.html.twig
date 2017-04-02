@@ -44,12 +44,13 @@
 												    (current)
 											    </span></a>
 									    </li>
-								    <li class="dropdown">
-									    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classement <span class="caret"></span></a>
-									    <ul class="dropdown-menu">
-										    <li><a href="{{ path('ambiguss_classement_general') }}">Général</a></li>
-									    </ul>
-								    </li>
+									    <li class="dropdown">
+										    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classement
+											    <span class="caret"></span></a>
+										    <ul class="dropdown-menu">
+											    <li><a href="{{ path('ambiguss_classement_general') }}">Général</a></li>
+										    </ul>
+									    </li>
 								    {% endif %}
 								    <li class="dropdown">
 									    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Export <span class="caret"></span></a>
@@ -100,12 +101,14 @@
 		    <div class="container-fluid">
 			    <div class="row" id="footer-link">
 				    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 text-center">
-
 					    <a href="{{ path('app_mentions') }}">Mentions légales</a>&emsp;
 					    <a href="{{ path('app_conditions') }}">Conditions d'utilisation</a>&emsp;
 					    <a href="{{ path('app_apropos') }}">À propos d'Ambiguss</a>&emsp;
 					    <a href="{{ path('app_contact') }}">Contact</a>
-
+					    {% if is_granted('ROLE_ADMINISTRATEUR') %}
+						    <br>
+						    # <a href="{{ path('administration_accueil') }}">Administration</a> #
+					    {% endif %}
 				    </div>
 				    <div class="col-xs-6 col-sm-6 col-xs-offset-3 col-sm-offset-3 text-center" id="copyright">
 					    • <a href="{{ path('app_accueil') }}">Ambiguss</a> © {{ "now" | date("Y") }} •

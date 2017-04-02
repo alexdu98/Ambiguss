@@ -1,28 +1,29 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
         $bundles = [
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new Symfony\Bundle\MonologBundle\MonologBundle(),
-            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-			new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(), // Doctrine migration Bundle
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AmbigussBundle\AmbigussBundle(),
-            new UserBundle\UserBundle(),
-            new JudgmentBundle\JudgmentBundle(),
-            new CommentBundle\CommentBundle(),
-            new AppBundle\AppBundle(),
-            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+	        new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+	        new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+	        new Symfony\Bundle\TwigBundle\TwigBundle(),
+	        new Symfony\Bundle\MonologBundle\MonologBundle(),
+	        new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+	        new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+	        new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),// Doctrine migration Bundle
+	        new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+	        new AmbigussBundle\AmbigussBundle(),
+	        new UserBundle\UserBundle(),
+	        new JudgmentBundle\JudgmentBundle(),
+	        new CommentBundle\CommentBundle(),
+	        new AppBundle\AppBundle(),
+	        new AdministrationBundle\AdministrationBundle(),
+	        new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+	        new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
@@ -33,11 +34,6 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
-    }
-
-    public function getRootDir()
-    {
-        return __DIR__;
     }
 
     public function getCacheDir()
@@ -54,4 +50,9 @@ class AppKernel extends Kernel
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
+
+	public function getRootDir()
+	{
+		return __DIR__;
+	}
 }

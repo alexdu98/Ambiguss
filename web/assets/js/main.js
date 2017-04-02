@@ -115,14 +115,21 @@ function addGloseModal(event) {
 				$("select.gloses").each(function () {
 					// Ajout la glose dans tous les select avec la même valeur de mot ambigu
 					if ($(this).next().val() === motAmbigu) {
-						$(this).append('<option value="' + data.glose.id + '">' + data.glose.valeur + '</option>');
+						// Si la glose n'était pas déjà présente dans le select, on l'ajoute
+						if (!$(this).find('option[value="' + data.glose.id + '"]').length) {
+							$(this).append('<option value="' + data.glose.id + '">' + data.glose.valeur + '</option>');
+						}
+						// On sélectionne la nouvelle glose si c'est le bouton de ce select qui a été click
+						if (select.attr('id') === $(this).attr('id')) {
+							$(this).find('option[value="' + data.glose.id + '"]').selected();
+						}
 					}
 				});
 				// On referme la modale
 				$(form).after(
 					'<div class="alert alert-success alert-dismissible fade in" role="alert">'
 					+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
-					+ 'Glose ajoutée</div>'
+					+ 'Glose "' + data.glose.valeur + '" ajoutée à "' + event.data.motAmbigu + '"</div>'
 				);
 				$(form).clearForm();
 			} else {

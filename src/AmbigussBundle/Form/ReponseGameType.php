@@ -27,8 +27,10 @@ class ReponseGameType extends AbstractType
 		        'class' => 'AmbigussBundle\Entity\Glose',
 		        'choice_label' => 'valeur',
 		        'label' => '__glose__',
-		        'required' => true,
-		        'attr' => array('class' => 'gloses'),
+		        'attr' => array(
+			        'class' => 'gloses',
+			        'required' => 'required',
+		        ),
 	        ))
 	        ->remove('motAmbiguPhrase')
             ->add('idMotAmbiguPhrase', HiddenType::class, array(

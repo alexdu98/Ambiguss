@@ -207,7 +207,7 @@
 			}
 
 			function addGloseButtonIsClicked(event){
-				setModalTitle('Ajouter une glose');
+				setModalTitle('Ajouter une glose à "' + event.data.motAmbigu + '"');
 				{% if app.user is empty %}
 					messageNeedConnectionModal();
 				{% else %}

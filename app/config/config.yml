@@ -56,6 +56,8 @@ twig:
     strict_variables: "%kernel.debug%"
     form_themes:
         - 'bootstrap_3_layout.html.twig'
+    globals:
+        dbname: "%database_name%"
 
 # Doctrine Configuration
 doctrine:

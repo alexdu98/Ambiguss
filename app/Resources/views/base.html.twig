@@ -56,6 +56,17 @@
 											    <li><a href="{{ path('ambiguss_classement_general') }}">Général</a></li>
 										    </ul>
 									    </li>
+									    {% if is_granted('ROLE_MODERATEUR') %}
+										    <li class="dropdown">
+											    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modération
+												    <span class="caret"></span></a>
+											    <ul class="dropdown-menu">
+												    <li><a href="#">Phrases</a></li>
+												    <li><a href="#">Mots ambigus</a></li>
+												    <li><a href="#">Gloses</a></li>
+											    </ul>
+										    </li>
+									    {% endif %}
 								    {% endif %}
 							    </ul>
 						    </div>

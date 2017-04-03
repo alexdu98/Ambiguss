@@ -81,7 +81,9 @@
             {{ form_end(form) }}
         </div>
     </div>
-
+	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpGameModal">
+		<img src="{{ asset('assets/images/infobulle.png') }}">
+	</button>
 {% endblock %}
 {% block js %}
 	<script>
@@ -198,7 +200,24 @@
 						next.remove();
 					}
 				});
-            })
+            });
+
+			// Au click sur le bouton, exécute la fonction
+			$('#helpGameModal').click(helpGameModal);
+			function helpGameModal(event) {
+				setModalSize('modal-lg');
+				setModalTitle('Comment les phrases sont-elles choisies ?');
+				setModalBody(
+					'<h4>Connecté</h4>'
+					+ 'Prend les 100 phrases les plus anciennes que vous n\'avez pas encore joué et en tire une au hasard.<br>'
+					+ 'Si toutes les phrases ont été jouées, en tire une au hasard parmis toutes les phrases existantes.<br>'
+					+ '<h4>Non connecté</h4>'
+					+ 'Prend les 100 phrases les plus anciennes que votre IP n\'a pas joué depuis plus de 3 jours et en tire une au hasard.<br>'
+					+ 'Si toutes les phrases ont été jouées, en tire une au hasard parmis toutes les phrases existantes.<br><br>'
+					+ '<div class="alert alert-info">Si vous passez la phrase, vous appliquez le même algorithme, '
+					+ 'ce qui peut donc redonner la même phrase, s\'il ne vous reste pas beacoup de phrases non jouées par exemple.</div>'
+				);
+			}
 		});
 	</script>
 {%  endblock %}

@@ -47,9 +47,6 @@
 				        {% for valeurGlose, res in ma.gloses %}
 					        {% if res.isSelected %}<b>{% endif %}
 					            {{ valeurGlose ~ ' ' ~ res.nbVotes }}
-								{% transchoice res.nbVotes %}
-									{0}vote|{1}vote|]1,Inf[votes
-								{% endtranschoice %}
 					        {% if res.isSelected %}</b>{% endif %}
 							{% if loop.last %}.{% else %},{% endif %}
 				        {% endfor %}

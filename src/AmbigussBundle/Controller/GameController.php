@@ -54,7 +54,10 @@ class GameController extends Controller{
 				$rep->setPoidsReponse($repository2->findOneBy(array('poidsReponse' => 1)));
 				$rep->setNiveau($repository3->findOneBy(array('titre' => 'Facile')));
 
-				$em->persist($rep);
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
+					$em->persist($rep);
+				}
 			}
 
 			// Si tous les mots ambigus ont une glose associée
@@ -110,18 +113,24 @@ class GameController extends Controller{
 						if($niveauSuivant != NULL && $this->getUser()->getPointsClassement() >= $niveauSuivant->getPointsClassementMin()){
 							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 						}
+
+						$data->reponses[0]->getPhrase()->getAuteur->updateCredits(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
+
 						$em->persist($this->getUser());
+
+						try
+						{
+							$em->flush();
+						}
+						catch(\Exception $e)
+						{
+							$this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
+						}
 					}
-					else{
+					else
+					{
 						$alreadyPlayed = true;
 					}
-				}
-
-				try{
-					$em->flush();
-				}
-				catch(\Exception $e){
-					$this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
 				}
 
 				$this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());

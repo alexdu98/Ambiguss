@@ -3,9 +3,7 @@ namespace AmbigussBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PhraseAddType extends AbstractType
 {
@@ -28,7 +26,7 @@ class PhraseAddType extends AbstractType
 				'label' =>  false,
 			))
 			->add('creer', SubmitType::class, array(
-				'label' => 'Créer',
+				'label' => 'Créer la phrase',
 				'attr' => array('class' => 'btn btn-primary'),
 			));
 	}

@@ -7,13 +7,6 @@
 
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
-
-		    {% if app.user.credits < costCreatePhraseCredits %}
-		        <div class="alert alert-danger">
-					Vous n'avez pas assez de crédits pour créer une phrase ({{ app.user.credits }}/{{ costCreatePhraseCredits }}).
-		        </div>
-		    {% endif %}
-
 		    {% if newPhrase is not null %}
 			    <div class="alert alert-success alert-dismissible fade in" role="alert">
 				    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -31,6 +24,12 @@
 						    <br>
 			            {% endfor %}
 				    </div>
+			    </div>
+		    {% endif %}
+
+		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
+			    <div class="alert alert-danger">
+				    Vous n'avez pas assez de crédits pour créer une phrase.
 			    </div>
 		    {% endif %}
 
@@ -63,7 +62,7 @@
 		    </div>
 		    {% do form.motsAmbigusPhrase.setRendered %}
 
-		    {% if app.user.credits < costCreatePhraseCredits %}
+		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
 			    {% do form.creer.setRendered %}
 		    {% else %}
 			    {{ form_row(form.creer) }}
@@ -263,10 +262,16 @@
 						+ 'en ajouter avec le bouton "Ajouter une glose".'
 					+ '</p>'
 					+ '<div class="alert alert-info">'
-						+ 'La création d\'une phrase '
-						+ '<b>coûte {{ costCreatePhraseCredits }} crédits</b>, '
-						+ '<b>rapporte {{ gainCreatePhrasePoints }} points</b>, '
-						+ 'et <b>{{ gainPerLikePhrasePoints }} points supplémentaires par like</b>.<br>'
+					+ 'La création d\'une phrase<br>'
+					+ '<b>coûte</b>'
+					+ '<ul>'
+					+ '<li>{{ costCreatePhraseByMotAmbiguCredits }} crédits par mot ambigu</li>'
+					+ '</ul>'
+					+ '<b>rapporte</b>'
+					+ '<ul>'
+					+ '<li>{{ gainPerLikePhrasePoints }} points par like</li>'
+					+ '<li>{{ gainPercentByGame }}% des points qu\'un joueur gagne en la jouant.</li>'
+					+ '</ul>'
 					+ '</div>'
 				);
 			}

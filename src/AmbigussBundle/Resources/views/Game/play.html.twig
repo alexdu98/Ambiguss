@@ -27,7 +27,6 @@
 	        {% endfor %}
 
 				<h3 id="result"></h3>
-	        <h5>par <a href="#">{{ auteur.pseudo }}</a></h5>
 				<div class="form-group">
 					{% if app.user %}
 						<button id="phraseLike" class="btn btn-{% if liked %}primary{% else %}default{% endif %} btn-xs">
@@ -159,10 +158,6 @@
 					if(data.status === 'succes'){
 						if(data.action === 'like' || data.action === 'relike'){
 							boutonLike.removeClass('btn-default').addClass('btn-primary');
-							if(data.action === 'like'){
-								credits = $("#credits");
-								credits.html(parseInt(credits.html()) + data.credits);
-							}
 						}else{
 							boutonLike.removeClass('btn-primary').addClass('btn-default');
 						}

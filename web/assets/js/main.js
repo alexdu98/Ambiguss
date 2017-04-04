@@ -40,7 +40,7 @@ $('#modal').on('hidden.bs.modal', cleanModal);
  * @param motAmbigu
  */
 function getGloses(select, motAmbigu) {
-	select.html('<option value>Choississez une glose</option>');
+	select.html('<option selected disabled value>Choisissez une glose</option>');
 	// Empêche la sélection pendant le chargement
 	select.attr('disabled', 'disabled').addClass('loading');
 	var url = Routing.generate('ambiguss_glose_get_by_motambigu');

@@ -15,7 +15,9 @@
 					<br>
 					Vous avez créé :
 					<ul>
-						<li>{{ app.user.phrases|length }} phrases</li>
+						<li>{{ app.user.phrases|length }} phrases
+							<a href="{{ path('ambiguss_classement_personnel') }}">(Voir)</a>
+						</li>
 						<li>{{ app.user.gloses|length }} gloses</li>
 						<li>{{ app.user.motsAmbigus|length }} mots ambigus</li>
 					</ul>

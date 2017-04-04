@@ -21,5 +21,23 @@ class ClassementController extends Controller{
 			'classement' => $classement,
 		));
 	}
+    public function classementPersonnelAction(){
+        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+        $classement = $repository->getClassementPhrasesUser( $this->getUser());
+
+
+        return $this->render('AmbigussBundle:Classement:phrasesUser.html.twig', array (
+            'classement' => $classement,
+        ));
+    }
+    public function classementPhrasesAction(){
+        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+        $classement = $repository->getClassementPhrases($this->getParameter('maxResultForClassementPhrases'));
+
+
+        return $this->render('AmbigussBundle:Classement:phrases.html.twig', array (
+            'classement' => $classement,
+        ));
+    }
 
 }

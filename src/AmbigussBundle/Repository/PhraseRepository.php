@@ -10,4 +10,24 @@ namespace AmbigussBundle\Repository;
  */
 class PhraseRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getClassementPhrasesUser($IdUser){
+        return $this->createQueryBuilder('p')->select("p.id , p.contenu ,p.dateCreation ")
+            ->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
+            ->where('p.auteur = :aut')->setParameter("aut", $IdUser)
+            ->groupBy('p.id')
+            ->orderBy('nbLikes', 'DESC')
+            ->getQuery()->getResult();
+        // TODO : recup gains peut etre en rajoutant un attributs gains a la phrase ?
+    }
+
+    public function getClassementPhrases($limit){
+        return $this->createQueryBuilder('p')->select("p.id , p.contenu ,p.dateCreation ")
+            ->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
+            ->groupBy('p.id')
+            ->orderBy('nbLikes', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
+        // TODO : recup gains peut etre en rajoutant un attributs gains a la phrase ?
+    }
 }

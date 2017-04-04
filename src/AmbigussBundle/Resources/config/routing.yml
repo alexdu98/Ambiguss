@@ -61,6 +61,16 @@ ambiguss_classement_general:
     defaults:
         _controller: AmbigussBundle:Classement:classementGeneral
 
+ambiguss_classement_personnel:
+    path: /ambiguss/classement/personnel
+    defaults:
+        _controller: AmbigussBundle:Classement:classementPersonnel
+
+ambiguss_classement_phrases:
+    path: /ambiguss/classement/phrases
+    defaults:
+        _controller: AmbigussBundle:Classement:classementPhrases
+
 ambiguss_phrase_like:
     path: /ambiguss/phrase/like/{id}
     defaults:

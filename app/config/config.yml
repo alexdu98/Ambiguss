@@ -20,6 +20,7 @@ parameters:
     gainPercentByGame: 10
     # Classement
     maxResultForClassementGeneral: 100
+    maxResultForClassementPhrases: 15
     # Jugement
     dureeDeliberationSecondes: 432000 # 5 jours
 

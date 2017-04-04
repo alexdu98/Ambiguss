@@ -53,8 +53,11 @@
 										    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classement
 											    <span class="caret"></span></a>
 										    <ul class="dropdown-menu">
-											    <li><a href="{{ path('ambiguss_classement_general') }}">Général</a></li>
-										    </ul>
+											    <li><a href="{{ path('ambiguss_classement_general') }}">Joueurs</a></li>
+												<li><a href="{{ path('ambiguss_classement_phrases') }}">Phrases</a></li>
+												<li><a href="{{ path('ambiguss_classement_personnel',{'id': app.user.Id|capitalize}) }}">Mes Phrases</a></li>
+
+										     </ul>
 									    </li>
 									    {% if is_granted('ROLE_MODERATEUR') %}
 										    <li class="dropdown">

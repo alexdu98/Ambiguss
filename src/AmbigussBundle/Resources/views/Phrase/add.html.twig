@@ -118,13 +118,18 @@
 			// Au clic sur le bouton ajout d'un mot ambigu
 			$("#addAmb").click(function () {
 				// S'il y a bien un mot séléctionné
-				if((sel = textarea.getSelection()).text !== '') {
+				if ((sel = textarea.getSelection()).text.trim() !== '') {
+					// Rajoute une espace après la balise ambigu si espace sélectionné
+					spaceOrNot = "";
+					if (textarea.val().charAt((sel.end) - 1) === " ")
+						spaceOrNot = " ";
 					// On met à jour la valeur du textarea en entourant le mot séléctionné
 					textarea.val(
 						textarea.val().slice(0, sel.start)
 						+ startBaliseAmbigu
-						+ sel.text
+						+ sel.text.trim()
 						+ endBaliseAmbigu
+						+ spaceOrNot
 						+ textarea.val().slice(sel.end)
 					);
 					updatePhrase();
@@ -245,7 +250,7 @@
 					'<ol>'
 						+ '<li>Écrivez votre phrase complète dans le champ dédié.</li>'
 						+ '<li>'
-							+ 'Sélectionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot sélectionné ambigu".'
+					+ 'Sélectionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot sélectionné ambigu".<br>'
 							+ 'Cela a pour effet d\'entourer le mot par les balises amb avec un numéro, et d\'afficher le mot en '
 							+ 'rouge dans le champ de rendu.<br>'
 							+ 'Cela crée aussi une nouvelle ligne dans le formulaire afin que vous puissiez choisir la glose de '
@@ -253,6 +258,10 @@
 						+ '</li>'
 						+ '<li>Choisissez une glose* pour ce mot ambigu, et indiquez si celle-ci est juste, fausse, ou si vous ne savez pas.</li>'
 						+ '<li>Répétez les points 2 et 3 pour chaque mot ambigu de votre phrase.</li>'
+					+ '<li>'
+					+ 'Appuyez sur le bouton "Créer la phrase".<br>'
+					+ 'Vous aurez alors 5 minutes pour la modifier avant qu\'elle ne soit mise en jeu et jouable.'
+					+ '</li>'
 					+ '</ol>'
 					+ '<div class="alert alert-info">'
 						+ 'Si vous vous êtes trompé pour un mot ambigu, vous pouvez le supprimer à l\'aide du bouton "Supprimer le mot ambigu".'

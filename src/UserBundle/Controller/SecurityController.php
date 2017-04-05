@@ -2,19 +2,8 @@
 
 namespace UserBundle\Controller;
 
-use AmbigussBundle\AmbigussBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use UserBundle\Form\MembreConnexionType;
 use UserBundle\Form\MembreOubliPassResetType;
 use UserBundle\Form\MembreOubliPassType;
@@ -75,10 +64,6 @@ class SecurityController extends Controller{
 				else{
 					$res->messages[] = 'Provider inconnu';
 				}
-
-
-
-
 
 				$membre->setIdFacebook($data->id);
 				$membre->setEmail($data->email);
@@ -208,7 +193,7 @@ class SecurityController extends Controller{
 		$em->persist($membre);
 		$em->flush();
 
-		$this->get('session')->getFlashBag()->add('succes', "Inscription confirmé. Vous pouvez maintenant vous connecter.");
+		$this->get('session')->getFlashBag()->add('succes', "Inscription confirmée. Vous pouvez maintenant vous connecter.");
 
 		// rediriger vers la page de connexion
 		return $this->redirectToRoute('user_connexion');

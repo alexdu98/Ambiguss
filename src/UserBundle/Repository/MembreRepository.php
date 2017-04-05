@@ -18,7 +18,7 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 	}
 
 	public function getClassementGeneral($limit){
-		return $this->createQueryBuilder('m')->select('m.id, m.pseudo, m.dateInscription, m.pointsClassement, m.credits')
+		return $this->createQueryBuilder('m')->select('m.id, m.pseudo, m.dateInscription, m.pointsClassement')
 			->leftJoin("m.phrases", "p")->addSelect('count(p.auteur) as nbPhrases')
 			->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
 			->groupBy('m.id')

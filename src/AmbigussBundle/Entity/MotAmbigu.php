@@ -81,7 +81,6 @@ class MotAmbigu
         $this->dateCreation = new \DateTime();
 	    $this->signale = 0;
 	    $this->visible = 1;
-	    $this->auteur = new \Doctrine\Common\Collections\ArrayCollection();
 	    $this->gloses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -93,30 +92,6 @@ class MotAmbigu
     public function getId()
     {
         return $this->id;
-    }
-
-	/**
-	 * Get valeur
-	 *
-	 * @return string
-	 */
-	public function getValeur()
-	{
-		return $this->valeur;
-	}
-
-    /**
-     * Set valeur
-     *
-     * @param string $valeur
-     *
-     * @return MotAmbigu
-     */
-    public function setValeur($valeur)
-    {
-        $this->valeur = $valeur;
-
-        return $this;
     }
 
     /**
@@ -293,6 +268,39 @@ class MotAmbigu
 	public function setModificateur(\UserBundle\Entity\Membre $modificateur = null)
 	{
 		$this->modificateur = $modificateur;
+
+		return $this;
+	}
+
+	/**
+	 * Normalise le mot ambigu
+	 */
+	public function normalize()
+	{
+		// Supprime les espaces multiples
+		$this->setValeur(preg_replace('#\s+#', ' ', $this->getValeur()));
+	}
+
+	/**
+	 * Get valeur
+	 *
+	 * @return string
+	 */
+	public function getValeur()
+	{
+		return $this->valeur;
+	}
+
+	/**
+	 * Set valeur
+	 *
+	 * @param string $valeur
+	 *
+	 * @return MotAmbigu
+	 */
+	public function setValeur($valeur)
+	{
+		$this->valeur = $valeur;
 
 		return $this;
 	}

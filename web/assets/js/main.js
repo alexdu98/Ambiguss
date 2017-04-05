@@ -79,7 +79,7 @@ function addGloseModal(event) {
 	// Autocomplete le champ
 	var input = $('#modal-body').find('#glose_add_valeur');
 	input.autocomplete({
-		minLength: 1, // Dès qu'il y a 1 caractère on autocomplete
+		minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 		appendTo: '#modal', // Pour que l'affichage ce fasse (car dans une modale)
 		source: function (request, response) {
 			var url = Routing.generate('ambiguss_glose_get_autocomplete');

@@ -31,6 +31,9 @@ class PhraseController extends Controller
 				$phrase->setAuteur($this->getUser());
 				$phrase->removeMotsAmbigusPhrase();
 
+				// Normalise la phrase
+				$phrase->normalize();
+
 				// Vérifie que la phrase soit bien formée
 				$res = $phrase->isValid();
 				$succes = $res['succes'];

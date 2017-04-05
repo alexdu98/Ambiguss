@@ -104,7 +104,7 @@ class GameController extends Controller{
 						'auteur'          => $this->getUser()
 					));
 
-					// Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points
+					// Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points et on enregistre les réponses
 					if(empty($repo)){
 						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
 						$this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
@@ -114,7 +114,7 @@ class GameController extends Controller{
 							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 						}
 
-						$data->reponses[0]->getPhrase()->getAuteur->updateCredits(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
+						$data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur()->updateCredits(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
 
 						$em->persist($this->getUser());
 
@@ -151,20 +151,20 @@ class GameController extends Controller{
 
 			$phrases = null;
 			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-				$phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser(), 100);
+				$phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser(), 100, $this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
 			else{
 				$date = new \DateTime();
 				// Date d'il y a 3 jours
 				$date = $date->getTimestamp() - (3600 * 24 * 30);
-				$phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date, 100);
+				$phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date, 100, $this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
 
 			// Si toutes les phrases ont été joués
 			$allPhrasesPlayed = false;
 			if(empty($phrases)){
 				$allPhrasesPlayed = true;
-				$phrases = $repmap->findAllIdPhrases();
+				$phrases = $repmap->findAllIdPhrases($this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
 
 			// Rend une clé au hasard

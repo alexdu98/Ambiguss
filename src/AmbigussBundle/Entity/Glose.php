@@ -94,27 +94,13 @@ class Glose
     }
 
     /**
-     * Set valeur
+     * Get dateCreation
      *
-     * @param string $valeur
-     *
-     * @return Glose
+     * @return \DateTime
      */
-    public function setValeur($valeur)
+	public function getDateCreation()
     {
-        $this->valeur = $valeur;
-
-        return $this;
-    }
-
-    /**
-     * Get valeur
-     *
-     * @return string
-     */
-    public function getValeur()
-    {
-        return $this->valeur;
+	    return $this->dateCreation;
     }
 
     /**
@@ -132,13 +118,13 @@ class Glose
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+	public function getDateModification()
     {
-        return $this->dateCreation;
+	    return $this->dateModification;
     }
 
     /**
@@ -156,13 +142,13 @@ class Glose
     }
 
     /**
-     * Get dateModification
+     * Get signale
      *
-     * @return \DateTime
+     * @return bool
      */
-    public function getDateModification()
+	public function getSignale()
     {
-        return $this->dateModification;
+	    return $this->signale;
     }
 
     /**
@@ -180,13 +166,13 @@ class Glose
     }
 
     /**
-     * Get signale
+     * Get visible
      *
      * @return bool
      */
-    public function getSignale()
+	public function getVisible()
     {
-        return $this->signale;
+	    return $this->visible;
     }
 
     /**
@@ -204,13 +190,13 @@ class Glose
     }
 
     /**
-     * Get visible
+     * Get auteur
      *
-     * @return bool
+     * @return \UserBundle\Entity\Membre
      */
-    public function getVisible()
+	public function getAuteur()
     {
-        return $this->visible;
+	    return $this->auteur;
     }
 
     /**
@@ -228,13 +214,13 @@ class Glose
     }
 
     /**
-     * Get auteur
+     * Get modificateur
      *
      * @return \UserBundle\Entity\Membre
      */
-    public function getAuteur()
+	public function getModificateur()
     {
-        return $this->auteur;
+	    return $this->modificateur;
     }
 
     /**
@@ -249,16 +235,6 @@ class Glose
         $this->modificateur = $modificateur;
 
         return $this;
-    }
-
-    /**
-     * Get modificateur
-     *
-     * @return \UserBundle\Entity\Membre
-     */
-    public function getModificateur()
-    {
-        return $this->modificateur;
     }
 
     /**
@@ -294,4 +270,40 @@ class Glose
     {
         return $this->motsAmbigus;
     }
+
+	/**
+	 * Normalise la glose
+	 */
+	public function normalize()
+	{
+		// Supprime les espaces multiples
+		$this->setValeur(preg_replace('#\s+#', ' ', $this->getValeur()));
+
+		// Minuscule
+		$this->setValeur(strtolower($this->getValeur()));
+	}
+
+	/**
+	 * Get valeur
+	 *
+	 * @return string
+	 */
+	public function getValeur()
+	{
+		return $this->valeur;
+	}
+
+	/**
+	 * Set valeur
+	 *
+	 * @param string $valeur
+	 *
+	 * @return Glose
+	 */
+	public function setValeur($valeur)
+	{
+		$this->valeur = $valeur;
+
+		return $this;
+	}
 }

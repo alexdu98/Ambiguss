@@ -365,6 +365,27 @@ class Phrase
     }
 
 	/**
+	 * Normalise la phrase
+	 */
+	public function normalize()
+	{
+		// Supprime les espaces multiples
+		$this->setContenu(preg_replace('#\s+#', ' ', $this->getContenu()));
+
+		// Met la première lettre en majuscule
+		$this->setContenu(preg_replace_callback('#^(\<amb id\="[0-9]+"\>)?([a-z])(.*)#', function($matches)
+		{
+			return $matches[1] . strtoupper($matches[2]) . $matches[3];
+		}, $this->getContenu()));
+
+		// Ajoute le . final
+		if($this->getContenu()[ strlen($this->getContenu()) - 1 ] != '.')
+		{
+			$this->setContenu($this->getContenu() . '.');
+		}
+	}
+
+	/**
 	 * Check if phrase is valid
 	 */
     public function isValid(){
@@ -382,6 +403,7 @@ class Phrase
 	    if(count($ambOuv) != count($ambFer))
 		    return array('succes' => false, 'message' => 'Il n\'y a pas le même nom de balise <amb> et </amb>');
 
+	    // récupère les mots ambigus
 	    $mots_ambigu = array();
 	    $regex = '#\<amb id\="([0-9]+)"\>(.*?)\</amb\>#'; // Faux bug d'affichage PHPStorm, ne pas toucher
 	    preg_match_all($regex, $this->getContenu(), $mots_ambigu, PREG_SET_ORDER);
@@ -389,6 +411,12 @@ class Phrase
 	    // Au moins 1 mot ambigu
 	    if(empty($mots_ambigu))
 	    	return array('succes' => false, 'message' => 'Il faut au moins 1 mot ambigu');
+
+	    // Pas plus de 10 mots ambigus
+	    if(count($mots_ambigu) > 10)
+		    return array(
+			    'succes' => false,
+			    'message' => 'Il ne faut pas dépasser 10 mots ambigus par phrase');
 
 	    // Pas de balise imbriquée
 	    foreach($mots_ambigu as $ma){
@@ -403,6 +431,16 @@ class Phrase
 		    return array(
 			    'succes' => false,
 			    'message' => 'Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être une lettre).',
+		    );
+	    }
+
+	    // Mot mal sélectionné
+	    preg_match_all('#\<amb id\="[0-9]+"\> | \</amb\>#', $this->getContenu(), $arr, PREG_SET_ORDER);
+	    if(!empty($arr))
+	    {
+		    return array(
+			    'succes' => false,
+			    'message' => 'Un mot était mal sélectionné (le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace).',
 		    );
 	    }
 

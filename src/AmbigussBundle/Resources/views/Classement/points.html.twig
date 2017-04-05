@@ -52,7 +52,14 @@
 	<script>
 		$(document).ready(function() {
 			$('#classement').DataTable({
-				order: [[3, 'desc']],
+				stateSave: true, // Enregistre les configurations
+				stateSaveParams: function (settings, data) {
+					data.start = 0; // On enregistre pas la page
+					data.order = [[3, "desc"]]; // On ordonne sur le nombre de points
+					data.search = {}; // On enregistre pas la recherche
+				},
+				stateDuration: 0, // pour une durée illimitée
+				order: [[3, 'desc']], // On ordonne sur le nombre de points
 				responsive: true,
 				language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
 			});

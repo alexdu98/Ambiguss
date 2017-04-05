@@ -36,7 +36,7 @@
 					<tr>
 						<td>{{ loop.index }}</td>
 						<td>{{ row.pseudo }}</td>
-						<td>{{ row.dateInscription|date("d/m/Y") }}</td>
+						<td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y") }}</td>
 						<td>{{ row.pointsClassement }}</td>
 						<td>{{ row.nbPhrases }}</td>
 						<td>{{ row.nbLikes }}</td>
@@ -52,6 +52,9 @@
 	<script>
 		$(document).ready(function() {
 			$('#classement').DataTable({
+				columnDefs: [
+					{type: "date-eu", targets: 2}
+				],
 				stateSave: true, // Enregistre les configurations
 				stateSaveParams: function (settings, data) {
 					data.start = 0; // On enregistre pas la page

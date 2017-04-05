@@ -7,7 +7,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GloseAddType extends AbstractType
 {
@@ -18,8 +17,11 @@ class GloseAddType extends AbstractType
     {
         $builder
 	        ->add('valeur', TextType::class, array(
-	        	'label' => false,
-	        	'attr' => array('placeholder' => 'Saisissez une nouvelle glose')
+		        'label' => false,
+		        'attr' => array(
+			        'placeholder' => 'Saisissez une nouvelle glose',
+			        'maxlength' => 32,
+		        ),
 	        ))
 	        ->remove('dateCreation')
 	        ->remove('dateModification')

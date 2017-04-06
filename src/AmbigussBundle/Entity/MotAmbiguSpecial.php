@@ -24,7 +24,7 @@ class MotAmbiguSpecial
     /**
      * @var string
      *
-     * @ORM\Column(name="valeur", type="string", length=32, unique=true)
+     * @ORM\Column(name="valeur", type="string", length=32, unique=true, options={"collation":"utf8_bin"})
      */
     private $valeur;
 
@@ -84,6 +84,16 @@ class MotAmbiguSpecial
         return $this->id;
     }
 
+	/**
+	 * Get valeur
+	 *
+	 * @return string
+	 */
+	public function getValeur()
+	{
+		return $this->valeur;
+	}
+
     /**
      * Set valeur
      *
@@ -99,13 +109,13 @@ class MotAmbiguSpecial
     }
 
     /**
-     * Get valeur
+     * Get ambigu
      *
-     * @return string
+     * @return bool
      */
-    public function getValeur()
+	public function getAmbigu()
     {
-        return $this->valeur;
+	    return $this->ambigu;
     }
 
     /**
@@ -122,15 +132,15 @@ class MotAmbiguSpecial
         return $this;
     }
 
-    /**
-     * Get ambigu
-     *
-     * @return bool
-     */
-    public function getAmbigu()
-    {
-        return $this->ambigu;
-    }
+	/**
+	 * Get dateCreation
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateCreation()
+	{
+		return $this->dateCreation;
+	}
 
 	/**
 	 * Set dateCreation
@@ -147,13 +157,13 @@ class MotAmbiguSpecial
 	}
 
 	/**
-	 * Get dateCreation
+	 * Get dateModification
 	 *
 	 * @return \DateTime
 	 */
-	public function getDateCreation()
+	public function getDateModification()
 	{
-		return $this->dateCreation;
+		return $this->dateModification;
 	}
 
 	/**
@@ -171,13 +181,13 @@ class MotAmbiguSpecial
 	}
 
 	/**
-	 * Get dateModification
+	 * Get motAmbigu
 	 *
-	 * @return \DateTime
+	 * @return \AmbigussBundle\Entity\MotAmbigu
 	 */
-	public function getDateModification()
+	public function getMotAmbigu()
 	{
-		return $this->dateModification;
+		return $this->motAmbigu;
 	}
 
     /**
@@ -195,13 +205,13 @@ class MotAmbiguSpecial
     }
 
     /**
-     * Get motAmbigu
+     * Get auteur
      *
-     * @return \AmbigussBundle\Entity\MotAmbigu
+     * @return \UserBundle\Entity\Membre
      */
-    public function getMotAmbigu()
+	public function getAuteur()
     {
-        return $this->motAmbigu;
+	    return $this->auteur;
     }
 
     /**
@@ -219,13 +229,13 @@ class MotAmbiguSpecial
     }
 
     /**
-     * Get auteur
+     * Get modificateur
      *
      * @return \UserBundle\Entity\Membre
      */
-    public function getAuteur()
+	public function getModificateur()
     {
-        return $this->auteur;
+	    return $this->modificateur;
     }
 
     /**
@@ -240,15 +250,5 @@ class MotAmbiguSpecial
         $this->modificateur = $modificateur;
 
         return $this;
-    }
-
-    /**
-     * Get modificateur
-     *
-     * @return \UserBundle\Entity\Membre
-     */
-    public function getModificateur()
-    {
-        return $this->modificateur;
     }
 }

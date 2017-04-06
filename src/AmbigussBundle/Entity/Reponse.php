@@ -47,7 +47,7 @@ class Reponse
     /**
      * @var string
      *
-     * @ORM\Column(name="valeur_mot_ambigu", type="string", length=32)
+     * @ORM\Column(name="valeur_mot_ambigu", type="string", length=32, options={"collation":"utf8_bin"})
      */
     private $valeurMotAmbigu;
 

@@ -63,30 +63,92 @@ class GloseController extends Controller
 					$glose->setModificateur($this->getUser());
 					$glose->setDateModification(new \DateTime());
 
+					$repoG = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+					$repoR = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
+
+					// Récupère la glose avec la valeur que l'on veut insert
+					$gloseM = $repoG->findOneBy(array(
+						'valeur' => $glose->getValeur(),
+					));
+
+					$em = $this->getDoctrine()->getManager();
+
+					// Si la nouvelle valeur de la glose existe déjà
+					if(!empty($gloseM))
+					{
+						// Récupère les réponses avec la glose en cours de modification
+						$reponses = $repoR->findBy(array(
+							'glose' => $glose,
+						));
+
+						// Modifie les réponses avec la glose en cours de modification par celle qui existe déjà
+						foreach($reponses as $reponse)
+						{
+							$reponse->setGlose($gloseM);
+							$em->persist($reponse);
+						}
+
+						// Ajoute les liaisons motAmbigu-Glose de la glose que l'on modifie à celle qui existe déjà
+						$maSave = array();
+						$i = 0;// Enregistre les objets pour le persist
+						foreach($glose->getMotsAmbigus() as $motAmbigu)
+						{
+							// Si la glose qui existe déjà, n'est pas liée au mot ambigu
+							if(!$gloseM->getMotsAmbigus()->contains($motAmbigu))
+							{
+								$maSave[ $i ] = $motAmbigu;
+								$motAmbigu->addGlose($gloseM);
+								$em->persist($maSave[ $i ]);
+							}
+						}
+
+						// Supprime la glose
+						$em->remove($glose);
+					}
+					else
+					{
+						$em->persist($glose);
+					}
+
+					if(!empty($gloseM))
+					{
+						$glose = $gloseM;
+					}
+
+					$res = array(
+						'id' => $glose->getId(),
+						'valeur' => $glose->getValeur(),
+						'modificateur' => $glose->getModificateur() != null ? $glose->getModificateur()->getPseudo() : '',
+						'dateModification' => $glose->getDateModification() != null ? $glose->getDateModification()->format('d/m/Y à H:i') : '',
+						'signale' => $glose->getSignale(),
+					);
+
 					try
 					{
-						$em = $this->getDoctrine()->getManager();
-						$em->persist($glose);
 						$em->flush();
 
-						$res = array(
-							'valeur' => $glose->getValeur(),
-							'modificateur' => $this->getUser()->getPseudo(),
-							'dateModification' => $glose->getDateModification()->format('d/m/Y à H:i'),
-							'signale' => $glose->getSignale(),
-						);
-
 						return $this->json(array(
-							'status' => 'succes',
+							'succes' => true,
 							'glose' => $res,
 						));
 					}
 					catch(\Exception $e)
 					{
-						return $this->json(array(
-							'status' => 'erreur',
-							'message' => $e,
-						));
+						// Si la liaison motAmbigu-glose est déjà faite
+						if($e instanceof \Doctrine\DBAL\Exception\UniqueConstraintViolationException)
+						{
+							return $this->json(array(
+								'succes' => true,
+								'glose' => $res,
+							));
+						}
+						else
+						{
+							return $this->json(array(
+								'succes' => false,
+								'message' => $e->getMessage(),
+							));
+						}
 					}
 				}
 				throw $this->createNotFoundException('Les paramètres sont invalides.');

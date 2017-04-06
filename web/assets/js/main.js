@@ -133,7 +133,7 @@ function addGloseModal(event) {
 				);
 				$(form).clearForm();
 			} else {
-				$(form).after('<div class="alert alert-danser">Erreur</div>');
+				$(form).after('<div class="alert alert-danger">Erreur</div>');
 			}
 		},
 		error: function(){

@@ -201,6 +201,20 @@ class MotAmbigu
     }
 
 	/**
+	 * Add glose if not exist
+	 *
+	 * @param \AmbigussBundle\Entity\Glose $glose
+	 *
+	 * @return MotAmbigu
+	 */
+	public function addGloseIfNotExist(\AmbigussBundle\Entity\Glose $glose)
+	{
+		$this->gloses[ $glose->getId() ] = $glose;
+
+		return $this;
+	}
+
+	/**
 	 * Get signale
 	 *
 	 * @return boolean

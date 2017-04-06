@@ -68,7 +68,7 @@ class Glose
     private $modificateur;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="AmbigussBundle\Entity\MotAmbigu", mappedBy="gloses")
+	 * @ORM\ManyToMany(targetEntity="AmbigussBundle\Entity\MotAmbigu", mappedBy="gloses", cascade={"persist"})
 	 */
     private $motsAmbigus;
 

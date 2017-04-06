@@ -3,89 +3,68 @@
 {% block title %}Jeu{% endblock %}
 {% block titre %}<h1>Jouons !</h1>{% endblock %}
 {% block contenu %}
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+			{% if app.user is null %}
+				<p class="text-success">
+					<b>
+						<a href="{{ path('user_connexion') }}">Connectez-vous</a>
+						pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
+					</b>
+				</p>
+			{% endif %}
 
-	        {% if app.user is null %}
-	            <p class="text-success">
-			        <b>
-				        <a href="{{ path('user_connexion') }}">Connectez-vous</a>
-				        pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
-			        </b>
-		        </p>
-	        {% endif %}
+			{% if alreadyPlayed %}
+				<p class="text-warning">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
+			{% endif %}
 
-	        {% if alreadyPlayed %}
-	            <p class="text-warning">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
-	        {% endif %}
-
-	        {% for flashMessage in app.session.flashbag.get('succes') %}
-		        <div class="alert alert-success">{{ flashMessage }}</div>
-	        {% endfor %}
-	        {% for flashMessage in app.session.flashbag.get('erreur') %}
-		        <div class="alert alert-danger">{{ flashMessage }}</div>
-	        {% endfor %}
-
-				<h3 id="result"></h3>
-				<div class="form-group">
-					{% if app.user %}
-						<button id="phraseLike" class="btn btn-{% if liked %}primary{% else %}default{% endif %} btn-xs">
-							<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-							J'aime
-							cette
-							phrase
-						</button>
-					{% endif %}
-
-                    {% if signal==1 %}
-					<button id="phraseSignal0" class="btn btn-danger btn-xs" disabled><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
-						Phrase déjà signalée </button>
-                    {% else %}
-
-						{% if signal==0 %}
-						<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
-							Je signale
-							cette
-							phrase</button>
-						{% else %}
-						<button id="phraseSignal" class="btn btn-danger btn-xs" ><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
-							Phrase
-							signalée</button>
-						{% endif %}
-					{% endif %}
-				</div>
-
-	        <br>
-	        {{ form_start(form, {'attr' : {'class' : 'form-horizontal'}}) }}
-
-            {{ form_errors(form) }}
-
-	        <div class="form-group">
-		        <div id="ambigussbundle_game_reponses" data-prototype="
-	                {{ include('AmbigussBundle:Game:reponse.prot.html.twig', {form: form.reponses.vars.prototype})|e
-		        ('html_attr') }}
-	                "></div>
-		        {% do form.reponses.setRendered %}
-	        </div>
+			{% for flashMessage in app.session.flashbag.get('succes') %}
+				<div class="alert alert-success">{{ flashMessage }}</div>
+			{% endfor %}
+			{% for flashMessage in app.session.flashbag.get('erreur') %}
+				<div class="alert alert-danger">{{ flashMessage }}</div>
+			{% endfor %}
+			<h3 id="result"></h3>
+			<div class="form-group">
+				{% if app.user %}
+					<button id="phraseLike" class="btn btn-{% if liked %}primary{% else %}default{% endif %} btn-xs">
+						<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+						J'aime cette phrase
+					</button>
+					<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
+						<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+						Signaler un élément
+					</button>
+				{% endif %}
+			</div>
 			<br>
+			{{ form_start(form, {'attr' : {'class' : 'form-horizontal'}}) }}
 
-	        <div class="form-group">
-		        {{ form_widget(form.valider) }}
-		        <a href="{{ path('ambiguss_game') }}" class="btn btn-default">Passer cette
-			        phrase</a>
-	        </div>
-
-            {{ form_rest(form) }}
-            {{ form_end(form) }}
-        </div>
-    </div>
+			{{ form_errors(form) }}
+			<div class="form-group">
+				<div id="ambigussbundle_game_reponses" data-prototype="
+	                {{ include('AmbigussBundle:Game:reponse.prot.html.twig', {form: form.reponses.vars.prototype})|e
+				('html_attr') }}
+	                "></div>
+				{% do form.reponses.setRendered %}
+			</div>
+			<br>
+			<div class="form-group">
+				{{ form_widget(form.valider) }}
+				<a href="{{ path('ambiguss_game') }}" class="btn btn-default">Passer cette
+					phrase</a>
+			</div>
+			{{ form_rest(form) }}
+			{{ form_end(form) }}
+		</div>
+	</div>
 	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpGameModal">
 		<img src="{{ asset('assets/images/infobulle.png') }}">
 	</button>
 {% endblock %}
 {% block js %}
 	<script>
-		$(document).ready(function() {
+		$(document).ready(function () {
 			var endBaliseAmbiguEscape = '<\/amb>';
 
 			// Regex pour avoir les contenus des balises <amb> et leurs id
@@ -141,7 +120,7 @@
 				index++;
 			}
 
-			function addGloseButtonIsClicked(event){
+			function addGloseButtonIsClicked(event) {
 				setModalTitle('Ajouter une glose à "' + event.data.motAmbigu + '"');
 				{% if app.user is empty %}
 				messageNeedConnectionModal();
@@ -151,24 +130,24 @@
 				{% endif %}
 			}
 
-			$("#phraseLike").click(function(){
+			$("#phraseLike").click(function () {
 				var boutonLike = $(this);
-				$.getJSON('{{ path('ambiguss_phrase_like', {'id':phrase_id}) }}', function(data){
-					if(data.status === 'succes'){
-						if(data.action === 'like' || data.action === 'relike'){
+				$.getJSON('{{ path('ambiguss_phrase_like', {'id':phrase_id}) }}', function (data) {
+					if (data.status === 'succes') {
+						if (data.action === 'like' || data.action === 'relike') {
 							boutonLike.removeClass('btn-default').addClass('btn-primary');
-						}else{
+						} else {
 							boutonLike.removeClass('btn-primary').addClass('btn-default');
 						}
 					}
 				});
 			});
 
-            $("#phraseSignal").click(function(){
-                var boutonSignal = $(this);
-                setModalTitle('Signaler une partie');
-                setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
-                $("#modal").modal("show");
+			$("#phraseSignal").click(function () {
+				var boutonSignal = $(this);
+				setModalTitle('Signaler un élément');
+				setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
+				$("#modal").modal("show");
 
 				// On envoit le formulaire par ajax
 				$('form[name="jugement_add"]').ajaxForm({
@@ -178,23 +157,16 @@
 					},
 					// Quand la réponse Ajax sera reçu, on appelle ce callback
 					success: function (data, status, xhr, form) {
-						if(data.succes) {
-							if (data.action === 'signale') {
-								boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Phrase signalée');
-							}
-							else{
-								boutonSignal.html('<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> Je signale cette phrase');
-							}
-						}
+
 					},
-					error: function(){
+					error: function () {
 						loading = $("#loading");
 						next = loading.prev().nextAll();
-						loading.before('<span class="text-danger">Erreur (pas encore implémenté)</span>');
+						loading.before('<span class="text-danger">Erreur</span>');
 						next.remove();
 					}
 				});
-            });
+			});
 
 			// Au click sur le bouton, exécute la fonction
 			$('#helpGameModal').click(helpGameModal);
@@ -214,4 +186,4 @@
 			}
 		});
 	</script>
-{%  endblock %}
+{% endblock %}

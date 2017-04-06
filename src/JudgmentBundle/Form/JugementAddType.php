@@ -2,11 +2,10 @@
 
 namespace JudgmentBundle\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class JugementAddType extends AbstractType
@@ -32,14 +31,12 @@ class JugementAddType extends AbstractType
 				'attr' => array('placeholder' => 'Détaillez le motif du signalement'),
 			))
 			// Cas: signaler les objets (gloses,mot ambigu et phrase) dans une seule modal
-			/*->add('typeObjet',EntityType::class, array(
+			->add('typeObjet', EntityType::class, array(
 			   'class' => 'JudgmentBundle\Entity\TypeObjet',
 			   'choice_label' => 'typeobjet',
 			   'label' =>  'Objet',
-			   'mapped' => false,
 			   'required' => true
-			))*/
-			->remove('typeObjet')
+			))
 			->remove('dateCreation')
 			->remove('dateDeliberation')
 			->remove('idObjet')
@@ -48,7 +45,10 @@ class JugementAddType extends AbstractType
 			->remove('juge')
 			->add('signaler', SubmitType::class, array(
 				'label' => 'Signaler',
-				'attr' => array('class' => 'btn btn-primary'),
+				'attr' => array(
+					'class' => 'btn btn-primary',
+					'disabled' => 'disabled',
+				),
 			));
 
 	}

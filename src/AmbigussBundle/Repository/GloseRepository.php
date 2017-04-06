@@ -33,4 +33,13 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 		}
 		return $entity;
 	}
+
+	public function getSignale()
+	{
+		return $this->createQueryBuilder('g')
+			->innerJoin('g.auteur', 'a', 'WITH', 'g.auteur = a.id')->addSelect('a')
+			->leftJoin('g.modificateur', 'm', 'WITH', 'g.modificateur = m.id')->addSelect('m')
+			->where('g.signale = 1')
+			->getQuery()->getResult();
+	}
 }

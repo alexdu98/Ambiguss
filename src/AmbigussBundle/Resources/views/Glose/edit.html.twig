@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+
+{{ form_errors(form) }}
+
+{{ form_row(form.valeur) }}
+<div class="form-group">
+	{{ form_label(form.signale) }}
+	{% for input in form.signale.children %}
+		{{ form_widget(input) }}
+	{% endfor %}
+</div>
+{{ form_rest(form) }}
+{{ form_end(form) }}

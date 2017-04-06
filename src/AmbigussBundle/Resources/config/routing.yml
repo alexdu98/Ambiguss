@@ -42,12 +42,36 @@ ambiguss_glose_get_autocomplete:
     defaults:
         _controller: AmbigussBundle:API:autocompleteGlose
     options:
-            expose: true
+        expose: true
 
 ambiguss_glose_add:
     path: /ambiguss/glose/add
     defaults:
         _controller: AmbigussBundle:API:addGlose
+
+ambiguss_glose_edit:
+    path: /ambiguss/glose/edit/{id}
+    defaults:
+        _controller: AmbigussBundle:Glose:editGlose
+        id: null
+
+ambiguss_glose_delete:
+    path: /ambiguss/glose/delete/{id}
+    defaults:
+        _controller: AmbigussBundle:Glose:deleteGlose
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+ambiguss_glose_link:
+    path: /ambiguss/glose/link/{id}
+    defaults:
+        _controller: AmbigussBundle:Glose:linkGlose
+    requirements:
+        id: \d+
+    options:
+        expose: true
 
 ambiguss_glose_get_by_motambigu:
     path: /ambiguss/glose/getByMotAmbigu
@@ -89,3 +113,8 @@ ambiguss_export:
     path: /ambiguss/export
     defaults:
         _controller: AmbigussBundle:Export:main
+
+ambiguss_gloses:
+    path: /ambiguss/gloses
+    defaults:
+        _controller: AmbigussBundle:Glose:main

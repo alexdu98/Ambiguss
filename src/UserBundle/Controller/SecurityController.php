@@ -12,7 +12,8 @@ use UserBundle\Form\MembreType;
 class SecurityController extends Controller{
 
 	public function connexionAction(Request $request){
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
 			return $this->redirectToRoute('app_accueil');
 		}
 

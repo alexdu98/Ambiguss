@@ -9,6 +9,7 @@
 namespace AmbigussBundle\Controller;
 
 use AmbigussBundle\Entity\Game;
+use AmbigussBundle\Entity\Partie;
 use AmbigussBundle\Form\GameType;
 use AmbigussBundle\Form\GloseAddType;
 use JudgmentBundle\Entity\Jugement;
@@ -114,8 +115,18 @@ class GameController extends Controller{
 							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 						}
 
-						$data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur()->updateCredits(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
+						$gainCreateur = ceil(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
 
+						$data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur()->updateCredits($gainCreateur);
+
+						$partie = new Partie();
+						$partie->setPhrase($data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase());
+						$partie->setJoueur($this->getUser());
+						$partie->setJoue(true);
+						$partie->setGainJoueur(ceil($nb_points));
+						$partie->setGainCreateur($gainCreateur);
+
+						$em->persist($partie);
 						$em->persist($this->getUser());
 
 						try

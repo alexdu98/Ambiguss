@@ -9,7 +9,6 @@
 namespace AmbigussBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class ClassementController extends Controller{
 
@@ -23,8 +22,7 @@ class ClassementController extends Controller{
 	}
     public function classementPersonnelAction(){
         $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-        $classement = $repository->getClassementPhrasesUser( $this->getUser());
-
+	    $classement = $repository->getClassementPhrasesUser($this->getUser());
 
         return $this->render('AmbigussBundle:Classement:phrasesUser.html.twig', array (
             'classement' => $classement,

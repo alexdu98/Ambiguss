@@ -25,14 +25,14 @@ class Partie
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="gainJoueur", type="integer")
+	 * @ORM\Column(name="gain_joueur", type="integer")
 	 */
 	private $gainJoueur;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="gainCreateur", type="integer")
+	 * @ORM\Column(name="gain_createur", type="integer")
 	 */
 	private $gainCreateur;
 
@@ -50,7 +50,7 @@ class Partie
 	private $joueur;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Phrase")
+	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Phrase", inversedBy="parties")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $phrase;

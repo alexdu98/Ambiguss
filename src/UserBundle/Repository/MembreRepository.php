@@ -26,4 +26,5 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 			->setMaxResults($limit)
 			->getQuery()->getResult();
 	}
+
 }

@@ -10,17 +10,6 @@ namespace AmbigussBundle\Repository;
  */
 class PhraseRepository extends \Doctrine\ORM\EntityRepository
 {
-
-    public function getClassementPhrasesUser($IdUser){
-        return $this->createQueryBuilder('p')->select("p.id , p.contenu ,p.dateCreation ")
-            ->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
-            ->where('p.auteur = :aut')->setParameter("aut", $IdUser)
-            ->groupBy('p.id')
-            ->orderBy('nbLikes', 'DESC')
-            ->getQuery()->getResult();
-        // TODO : recup gains peut etre en rajoutant un attributs gains a la phrase ?
-    }
-
     public function getClassementPhrases($limit){
         return $this->createQueryBuilder('p')->select("p.id , p.contenu ,p.dateCreation ")
             ->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
@@ -28,6 +17,16 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('nbLikes', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()->getResult();
-        // TODO : recup gains peut etre en rajoutant un attributs gains a la phrase ?
     }
+
+	public function getClassementPhrasesUser($user)
+	{
+		return $this->createQueryBuilder('p')->select('p.contenu, p.dateCreation')
+			->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
+			->leftJoin("p.parties", "pa", 'with', 'pa.phrase = p.id')->addSelect('sum(pa.gainCreateur) as nbPoints')
+			->where('p.auteur = :user')->setParameter('user', $user)
+			->groupBy('p.id')
+			->orderBy('nbPoints', 'DESC')
+			->getQuery()->getResult();
+	}
 }

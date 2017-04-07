@@ -77,6 +77,13 @@ class Phrase
 	 */
 	private $likesPhrase;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\Partie", mappedBy="phrase")
+	 */
+	private $parties;
+
+
+
 
     /**
      * Constructor
@@ -461,4 +468,38 @@ class Phrase
 
 	    return array('succes' => true, 'motsAmbigus' => $mots_ambigu);
     }
+
+	/**
+	 * Add party
+	 *
+	 * @param \AmbigussBundle\Entity\Partie $party
+	 *
+	 * @return Phrase
+	 */
+	public function addParty(\AmbigussBundle\Entity\Partie $party)
+	{
+		$this->parties[] = $party;
+
+		return $this;
+	}
+
+	/**
+	 * Remove party
+	 *
+	 * @param \AmbigussBundle\Entity\Partie $party
+	 */
+	public function removeParty(\AmbigussBundle\Entity\Partie $party)
+	{
+		$this->parties->removeElement($party);
+	}
+
+	/**
+	 * Get parties
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getParties()
+	{
+		return $this->parties;
+	}
 }

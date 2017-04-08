@@ -44,6 +44,13 @@ class Partie
 	private $joue;
 
 	/**
+	 * @var \DateTime
+	 *
+	 * @ORM\Column(name="date_partie", type="datetime")
+	 */
+	private $datePartie;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
@@ -61,6 +68,7 @@ class Partie
 	public function __construct()
 	{
 		$this->joue = 0;
+		$this->datePartie = new \DateTime();
 	}
 
 	/**
@@ -189,6 +197,30 @@ class Partie
 	public function setPhrase(\AmbigussBundle\Entity\Phrase $phrase)
 	{
 		$this->phrase = $phrase;
+
+		return $this;
+	}
+
+	/**
+	 * Get datePartie
+	 *
+	 * @return \DateTime
+	 */
+	public function getDatePartie()
+	{
+		return $this->datePartie;
+	}
+
+	/**
+	 * Set datePartie
+	 *
+	 * @param \DateTime $datePartie
+	 *
+	 * @return Partie
+	 */
+	public function setDatePartie($datePartie)
+	{
+		$this->datePartie = $datePartie;
 
 		return $this;
 	}

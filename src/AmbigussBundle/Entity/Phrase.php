@@ -387,7 +387,8 @@ class Phrase
 
 		// Ajoute le . final si non existant
 		$last_letter = $this->getContenu()[ strlen($this->getContenu()) - 1 ];
-		if($last_letter != '.' || $last_letter != '?' || $last_letter != '!')
+
+		if($last_letter != '.' && $last_letter != '?' && $last_letter != '!')
 		{
 			$this->setContenu($this->getContenu() . '.');
 		}

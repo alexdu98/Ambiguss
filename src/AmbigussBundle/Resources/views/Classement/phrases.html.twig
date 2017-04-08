@@ -16,6 +16,7 @@
 				<th>#</th>
 				<th>Phrase</th>
 				<th>Nombre de likes</th>
+				<th>Gains</th>
 				<th>Date de création</th>
 			</tr>
 			</thead>
@@ -24,6 +25,7 @@
 				<th>#</th>
 				<th>Phrase</th>
 				<th>Nombre de likes</th>
+				<th>Gains</th>
 				<th>Date de création</th>
 			</tr>
 			</tfoot>
@@ -33,6 +35,7 @@
 					<td>{{ loop.index }}</td>
 					<td>{{ getPhraseHTML(row.contenu) | raw }}</td>
 					<td>{{ row.nbLikes }}</td>
+					<td>{{ row.nbPoints|default('0') }}</td>
 					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y") }}</td>
 				</tr>
 			{% endfor %}

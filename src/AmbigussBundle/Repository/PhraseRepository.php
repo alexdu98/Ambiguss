@@ -11,8 +11,8 @@ namespace AmbigussBundle\Repository;
 class PhraseRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getClassementPhrases($limit){
-        return $this->createQueryBuilder('p')->select("p.id , p.contenu ,p.dateCreation ")
-            ->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(lp) as nbLikes')
+	    return $this->createQueryBuilder('p')->select("p.contenu, p.dateCreation ")
+		    ->leftJoin("p.likesPhrase", "lp", 'with', 'lp.phrase = p.id AND lp.active = 1')->addSelect('count(lp) as nbLikes')
             ->groupBy('p.id')
             ->orderBy('nbLikes', 'DESC')
             ->setMaxResults($limit)

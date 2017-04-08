@@ -21,7 +21,7 @@ parameters:
     dureeAvantJouabiliteSecondes: 300
     # Classement
     maxResultForClassementGeneral: 100
-    maxResultForClassementPhrases: 15
+    maxResultForClassementPhrases: 25
     # Jugement
     dureeDeliberationSecondes: 432000 # 5 jours
 

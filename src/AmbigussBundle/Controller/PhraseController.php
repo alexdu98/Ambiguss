@@ -64,6 +64,8 @@ class PhraseController extends Controller
 						$mot_ambigu_OBJ = new MotAmbigu();
 						$mot_ambigu_OBJ->setValeur($mot_ambigu[2]);
 						$mot_ambigu_OBJ->setAuteur($this->getUser());
+						// Normalise le mot ambigu
+						$mot_ambigu_OBJ->normalize();
 						$mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu_OBJ);
 
 						$map = new MotAmbiguPhrase();
@@ -158,13 +160,15 @@ class PhraseController extends Controller
 		}
 		else
 		{
+
 			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
 
 			return $this->redirectToRoute('user_connexion');
 		}
 	}
 
-	public function likeAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
+	public
+	function likeAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
 	{
 
 		$rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
@@ -182,7 +186,9 @@ class PhraseController extends Controller
 			$aimerPhrase->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
 			$action = 'like';
 		}
-		else if($aimerPhrase->getActive() === false)
+		else
+		{
+			if($aimerPhrase->getActive() === false)
 		{
 			$aimerPhrase->setActive(true);
 			$action = 'relike';
@@ -191,6 +197,7 @@ class PhraseController extends Controller
 		{
 			$aimerPhrase->setActive(false);
 			$action = 'unlike';
+		}
 		}
 
 		$em = $this->getDoctrine()->getManager();
@@ -203,7 +210,8 @@ class PhraseController extends Controller
 		));
 	}
 
-	public function SignalAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
+	public
+	function SignalAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
 	{
 		if($phrase->getSignale() == 0)
 		{

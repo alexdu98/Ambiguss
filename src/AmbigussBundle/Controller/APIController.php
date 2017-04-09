@@ -41,6 +41,9 @@ class APIController extends Controller
 
 				$data->setAuteur($this->getUser());
 
+				// Normalise la glose
+				$data->normalize();
+
 				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
 				$glose = $repository->findOneOrCreate($data);
 

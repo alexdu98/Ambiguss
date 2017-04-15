@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GameController extends Controller{
 
-	public function mainAction(Request $request, $id=null){
+	public function mainAction(Request $request,\AmbigussBundle\Entity\Phrase  $id=null){
 		$game = new Game();
 		$form = $this->get('form.factory')->create(GameType::class, $game);
 

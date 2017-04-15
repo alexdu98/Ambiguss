@@ -15,6 +15,7 @@
 				<tr>
 					<th>#</th>
 					<th>Pseudo</th>
+					<th>Titre</th>
 					<th>Inscription</th>
 					<th>Points</th>
 					<th>Nombre de phrases</th>
@@ -25,6 +26,7 @@
 				<tr>
 					<th>#</th>
 					<th>Pseudo</th>
+					<th>Titre</th>
 					<th>Inscription</th>
 					<th>Points</th>
 					<th>Nombre de phrases</th>
@@ -36,6 +38,19 @@
 					<tr>
 						<td>{{ loop.index }}</td>
 						<td><a style="color:black" href="{{ path('user_profil' , {'id':row.id}) }}">{{ row.pseudo }}</a></td>
+						<td>
+							{% if loop.index==1 %}
+								Ambigator
+								{% elseif loop.index>1 and loop.index< 5 %}
+								Grand Maître
+                                {% elseif loop.index>=5 and loop.index< 11 %}
+								Cavalier
+                                {% elseif loop.index>=11 and row.pointsClassement> 1500 %}
+								Challenger
+                                {% else %}
+								Novice
+							{% endif %}
+						</td>
 						<td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y") }}</td>
 						<td>{{ row.pointsClassement }}</td>
 						<td>{{ row.nbPhrases }}</td>
@@ -55,7 +70,7 @@
 				stateSave: true, // Enregistre les configurations
 				stateSaveParams: function (settings, data) {
 					data.start = 0; // On enregistre pas la page
-					data.order = [[3, "desc"]]; // On ordonne sur le nombre de points
+					data.order = [[5, "desc"]]; // On ordonne sur le nombre de points
 					data.search = {}; // On enregistre pas la recherche
 				},
 				stateDuration: 0, // pour une durée illimitée

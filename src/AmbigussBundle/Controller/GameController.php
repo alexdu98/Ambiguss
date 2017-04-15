@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GameController extends Controller{
 
-	public function mainAction(Request $request){
+	public function mainAction(Request $request, $id=null){
 		$game = new Game();
 		$form = $this->get('form.factory')->create(GameType::class, $game);
 
@@ -179,9 +179,16 @@ class GameController extends Controller{
 			}
 
 			// Rend une clé au hasard
-			$phrase_id = array_rand($phrases);
+            if($id==null) {
+                $phrase_id = array_rand($phrases);
 
-			$phraseOBJ = $repository->find($phrases[$phrase_id][1]);
+                $phraseOBJ = $repository->find($phrases[$phrase_id][1]);
+            }
+            else{
+                $phrase_id = $id;
+
+                $phraseOBJ = $repository->find($phrase_id);
+            }
 
 			// recup champ signal
 			$signal = $phraseOBJ->getSignale();

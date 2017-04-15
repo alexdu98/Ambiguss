@@ -33,7 +33,7 @@
 			{% for row in classement %}
 				<tr>
 					<td>{{ loop.index }}</td>
-					<td>{{ getPhraseHTML(row.contenu) | raw }}</td>
+					<td><a style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
 					<td>{{ row.nbLikes }}</td>
 					<td>{{ row.nbPoints|default('0') }}</td>
 					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y") }}</td>

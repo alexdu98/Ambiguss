@@ -28,9 +28,12 @@ ambiguss_phrase_delete:
         id: \d+
 
 ambiguss_game:
-    path: /ambiguss/jeu
+    path: /ambiguss/jeu/{id}
     defaults:
-        _controller: AmbigussBundle:Game:main
+        {_controller: AmbigussBundle:Game:main,id: null}
+
+
+
 
 ambiguss_game_result:
     path: /ambiguss/jeu/resultat

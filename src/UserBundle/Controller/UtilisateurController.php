@@ -7,12 +7,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UtilisateurController extends Controller
 {
-	public function profilAction(Request $request)
+	public function profilAction(Request $request, \UserBundle\Entity\Membre $user=null)
 	{
 		if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('user_connexion');
 		}
-
-		return $this->render('UserBundle:Utilisateur:profil.html.twig');
+        if($user==null)
+		    return $this->render('UserBundle:Utilisateur:profil.html.twig',array (
+                'user' => $this->getUser(),));
+		else
+            return $this->render('UserBundle:Utilisateur:profil.html.twig',array (
+                'user' => $user,));
 	}
 }

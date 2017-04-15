@@ -43,6 +43,6 @@ user_oubli_mdp_reinitialisation:
         cle: "[a-zA-Z0-9]+"
 
 user_profil:
-    path: /user/profil
+    path: /user/profil/{id}
     defaults:
-        _controller: UserBundle:Utilisateur:Profil
+        {_controller: UserBundle:Utilisateur:Profil, id : null}

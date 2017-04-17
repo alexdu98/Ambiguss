@@ -42,6 +42,11 @@ user_oubli_mdp_reinitialisation:
     requirements:
         cle: "[a-zA-Z0-9]+"
 
+user_modif_profil:
+    path: /modifier
+    defaults:
+        _controller: UserBundle:Utilisateur:ModifProfil
+
 user_profil:
     path: /user/profil/{id}
     defaults:

@@ -64,7 +64,9 @@ class MembreType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'UserBundle\Entity\Membre'
+            'data_class' => 'UserBundle\Entity\Membre',
+            'pseudo' => null,
+            'email'=> null
         ));
     }
 

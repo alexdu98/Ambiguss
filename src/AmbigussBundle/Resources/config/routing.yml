@@ -27,18 +27,15 @@ ambiguss_phrase_delete:
     requirements:
         id: \d+
 
-ambiguss_game:
-    path: /ambiguss/jeu/{id}
-    defaults:
-        {_controller: AmbigussBundle:Game:main,id: null}
-
-
-
-
 ambiguss_game_result:
     path: /ambiguss/jeu/resultat
     defaults:
         _controller: AmbigussBundle:Game:resultat
+
+ambiguss_game:
+    path: /ambiguss/jeu/{id}
+    defaults:
+        {_controller: AmbigussBundle:Game:main,id: null}
 
 ambiguss_glose_get_autocomplete:
     path: /ambiguss/glose/get/autocomplete

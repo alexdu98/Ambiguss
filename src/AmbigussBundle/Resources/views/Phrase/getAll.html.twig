@@ -1,0 +1,172 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Phrases{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/DataTables/datatables.css') }}">
+{% endblock %}
+
+{% block titre %}Modération de phrases{% endblock %}
+
+{% block contenu %}
+    <div class="well">
+        <table id="phrasesTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Valeur</th>
+                <th>Auteur</th>
+                <th>Date de création</th>
+                <th>Modificateur</th>
+                <th>Date de modification</th>
+                <th>Signalée</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Valeur</th>
+                <th>Auteur</th>
+                <th>Date de création</th>
+                <th>Modificateur</th>
+                <th>Date de modification</th>
+                <th>Signalée</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for row in phrases %}
+                <tr id="phrase-{{ row.id }}">
+                    <td>{{ row.id }}</td>
+                    <td class="phrase-valeur">{{ row.contenu }}</td>
+                    <td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
+                    <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
+                    {% if not row.modificateur %}
+                        <td class="phrase-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+                    {% else %}
+                        <td class="phrase-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
+                    {%  endif %}
+                    {% if row.dateModification %}
+                        <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
+						H:i") }}</td>
+                    {% else %}
+                        <td class="phrase-dateModification" data-order=""></td>
+                    {% endif %}
+                    <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm keepPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
+                            Concerver
+                        </button>
+                        <button class="btn btn-warning btn-sm editPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
+                            Modifier
+                        </button>
+                        <button class="btn btn-danger btn-sm deletePhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
+                            Supprimer
+                        </button>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ asset('assets/vendor/DataTables/datatables.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('#phrasesTable').DataTable({
+            stateSave: true, // Enregistre les configurations
+            stateSaveParams: function (settings, data) {
+                data.start = 0; // On enregistre pas la page
+                data.order = [[0, "desc"]]; // On ordonne sur l'id
+                data.search = {}; // On enregistre pas la recherche
+            },
+            stateDuration: 0, // pour une durée illimitée
+            columnDefs: [
+                {targets: 7, orderable: false}
+            ],
+            order: [[0, 'asc']], // On ordonne sur l'id
+            responsive: true,
+            language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
+        });
+        // Au click sur le bouton, exécute la fonction
+        $('.deletePhraseButton').click(deletePhraseModal);
+        function deletePhraseModal(event) {
+            var button = $(this);
+            setModalTitle('Supprimer la phrase "' + button.data('valeur') + '"');
+
+            setModalBody('Êtes-vous certain de vouloir supprimer cette phrase ?<br><br>');
+
+                setModalBody(
+                    '<span class="text-danger">La phrase ne sera plus visible aux joueurs .</span><br><br>'
+                    + '<div class="text-right"><button id="phraseDelete" class="btn btn-danger">Supprimer</button></div>'
+                );
+
+                $('#phraseDelete').click(function (data) {
+                    // On affiche l'image laoding en attendant la réponse
+                    $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+                    var url = Routing.generate('ambiguss_phrase_delete', {'id' : button.data('id')});
+
+                    $.getJSON(url, function (data) {
+                        if (data.succes) {
+                            // On trouve la ligne et on l'a supprime
+                            $('#phrasesTable').DataTable().row(button.parents('tr')).remove().draw();
+                            // On cache la modale
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            $(this).after('<span class="text-danger">Erreur</span>');
+                        }
+                    })
+                        .fail(function () {
+                            $(this).after('<span class="text-danger">Erreur</span>');
+                        })
+                        .always(function () {
+                            $('#loading').remove();
+                        });
+                });
+        }
+
+        // Au click sur le bouton, exécute la fonction
+        $('.keepPhraseButton').click(keepPhraseModal);
+        function keepPhraseModal(event) {
+            var button = $(this);
+            setModalTitle('Concerver la phrase "' + button.data('valeur') + '"');
+
+            setModalBody('Êtes-vous certain de vouloir concerver cette phrase ?<br><br>');
+
+            setModalBody(
+                '<span class="text-danger">La phrase restera telle quelle et ne sera plus signalée.</span><br><br>'
+                + '<div class="text-right"><button id="phraseKeep" class="btn btn-primary">Concerver</button></div>'
+            );
+
+            $('#phraseKeep').click(function (data) {
+                // On affiche l'image laoding en attendant la réponse
+                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+                var url = Routing.generate('ambiguss_phrase_keep', {'id' : button.data('id')});
+
+                $.getJSON(url, function (data) {
+                    if (data.succes) {
+                        // On trouve la ligne et on l'a supprime
+                        $('#phrasesTable').DataTable().row(button.parents('tr')).remove().draw();
+                        // On cache la modale
+                        $('#modal').modal('hide');
+                    }
+                    else {
+                        $(this).after('<span class="text-danger">Erreur</span>');
+                    }
+                })
+                    .fail(function () {
+                        $(this).after('<span class="text-danger">Erreur</span>');
+                    })
+                    .always(function () {
+                        $('#loading').remove();
+                    });
+            });
+        }
+    });
+</script>
+{% endblock %}

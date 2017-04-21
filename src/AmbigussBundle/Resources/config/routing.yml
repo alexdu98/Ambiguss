@@ -26,7 +26,8 @@ ambiguss_phrase_delete:
         _controller: AmbigussBundle:Phrase:delete
     requirements:
         id: \d+
-
+    options:
+        expose: true
 ambiguss_game_result:
     path: /ambiguss/jeu/resultat
     defaults:
@@ -118,3 +119,17 @@ ambiguss_gloses:
     path: /ambiguss/gloses
     defaults:
         _controller: AmbigussBundle:Glose:main
+
+ambiguss_moderation_phrase:
+    path: /ambiguss/moderation/phrases
+    defaults:
+        _controller: AmbigussBundle:Phrase:moderation
+
+ambiguss_phrase_keep:
+    path: /ambiguss/phrase/keep/{id}
+    defaults:
+        _controller: AmbigussBundle:Phrase:keep
+    requirements:
+        id: \d+
+    options:
+        expose: true

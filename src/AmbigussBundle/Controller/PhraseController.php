@@ -234,4 +234,63 @@ class PhraseController extends Controller
 		));
 
 	}
+
+    public function moderationAction()
+    {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+        {
+            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+            {
+                $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+                $phrases= $repo->getSignale(array(
+                    'signale' => true,
+                ));
+
+
+                return $this->render('AmbigussBundle:Phrase:getAll.html.twig', array(
+                    'phrases' => $phrases,
+                ));
+            }
+            else
+            {
+                if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+                {
+                    $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+
+                    return $this->redirectToRoute('user_connexion');
+                }
+            }
+        }
+        throw $this->createAccessDeniedException();
+    }
+
+    public function keepAction(\AmbigussBundle\Entity\Phrase $phrase)
+    {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+        {
+            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+            {
+                try
+                {
+                    $phrase->setSignale(0);
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $em->persist($phrase);
+                    $em->flush();
+
+                    return $this->json(array(
+                        'succes' => true,
+                    ));
+                }
+                catch(\Exception $e)
+                {
+                    return $this->json(array(
+                        'succes' => false,
+                        'message' => $e,
+                    ));
+                }
+            }
+        }
+        throw $this->createAccessDeniedException();
+    }
+
 }

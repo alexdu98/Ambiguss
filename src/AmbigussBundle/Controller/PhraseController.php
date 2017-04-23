@@ -265,6 +265,36 @@ class PhraseController extends Controller
         throw $this->createAccessDeniedException();
     }
 
+    public function moderation_maAction()
+    {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+        {
+            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+            {
+                $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
+                $ma= $repo->getSignale(array(
+                    'signale' => true,
+                ));
+
+
+                return $this->render('AmbigussBundle:MAmbigu:getAll.html.twig', array(
+                    'mambigus' => $ma,
+                ));
+            }
+            else
+            {
+                if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+                {
+                    $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+
+                    return $this->redirectToRoute('user_connexion');
+                }
+            }
+        }
+        throw $this->createAccessDeniedException();
+    }
+
+
     public function keepAction(\AmbigussBundle\Entity\Phrase $phrase)
     {
         if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))

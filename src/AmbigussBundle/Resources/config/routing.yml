@@ -126,6 +126,11 @@ ambiguss_moderation_phrase:
     defaults:
         _controller: AmbigussBundle:Phrase:moderation
 
+ambiguss_moderation_ma:
+    path: /ambiguss/moderation/mots_ambigus
+    defaults:
+        _controller: AmbigussBundle:Phrase:moderation_ma
+
 ambiguss_phrase_keep:
     path: /ambiguss/phrase/keep/{id}
     defaults:

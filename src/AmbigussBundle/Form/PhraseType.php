@@ -34,7 +34,8 @@ class PhraseType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AmbigussBundle\Entity\Phrase'
+            'data_class' => 'AmbigussBundle\Entity\Phrase',
+            'contenu' => null,
         ));
     }
 

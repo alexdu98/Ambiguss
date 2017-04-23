@@ -8,6 +8,7 @@ use AmbigussBundle\Entity\MotAmbiguPhrase;
 use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
+use AmbigussBundle\Form\PhraseEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -308,6 +309,78 @@ class PhraseController extends Controller
 
                     return $this->json(array(
                         'succes' => true,
+                    ));
+                }
+                catch(\Exception $e)
+                {
+                    return $this->json(array(
+                        'succes' => false,
+                        'message' => $e,
+                    ));
+                }
+            }
+        }
+        throw $this->createAccessDeniedException();
+    }
+
+    public function editAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
+    {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+        {
+            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+            {
+
+                try
+                {
+                    $phr = new \AmbigussBundle\Entity\Phrase();
+                    $nb_MA= count(preg_split("/(<a(.)+b>)/",$phrase->getContenu()));
+
+                    // au cas ou on disable les MA
+                   // $test= preg_replace("/(<a(.)+b>)/", "<span contenteditable=\"false\">\$1</span>",$phrase->getContenu());
+                    $phr->setContenu($phrase->getContenu());
+
+                    $form = $this->get('form.factory')->create(PhraseEditType::class, $phr,array(
+                        'contenu'=> $phr->getContenu()));
+
+                    $form->handleRequest($request);
+
+                    if($form->isSubmitted() ) {
+                        $data = $form->getData();
+                        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+                        $phrase_modif = $repository->find($phrase->getId());
+                        $phrase_modif->setModificateur($this->getUser());
+                        $phrase_modif->setDateModification( new \DateTime());
+
+                        //problème car data->getContenu() contient les modifs mais pas les anciennes
+                        //balises des MA
+                        $phrase_modif->setContenu($data->getContenu());
+
+                        try {
+                            /*
+                            $em = $this->getDoctrine()->getManager();
+                            $em->getConnection()->beginTransaction();
+                            $em->persist($phrase_modif);
+                            $em->flush();*/
+
+                            // Réinitialise le formulaire
+                            $phrase = new \AmbigussBundle\Entity\Phrase();
+                            $form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
+                        } catch (\Exception $e) {
+                                $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $e->getMessage());
+                            }
+
+                    }
+                        $newPhrase = null;
+                        $glose = new \AmbigussBundle\Entity\Glose();
+                        $addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
+                            'action' => $this->generateUrl('ambiguss_glose_add'),
+                        ));
+
+                    return $this->render('AmbigussBundle:Phrase:edit.html.twig', array(
+                        'form' => $form->createView(),
+                        'newPhrase' => $phr,
+                        'nb_MA' => $nb_MA,
+                        'addGloseForm' => $addGloseForm->createView(),
                     ));
                 }
                 catch(\Exception $e)

@@ -38,8 +38,8 @@
             <tbody>
             {% for row in phrases %}
                 <tr id="phrase-{{ row.id }}">
-                    <td>{{ row.id }}</td>
-                    <td class="phrase-valeur">{{ row.contenu }}</td>
+                    <td >{{ row.id }}</td>
+                    <td width="30%"class="phrase-valeur">{{row.contenu|raw }}</td>
                     <td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
                     {% if not row.modificateur %}
@@ -166,6 +166,36 @@
                         $('#loading').remove();
                     });
             });
+        }
+
+        // Au click sur le bouton, exécute la fonction
+        $('.editPhraseButton').click(editPhraseModal);
+        function editPhraseModal(event) {
+            var button = $(this);
+
+            setModalTitle('Modifier la phrase "' + button.data('valeur') + '"');
+
+            setModalBody('Êtes-vous certain de vouloir modifier cette phrase ?<br><br>');
+
+            setModalBody(
+                '<span class="text-danger">La phrase sera définitivement modifiée</span><br><br>'
+                + '<div class="text-right"><button id="phraseEdit" class="btn btn-warning">Modifier</button></div>'
+            );
+
+            $('#phraseEdit').click(function (data) {
+                // On affiche l'image laoding en attendant la réponse
+                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+                var id= button.data('id');
+                var url ="{{ path('ambiguss_phrase_edit', {'id': '0'}) }}";
+                url=url.replace('0',parseInt(id));
+                location.href = url;
+
+
+
+
+
+            });
+
         }
     });
 </script>

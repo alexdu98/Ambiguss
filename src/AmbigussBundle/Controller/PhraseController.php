@@ -293,4 +293,32 @@ class PhraseController extends Controller
         throw $this->createAccessDeniedException();
     }
 
+    public function deleteAction(\AmbigussBundle\Entity\Phrase $phrase)
+    {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+        {
+            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+            {
+                try
+                {
+                    $phrase->setVisible(0);
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $em->persist($phrase);
+                    $em->flush();
+
+                    return $this->json(array(
+                        'succes' => true,
+                    ));
+                }
+                catch(\Exception $e)
+                {
+                    return $this->json(array(
+                        'succes' => false,
+                        'message' => $e,
+                    ));
+                }
+            }
+        }
+        throw $this->createAccessDeniedException();
+    }
 }

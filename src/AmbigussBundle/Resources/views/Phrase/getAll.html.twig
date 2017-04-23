@@ -56,7 +56,7 @@
                     <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td>
                         <button class="btn btn-primary btn-sm keepPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
-                            Concerver
+                            Conserver
                         </button>
                         <button class="btn btn-warning btn-sm editPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
                             Modifier
@@ -136,11 +136,11 @@
             var button = $(this);
             setModalTitle('Concerver la phrase "' + button.data('valeur') + '"');
 
-            setModalBody('Êtes-vous certain de vouloir concerver cette phrase ?<br><br>');
+            setModalBody('Êtes-vous certain de vouloir conserver cette phrase ?<br><br>');
 
             setModalBody(
                 '<span class="text-danger">La phrase restera telle quelle et ne sera plus signalée.</span><br><br>'
-                + '<div class="text-right"><button id="phraseKeep" class="btn btn-primary">Concerver</button></div>'
+                + '<div class="text-right"><button id="phraseKeep" class="btn btn-primary">Conserver</button></div>'
             );
 
             $('#phraseKeep').click(function (data) {

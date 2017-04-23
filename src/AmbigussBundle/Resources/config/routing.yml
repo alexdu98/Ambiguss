@@ -28,6 +28,7 @@ ambiguss_phrase_delete:
         id: \d+
     options:
         expose: true
+
 ambiguss_game_result:
     path: /ambiguss/jeu/resultat
     defaults:

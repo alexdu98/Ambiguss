@@ -44,15 +44,14 @@
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
                     {% if not row.modificateur %}
                         <td class="phrase-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="phrase-dateModification" data-order=""></td>
                     {% else %}
                         <td class="phrase-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
-                    {%  endif %}
-                    {% if row.dateModification %}
                         <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
 						H:i") }}</td>
-                    {% else %}
-                        <td class="phrase-dateModification" data-order=""></td>
-                    {% endif %}
+
+                    {%  endif %}
+
                     <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td>
                         <button class="btn btn-primary btn-sm keepPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">

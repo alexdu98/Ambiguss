@@ -10,7 +10,7 @@
 
 {% block contenu %}
     <div class="well">
-        <table id="glosesTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+        <table id="mambigusTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
             <tr>
                 <th>#</th>
@@ -39,23 +39,24 @@
             </tfoot>
             <tbody>
             {% for row in mambigus %}
-                <tr id="glose-{{ row.id }}">
+                <tr id="mambigu-{{ row.id }}">
                     <td>{{ row.id }}</td>
-                    <td class="glose-valeur">{{ row.valeur }}</td>
+                    <td class="mambigu-valeur">{{ row.valeur }}</td>
                     <td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
                     <td> a venir</td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
 
                     {% if row.Modificateur %}
-                        <td class="glose-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
-
+                        <td class="mambigu-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="mambigu-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
+						H:i") }}</td>
                     {% else %}
-                        <td class="glose-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="mambigu-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="mambigu-dateModification" data-order=""></td></td>
 
                     {% endif %}
-                    <td class="glose-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à H:i") }}</td>
 
-                    <td class="glose-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
+                    <td class="mambigu-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td>
                         <button class="btn btn-primary btn-sm keepPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.valeur }}">
                             Conserver

@@ -83,7 +83,7 @@
 			var replaced = phrase.search(reg2) >= 0;
 			// Si au moins 1
 			if (replaced) {
-				html = '<b num="__num__" class="color-red" title="Ce mot est ambigu (id : __num__)' +
+				html = '<b id="ma__num__" class="ma color-red" title="Ce mot est ambigu (id : __num__)' +
 					'">__amb__</b>';
 				// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
 				res = phrase.replace(reg2, function ($0, $1, $2) {
@@ -166,6 +166,28 @@
 						next.remove();
 					}
 				});
+			});
+
+			// Au survol d'une réponse on surligne le MA
+			$('.reponseGroupe').hover(function () {
+				var ordre = $(this).attr('id').replace(/rep/g, '');
+				$(this).css('background', 'rgba(160, 210, 51, 0.6)');
+				$('#result').find('b#ma' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
+			}, function () {
+				var ordre = $(this).attr('id').replace(/rep/g, '');
+				$(this).css('background', 'none');
+				$('#result').find('b#ma' + ordre).css('background', 'none');
+			});
+
+			// Au survol d'un MA on surligne la réponse
+			$('.ma').hover(function () {
+				var ordre = $(this).attr('id').replace(/ma/g, '');
+				$(this).css('background', 'rgba(160, 210, 51, 0.6)');
+				$('#rep' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
+			}, function () {
+				var ordre = $(this).attr('id').replace(/ma/g, '');
+				$(this).css('background', 'none');
+				$('#rep' + ordre).css('background', 'none');
 			});
 
 			// Au click sur le bouton, exécute la fonction

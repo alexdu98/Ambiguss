@@ -16,6 +16,7 @@ use JudgmentBundle\Entity\Jugement;
 use JudgmentBundle\Form\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use UserBundle\Entity\Historique;
 
 class GameController extends Controller{
 
@@ -106,20 +107,31 @@ class GameController extends Controller{
 						'auteur'          => $this->getUser()
 					));
 
-					// Si le joueur n'avait pas déjà joué la phrase on lui ajoute les points et on enregistre les réponses
+					// Si le joueur n'avait pas déjà joué la phrase
 					if(empty($repo)){
+						// On lui ajoute les points et crédits au joueur
 						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
 						$this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
 
+						// On vérifie le niveau du joueur
 						$niveauSuivant = $this->getUser()->getNiveau()->getNiveauParent();
 						if($niveauSuivant != NULL && $this->getUser()->getPointsClassement() >= $niveauSuivant->getPointsClassementMin()){
 							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 						}
 
+						// On ajoute les crédits au createur de la phrase
 						$gainCreateur = ceil(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
+						$auteur = $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur();
+						$auteur->updateCredits($gainCreateur);
 
-						$data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur()->updateCredits($gainCreateur);
+						// On vérifie le niveau du createur
+						$niveauSuivant = $auteur->getNiveau()->getNiveauParent();
+						if($niveauSuivant != null && $auteur->getPointsClassement() >= $niveauSuivant->getPointsClassementMin())
+						{
+							$auteur->setNiveau($auteur->getNiveau()->getNiveauParent());
+						}
 
+						// On enregistre la partie
 						$partie = new Partie();
 						$partie->setPhrase($data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase());
 						$partie->setJoueur($this->getUser());
@@ -127,8 +139,22 @@ class GameController extends Controller{
 						$partie->setGainJoueur(ceil($nb_points));
 						$partie->setGainCreateur($gainCreateur);
 
+						// On enregistre dans l'historique du joueur
+						$histJoueur = new Historique();
+						$histJoueur->setValeur("Vous avez joué la phrase n°" . $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId()
+						                       . " (+" . ceil($nb_points) . " crédits/points).");
+						$histJoueur->setMembre($this->getUser());
+
+						// On enregistre dans l'historique du createur de la phrase
+						$histAuteur = new Historique();
+						$histAuteur->setValeur("Un joueur a joué votre phrase n°" . $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId() . " (+" . $gainCreateur . " crédits).");
+						$histAuteur->setMembre($auteur);
+
 						$em->persist($partie);
+						$em->persist($histJoueur);
+						$em->persist($histAuteur);
 						$em->persist($this->getUser());
+						$em->persist($auteur);
 
 						try
 						{

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user.pseudo }} {% endblock %}
+
+{% block titre %}Profil
+	<small>{{ user.pseudo }} </small>{% endblock %}
+
+{% block contenu %}
+	<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 text-left">
+					<p><b>Niveau :</b> {{ user.niveau.titre }}</p>
+					<p><b>Points :</b> {{ user.pointsClassement }}</p>
+					<br>
+					{% if user.pseudo == app.user.pseudo %}
+						A créé :
+					{% else %}
+						{{ user.pseudo }} a créé :
+					{% endif %}
+					<ul>
+						<li>{{ user.phrases|length }} phrases</li>
+						<li>{{ user.gloses|length }} gloses</li>
+						<li>{{ user.motsAmbigus|length }} mots ambigus</li>
+					</ul>
+				</div>
+				<div class="col-md-6 text-right">
+					<p><b>Date d'inscription :</b> {{ user.dateInscription|date('d/m/Y à H:i') }}</p>
+					<p><b>Dernière connexion :</b> {{ user.dateConnexion|date('d/m/Y à H:i') }}</p>
+					<p><b>Groupe :</b> {{ user.groupe.nom }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -11,6 +11,7 @@ use AmbigussBundle\Form\PhraseAddType;
 use AmbigussBundle\Form\PhraseEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use UserBundle\Entity\Historique;
 
 class PhraseController extends Controller
 {
@@ -87,6 +88,12 @@ class PhraseController extends Controller
 
 						$em->persist($phrase);
 						$em->flush();
+
+						// On enregistre dans l'historique du joueur
+						$histJoueur = new Historique();
+						$histJoueur->setValeur("Création de la phrase n°" . $phrase->getId() . ".");
+						$histJoueur->setMembre($this->getUser());
+						$em->persist($histJoueur);
 
 						$repository1 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:PoidsReponse');
 						$repository2 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
@@ -178,6 +185,8 @@ class PhraseController extends Controller
 			'membre' => $this->getUser(),
 		));
 
+		$em = $this->getDoctrine()->getManager();
+
 		$action = null;
 		if(!$aimerPhrase)
 		{
@@ -186,6 +195,20 @@ class PhraseController extends Controller
 			// ajoute X points au créateur
 			$aimerPhrase->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
 			$action = 'like';
+
+			// On enregistre dans l'historique du joueur
+			$histJoueur = new Historique();
+			$histJoueur->setValeur("Aime la phrase n°" . $phrase->getId() . ".");
+			$histJoueur->setMembre($this->getUser());
+
+			// On enregistre dans l'historique du createur de la phrase
+			$histAuteur = new Historique();
+			$histAuteur->setValeur("Un joueur a aimé votre phrase n°" . $phrase->getId() . " (+" . $this->getParameter('gainPerLikePhrasePoints') .
+			                       " points).");
+			$histAuteur->setMembre($phrase->getAuteur());
+
+			$em->persist($histJoueur);
+			$em->persist($histAuteur);
 		}
 		else
 		{
@@ -201,7 +224,6 @@ class PhraseController extends Controller
 		}
 		}
 
-		$em = $this->getDoctrine()->getManager();
 		$em->persist($aimerPhrase);
 		$em->flush();
 

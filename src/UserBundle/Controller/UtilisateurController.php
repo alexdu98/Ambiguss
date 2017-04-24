@@ -4,21 +4,30 @@ namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use UserBundle\Entity\Historique;
 use UserBundle\Form\ModifProfilType;
 
 class UtilisateurController extends Controller
 {
-	public function profilAction(Request $request, \UserBundle\Entity\Membre $user=null)
+
+	public function profilAction(Request $request, \UserBundle\Entity\Membre $user = null)
 	{
 		if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('user_connexion');
 		}
-        if($user==null)
-		    return $this->render('UserBundle:Utilisateur:profil.html.twig',array (
-                'user' => $this->getUser(),));
+
+		if($user == null)
+		{
+			return $this->render('UserBundle:Utilisateur:myprofil.html.twig', array(
+				'user' => $this->getUser(),
+			));
+		}
 		else
-            return $this->render('UserBundle:Utilisateur:profil.html.twig',array (
-                'user' => $user,));
+		{
+			return $this->render('UserBundle:Utilisateur:otherprofil.html.twig', array(
+				'user' => $user,
+			));
+		}
 	}
 
     public function ModifProfilAction(Request $request){
@@ -39,9 +48,12 @@ class UtilisateurController extends Controller
             //$membre = null;
 
 	        $membre = $repoUser->find($this->getUser()->getid());
+	        $histJoueur = new Historique();
+	        $histJoueur->setMembre($this->getUser());
 
 	        if(!empty($data->getEmail()))
 	        {
+		        $histJoueur->setValeur("Modification de l'email (IP : " . $_SERVER['REMOTE_ADDR'] . " / " . $this->getUser()->getEmail() . " => " . $data->getEmail() . ").");
 		        $membre->setEmail($data->getEmail());
 	        }
 	        else if(!empty($data->getMdp()))
@@ -51,17 +63,25 @@ class UtilisateurController extends Controller
                 $hash = $encoder->encodePassword($membre, $data->getMdp());
 
                 $membre->setMdp($hash);
+	            $histJoueur->setValeur("Modification du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
             }
 	        else if($data->getNewsletter() !== null)
 	        {
+		        $valactu = $this->getUser()->getNewsletter() === false ? 'non abonné' : 'abonné';
+		        $valnew = $data->getNewsletter() === false ? 'non abonné' : 'abonné';
 		        $membre->setNewsletter($data->getNewsletter());
+		        $histJoueur->setValeur("Modification de l'inscription à la newsletter (" . $valactu . " => " . $valnew . ").");
 	        }
 
-            try {
-                 $em = $this->getDoctrine()->getManager();
-                 $em->persist($membre);
-	            $em->flush();
-	            $this->get('session')->getFlashBag()->add('succes', 'Vos informations ont bien été modifiées');
+	        $em = $this->getDoctrine()->getManager();
+
+	        $em->persist($membre);
+	        $em->persist($histJoueur);
+
+	        try
+	        {
+		        $em->flush();
+		        $this->get('session')->getFlashBag()->add('succes', 'Vos informations ont bien été modifiées');
             }
             catch(\Exception $e)
             {

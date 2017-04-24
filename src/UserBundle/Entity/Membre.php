@@ -222,6 +222,11 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 */
 	private $motsAmbigus;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="UserBundle\Entity\Historique", mappedBy="membre")
+	 */
+	private $historiques;
+
 
 	/**
 	 * Constructor
@@ -237,6 +242,7 @@ class Membre implements AdvancedUserInterface, \Serializable
 		$this->phrases = new ArrayCollection();
 		$this->gloses = new ArrayCollection();
 		$this->motsAmbigus = new ArrayCollection();
+		$this->historiques = new ArrayCollection();
 	}
 
     /**
@@ -996,5 +1002,39 @@ class Membre implements AdvancedUserInterface, \Serializable
 	public function getMotsAmbigus()
 	{
 		return $this->motsAmbigus;
+	}
+
+	/**
+	 * Add historique
+	 *
+	 * @param \UserBundle\Entity\Historique $historique
+	 *
+	 * @return Membre
+	 */
+	public function addHistorique(\UserBundle\Entity\Historique $historique)
+	{
+		$this->historiques[] = $historique;
+
+		return $this;
+	}
+
+	/**
+	 * Remove historique
+	 *
+	 * @param \UserBundle\Entity\Historique $historique
+	 */
+	public function removeHistorique(\UserBundle\Entity\Historique $historique)
+	{
+		$this->historiques->removeElement($historique);
+	}
+
+	/**
+	 * Get historiques
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getHistoriques()
+	{
+		return $this->historiques;
 	}
 }

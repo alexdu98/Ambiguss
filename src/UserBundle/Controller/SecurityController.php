@@ -4,6 +4,7 @@ namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use UserBundle\Entity\Historique;
 use UserBundle\Form\MembreConnexionType;
 use UserBundle\Form\MembreOubliPassResetType;
 use UserBundle\Form\MembreOubliPassType;
@@ -138,10 +139,19 @@ class SecurityController extends Controller{
 						// Génère la clé pour la confirmation d'email et l'enregistre dans le champ cleOubliMdp
 						$cleConfirmation = $membre->generateCle();
 
+						// On enregistre dans l'historique du joueur
+						$histJoueur = new Historique();
+						$histJoueur->setValeur("Inscription via Ambiguss.");
+						$histJoueur->setMembre($membre);
+
 						// On enregistre le membre dans la base de données
 						$em = $this->getDoctrine()->getManager();
-						try{
-							$em->persist($membre);
+
+						$em->persist($membre);
+						$em->persist($histJoueur);
+
+						try
+						{
 							$em->flush();
 						}
 						catch(\Exception $e){
@@ -190,8 +200,14 @@ class SecurityController extends Controller{
 		$membre->setCleOubliMdp(NULL);
 		$membre->setActif(true);
 
+		// On enregistre dans l'historique du joueur
+		$histJoueur = new Historique();
+		$histJoueur->setValeur("Confirmation d'inscription.");
+		$histJoueur->setMembre($membre);
+
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($membre);
+		$em->persist($histJoueur);
 		$em->flush();
 
 		$this->get('session')->getFlashBag()->add('succes', "Inscription confirmée. Vous pouvez maintenant vous connecter.");
@@ -217,10 +233,19 @@ class SecurityController extends Controller{
 					// Génère la clé pour la réinitialisation de mot de passe et l'enregistre dans le champ cleOubliMdp
 					$cleConfirmation = $membre->generateCle();
 
+					// On enregistre dans l'historique du joueur
+					$histJoueur = new Historique();
+					$histJoueur->setValeur("Demande de réinitialisation du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
+					$histJoueur->setMembre($membre);
+
 					// On enregistre le membre dans la base de données
 					$em = $this->getDoctrine()->getManager();
-					try{
-						$em->persist($membre);
+
+					$em->persist($membre);
+					$em->persist($histJoueur);
+
+					try
+					{
 						$em->flush();
 					}
 					catch(\Exception $e){
@@ -281,10 +306,19 @@ class SecurityController extends Controller{
 				$membre->setMdp($hash);
 				$membre->setCleOubliMdp(NULL);
 
+				// On enregistre dans l'historique du joueur
+				$histJoueur = new Historique();
+				$histJoueur->setValeur("Réinitialisation du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
+				$histJoueur->setMembre($membre);
+
 				// On enregistre le membre dans la base de données
 				$em = $this->getDoctrine()->getManager();
-				try{
-					$em->persist($membre);
+
+				$em->persist($membre);
+				$em->persist($histJoueur);
+
+				try
+				{
 					$em->flush();
 				}
 				catch(\Exception $e){

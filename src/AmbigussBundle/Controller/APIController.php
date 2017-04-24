@@ -12,6 +12,7 @@ use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Form\GloseAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use UserBundle\Entity\Historique;
 
 class APIController extends Controller
 {
@@ -55,10 +56,20 @@ class APIController extends Controller
 
 				$motAmbigu->addGlose($glose);
 
+				$em = $this->getDoctrine()->getManager();
+
+				$em->persist($motAmbigu);
+
 				try
 				{
-					$em = $this->getDoctrine()->getManager();
-					$em->persist($motAmbigu);
+					$em->flush();
+
+					// On enregistre dans l'historique du joueur
+					$histJoueur = new Historique();
+					$histJoueur->setMembre($this->getUser());
+					$histJoueur->setValeur("Liaison de la glose n°" . $glose->getId() . " avec le mot ambigu n°" . $motAmbigu->getId() . ".");
+
+					$em->persist($histJoueur);
 					$em->flush();
 
 					$res = array(

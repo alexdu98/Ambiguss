@@ -38,7 +38,7 @@ class Historique
     private $dateAction;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Membre")
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="historiques")
      * @ORM\JoinColumn(nullable=false)
      */
     private $membre;
@@ -62,6 +62,16 @@ class Historique
         return $this->id;
     }
 
+	/**
+	 * Get valeur
+	 *
+	 * @return string
+	 */
+	public function getValeur()
+	{
+		return $this->valeur;
+	}
+
     /**
      * Set valeur
      *
@@ -77,13 +87,13 @@ class Historique
     }
 
     /**
-     * Get valeur
+     * Get dateAction
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getValeur()
+	public function getDateAction()
     {
-        return $this->valeur;
+	    return $this->dateAction;
     }
 
     /**
@@ -101,13 +111,13 @@ class Historique
     }
 
     /**
-     * Get dateAction
+     * Get membre
      *
-     * @return \DateTime
+     * @return \UserBundle\Entity\Membre
      */
-    public function getDateAction()
+	public function getMembre()
     {
-        return $this->dateAction;
+	    return $this->membre;
     }
 
     /**
@@ -122,15 +132,5 @@ class Historique
         $this->membre = $membre;
 
         return $this;
-    }
-
-    /**
-     * Get membre
-     *
-     * @return \UserBundle\Entity\Membre
-     */
-    public function getMembre()
-    {
-        return $this->membre;
     }
 }

@@ -186,7 +186,8 @@
 				var template = $container.attr('data-prototype')
 					.replace(/__name__label__/g, '')
 					.replace(/__name__/g, index)
-					.replace(/__id__/g, index);
+					.replace(/__id__/g, index)
+					.replace(/__MA__/g, motAmbigu);
 				var $prototype = $(template);
 				// Trouve la balise qui à la class amb
 				var amb = $prototype.find('.amb');

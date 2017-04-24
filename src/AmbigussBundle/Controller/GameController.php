@@ -19,7 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GameController extends Controller{
 
-	public function mainAction(Request $request,\AmbigussBundle\Entity\Phrase  $id=null){
+	public function mainAction(Request $request, \AmbigussBundle\Entity\Phrase $id = null)
+	{
 		$game = new Game();
 		$form = $this->get('form.factory')->create(GameType::class, $game);
 
@@ -179,7 +180,8 @@ class GameController extends Controller{
 			}
 
 			// Rend une clé au hasard
-            if($id==null) {
+			if($id == null)
+			{
                 $phrase_id = array_rand($phrases);
 
                 $phraseOBJ = $repository->find($phrases[$phrase_id][1]);
@@ -188,6 +190,17 @@ class GameController extends Controller{
                 $phrase_id = $id;
 
                 $phraseOBJ = $repository->find($phrase_id);
+
+	            $repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
+	            if($repoP->findOneBy(array(
+		            'joueur' => $this->getUser(),
+		            'phrase' => $phraseOBJ,
+		            'joue' => true,
+	            ))
+	            )
+	            {
+		            $allPhrasesPlayed = true;
+	            }
             }
 
 			// recup champ signal

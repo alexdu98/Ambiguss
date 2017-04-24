@@ -31,7 +31,7 @@
 			</tfoot>
 			<tbody>
 			{% for row in classement %}
-				<tr>
+				<tr title="Jouer cette phrase">
 					<td>{{ loop.index }}</td>
 					<td><a style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
 					<td>{{ row.nbLikes }}</td>

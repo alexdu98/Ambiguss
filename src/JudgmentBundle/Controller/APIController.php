@@ -12,6 +12,7 @@ use JudgmentBundle\Entity\Jugement;
 use JudgmentBundle\Form\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use UserBundle\Entity\Historique;
 
 class APIController extends Controller
 {
@@ -25,20 +26,48 @@ class APIController extends Controller
 
 			$form->handleRequest($request);
 
-			if($form->isSubmitted() && $form->isValid())
+			if($form->isValid())
 			{
 				$jugement = $form->getData();
 
 				$dateDeliberation = new \DateTime();
-				$jugement->setDateDeliberation($dateDeliberation->getTimestamp() + $this->getParameter('dureeDeliberationSecondes'));
-				$jugement->setIdObjet(); // A remplir
-				$jugement->setTypeObjet(); // A remplir
+				$jugement->setDateDeliberation(\DateTime::createFromFormat('U', $dateDeliberation->getTimestamp() + $this->getParameter('dureeDeliberationSecondes')));
+				$jugement->setIdObjet($request->request->get('jugement_add')['idObjet']);
 				$jugement->setAuteur($this->getUser());
+
+				$em = $this->getDoctrine()->getManager();
+
+				// On enregistre dans l'historique du joueur
+				$histJoueur = new Historique();
+				$histJoueur->setMembre($this->getUser());
+
+				$obj = null;
+				if($jugement->getTypeObjet()->getTypeObjet() == 'Phrase')
+				{
+					$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+					$phrase = $repoP->find($jugement->getIdObjet());
+					$phrase->setSignale(true);
+					$obj = $phrase;
+					$histJoueur->setValeur("Signalement de la phrase n°" . $phrase->getId() . ".");
+				}
+				else
+				{
+					if($jugement->getTypeObjet()->getTypeObjet() == 'Glose')
+					{
+						$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+						$glose = $repoP->find($jugement->getIdObjet());
+						$glose->setSignale(true);
+						$obj = $glose;
+						$histJoueur->setValeur("Signalement de la glose n°" . $glose->getId() . ".");
+					}
+				}
+
+				$em->persist($jugement);
+				$em->persist($obj);
+				$em->persist($histJoueur);
 
 				try
 				{
-					$em = $this->getDoctrine()->getManager();
-					$em->persist($jugement);
 					$em->flush();
 
 					return $this->json(array(
@@ -54,6 +83,11 @@ class APIController extends Controller
 					));
 				}
 			}
+
+			return $this->json(array(
+				'succes' => false,
+				'message' => $form->getErrors(true),
+			));
 		}
 
 		throw $this->createNotFoundException();

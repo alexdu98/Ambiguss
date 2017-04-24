@@ -4,9 +4,11 @@ namespace JudgmentBundle\Form;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 
 class JugementAddType extends AbstractType
 {
@@ -16,7 +18,10 @@ class JugementAddType extends AbstractType
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-
+		$builder->addEventListener(FormEvents::POST_SUBMIT, function($event)
+		{
+			$event->stopPropagation();
+		}, 900);
 		$builder
 			->add('description', TextareaType::class, array(
 				'label' => 'Description',
@@ -26,20 +31,22 @@ class JugementAddType extends AbstractType
 				'class' => 'JudgmentBundle\Entity\CategorieJugement',
 				'choice_label' => 'CategorieJugement',
 				'label' => 'Catégorie',
-				'mapped' => false,
 				'required' => true,
 				'attr' => array('placeholder' => 'Détaillez le motif du signalement'),
 			))
 			// Cas: signaler les objets (gloses,mot ambigu et phrase) dans une seule modal
 			->add('typeObjet', EntityType::class, array(
-			   'class' => 'JudgmentBundle\Entity\TypeObjet',
-			   'choice_label' => 'typeobjet',
-			   'label' =>  'Objet',
-			   'required' => true
+				'class' => 'JudgmentBundle\Entity\TypeObjet',
+				'choice_label' => 'typeobjet',
+				'label' => 'Type de l\'objet',
+				'required' => true,
 			))
 			->remove('dateCreation')
 			->remove('dateDeliberation')
-			->remove('idObjet')
+			->add('idObjet', ChoiceType::class, array(
+				'label' => 'Objet',
+				'required' => true,
+			))
 			->remove('verdict')
 			->remove('auteur')
 			->remove('juge')
@@ -47,10 +54,16 @@ class JugementAddType extends AbstractType
 				'label' => 'Signaler',
 				'attr' => array(
 					'class' => 'btn btn-primary',
-					'disabled' => 'disabled',
 				),
 			));
 
+	}
+
+	public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(array(
+			'validation_groups' => false,
+		));
 	}
 
 	public function getParent()

@@ -143,11 +143,37 @@
 				});
 			});
 
+			// Signalement
 			$("#phraseSignal").click(function () {
 				var boutonSignal = $(this);
 				setModalTitle('Signaler un élément');
 				setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
 				$("#modal").modal("show");
+
+				// MAJ type objet signalement
+				$("#jugement_add_typeObjet").on('change', function () {
+					var idTypeObjet = $(this).val();
+					var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
+					if (typeObjet === 'Glose') {
+						$('#jugement_add_signaler').prop('disabled', false);
+						$('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
+						$('.gloses').each(function () {
+							var ma = $(this).next().val();
+							var opts = $(this).clone();
+							opts.find('option').eq(0).remove();
+							$('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+						})
+					}
+					else if (typeObjet === 'Phrase') {
+						$('#jugement_add_signaler').prop('disabled', false);
+						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase_id }}">{{ phrase_id }}</option>');
+					}
+					else {
+						$('#jugement_add_signaler').prop('disabled', true);
+					}
+				});
+				$("#jugement_add_typeObjet").trigger('change');
+
 
 				// On envoit le formulaire par ajax
 				$('form[name="jugement_add"]').ajaxForm({
@@ -157,7 +183,18 @@
 					},
 					// Quand la réponse Ajax sera reçu, on appelle ce callback
 					success: function (data, status, xhr, form) {
-
+						// On supprime l'image loading
+						$(form).next().remove();
+						if (data.succes) {
+							$(form).after(
+								'<div class="alert alert-success alert-dismissible fade in" role="alert">'
+								+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+								+ 'Élément signalé</div>'
+							);
+						}
+						else {
+							$(form).after('<div class="alert alert-danger">Erreur</div>');
+						}
 					},
 					error: function () {
 						loading = $("#loading");
@@ -167,6 +204,7 @@
 					}
 				});
 			});
+
 
 			// Au survol d'une réponse on surligne le MA
 			$('.reponseGroupe').hover(function () {

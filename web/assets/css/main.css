@@ -259,3 +259,16 @@ button.infobulle img{
 .bulle a:not(.btn):hover{
 	color: var(--color-green);
 }
+/*
+    #####################################################################
+    ############################### PROFIL ##############################
+    #####################################################################
+*/
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{
+	background: var(--color-green);
+	color: var(--color-brown)
+}
+.nav-tabs > li > a:hover{
+	background: var(--color-green);
+	color: var(--color-brown) !important;
+}

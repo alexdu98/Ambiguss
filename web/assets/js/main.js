@@ -157,7 +157,7 @@ $(document).ready(function () {
     $.ajaxSetup({cache: true});
 
     $('#login-facebook').click(function () {
-        alert('ok')
+        //alert('ok')
         $.getScript('//connect.facebook.net/fr_FR/sdk.js', function () {
             FB.init({
                 appId: '1810880632571404',

@@ -37,7 +37,7 @@
 				{% for row in classement %}
 					<tr>
 						<td>{{ loop.index }}</td>
-						<td><a style="color:black" href="{{ path('user_profil' , {'id':row.id}) }}">{{ row.pseudo }}</a></td>
+						<td><a href="{{ path('user_profil' , {'id':row.id}) }}">{{ row.pseudo }}</a></td>
 						<td>
 							{% if loop.index==1 %}
 								Ambigator

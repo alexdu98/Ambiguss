@@ -38,8 +38,8 @@
             <tbody>
             {% for row in phrases %}
                 <tr id="phrase-{{ row.id }}">
-                    <td >{{ row.id }}</td>
-                    <td width="30%"class="phrase-valeur">{{row.contenu|raw }}</td>
+                    <td>{{ row.id }}</td>
+                    <td><a style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
                     <td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
                     {% if not row.modificateur %}

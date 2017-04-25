@@ -25,7 +25,9 @@
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/migrations": "^1.5",
         "friendsofsymfony/jsrouting-bundle": "^1.6",
-        "hwi/oauth-bundle": "^0.5.3"
+        "hwi/oauth-bundle": "^0.5.3",
+        "league/oauth2-client": "~1.0@dev",
+        "league/oauth2-facebook": "^1.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

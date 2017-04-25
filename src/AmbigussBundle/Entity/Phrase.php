@@ -324,6 +324,11 @@ class Phrase
 		return $this;
 	}
 
+	public function getContenuAmb()
+	{
+		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<amb>$2</amb>', $this->getContenu());
+	}
+
     /**
      * Add motsAmbigusPhrase
      *

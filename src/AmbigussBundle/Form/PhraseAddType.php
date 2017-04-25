@@ -28,6 +28,10 @@ class PhraseAddType extends AbstractType
 			->add('creer', SubmitType::class, array(
 				'label' => 'Créer la phrase',
 				'attr' => array('class' => 'btn btn-primary'),
+			))
+			->add('modifier', SubmitType::class, array(
+				'label' => 'Modifier la phrase',
+				'attr' => array('class' => 'btn btn-warning'),
 			));
 	}
 

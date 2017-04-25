@@ -1,7 +1,3 @@
-ambiguss_phrase:
-    path: /ambiguss/phrase
-    defaults: {_controller: AmbigussBundle:Phrase:main }
-
 ambiguss_phrase_view:
     path: /ambiguss/phrase/view/{id}
     defaults:

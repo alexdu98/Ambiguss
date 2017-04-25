@@ -8,7 +8,6 @@ use AmbigussBundle\Entity\MotAmbiguPhrase;
 use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
-use AmbigussBundle\Form\PhraseEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Historique;
@@ -16,7 +15,7 @@ use UserBundle\Entity\Historique;
 class PhraseController extends Controller
 {
 
-	public function mainAction(Request $request)
+	public function addAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
@@ -26,9 +25,12 @@ class PhraseController extends Controller
 			$form->handleRequest($request);
 
 			$newPhrase = null;
+			$edit = false;
 			if($form->isSubmitted() && $form->isValid())
 			{
 				$data = $form->getData();
+
+				$edit = empty($_POST['phrase_id']) ? false : true;
 
 				$phrase->setAuteur($this->getUser());
 				$phrase->removeMotsAmbigusPhrase();
@@ -40,10 +42,13 @@ class PhraseController extends Controller
 				$res = $phrase->isValid();
 				$succes = $res['succes'];
 
-				if($this->getUser()->getCredits() < $this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($res['motsAmbigus']))
+				if(!$edit)
 				{
-					$succes = false;
-					$res['message'] = "Vous n'avez pas assez de crédits pour créer une phrase avec " . count($res['motsAmbigus']) . " mots ambigus.";
+					if($this->getUser()->getCredits() < $this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($res['motsAmbigus']))
+					{
+						$succes = false;
+						$res['message'] = "Vous n'avez pas assez de crédits pour créer une phrase avec " . count($res['motsAmbigus']) . " mots ambigus.";
+					}
 				}
 
 				if($succes === true)
@@ -78,8 +83,11 @@ class PhraseController extends Controller
 						$phrase->addMotAmbiguPhrase($map);
 					}
 
-					$phrase->getAuteur()->updateCredits(-$this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($mots_ambigu));
-					$phrase->getAuteur()->updatePoints($this->getParameter('gainCreatePhrasePoints'));
+					if(!$edit)
+					{
+						$phrase->getAuteur()->updateCredits(-$this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($mots_ambigu));
+						$phrase->getAuteur()->updatePoints($this->getParameter('gainCreatePhrasePoints'));
+					}
 
 					$em = $this->getDoctrine()->getManager();
 					$em->getConnection()->beginTransaction();
@@ -91,7 +99,14 @@ class PhraseController extends Controller
 
 						// On enregistre dans l'historique du joueur
 						$histJoueur = new Historique();
-						$histJoueur->setValeur("Création de la phrase n°" . $phrase->getId() . ".");
+						if(!$edit)
+						{
+							$histJoueur->setValeur("Création de la phrase n°" . $phrase->getId() . ".");
+						}
+						else
+						{
+							$histJoueur->setValeur("Modification d'une phrase (n° ? => n°" . $phrase->getId() . ").");
+						}
 						$histJoueur->setMembre($this->getUser());
 						$em->persist($histJoueur);
 
@@ -131,13 +146,19 @@ class PhraseController extends Controller
 
 							$em->persist($map);
 							$em->persist($rep);
-
-							$em->flush();
 						}
 
-						$em->getConnection()->commit();
-
 						$newPhrase = $phrase;
+
+						if($edit)
+						{
+							$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+							$phrD = $repoP->find($_POST['phrase_id']);
+							$em->remove($phrD);
+						}
+
+						$em->flush();
+						$em->getConnection()->commit();
 
 						// Réinitialise le formulaire
 						$phrase = new \AmbigussBundle\Entity\Phrase();
@@ -160,9 +181,22 @@ class PhraseController extends Controller
 				'action' => $this->generateUrl('ambiguss_glose_add'),
 			));
 
+			if($edit)
+			{
+				return $this->render('AmbigussBundle:Phrase:edit.html.twig', array(
+					'form' => $form->createView(),
+					'newPhrase' => $newPhrase,
+					// en cas d'edit ne doit pas etre false
+					'phrase' => $newPhrase,
+					'addGloseForm' => $addGloseForm->createView(),
+				));
+			}
+
 			return $this->render('AmbigussBundle:Phrase:add.html.twig', array(
 				'form' => $form->createView(),
 				'newPhrase' => $newPhrase,
+				// en cas d'edit ne doit pas etre false
+				'phrase' => false,
 				'addGloseForm' => $addGloseForm->createView(),
 			));
 		}
@@ -213,15 +247,15 @@ class PhraseController extends Controller
 		else
 		{
 			if($aimerPhrase->getActive() === false)
-		{
-			$aimerPhrase->setActive(true);
-			$action = 'relike';
-		}
-		else
-		{
-			$aimerPhrase->setActive(false);
-			$action = 'unlike';
-		}
+			{
+				$aimerPhrase->setActive(true);
+				$action = 'relike';
+			}
+			else
+			{
+				$aimerPhrase->setActive(false);
+				$action = 'unlike';
+			}
 		}
 
 		$em->persist($aimerPhrase);
@@ -258,165 +292,136 @@ class PhraseController extends Controller
 
 	}
 
-    public function moderationAction()
-    {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                $repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-                $phrases= $repo->getSignale(array(
-                    'signale' => true,
-                ));
+	public function moderationAction()
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				$repo = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+				$phrases = $repo->getSignale(array(
+					'signale' => true,
+				));
 
+				return $this->render('AmbigussBundle:Phrase:getAll.html.twig', array(
+					'phrases' => $phrases,
+				));
+			}
+			else
+			{
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
+					$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-                return $this->render('AmbigussBundle:Phrase:getAll.html.twig', array(
-                    'phrases' => $phrases,
-                ));
-            }
-            else
-            {
-                if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-                {
-                    $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+					return $this->redirectToRoute('user_connexion');
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
 
-                    return $this->redirectToRoute('user_connexion');
-                }
-            }
-        }
-        throw $this->createAccessDeniedException();
-    }
+	public function keepAction(\AmbigussBundle\Entity\Phrase $phrase)
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				try
+				{
+					$phrase->setSignale(0);
+					$em = $this->getDoctrine()->getEntityManager();
+					$em->persist($phrase);
+					$em->flush();
 
+					return $this->json(array(
+						'succes' => true,
+					));
+				}
+				catch(\Exception $e)
+				{
+					return $this->json(array(
+						'succes' => false,
+						'message' => $e,
+					));
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
 
+	public function deleteAction(\AmbigussBundle\Entity\Phrase $phrase)
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				try
+				{
+					$phrase->setVisible(0);
+					$em = $this->getDoctrine()->getEntityManager();
+					$em->persist($phrase);
+					$em->flush();
 
+					return $this->json(array(
+						'succes' => true,
+					));
+				}
+				catch(\Exception $e)
+				{
+					return $this->json(array(
+						'succes' => false,
+						'message' => $e,
+					));
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
 
-    public function keepAction(\AmbigussBundle\Entity\Phrase $phrase)
-    {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                try
-                {
-                    $phrase->setSignale(0);
-                    $em = $this->getDoctrine()->getEntityManager();
-                    $em->persist($phrase);
-                    $em->flush();
+	public function editAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
+	{
+		$dateMax = $phrase->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
+		$dateActu = new \DateTime();
+		$dateActu = $dateActu->getTimestamp();
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR') || $phrase->getAuteur() == $this->getUser() && $dateMax < $dateActu)
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				$phr = new \AmbigussBundle\Entity\Phrase();
 
-                    return $this->json(array(
-                        'succes' => true,
-                    ));
-                }
-                catch(\Exception $e)
-                {
-                    return $this->json(array(
-                        'succes' => false,
-                        'message' => $e,
-                    ));
-                }
-            }
-        }
-        throw $this->createAccessDeniedException();
-    }
+				if($dateActu < $dateMax)
+				{
+					$phr = new \AmbigussBundle\Entity\Phrase();
+					$form = $this->get('form.factory')->create(PhraseAddType::class, $phr, array('action' => $this->generateUrl('ambiguss_phrase_add')));
 
-    public function deleteAction(\AmbigussBundle\Entity\Phrase $phrase)
-    {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                try
-                {
-                    $phrase->setVisible(0);
-                    $em = $this->getDoctrine()->getEntityManager();
-                    $em->persist($phrase);
-                    $em->flush();
+					$form->handleRequest($request);
+					$newPhrase = null;
 
-                    return $this->json(array(
-                        'succes' => true,
-                    ));
-                }
-                catch(\Exception $e)
-                {
-                    return $this->json(array(
-                        'succes' => false,
-                        'message' => $e,
-                    ));
-                }
-            }
-        }
-        throw $this->createAccessDeniedException();
-    }
+					$glose = new \AmbigussBundle\Entity\Glose();
+					$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
+						'action' => $this->generateUrl('ambiguss_glose_add'),
+					));
 
-    public function editAction(Request $request, \AmbigussBundle\Entity\Phrase $phrase)
-    {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
+					return $this->render('AmbigussBundle:Phrase:edit.html.twig', array(
+						'form' => $form->createView(),
+						'newPhrase' => $newPhrase,
+						'phrase' => $phrase,
+						'addGloseForm' => $addGloseForm->createView(),
+					));
+				}
+				else
+				{
+					if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+					{
 
-                try
-                {
-                    $phr = new \AmbigussBundle\Entity\Phrase();
-                    $nb_MA= count(preg_split("/(<a(.)+b>)/",$phrase->getContenu()));
-
-                    // au cas ou on disable les MA
-                   // $test= preg_replace("/(<a(.)+b>)/", "<span contenteditable=\"false\">\$1</span>",$phrase->getContenu());
-                    $phr->setContenu($phrase->getContenu());
-
-                    $form = $this->get('form.factory')->create(PhraseEditType::class, $phr,array(
-                        'contenu'=> $phr->getContenu()));
-
-                    $form->handleRequest($request);
-
-                    if($form->isSubmitted() ) {
-                        $data = $form->getData();
-                        $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-                        $phrase_modif = $repository->find($phrase->getId());
-                        $phrase_modif->setModificateur($this->getUser());
-                        $phrase_modif->setDateModification( new \DateTime());
-
-                        //problème car data->getContenu() contient les modifs mais pas les anciennes
-                        //balises des MA
-                        $phrase_modif->setContenu($data->getContenu());
-
-                        try {
-                            /*
-                            $em = $this->getDoctrine()->getManager();
-                            $em->getConnection()->beginTransaction();
-                            $em->persist($phrase_modif);
-                            $em->flush();*/
-
-                            // Réinitialise le formulaire
-                            $phrase = new \AmbigussBundle\Entity\Phrase();
-                            $form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
-                        } catch (\Exception $e) {
-                                $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $e->getMessage());
-                            }
-
-                    }
-                        $newPhrase = null;
-                        $glose = new \AmbigussBundle\Entity\Glose();
-                        $addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-                            'action' => $this->generateUrl('ambiguss_glose_add'),
-                        ));
-
-                    return $this->render('AmbigussBundle:Phrase:edit.html.twig', array(
-                        'form' => $form->createView(),
-                        'newPhrase' => $phr,
-                        'nb_MA' => $nb_MA,
-                        'addGloseForm' => $addGloseForm->createView(),
-                    ));
-                }
-                catch(\Exception $e)
-                {
-                    return $this->json(array(
-                        'succes' => false,
-                        'message' => $e,
-                    ));
-                }
-            }
-        }
-        throw $this->createAccessDeniedException();
-    }
+					}
+					else
+					{
+						throw $this->createAccessDeniedException();
+					}
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
 }

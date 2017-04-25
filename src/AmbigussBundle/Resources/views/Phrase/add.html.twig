@@ -1,30 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Création de phrase{% endblock %}
+{% block titre %}Création d'une phrase{% endblock %}
 
 {% block contenu %}
-	<h1>Création d'une phrase</h1>
-
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
-		    {% if newPhrase is not null %}
-			    <div class="alert alert-success alert-dismissible fade in" role="alert">
-				    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-				    La phrase a bien été ajoutée. Vous disposez de <b>5 minutes</b> pour <b><a href="#">la modifier</a></b>.
-				    <h3 id="result" class="text-center">
-			            {{ newPhrase.contenuHTML|raw }}
-				    </h3>
-				    <div class="text-center">
-					    {% for map in newPhrase.motsAmbigusPhrase %}
-						    <b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
-						    <small>({{ map.getOrdre }})</small> :
-							{% for reponse in map.reponses %}
-								{{ reponse.valeurGlose }} -> {{ reponse.poidsReponse.label }}
-							{% endfor %}
-						    <br>
-			            {% endfor %}
-				    </div>
-			    </div>
+		    {% if phrase and newPhrase is not null %}
+			    {{ include('@Ambiguss/Phrase/displayPhrase.html.twig', {'add': false, 'phraseDisplay' : phrase}) }}
+		    {% elseif newPhrase is not null %}
+			    {{ include('@Ambiguss/Phrase/displayPhrase.html.twig', {'add': true, 'phraseDisplay' : newPhrase}) }}
 		    {% endif %}
 
 		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
@@ -47,8 +32,7 @@
 		    <div class="form-group">
 		        <div id="rendu" style="background: white; color: black; padding: 5px;" hidden></div>
 		    </div>
-
-		    {{ form_row(form.contenu) }}
+		    {{ form_row(form.contenu, {value: phrase.contenuAmb|default('')}) }}
 
 		    <div class="form-group">
 			    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
@@ -62,10 +46,15 @@
 		    </div>
 		    {% do form.motsAmbigusPhrase.setRendered %}
 
-		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
+		    {% if phrase %}
+			    <input type="hidden" name="phrase_id" value="{{ phrase.id }}">
+			    {{ form_row(form.modifier) }}
+			    {% do form.creer.setRendered %}
+		    {% elseif app.user.credits < costCreatePhraseByMotAmbiguCredits %}
 			    {% do form.creer.setRendered %}
 		    {% else %}
 			    {{ form_row(form.creer) }}
+			    {% do form.modifier.setRendered %}
 		    {% endif %}
 
 		    {{ form_rest(form) }}
@@ -108,6 +97,10 @@
 
 			// Pour numéroter le mot ambigu
 			var index = 0;
+
+			// Au chargement (au cas ou edit, pas grave si add)
+			updatePhrase();
+			updateRendu();
 
 			// A chaque modification du textarea via le clavier
 			textarea.bind('input', function() {

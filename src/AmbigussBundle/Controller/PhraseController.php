@@ -383,7 +383,7 @@ class PhraseController extends Controller
 		$dateMax = $phrase->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
 		$dateActu = new \DateTime();
 		$dateActu = $dateActu->getTimestamp();
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR') || $phrase->getAuteur() == $this->getUser() && $dateMax < $dateActu)
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR') || ($phrase->getAuteur() == $this->getUser() && $dateMax < $dateActu))
 		{
 			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
 			{
@@ -414,6 +414,9 @@ class PhraseController extends Controller
 					if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
 					{
 
+                        $this->get('session')->getFlashBag()->add('erreur', "Le modérateur ne peut toujours pas modifier une phrase si celle ci a été crée il y a plus de 5 minutes !");
+
+                        return $this->redirectToRoute('ambiguss_game');
 					}
 					else
 					{
@@ -422,6 +425,6 @@ class PhraseController extends Controller
 				}
 			}
 		}
-		throw $this->createAccessDeniedException();
+
 	}
 }

@@ -53,5 +53,17 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('mamb',$Ma)
             ->getQuery()->getResult();
     }
+    public function findReponsesforExport($phrase, $Ma)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r) as nbt')
+            ->where('r.contenuPhrase = :phrase')
+            ->andWhere('r.valeurMotAmbigu = :mamb')
+            ->setParameter('phrase',$phrase)
+            ->setParameter('mamb',$Ma)
+            ->getQuery()->getSingleResult();
+    }
+
+
 
 }

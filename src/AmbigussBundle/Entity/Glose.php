@@ -81,6 +81,7 @@ class Glose
         $this->dateCreation = new \DateTime();
 	    $this->signale = 0;
 	    $this->visible = 1;
+	    $this->motsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -25,6 +25,14 @@ class APIController extends Controller
 		return $this->json($gloses);
 	}
 
+	public function autocompleteMotAmbiguAction(Request $request)
+	{
+		$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
+		$motsAmbigus = $repository->findByValeurAutoComplete($request->get('term'));
+
+		return $this->json($motsAmbigus);
+	}
+
 	public function addGloseAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))

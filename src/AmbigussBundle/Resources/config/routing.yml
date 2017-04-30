@@ -42,6 +42,13 @@ ambiguss_glose_get_autocomplete:
     options:
         expose: true
 
+ambiguss_motambigu_get_autocomplete:
+    path: /ambiguss/motambigu/get/autocomplete
+    defaults:
+        _controller: AmbigussBundle:API:autocompleteMotAmbigu
+    options:
+        expose: true
+
 ambiguss_glose_add:
     path: /ambiguss/glose/add
     defaults:
@@ -126,6 +133,18 @@ ambiguss_moderation_ma:
     path: /ambiguss/moderation/mots_ambigus
     defaults:
         _controller: AmbigussBundle:MotAmbigu:moderation_ma
+
+ambiguss_moderation_mag:
+    path: /ambiguss/moderation/mag
+    defaults:
+        _controller: AmbigussBundle:MAG:get
+
+ambiguss_mag_delete:
+    path: /ambiguss/moderation/mag/delete
+    defaults:
+        _controller: AmbigussBundle:MAG:delete
+    options:
+        expose: true
 
 ambiguss_motambigu_keep:
     path: /ambiguss/motambigu/keep/{id}

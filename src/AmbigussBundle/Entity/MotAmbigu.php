@@ -69,7 +69,8 @@ class MotAmbigu
 
     /**
      * @ORM\ManyToMany(targetEntity="Glose", inversedBy="motsAmbigus", cascade={"persist"})
-	 */
+     * @ORM\JoinTable(name="mot_ambigu_glose")
+     */
     private $gloses = array();
 
 

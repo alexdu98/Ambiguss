@@ -20,6 +20,14 @@ class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
 		}
 		return $entity;
 	}
+
+	public function findByValeurAutoComplete($valeur)
+	{
+		return $this->createQueryBuilder('ma')->select('ma.valeur')
+			->where('ma.valeur LIKE :valeur')->setParameter('valeur', $valeur . '%')
+			->getQuery()->getResult();
+	}
+
     public function getSignale()
     {
         return $this->createQueryBuilder('g')

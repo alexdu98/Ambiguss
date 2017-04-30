@@ -115,13 +115,14 @@ class GameController extends Controller
 				$alreadyPlayed = false;
 				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 				{
-					$repo = $repo4->findBy(array(
-						'motAmbiguPhrase' => $map,
-						'auteur' => $this->getUser(),
+					$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
+					$partie = $repoP->findOneBy(array(
+						'phrase' => $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase(),
+						'joueur' => $this->getUser(),
 					));
 
 					// Si le joueur n'avait pas déjà joué la phrase
-					if(empty($repo))
+					if(empty($partie) || $partie->getJoue() == 0)
 					{
 						// On lui ajoute les points et crédits au joueur
 						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
@@ -147,9 +148,13 @@ class GameController extends Controller
 						}
 
 						// On enregistre la partie
-						$partie = new Partie();
-						$partie->setPhrase($data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase());
-						$partie->setJoueur($this->getUser());
+						if(empty($partie))
+						{
+							$partie = new Partie();
+							$partie->setPhrase($data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase());
+							$partie->setJoueur($this->getUser());
+						}
+
 						$partie->setJoue(true);
 						$partie->setGainJoueur(ceil($nb_points));
 						$partie->setGainCreateur($gainCreateur);
@@ -207,13 +212,13 @@ class GameController extends Controller
 			$phrases = null;
 			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 			{
-				$phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser(), 100, $this->getParameter('dureeAvantJouabiliteSecondes'));
+				$phrases = $repository->findIdPhrasesNotPlayedByMembre($this->getUser(), $this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
 			else
 			{
 				$date = new \DateTime();
 				// Date d'il y a 3 jours
-				$date = $date->getTimestamp() - (3600 * 24 * 30);
+				$date = $date->getTimestamp() - (3600 * 24 * 3);
 				$phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date, 100, $this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
 
@@ -230,7 +235,7 @@ class GameController extends Controller
 			{
 				$phrase_id = array_rand($phrases);
 
-				$phraseOBJ = $repository->find($phrases[ $phrase_id ][1]);
+				$phraseOBJ = $repository->find($phrases[ $phrase_id ]['id']);
 			}
 			else
 			{

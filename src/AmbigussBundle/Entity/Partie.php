@@ -58,7 +58,7 @@ class Partie
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\Phrase", inversedBy="parties")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
 	 */
 	private $phrase;
 

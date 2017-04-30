@@ -42,4 +42,33 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('g.visible=1')
             ->getQuery()->getResult();
     }
+
+	/**
+	 * Retoune un tableau de tableau avec un champ correspondant à l'id d'une phrase non joué et existante depuis plus de $dureeAv par le membre
+	 *
+	 * @param $membre
+	 * @param $maxResult
+	 * @param $dureeAvantJouabiliteSecondes
+	 *
+	 * @return array
+	 */
+	public function findIdPhrasesNotPlayedByMembre($membre, $dureeAvantJouabiliteSecondes)
+	{
+		$date = new \DateTime();
+		$dateMin = $date->setTimestamp($date->getTimestamp() - $dureeAvantJouabiliteSecondes);
+
+		$sub = $this->_em->getRepository('AmbigussBundle:Partie')->createQueryBuilder('pa')
+			->select('identity(pa.phrase)')
+			->where('pa.joueur = :membre')
+			->andWhere('pa.joue = 1');
+
+		$q = $this->createQueryBuilder('ph');
+
+		return $q->select('ph.id')
+			->where($q->expr()->notIn('ph.id', $sub->getDQL()))
+			->andWhere('ph.dateCreation < :dateMin')
+			->setParameter('dateMin', $dateMin->format('Y-m-d H:i:s'))
+			->setParameter('membre', $membre)
+			->getQuery()->getArrayResult();
+	}
 }

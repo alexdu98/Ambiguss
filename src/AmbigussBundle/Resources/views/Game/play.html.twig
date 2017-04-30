@@ -72,26 +72,10 @@
 			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
 			var reg2 = new RegExp('<amb id=\"([0-9]+)\">(.*?)' + endBaliseAmbiguEscape, 'g');
 
-			var phrase = "{{ phraseEscape|raw }}";
-			var rendu = $("#result");
-			var res;
+			$("#result").append("{{ phraseHTMLEscape|raw }}");
 
 			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
 			var $container = $('div#ambigussbundle_game_reponses');
-
-			// Compte le nombre d'occurence de balise <amb id="">
-			var replaced = phrase.search(reg2) >= 0;
-			// Si au moins 1
-			if (replaced) {
-				html = '<b id="ma__num__" class="ma color-red" title="Ce mot est ambigu (id : __num__)' +
-					'">__amb__</b>';
-				// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
-				res = phrase.replace(reg2, function ($0, $1, $2) {
-					return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
-				});
-			}
-
-			rendu.append(res);
 
 			var motsAmbigus = $.parseJSON('{{ motsAmbigus | raw }}');
 
@@ -146,6 +130,7 @@
 			// Signalement
 			$("#phraseSignal").click(function () {
 				var boutonSignal = $(this);
+				setModalSize('modal-lg');
 				setModalTitle('Signaler un élément');
 				setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
 				$("#modal").modal("show");
@@ -156,6 +141,7 @@
 					var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
 					if (typeObjet === 'Glose') {
 						$('#jugement_add_signaler').prop('disabled', false);
+						$('#jugement_phrase_contenu').hide();
 						$('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
 						$('.gloses').each(function () {
 							var ma = $(this).next().val();
@@ -165,11 +151,13 @@
 						})
 					}
 					else if (typeObjet === 'Phrase') {
+						$('#jugement_phrase_contenu').show().empty().append("{{ phraseHTMLEscape|raw }}");
 						$('#jugement_add_signaler').prop('disabled', false);
 						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase_id }}">{{ phrase_id }}</option>');
 					}
 					else {
 						$('#jugement_add_signaler').prop('disabled', true);
+						$('#jugement_phrase_contenu').hide();
 					}
 				});
 				$("#jugement_add_typeObjet").trigger('change');

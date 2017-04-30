@@ -1,6 +1,6 @@
 /**
  * Change la taille de la modale
- * @param size
+ * @param size modal-lg | modal-sm
  */
 function setModalSize(size) {
 	$('#modal-dialog').addClass(size);

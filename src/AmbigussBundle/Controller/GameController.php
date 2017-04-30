@@ -18,7 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Historique;
 
-class GameController extends Controller{
+class GameController extends Controller
+{
 
 	public function mainAction(Request $request, \AmbigussBundle\Entity\Phrase $id = null)
 	{
@@ -27,12 +28,13 @@ class GameController extends Controller{
 
 		$phraseOBJ = null;
 		$motsAmbigus = null;
-		$phraseEscape = null;
+		$phraseHTMLEscape = null;
 		$allPhrasesPlayed = null;
 		$signal = null;
 
 		$form->handleRequest($request);
-		if($form->isSubmitted() && $form->isValid()){
+		if($form->isSubmitted() && $form->isValid())
+		{
 			$data = $form->getData();
 
 			$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
@@ -41,17 +43,20 @@ class GameController extends Controller{
 
 			$em = $this->getDoctrine()->getManager();
 			$valid = true;
-			foreach($data->reponses as $key => $rep){
-				if(!$rep->getGlose()){
+			foreach($data->reponses as $key => $rep)
+			{
+				if(!$rep->getGlose())
+				{
 					$valid = false;
 					break;
 				}
 				$rep->setMotAmbiguPhrase($repository->find($request->request->get('ambigussbundle_game')
-				                                           ['reponses'][$key]['idMotAmbiguPhrase']));
+				                                           ['reponses'][ $key ]['idMotAmbiguPhrase']));
 				$rep->setContenuPhrase($rep->getMotAmbiguPhrase()->getPhrase()->getContenu());
 				$rep->setValeurMotAmbigu($rep->getMotAmbiguPhrase()->getMotAmbigu()->getValeur());
 				$rep->setValeurGlose($rep->getGlose()->getValeur());
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
 					$rep->setAuteur($this->getUser());
 				}
 				$rep->setPoidsReponse($repository2->findOneBy(array('poidsReponse' => 1)));
@@ -64,58 +69,68 @@ class GameController extends Controller{
 			}
 
 			// Si tous les mots ambigus ont une glose associée
-			if($valid){
+			if($valid)
+			{
 				$hash = array();
 				$map = array();
 				$nb_points = 0;
 				$repo4 = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Reponse');
-				foreach($data->reponses as $rep){
+				foreach($data->reponses as $rep)
+				{
 					$map[] = $rep->getMotAmbiguPhrase()->getId();
 					$gloses = array();
 					$total = 0;
-					foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g){
+					foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g)
+					{
 						$compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
 						$isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
 						$ar2 = array(
-							'nbVotes'    => $compteur['nbVotes'],
-							'isSelected' => $isSelected
+							'nbVotes' => $compteur['nbVotes'],
+							'isSelected' => $isSelected,
 						);
-						$gloses[$g->getValeur()] = $ar2;
-						$total = $total + $gloses[$g->getValeur()]['nbVotes'];
+						$gloses[ $g->getValeur() ] = $ar2;
+						$total = $total + $gloses[ $g->getValeur() ]['nbVotes'];
 					}
 					// Trie le tableau des gloses dans l'ordre décroissant du nombre de réponses
-					uasort($gloses, function($a, $b){
-						if($a['nbVotes'] == $b['nbVotes']){
+					uasort($gloses, function($a, $b)
+					{
+						if($a['nbVotes'] == $b['nbVotes'])
+						{
 							return 0;
 						}
+
 						return ($a['nbVotes'] > $b['nbVotes']) ? -1 : 1;
 					});
 					$resMA = array(
 						'valeurMA' => $rep->getValeurMotAmbigu(),
-						'gloses'   => $gloses
+						'gloses' => $gloses,
 					);
-					if($total > 0){
-						$nb_points = $nb_points + (($gloses[$rep->getValeurGlose()]['nbVotes'] / $total) * 100);
+					if($total > 0)
+					{
+						$nb_points = $nb_points + (($gloses[ $rep->getValeurGlose() ]['nbVotes'] / $total) * 100);
 					}
-					$hash[$rep->getMotAmbiguPhrase()->getOrdre()] = $resMA;
+					$hash[ $rep->getMotAmbiguPhrase()->getOrdre() ] = $resMA;
 				}
 
 				$alreadyPlayed = false;
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
 					$repo = $repo4->findBy(array(
 						'motAmbiguPhrase' => $map,
-						'auteur'          => $this->getUser()
+						'auteur' => $this->getUser(),
 					));
 
 					// Si le joueur n'avait pas déjà joué la phrase
-					if(empty($repo)){
+					if(empty($repo))
+					{
 						// On lui ajoute les points et crédits au joueur
 						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
 						$this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
 
 						// On vérifie le niveau du joueur
 						$niveauSuivant = $this->getUser()->getNiveau()->getNiveauParent();
-						if($niveauSuivant != NULL && $this->getUser()->getPointsClassement() >= $niveauSuivant->getPointsClassementMin()){
+						if($niveauSuivant != null && $this->getUser()->getPointsClassement() >= $niveauSuivant->getPointsClassementMin())
+						{
 							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 						}
 
@@ -179,19 +194,23 @@ class GameController extends Controller{
 
 				return $this->redirectToRoute('ambiguss_game_result');
 			}
-			else{
+			else
+			{
 				$this->get('session')->getFlashBag()->add('erreur', "Tous les mots ambigus doivent avoir une glose");
 			}
 		}
-		else{
+		else
+		{
 			$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
 			$repmap = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
 
 			$phrases = null;
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+			{
 				$phrases = $repmap->findIdPhrasesNotPlayedByMembre($this->getUser(), 100, $this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
-			else{
+			else
+			{
 				$date = new \DateTime();
 				// Date d'il y a 3 jours
 				$date = $date->getTimestamp() - (3600 * 24 * 30);
@@ -200,7 +219,8 @@ class GameController extends Controller{
 
 			// Si toutes les phrases ont été joués
 			$allPhrasesPlayed = false;
-			if(empty($phrases)){
+			if(empty($phrases))
+			{
 				$allPhrasesPlayed = true;
 				$phrases = $repmap->findAllIdPhrases($this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
@@ -208,80 +228,86 @@ class GameController extends Controller{
 			// Rend une clé au hasard
 			if($id == null)
 			{
-                $phrase_id = array_rand($phrases);
+				$phrase_id = array_rand($phrases);
 
-                $phraseOBJ = $repository->find($phrases[$phrase_id][1]);
-            }
-            else{
-                $phrase_id = $id;
+				$phraseOBJ = $repository->find($phrases[ $phrase_id ][1]);
+			}
+			else
+			{
+				$phrase_id = $id;
 
-                $phraseOBJ = $repository->find($phrase_id);
+				$phraseOBJ = $repository->find($phrase_id);
 
-	            $repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
-	            if($repoP->findOneBy(array(
-		            'joueur' => $this->getUser(),
-		            'phrase' => $phraseOBJ,
-		            'joue' => true,
-	            ))
-	            )
-	            {
-		            $allPhrasesPlayed = true;
-	            }
-            }
+				$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
+				if($repoP->findOneBy(array(
+					'joueur' => $this->getUser(),
+					'phrase' => $phraseOBJ,
+					'joue' => true,
+				))
+				)
+				{
+					$allPhrasesPlayed = true;
+				}
+			}
 
 			// recup champ signal
 			$signal = $phraseOBJ->getSignale();
 
-			$phraseEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenu());
+			$phraseHTMLEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenuHTML());
 
 			$motsAmbigus = array();
-			foreach($phraseOBJ->getMotsAmbigusPhrase() as $key => $map){
+			foreach($phraseOBJ->getMotsAmbigusPhrase() as $key => $map)
+			{
 				$motsAmbigus[] = array(
 					$map->getMotAmbigu()->getValeur(),
 					$map->getId(),
-					$map->getOrdre()
+					$map->getOrdre(),
 				);
 			}
 		}
 
 		// récupère le like d'un membre
 		$liked = null;
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+		{
 			$rep = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:AimerPhrase');
 			$liked = $rep->findOneBy(array(
 				'membre' => $this->getUser(),
-				'phrase' => $phraseOBJ
+				'phrase' => $phraseOBJ,
 			));
 			if($liked)
+			{
 				$liked = $liked->getActive();
+			}
 		}
 
 		$glose = new \AmbigussBundle\Entity\Glose();
 		$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-			'action' => $this->generateUrl('ambiguss_glose_add')
+			'action' => $this->generateUrl('ambiguss_glose_add'),
 		));
 
 		// jugement (cas signalement)
 		$jug = new Jugement();
 		$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
-			'action' => $this->generateUrl('jugement_add')
+			'action' => $this->generateUrl('jugement_add'),
 		));
 
 		return $this->render('AmbigussBundle:Game:play.html.twig', array(
-			'form'          => $form->createView(),
-			'phrase_id'     => $phraseOBJ->getId(),
-			'motsAmbigus'   => json_encode($motsAmbigus),
-			'phraseEscape'  => $phraseEscape,
-			'liked'         => $liked,
+			'form' => $form->createView(),
+			'phrase_id' => $phraseOBJ->getId(),
+			'motsAmbigus' => json_encode($motsAmbigus),
+			'phraseHTMLEscape' => $phraseHTMLEscape,
+			'liked' => $liked,
 			'alreadyPlayed' => $allPhrasesPlayed,
-			'signal'        => $signal,
+			'signal' => $signal,
 			'auteur' => $phraseOBJ->getAuteur(),
-			'addGloseForm'  => $addGloseForm->createView(),
-			'addJugementForm' => $addJugementForm->createView()
+			'addGloseForm' => $addGloseForm->createView(),
+			'addJugementForm' => $addJugementForm->createView(),
 		));
 	}
 
-	public function resultatAction(Request $request){
+	public function resultatAction(Request $request)
+	{
 		$phrase = $this->get('session')->getFlashBag()->get('phrase');
 		$auteur = $this->get('session')->getFlashBag()->get('auteur');
 		$stats = $this->get('session')->getFlashBag()->get('stats');
@@ -291,11 +317,11 @@ class GameController extends Controller{
 		if(!empty($phrase) && !empty($auteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
 		{
 			return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
-				'phrase'        => $phrase[0],
+				'phrase' => $phrase[0],
 				'auteur' => $auteur[0],
-				'stats'         => $stats[0],
+				'stats' => $stats[0],
 				'alreadyPlayed' => $alreadyPlayed[0],
-				'nb_point'      => $nb_points[0]
+				'nb_point' => $nb_points[0],
 			));
 		}
 		throw $this->createNotFoundException();

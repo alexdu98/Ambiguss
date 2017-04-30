@@ -42,7 +42,7 @@ class PhraseController extends Controller
 				$res = $phrase->isValid();
 				$succes = $res['succes'];
 
-				if(!$edit)
+				if(!$edit && $succes)
 				{
 					if($this->getUser()->getCredits() < $this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($res['motsAmbigus']))
 					{

@@ -25,7 +25,8 @@ class ClassementController extends Controller{
 	    $classement = $repository->getClassementPhrasesUser($this->getUser());
 
         return $this->render('AmbigussBundle:Classement:phrasesUser.html.twig', array (
-            'classement' => $classement,
+	        'classement' => $classement,
+	        'dureeAvantJouabiliteSecondes' => $this->getParameter('dureeAvantJouabiliteSecondes'),
         ));
     }
     public function classementPhrasesAction(){

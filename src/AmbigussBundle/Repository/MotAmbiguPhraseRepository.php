@@ -53,7 +53,8 @@ class MotAmbiguPhraseRepository extends \Doctrine\ORM\EntityRepository
 	{
 		$date = new \DateTime();
 		$dateMin = $date->setTimestamp($date->getTimestamp() - $dureeAvantJouabiliteSecondes);
-		return $this->createQueryBuilder('pma')->select('identity(pma.phrase)')
+
+		return $this->createQueryBuilder('pma')->select('identity(pma.phrase) id')
 			->leftJoin('pma.reponses', 'r', "WITH", "pma.id = r.motAmbiguPhrase")
 			->join('pma.phrase', 'p', "WITH", "pma.phrase = p.id")
 			->where('p.dateCreation < :dateMin')->setParameter('dateMin', $dateMin->format('Y-m-d H:i:s'))

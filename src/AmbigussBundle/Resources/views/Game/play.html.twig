@@ -8,14 +8,14 @@
 			{% if app.user is null %}
 				<p class="text-success">
 					<b>
-						<a href="{{ path('user_connexion') }}">Connectez-vous</a>
+						<a href="{{ path('user_connexion') }}" class="size18">Connectez-vous</a>
 						pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
 					</b>
 				</p>
 			{% endif %}
 
 			{% if alreadyPlayed %}
-				<p class="text-warning">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
+				<p class="text-warning size16">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
 			{% endif %}
 
 			{% for flashMessage in app.session.flashbag.get('succes') %}

@@ -15,51 +15,49 @@
 	        {% if app.user is null %}
 		        <p class="text-success">
 			        <b>
-				        <a href="{{ path('user_connexion') }}">Connectez-vous</a>
+				        <a href="{{ path('user_connexion') }}" class="size18">Connectez-vous</a>
 				        pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
 			        </b>
 		        </p>
 	        {% endif %}
-
-	        <h3 id="result">
+	        <span class="size24">
 		        {% if app.user %}
 			        {% if alreadyPlayed %}
-				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.
+				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.<br>
 			        {% else %}
 				        {% transchoice nb_point %}
 					        {0} Dommage, vous n'avez pas gagné de point cette fois. |
 					        {1} Bravo, vous avez gagné 1 point. |]1,
-					        Inf[ Félicitation, vous avez gagné <span id="fun-level" style="color: red;">0 </span> points !
-
+				        Inf[ Félicitation, vous avez gagné <span id="fun-level">0</span> points !
 				        {% endtranschoice %}
 						<div >
 							<img src="{{ asset('avogif.gif') }} " alt="gif">
 						</div>
 			        {% endif %}
 		        {% else %}
-			        Vous n'êtes pas connecté, vous ne gagnez donc pas de points
+			        Vous n'êtes pas connecté, vous ne gagnez donc pas de points.<br>
 		        {% endif %}
-	        </h3>
-			<br>
-	        <h4><span class="color-green">La phrase était :</span><br> {{ phrase|raw }}</h4>
-	        <h5>par <a href="#">{{ auteur.pseudo }}</a></h5>
+	        </span>
 	        <br>
-	        <div class="text-center">
-		        <ul><h4><span class="color-green">Les votes précédents étaient :</span></h4>
+	        <span class="color-green size18">La phrase était :</span><br>
+	        <span class="size24">{{ phrase|raw }}</span><br>
+	        <span class="size16">par <a href="{{ path('user_profil', {id: auteur.id}) }}">{{ auteur.pseudo }}</a></span><br>
+	        <br>
+	        <ul><span class="color-green size18">Les votes précédents étaient :</span>
 		        {% for ordre, ma in stats %}
-			        <li class="not-list"><b class="color-red" title="Ce mot est ambigu (id : {{ ordre }})">{{ ma.valeurMA }}</b>
+			        <li class="not-list"><b class="color-red size16" title="Ce mot est ambigu (id : {{ ordre }})">{{ ma.valeurMA }}</b>
 				        :
 				        {% for valeurGlose, res in ma.gloses %}
 					        {% if res.isSelected %}<b>{% endif %}
-					            {{ valeurGlose ~ ' ' ~ res.nbVotes }}
+					        {{ valeurGlose ~ ' ' ~ res.nbVotes }}
 					        {% if res.isSelected %}</b>{% endif %}
-							{% if loop.last %}.{% else %},{% endif %}
+					        {% if loop.last %}.{% else %},{% endif %}
 				        {% endfor %}
 			        </li>
 		        {% endfor %}
-		        </ul>
-	        </div>
+	        </ul>
 	        <br>
+
             <a href="{{ path('ambiguss_game') }}" class="btn btn-primary">Rejouer</a>
         </div>
     </div>
@@ -107,7 +105,7 @@
                 easing: 'easeInQuad',
                 numberStep:number_step
             },
-            1000
+	        1500
         );
 
 	</script>

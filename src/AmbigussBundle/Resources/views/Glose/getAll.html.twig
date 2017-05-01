@@ -140,7 +140,7 @@
 						// On supprime l'image loading
 						$(form).next().remove();
 						if (data.succes) {
-							if (data.id === button.data('id')) {
+							if (data.glose.id == button.data('id')) {
 								// On trouve la ligne
 								var row = button.parents('tr');
 								// On met à jour la ligne

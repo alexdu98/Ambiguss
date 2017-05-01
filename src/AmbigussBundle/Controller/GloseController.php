@@ -107,8 +107,8 @@ class GloseController extends Controller
 
 					$em = $this->getDoctrine()->getManager();
 
-					// Si la nouvelle valeur de la glose existe déjà
-					if(!empty($gloseM))
+					// Si la nouvelle valeur de la glose existe déjà et que ce n'est pas la même glose
+					if(!empty($gloseM) && $gloseM->getId() != $glose->getId())
 					{
 						// Récupère les réponses avec la glose en cours de modification
 						$reponses = $repoR->findBy(array(

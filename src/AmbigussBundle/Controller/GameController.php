@@ -234,7 +234,6 @@ class GameController extends Controller
 			if($id == null)
 			{
 				$phrase_id = array_rand($phrases);
-
 				$phraseOBJ = $repository->find($phrases[ $phrase_id ]['id']);
 			}
 			else

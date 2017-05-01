@@ -5,6 +5,7 @@ namespace AmbigussBundle\Controller;
 use AmbigussBundle\Entity\AimerPhrase;
 use AmbigussBundle\Entity\MotAmbigu;
 use AmbigussBundle\Entity\MotAmbiguPhrase;
+use AmbigussBundle\Entity\Partie;
 use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
@@ -147,6 +148,12 @@ class PhraseController extends Controller
 							$em->persist($map);
 							$em->persist($rep);
 						}
+
+						$partie = new Partie();
+						$partie->setJoueur($this->getUser());
+						$partie->setPhrase($phrase);
+						$partie->setJoue(true);
+						$em->persist($partie);
 
 						$newPhrase = $phrase;
 

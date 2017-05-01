@@ -67,7 +67,9 @@ class Partie
 	 */
 	public function __construct()
 	{
-		$this->joue = 0;
+		$this->joue = 1;
+		$this->gainJoueur = 0;
+		$this->gainCreateur = 0;
 		$this->datePartie = new \DateTime();
 	}
 

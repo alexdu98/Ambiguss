@@ -16,7 +16,9 @@ use UserBundle\Entity\Historique;
 
 class APIController extends Controller
 {
-	public function addJugementAction(Request $request){
+
+	public function addJugementAction(Request $request)
+	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
 			$jug = new Jugement();
@@ -72,7 +74,7 @@ class APIController extends Controller
 
 					return $this->json(array(
 						'succes' => true,
-					    'action' => 'signale'
+						'action' => 'signale',
 					));
 				}
 				catch(\Exception $e)
@@ -93,4 +95,110 @@ class APIController extends Controller
 		throw $this->createNotFoundException();
 	}
 
+	public function gloseAction(Request $request)
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				$data = $request->request->all();
+
+				if(!empty($data['id']) && is_numeric($data['id']))
+				{
+					$repoJ = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:Jugement');
+					$repoTO = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:TypeObjet');
+
+					$typeObj = $repoTO->findOneBy(array('typeObjet' => 'Glose'));
+					$jugements = $repoJ->findBy(array(
+						'typeObjet' => $typeObj,
+						'verdict' => null,
+						'idObjet' => $data['id'],
+					));
+
+					return $this->json(array(
+						'succes' => true,
+						'jugements' => $jugements,
+					));
+				}
+
+			}
+			else
+			{
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
+					$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+
+					return $this->redirectToRoute('user_connexion');
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
+
+	public function editAction(Request $request)
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				$data = $request->request->all();
+
+				if($this->isCsrfTokenValid('jugement_glose', $data['token']))
+				{
+					if(!empty($data['id']) && is_numeric($data['id']))
+					{
+						$repoJ = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:Jugement');
+						$repoTV = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:TypeVote');
+
+						$jugement = $repoJ->find($data['id']);
+						$jugement->setDateDeliberation(new \DateTime());
+						$jugement->setJuge($this->getUser());
+						if($data['verdict'] == 'valide')
+						{
+							$jugement->setVerdict($repoTV->findOneBy(array('typeVote' => 'Valide')));
+						}
+						else
+						{
+							$jugement->setVerdict($repoTV->findOneBy(array('typeVote' => 'Non valide')));
+						}
+
+						// On enregistre dans l'historique du joueur
+						$histJoueur = new Historique();
+						$histJoueur->setMembre($jugement->getAuteur());
+						$histJoueur->setValeur("Jugement n°" . $jugement->getId() . ", verdict : " . $jugement->getVerdict()->getTypeVote() . ".");
+
+						$em = $this->getDoctrine()->getManager();
+						$em->persist($jugement);
+						$em->persist($histJoueur);
+
+						try
+						{
+							$em->flush();
+
+							return $this->json(array(
+								'succes' => true,
+							));
+						}
+						catch(\Exception $e)
+						{
+							return $this->json(array(
+								'succes' => false,
+								'message' => $e,
+							));
+						}
+					}
+				}
+			}
+			else
+			{
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
+					$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+
+					return $this->redirectToRoute('user_connexion');
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
 }

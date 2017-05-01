@@ -1,9 +1,14 @@
-judgment_homepage:
-    path: /jugement
-    defaults:
-        _controller: JudgmentBundle:Main:index
-
 jugement_add:
     path: /jugement/add
     defaults:
         _controller: JudgmentBundle:API:addJugement
+
+jugement_edit:
+    path: /jugement/edit
+    defaults:
+        _controller: JudgmentBundle:API:edit
+
+jugement_glose:
+    path: /ambiguss/jugement/glose
+    defaults:
+        _controller: JudgmentBundle:API:Glose

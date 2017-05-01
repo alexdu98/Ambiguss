@@ -163,3 +163,12 @@ ambiguss_phrase_keep:
         id: \d+
     options:
         expose: true
+
+ambiguss_glose_jugement:
+    path: /ambiguss/glose/{id}/jugements
+    defaults:
+        _controller: AmbigussBundle:Glose:jugement
+    requirements:
+        id: \d+
+    options:
+        expose: true

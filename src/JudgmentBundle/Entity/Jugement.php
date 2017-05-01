@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity(repositoryClass="JudgmentBundle\Repository\JugementRepository")
  */
-class Jugement
+class Jugement implements \JsonSerializable
 {
     /**
      * @var int
@@ -91,61 +91,13 @@ class Jugement
     }
 
     /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Jugement
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set dateCreation
-     *
-     * @param \DateTime $dateCreation
-     *
-     * @return Jugement
-     */
-    public function setDateCreation($dateCreation)
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get dateCreation
+     * Get dateDeliberation
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+	public function getDateDeliberation()
     {
-        return $this->dateCreation;
+	    return $this->dateDeliberation;
     }
 
     /**
@@ -163,13 +115,13 @@ class Jugement
     }
 
     /**
-     * Get dateDeliberation
+     * Get idObjet
      *
-     * @return \DateTime
+     * @return int
      */
-    public function getDateDeliberation()
+	public function getIdObjet()
     {
-        return $this->dateDeliberation;
+	    return $this->idObjet;
     }
 
     /**
@@ -187,37 +139,13 @@ class Jugement
     }
 
     /**
-     * Get idObjet
+     * Get typeObjet
      *
-     * @return int
+     * @return \JudgmentBundle\Entity\TypeObjet
      */
-    public function getIdObjet()
+	public function getTypeObjet()
     {
-        return $this->idObjet;
-    }
-
-    /**
-     * Set categorieJugement
-     *
-     * @param \JudgmentBundle\Entity\CategorieJugement $categorieJugement
-     *
-     * @return Jugement
-     */
-    public function setCategorieJugement(\JudgmentBundle\Entity\CategorieJugement $categorieJugement)
-    {
-        $this->categorieJugement = $categorieJugement;
-
-        return $this;
-    }
-
-    /**
-     * Get categorieJugement
-     *
-     * @return \JudgmentBundle\Entity\CategorieJugement
-     */
-    public function getCategorieJugement()
-    {
-        return $this->categorieJugement;
+	    return $this->typeObjet;
     }
 
     /**
@@ -235,13 +163,13 @@ class Jugement
     }
 
     /**
-     * Get typeObjet
+     * Get verdict
      *
-     * @return \JudgmentBundle\Entity\TypeObjet
+     * @return \JudgmentBundle\Entity\TypeVote
      */
-    public function getTypeObjet()
+	public function getVerdict()
     {
-        return $this->typeObjet;
+	    return $this->verdict;
     }
 
     /**
@@ -259,37 +187,13 @@ class Jugement
     }
 
     /**
-     * Get verdict
-     *
-     * @return \JudgmentBundle\Entity\TypeVote
-     */
-    public function getVerdict()
-    {
-        return $this->verdict;
-    }
-
-    /**
-     * Set auteur
-     *
-     * @param \UserBundle\Entity\Membre $auteur
-     *
-     * @return Jugement
-     */
-    public function setAuteur(\UserBundle\Entity\Membre $auteur)
-    {
-        $this->auteur = $auteur;
-
-        return $this;
-    }
-
-    /**
-     * Get auteur
+     * Get juge
      *
      * @return \UserBundle\Entity\Membre
      */
-    public function getAuteur()
+	public function getJuge()
     {
-        return $this->auteur;
+	    return $this->juge;
     }
 
     /**
@@ -306,13 +210,125 @@ class Jugement
         return $this;
     }
 
+	/**
+	 * AUTRES
+	 */
+
+	function jsonSerialize()
+	{
+		return array(
+			'id' => $this->getId(),
+			'categorieJugement' => $this->getCategorieJugement()->getCategorieJugement(),
+			'description' => $this->getDescription(),
+			'dateCreation' => $this->getDateCreation()->getTimestamp(),
+			'auteur' => $this->getAuteur()->getPseudo(),
+			'auteur_id' => $this->getAuteur()->getId(),
+		);
+	}
+
     /**
-     * Get juge
+     * Get id
+     *
+     * @return int
+     */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * Get categorieJugement
+	 *
+	 * @return \JudgmentBundle\Entity\CategorieJugement
+	 */
+	public function getCategorieJugement()
+	{
+		return $this->categorieJugement;
+	}
+
+	/**
+	 * Set categorieJugement
+	 *
+	 * @param \JudgmentBundle\Entity\CategorieJugement $categorieJugement
+	 *
+	 * @return Jugement
+	 */
+	public function setCategorieJugement(\JudgmentBundle\Entity\CategorieJugement $categorieJugement)
+	{
+		$this->categorieJugement = $categorieJugement;
+
+		return $this;
+	}
+
+	/**
+	 * Get description
+	 *
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
+
+	/**
+	 * Set description
+	 *
+	 * @param string $description
+	 *
+	 * @return Jugement
+	 */
+	public function setDescription($description)
+	{
+		$this->description = $description;
+
+		return $this;
+	}
+
+	/**
+	 * Get dateCreation
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateCreation()
+	{
+		return $this->dateCreation;
+	}
+
+	/**
+	 * Set dateCreation
+	 *
+	 * @param \DateTime $dateCreation
+	 *
+	 * @return Jugement
+	 */
+	public function setDateCreation($dateCreation)
+	{
+		$this->dateCreation = $dateCreation;
+
+		return $this;
+	}
+
+	/**
+	 * Get auteur
      *
      * @return \UserBundle\Entity\Membre
      */
-    public function getJuge()
+	public function getAuteur()
     {
-        return $this->juge;
+	    return $this->auteur;
+    }
+
+	/**
+	 * Set auteur
+	 *
+	 * @param \UserBundle\Entity\Membre $auteur
+	 *
+	 * @return Jugement
+	 */
+	public function setAuteur(\UserBundle\Entity\Membre $auteur)
+	{
+		$this->auteur = $auteur;
+
+		return $this;
     }
 }

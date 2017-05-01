@@ -93,8 +93,39 @@
 			$('.editGloseButton').click(editGloseModal);
 			function editGloseModal(event) {
 				var button = $(this);
+				setModalSize('modal-lg');
 				setModalTitle('Modifier la glose "' + button.data('valeur') + '"');
 				setModalBody('{{ include('AmbigussBundle:Glose:edit.html.twig', {'form': editGloseForm})|e('js') }}');
+
+				$("#toggleJugements").click(function () {
+					$("#jugements").toggle("slow");
+				});
+
+				// Récupère les jugements en cours
+				var url = Routing.generate('ambiguss_glose_jugement', {id: button.data('id')});
+				$.post(url, function (data) {
+					if (data.succes) {
+						divJugement = $('#jugements');
+						if (data.jugements.length === 0)
+							divJugement.append('<span class="text-danger">Aucun jugement en cours</span>');
+						html = '{{ include('@Judgment/Jugement/jugement.html.twig')|e('js') }}';
+						$.each(data.jugements, function (index) {
+							clone = $(html);
+							clone.find('.panel-heading').append(data.jugements[index].categorieJugement);
+							clone.find('.panel-body').append(data.jugements[index].description);
+							var profil = Routing.generate('user_profil', {id: data.jugements[index].auteur_id});
+							var dt = new Date(data.jugements[index].dateCreation * 1000);
+							var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
+									.getMinutes();
+							clone.find('.panel-footer').append('Par <a href="' + profil + '">' + data.jugements[index].auteur + '</a>, le ' + date);
+							divJugement.append(clone);
+						});
+					}
+					else {
+
+					}
+				}, "json");
+
 				$('#glose_edit_valeur').val(button.data('valeur'));
 				var form = $('form[name="glose_edit"]');
 				var action = form.attr('action');

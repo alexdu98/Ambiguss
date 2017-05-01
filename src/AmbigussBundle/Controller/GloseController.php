@@ -49,6 +49,40 @@ class GloseController extends Controller
 		throw $this->createAccessDeniedException();
 	}
 
+	public function jugementAction(Request $request, $id)
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				$repoJ = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:Jugement');
+				$repoTO = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:TypeObjet');
+
+				$typeObj = $repoTO->findOneBy(array('typeObjet' => 'Glose'));
+				$jugements = $repoJ->findBy(array(
+					'typeObjet' => $typeObj,
+					'verdict' => null,
+					'idObjet' => $id,
+				));
+
+				return $this->json(array(
+					'succes' => true,
+					'jugements' => $jugements,
+				));
+			}
+			else
+			{
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
+					$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+
+					return $this->redirectToRoute('user_connexion');
+				}
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
+
 	public function editGloseAction(Request $request, \AmbigussBundle\Entity\Glose $glose)
 	{
 		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))

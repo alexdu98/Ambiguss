@@ -51,3 +51,5 @@ user_profil:
     path: /user/profil/{id}
     defaults:
         {_controller: UserBundle:Utilisateur:Profil, id : null}
+    options:
+        expose: true

@@ -233,8 +233,8 @@ class GameController extends Controller
 			// Rend une clé au hasard
 			if($id == null)
 			{
-				$phrase_id = array_rand($phrases);
-				$phraseOBJ = $repository->find($phrases[ $phrase_id ]['id']);
+				$phrase_id = $phrases[ array_rand($phrases) ]['id'];
+				$phraseOBJ = $repository->find($phrase_id);
 			}
 			else
 			{

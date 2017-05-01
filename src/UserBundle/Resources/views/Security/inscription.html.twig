@@ -86,7 +86,7 @@
 			else if(!pseudo.val().match(/^[a-zA-Z0-9-_]{3,32}$/)){
 				erreurs.push('pseudoreg');
 				pseudo.next().remove();
-				pseudo.after('<span class="color-red">Le pseudo doit être alphanumérique (- et _ autorisé) et faire entre 6 et 72 caractères</span>');
+				pseudo.after('<span class="color-red">Le pseudo doit être alphanumérique (- et _ autorisé) et faire entre 3 et 32 caractères</span>');
 			}
 			else{
 				pseudo.next().remove();

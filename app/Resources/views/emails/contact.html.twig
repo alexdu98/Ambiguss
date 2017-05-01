@@ -1,0 +1,25 @@
+{% extends "emails/base.html.twig" %}
+
+{% block titre %}Contact{% endblock %}
+
+{% block pseudo %}{% endblock %}
+
+{% block contenu %}
+	<p>
+		<b>{{ pseudoExpediteur }}</b> ({% if app.user %}connecté{% else %}non connecté{% endif %}) à envoyé un formulaire de contact sur Ambiguss.<br>
+	</p>
+	Email : <b>{{ emailExpediteur }}</b><br>
+	Message : <br>
+	<hr>
+	<p>
+		{{ message | nl2br }}
+	</p>
+	<hr>
+	<br>
+	Liste des destinataires de cet email :<br>
+	<ul>
+		{% for email,pseudo in listeDest %}
+			<li>{{ pseudo }} ({{ email }})</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

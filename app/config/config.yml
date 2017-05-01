@@ -24,6 +24,11 @@ parameters:
     maxResultForClassementPhrases: 100
     # Jugement
     dureeDeliberationSecondes: 432000 # 5 jours
+    # Emails contact
+    emailsContact:
+        # Email: "Nom"
+        alexdu98@gmx.fr: "Alexandre"
+        lafourcade@lirmm.fr: "Mathieu Lafourcade"
 
 
 framework:

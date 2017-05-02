@@ -123,7 +123,7 @@ class GameController extends Controller
 					));
 
 					// Si le joueur n'avait pas déjà joué la phrase
-					if((empty($partie) || $partie->getJoue() == 0) && $partie->getPhrase()->getAuteur() != $this->getUser())
+					if(empty($partie) || ($partie->getJoue() == 0 && $partie->getPhrase()->getAuteur() != $this->getUser()))
 					{
 						// On lui ajoute les points et crédits au joueur
 						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));

@@ -77,4 +77,31 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			->select('count(p) nbPhrases')
 			->getQuery()->getSingleResult();
 	}
+
+	public function getStat()
+	{
+		$array = array();
+
+		$array['total'] = $this->createQueryBuilder('p')
+			                  ->select('count(p) total')
+			                  ->getQuery()->getSingleResult()['total'];
+
+		$dateJ7 = new \DateTime();
+		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
+		$array['creationJ7'] = $this->createQueryBuilder('p')
+			                       ->select('count(p) creationJ7')
+			                       ->where('p.dateCreation > :j7')->setParameter('j7', $dateJ7)
+			                       ->getQuery()->getSingleResult()['creationJ7'];
+
+		$array['signale'] = $this->createQueryBuilder('p')
+			                    ->select('count(p) signale')
+			                    ->where('p.signale = 1')
+			                    ->getQuery()->getSingleResult()['signale'];
+
+		$array['moyGain'] = $this->createQueryBuilder('p')
+			                    ->select('avg(p.gainCreateur) moyGain')
+			                    ->getQuery()->getSingleResult()['moyGain'];
+
+		return $array;
+	}
 }

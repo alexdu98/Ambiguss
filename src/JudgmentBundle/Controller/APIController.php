@@ -124,12 +124,9 @@ class APIController extends Controller
 			}
 			else
 			{
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-				{
-					$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-					return $this->redirectToRoute('user_connexion');
-				}
+				return $this->redirectToRoute('user_connexion');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -191,12 +188,9 @@ class APIController extends Controller
 			}
 			else
 			{
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-				{
-					$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-					return $this->redirectToRoute('user_connexion');
-				}
+				return $this->redirectToRoute('user_connexion');
 			}
 		}
 		throw $this->createAccessDeniedException();

@@ -27,4 +27,62 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getResult();
 	}
 
+	public function getStat()
+	{
+		$array = array();
+
+		$array['total'] = $this->createQueryBuilder('m')
+			                  ->select('count(m) total')
+			                  ->getQuery()->getSingleResult()['total'];
+
+		$dateJ7 = new \DateTime();
+		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
+		$array['inscriptionJ7'] = $this->createQueryBuilder('m')
+			                          ->select('count(m) inscriptionJ7')
+			                          ->where('m.dateInscription > :j7')->setParameter('j7', $dateJ7)
+			                          ->getQuery()->getSingleResult()['inscriptionJ7'];
+
+		$array['bannis'] = $this->createQueryBuilder('m')
+			                   ->select('count(m) bannis')
+			                   ->where('m.banni = 1')
+			                   ->getQuery()->getSingleResult()['bannis'];
+
+		$array['inactifs'] = $this->createQueryBuilder('m')
+			                     ->select('count(m) inactifs')
+			                     ->where('m.actif = 0')
+			                     ->getQuery()->getSingleResult()['inactifs'];
+
+		$array['newsletter'] = $this->createQueryBuilder('m')
+			                       ->select('count(m) newsletter')
+			                       ->where('m.newsletter = 1')
+			                       ->getQuery()->getSingleResult()['newsletter'];
+
+		$array['homme'] = $this->createQueryBuilder('m')
+			                  ->select('count(m) homme')
+			                  ->where('m.sexe = :sexe')->setParameter('sexe', 'Homme')
+			                  ->getQuery()->getSingleResult()['homme'];
+
+		$array['femme'] = $this->createQueryBuilder('m')
+			                  ->select('count(m) femme')
+			                  ->where('m.sexe = :sexe')->setParameter('sexe', 'Femme')
+			                  ->getQuery()->getSingleResult()['femme'];
+
+		$array['moyPoints'] = $this->createQueryBuilder('m')
+			                      ->select('avg(m.pointsClassement) moyPoints')
+			                      ->getQuery()->getSingleResult()['moyPoints'];
+
+		$array['moyCredits'] = $this->createQueryBuilder('m')
+			                       ->select('avg(m.credits) moyCredits')
+			                       ->getQuery()->getSingleResult()['moyCredits'];
+
+		$sr = $this->createQueryBuilder('m1');
+		$array['social'] = $this->createQueryBuilder('m')
+			                   ->select('count(m) social')
+			                   ->where($sr->expr()->isNotNull('m.idFacebook'))
+			                   ->orWhere($sr->expr()->isNotNull('m.idTwitter'))
+			                   ->getQuery()->getSingleResult()['social'];
+
+		return $array;
+	}
+
 }

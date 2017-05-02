@@ -121,7 +121,6 @@ class APIController extends Controller
 				}
 			}
 		}
-
 		throw $this->createNotFoundException();
 	}
 

@@ -64,6 +64,29 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getSingleResult();
     }
 
+	public function getStat()
+	{
+		$array = array();
 
+		$array['total'] = $this->createQueryBuilder('r')
+			                  ->select('count(r) total')
+			                  ->getQuery()->getSingleResult()['total'];
+
+		$dateJ7 = new \DateTime();
+		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
+		$array['reponduJ7'] = $this->createQueryBuilder('r')
+			                      ->select('count(r) reponduJ7')
+			                      ->where('r.dateReponse > :j7')->setParameter('j7', $dateJ7)
+			                      ->getQuery()->getSingleResult()['reponduJ7'];
+
+		$dateH24 = new \DateTime();
+		$dateH24->setTimestamp($dateH24->getTimestamp() - (3600 * 24));
+		$array['reponduH24'] = $this->createQueryBuilder('r')
+			                       ->select('count(r) reponduH24')
+			                       ->where('r.dateReponse > :h24')->setParameter('h24', $dateH24)
+			                       ->getQuery()->getSingleResult()['reponduH24'];
+
+		return $array;
+	}
 
 }

@@ -38,4 +38,27 @@ class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getResult();
     }
 
+	public function getStat()
+	{
+		$array = array();
+
+		$array['total'] = $this->createQueryBuilder('ma')
+			                  ->select('count(ma) total')
+			                  ->getQuery()->getSingleResult()['total'];
+
+		$dateJ7 = new \DateTime();
+		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
+		$array['creationJ7'] = $this->createQueryBuilder('ma')
+			                       ->select('count(ma) creationJ7')
+			                       ->where('ma.dateCreation > :j7')->setParameter('j7', $dateJ7)
+			                       ->getQuery()->getSingleResult()['creationJ7'];
+
+		$array['signale'] = $this->createQueryBuilder('ma')
+			                    ->select('count(ma) signale')
+			                    ->where('ma.signale = 1')
+			                    ->getQuery()->getSingleResult()['signale'];
+
+		return $array;
+	}
+
 }

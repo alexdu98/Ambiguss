@@ -42,4 +42,27 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 			->where('g.signale = 1')
 			->getQuery()->getResult();
 	}
+
+	public function getStat()
+	{
+		$array = array();
+
+		$array['total'] = $this->createQueryBuilder('g')
+			                  ->select('count(g) total')
+			                  ->getQuery()->getSingleResult()['total'];
+
+		$dateJ7 = new \DateTime();
+		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
+		$array['creationJ7'] = $this->createQueryBuilder('g')
+			                       ->select('count(g) creationJ7')
+			                       ->where('g.dateCreation > :j7')->setParameter('j7', $dateJ7)
+			                       ->getQuery()->getSingleResult()['creationJ7'];
+
+		$array['signale'] = $this->createQueryBuilder('g')
+			                    ->select('count(g) signale')
+			                    ->where('g.signale = 1')
+			                    ->getQuery()->getSingleResult()['signale'];
+
+		return $array;
+	}
 }

@@ -35,4 +35,22 @@ class VisiteRepository extends \Doctrine\ORM\EntityRepository
 			$em->flush();
 		}
 	}
+
+	public function getStat()
+	{
+		$array = array();
+
+		$array['total'] = $this->createQueryBuilder('v')
+			                  ->select('count(v) total')
+			                  ->getQuery()->getSingleResult()['total'];
+
+		$dateH24 = new \DateTime();
+		$dateH24->setTimestamp($dateH24->getTimestamp() - (3600 * 24));
+		$array['h24'] = $this->createQueryBuilder('v')
+			                ->select('count(v) h24')
+			                ->where('v.dateVisite > :h24')->setParameter('h24', $dateH24)
+			                ->getQuery()->getSingleResult()['h24'];
+
+		return $array;
+	}
 }

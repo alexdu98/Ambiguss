@@ -28,6 +28,13 @@ class Phrase
      */
     private $contenu;
 
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="gain_createur", type="integer")
+	 */
+	private $gainCreateur;
+
     /**
      * @var \DateTime
      *
@@ -93,6 +100,7 @@ class Phrase
         $this->dateCreation = new \DateTime();
         $this->signale = 0;
         $this->visible = 1;
+	    $this->gainCreateur = 0;
 	    $this->motsAmbigusPhrase = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -153,6 +161,30 @@ class Phrase
 
         return $this;
     }
+
+	/**
+	 * Get gainCreateur
+	 *
+	 * @return int
+	 */
+	public function getGainCreateur()
+	{
+		return $this->gainCreateur;
+	}
+
+	/**
+	 * Set gainCreateur
+	 *
+	 * @param integer $gainCreateur
+	 *
+	 * @return Phrase
+	 */
+	public function setGainCreateur($gainCreateur)
+	{
+		$this->gainCreateur = $gainCreateur;
+
+		return $this;
+	}
 
     /**
      * Get signale

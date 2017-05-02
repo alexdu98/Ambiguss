@@ -22,7 +22,9 @@
 	        {% endif %}
 	        <span class="size24">
 		        {% if app.user %}
-			        {% if alreadyPlayed %}
+			        {% if isAuteur %}
+				        Vous êtes l'auteur de cette phrase, vous ne gagnez donc pas de points.<br>
+			        {% elseif alreadyPlayed %}
 				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.<br>
 			        {% else %}
 				        {% transchoice nb_point %}

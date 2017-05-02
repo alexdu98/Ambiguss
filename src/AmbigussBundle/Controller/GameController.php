@@ -31,6 +31,7 @@ class GameController extends Controller
 		$phraseHTMLEscape = null;
 		$allPhrasesPlayed = null;
 		$signal = null;
+		$isAuteur = null;
 
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid())
@@ -122,7 +123,7 @@ class GameController extends Controller
 					));
 
 					// Si le joueur n'avait pas déjà joué la phrase
-					if(empty($partie) || $partie->getJoue() == 0)
+					if((empty($partie) || $partie->getJoue() == 0) && $partie->getPhrase()->getAuteur() != $this->getUser())
 					{
 						// On lui ajoute les points et crédits au joueur
 						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
@@ -157,7 +158,7 @@ class GameController extends Controller
 
 						$partie->setJoue(true);
 						$partie->setGainJoueur(ceil($nb_points));
-						$partie->setGainCreateur($gainCreateur);
+						$partie->getPhrase()->setGainCreateur($gainCreateur);
 
 						// On enregistre dans l'historique du joueur
 						$histJoueur = new Historique();
@@ -185,6 +186,9 @@ class GameController extends Controller
 							$this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
 						}
 					}
+					elseif($partie->getPhrase()->getAuteur() == $this->getUser()){
+						$isAuteur = true;
+					}
 					else
 					{
 						$alreadyPlayed = true;
@@ -195,6 +199,7 @@ class GameController extends Controller
 				$this->get('session')->getFlashBag()->add('auteur', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur());
 				$this->get('session')->getFlashBag()->add('stats', $hash);
 				$this->get('session')->getFlashBag()->add('alreadyPlayed', $alreadyPlayed);
+				$this->get('session')->getFlashBag()->add('isAuteur', $isAuteur);
 				$this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
 
 				return $this->redirectToRoute('ambiguss_game_result');
@@ -314,15 +319,17 @@ class GameController extends Controller
 	{
 		$phrase = $this->get('session')->getFlashBag()->get('phrase');
 		$auteur = $this->get('session')->getFlashBag()->get('auteur');
+		$isAuteur = $this->get('session')->getFlashBag()->get('isAuteur');
 		$stats = $this->get('session')->getFlashBag()->get('stats');
 		$alreadyPlayed = $this->get('session')->getFlashBag()->get('alreadyPlayed');
 		$nb_points = $this->get('session')->getFlashBag()->get('nb_points');
 
-		if(!empty($phrase) && !empty($auteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
+		if(!empty($phrase) && !empty($auteur) && !empty($isAuteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
 		{
 			return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
 				'phrase' => $phrase[0],
 				'auteur' => $auteur[0],
+				'isAuteur' => $isAuteur[0],
 				'stats' => $stats[0],
 				'alreadyPlayed' => $alreadyPlayed[0],
 				'nb_point' => $nb_points[0],

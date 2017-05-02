@@ -37,7 +37,7 @@
 						<a title="Jouer cette phrase" style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a>
 					</td>
 					<td>{{ row.nbLikes }}</td>
-					<td>{{ row.nbPoints|default('0') }}</td>
+					<td>{{ row.gainCreateur }}</td>
 					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y") }}</td>
 				</tr>
 			{% endfor %}

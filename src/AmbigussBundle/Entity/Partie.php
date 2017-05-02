@@ -30,13 +30,6 @@ class Partie
 	private $gainJoueur;
 
 	/**
-	 * @var int
-	 *
-	 * @ORM\Column(name="gain_createur", type="integer")
-	 */
-	private $gainCreateur;
-
-	/**
 	 * @var bool
 	 *
 	 * @ORM\Column(name="joue", type="boolean")
@@ -69,7 +62,6 @@ class Partie
 	{
 		$this->joue = 1;
 		$this->gainJoueur = 0;
-		$this->gainCreateur = 0;
 		$this->datePartie = new \DateTime();
 	}
 
@@ -103,30 +95,6 @@ class Partie
 	public function setGainJoueur($gainJoueur)
 	{
 		$this->gainJoueur = $gainJoueur;
-
-		return $this;
-	}
-
-	/**
-	 * Get gainCreateur
-	 *
-	 * @return int
-	 */
-	public function getGainCreateur()
-	{
-		return $this->gainCreateur;
-	}
-
-	/**
-	 * Set gainCreateur
-	 *
-	 * @param integer $gainCreateur
-	 *
-	 * @return Partie
-	 */
-	public function setGainCreateur($gainCreateur)
-	{
-		$this->gainCreateur = $gainCreateur;
 
 		return $this;
 	}

@@ -14,7 +14,9 @@
 				</p>
 			{% endif %}
 
-			{% if alreadyPlayed %}
+			{% if auteur == app.user %}
+				<p class="text-warning size16">Vous êtes l'auteur cette phrase, vous ne gagnerez donc pas de points.</p>
+			{% elseif alreadyPlayed %}
 				<p class="text-warning size16">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
 			{% endif %}
 
@@ -136,7 +138,7 @@
 			$("#phraseSignal").click(function () {
 				var boutonSignal = $(this);
 				setModalSize('modal-lg');
-				setModalTitle('Signaler un élément de la phrase "{{ phraseHTMLEscape|escape('js')|raw }}"');
+				setModalTitle("Signaler un élément de la phrase \"{{ phraseHTMLEscape|raw }}\"");
 				setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
 				$("#modal").modal("show");
 
@@ -197,7 +199,6 @@
 					}
 				});
 			});
-
 
 			// Au survol d'une réponse on surligne le MA
 			$('.reponseGroupe').hover(function () {

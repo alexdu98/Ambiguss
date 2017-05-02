@@ -33,7 +33,6 @@ class ClassementController extends Controller{
         $repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
         $classement = $repository->getClassementPhrases($this->getParameter('maxResultForClassementPhrases'));
 
-
         return $this->render('AmbigussBundle:Classement:phrases.html.twig', array (
             'classement' => $classement,
         ));

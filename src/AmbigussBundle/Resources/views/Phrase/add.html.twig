@@ -244,9 +244,10 @@
 			$('#helpAddPhraseModal').click(helpAddPhraseModal);
 			function helpAddPhraseModal(event){
 				setModalSize('modal-lg');
-				setModalTitle('Comment créer une phrase ?');
+				setModalTitle('Informations sur la création de phrase');
 				setModalBody(
-					'<ol>'
+					'<h4><b>Comment créer une phrase ?</b></h4>'
+					+ '<ol>'
 						+ '<li>Écrivez votre phrase complète dans le champ dédié.</li>'
 						+ '<li>'
 					+ 'Sélectionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot sélectionné ambigu".<br>'
@@ -281,6 +282,11 @@
 					+ '<li>{{ gainPercentByGame }}% des points qu\'un joueur gagne en la jouant.</li>'
 					+ '</ul>'
 					+ '</div>'
+					+ '<h4><b>Coût de l\'ajout d\'une glose</b></h4>'
+					+ 'La formule est la suivante :<br>'
+					+ '<span class="text-primary">Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.'
+					+ '</span><br><br>'
+					+ '<b>Exemple :</b><br> Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = ' + (3 * {{ costCreateGloseByGlosesOfMotAmbigu }}) + ' crédits.'
 				);
 			}
 

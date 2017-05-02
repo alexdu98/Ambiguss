@@ -226,16 +226,21 @@
 			$('#helpGameModal').click(helpGameModal);
 			function helpGameModal(event) {
 				setModalSize('modal-lg');
-				setModalTitle('Comment les phrases sont-elles choisies ?');
+				setModalTitle('Informations sur une partie');
 				setModalBody(
-					'<h4>Connecté</h4>'
-					+ 'Prend les 100 phrases les plus anciennes que vous n\'avez pas encore joué et en tire une au hasard.<br>'
+					'<h4><b>Tirage au sort de la phrase : mode connecté</b></h4>'
+					+ 'Tire une phrase dont vous n\'êtes pas le créateur au hasard.<br>'
 					+ 'Si toutes les phrases ont été jouées, en tire une au hasard parmis toutes les phrases existantes.<br>'
-					+ '<h4>Non connecté</h4>'
+					+ '<h4><b>Tirage au sort de la phrase : mode non connecté</b></h4>'
 					+ 'Prend les 100 phrases les plus anciennes que votre IP n\'a pas joué depuis plus de 3 jours et en tire une au hasard.<br>'
 					+ 'Si toutes les phrases ont été jouées, en tire une au hasard parmis toutes les phrases existantes.<br><br>'
 					+ '<div class="alert alert-info">Si vous passez la phrase, vous appliquez le même algorithme, '
 					+ 'ce qui peut donc redonner la même phrase, s\'il ne vous reste pas beacoup de phrases non jouées par exemple.</div>'
+					+ '<h4><b>Coût de l\'ajout d\'une glose</b></h4>'
+					+ 'La formule est la suivante :<br>'
+					+ '<span class="text-primary">Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.'
+					+ '</span><br><br>'
+					+ '<b>Exemple :</b><br> Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = ' + (3 * {{ costCreateGloseByGlosesOfMotAmbigu }}) + ' crédits.'
 				);
 			}
 		});

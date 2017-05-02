@@ -209,8 +209,13 @@
 				{% if app.user is empty %}
 					messageNeedConnectionModal();
 				{% else %}
+				nbGloses = $(event.target).parents('.row').find('select.gloses option').length - 1;
+				cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
+				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédits.</div><br>');
+				if ($('#credits').html() > cost) {
 					setModalBody('{{ include('AmbigussBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
 					addGloseModal(event);
+				}
 				{% endif %}
 			}
 

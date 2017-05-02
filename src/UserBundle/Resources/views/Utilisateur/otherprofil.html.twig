@@ -10,7 +10,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-6 text-left">
-					<p><b>Niveau :</b> {{ user.niveau.titre }}</p>
+					<p><b>Parties : </b> {{ nbParties }} / {{ nbPhrases }}</p>
 					<p><b>Points :</b> {{ user.pointsClassement }}</p>
 					<br>
 					{% if user.pseudo == app.user.pseudo %}

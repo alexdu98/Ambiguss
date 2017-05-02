@@ -16,16 +16,27 @@ class UtilisateurController extends Controller
 			return $this->redirectToRoute('user_connexion');
 		}
 
+		$repoPh = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+		$nbPhrases = $repoPh->countAll();
+
+		$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
+
 		if($user == null)
 		{
+			$nbParties = $repoP->countAllGamesByMembre($this->getUser());
 			return $this->render('UserBundle:Utilisateur:myprofil.html.twig', array(
 				'user' => $this->getUser(),
+				'nbParties' => $nbParties['nbParties'],
+				'nbPhrases' => $nbPhrases['nbPhrases'],
 			));
 		}
 		else
 		{
+			$nbParties = $repoP->countAllGamesByMembre($user);
 			return $this->render('UserBundle:Utilisateur:otherprofil.html.twig', array(
 				'user' => $user,
+				'nbParties' => $nbParties['nbParties'],
+				'nbPhrases' => $nbPhrases['nbPhrases'],
 			));
 		}
 	}

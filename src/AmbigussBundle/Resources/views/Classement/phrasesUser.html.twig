@@ -18,7 +18,6 @@
 				<th>Nombre de likes</th>
 				<th>Gains</th>
 				<th>Date de création</th>
-				<th>Actions</th>
 			</tr>
 			</thead>
 			<tfoot>
@@ -28,7 +27,6 @@
 				<th>Nombre de likes</th>
 				<th>Gains</th>
 				<th>Date de création</th>
-				<th>Actions</th>
 			</tr>
 			</tfoot>
 			<tbody>
@@ -36,18 +34,19 @@
 				<tr>
 					<td>{{ loop.index }}</td>
 					<td>
-						<a title="Jouer cette phrase" style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a>
+						<div class="row">
+							<div class="col-md-10">
+								<a title="Jouer cette phrase" style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a>
+							</div>
+							{% if row.dateCreation|date("U") > "now"|date("U") - dureeAvantJouabiliteSecondes %}
+								<div class="col-md-2 text-right">
+									<a href="{{ path('ambiguss_phrase_edit', {id : row.id}) }}" class="btn btn-warning btn-xs">Modifier</a></div>
+							{% endif %}
+						</div>
 					</td>
 					<td>{{ row.nbLikes }}</td>
 					<td>{{ row.nbPoints|default('0') }}</td>
 					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
-					<td>
-						<a href="{{ path('ambiguss_phrase_edit', {id : row.id}) }}" class="btn btn-warning"
-								{% if row.dateCreation|date("U") < "now"|date("U") - dureeAvantJouabiliteSecondes %}
-									disabled
-								{% endif %}
-						>Modifier</a>
-					</td>
 				</tr>
 			{% endfor %}
 			</tbody>

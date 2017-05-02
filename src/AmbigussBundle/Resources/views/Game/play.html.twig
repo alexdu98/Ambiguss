@@ -109,8 +109,13 @@
 				{% if app.user is empty %}
 				messageNeedConnectionModal();
 				{% else %}
-				setModalBody('{{ include('AmbigussBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
-				addGloseModal(event);
+				nbGloses = $(event.target).parents('.reponseGroupe').find('select.gloses option').length - 1;
+				cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
+				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédits.</div><br>');
+				if ($('#credits').html() > cost) {
+					setModalBody('{{ include('AmbigussBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
+					addGloseModal(event);
+				}
 				{% endif %}
 			}
 
@@ -131,7 +136,7 @@
 			$("#phraseSignal").click(function () {
 				var boutonSignal = $(this);
 				setModalSize('modal-lg');
-				setModalTitle('Signaler un élément');
+				setModalTitle('Signaler un élément de la phrase "{{ phraseHTMLEscape|escape('js')|raw }}"');
 				setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
 				$("#modal").modal("show");
 
@@ -140,8 +145,8 @@
 					var idTypeObjet = $(this).val();
 					var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
 					if (typeObjet === 'Glose') {
+						$('#signalementIdObjet').show();
 						$('#jugement_add_signaler').prop('disabled', false);
-						$('#jugement_phrase_contenu').hide();
 						$('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
 						$('.gloses').each(function () {
 							var ma = $(this).next().val();
@@ -151,13 +156,13 @@
 						})
 					}
 					else if (typeObjet === 'Phrase') {
-						$('#jugement_phrase_contenu').show().empty().append("{{ phraseHTMLEscape|raw }}");
+						$('#signalementIdObjet').hide();
 						$('#jugement_add_signaler').prop('disabled', false);
 						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase_id }}">{{ phrase_id }}</option>');
 					}
 					else {
+						$('#signalementIdObjet').show();
 						$('#jugement_add_signaler').prop('disabled', true);
-						$('#jugement_phrase_contenu').hide();
 					}
 				});
 				$("#jugement_add_typeObjet").trigger('change');

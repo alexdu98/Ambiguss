@@ -54,19 +54,25 @@ class APIController extends Controller
 				$data->normalize();
 
 				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Glose');
+				$repoMA = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
+
+				$ma = $repoMA->findOneBy(array('valeur' => $request->request->get('glose_add')['motAmbigu']));
+				$cout = -($ma->getGloses()->count() * $this->getParameter('costCreateGloseByGlosesOfMotAmbigu'));
+				$this->getUser()->updateCredits($cout);
+
 				$glose = $repository->findOneOrCreate($data);
 
-				$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
 				$motAmbigu = new MotAmbigu();
 				$motAmbigu->setValeur($request->request->get('glose_add')['motAmbigu']);
 				$motAmbigu->setAuteur($this->getUser());
-				$motAmbigu = $repository->findOneOrCreate($motAmbigu);
+				$motAmbigu = $repoMA->findOneOrCreate($motAmbigu);
 
 				$motAmbigu->addGlose($glose);
 
 				$em = $this->getDoctrine()->getManager();
 
 				$em->persist($motAmbigu);
+				$em->persist($this->getUser());
 
 				try
 				{
@@ -86,7 +92,7 @@ class APIController extends Controller
 					);
 
 					return $this->json(array(
-						'status' => 'succes',
+						'succes' => true,
 						'glose' => $res,
 					));
 				}
@@ -99,14 +105,15 @@ class APIController extends Controller
 					);
 
 					return $this->json(array(
-						'status' => 'succes',
+						'succes' => true,
+						'liaisonExiste' => true,
 						'glose' => $res,
 					));
 				}
 				catch(\Exception $e)
 				{
 					return $this->json(array(
-						'status' => 'erreur',
+						'succes' => false,
 						'message' => $e,
 					));
 				}

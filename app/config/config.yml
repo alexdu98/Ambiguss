@@ -19,6 +19,8 @@ parameters:
     gainPerLikePhrasePoints: 25
     gainPercentByGame: 10
     dureeAvantJouabiliteSecondes: 300
+    # Glose
+    costCreateGloseByGlosesOfMotAmbigu: 50
     # Classement
     maxResultForClassementGeneral: 100
     maxResultForClassementPhrases: 100
@@ -69,6 +71,7 @@ twig:
         gainCreatePhrasePoints: "%gainCreatePhrasePoints%"
         gainPerLikePhrasePoints: "%gainPerLikePhrasePoints%"
         gainPercentByGame: "%gainPercentByGame%"
+        costCreateGloseByGlosesOfMotAmbigu: "%costCreateGloseByGlosesOfMotAmbigu%"
 
 # Doctrine Configuration
 doctrine:

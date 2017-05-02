@@ -11,4 +11,12 @@ namespace AmbigussBundle\Repository;
 class PartieRepository extends \Doctrine\ORM\EntityRepository
 {
 
+	public function countAllGamesByMembre($membre)
+	{
+		return $this->createQueryBuilder('p')
+			->select('count(p) nbParties')
+			->where('p.joueur = :membre')->setParameter('membre', $membre)
+			->andWhere('p.joue = 1')
+			->getQuery()->getSingleResult();
+	}
 }

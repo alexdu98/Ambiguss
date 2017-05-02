@@ -108,7 +108,7 @@ function addGloseModal(event) {
 		success: function (data, status, xhr, form) {
 			// On supprime l'image loading
 			$(form).next().remove();
-			if (data.status) {
+			if (data.succes) {
 				// On ajoute la nouvelle glose à la liste des gloses du select
 				select = event.data.prototype.find('select.gloses');
 				motAmbigu = $(select).next().val();
@@ -130,12 +130,17 @@ function addGloseModal(event) {
 					+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
 					+ 'Glose "' + data.glose.valeur + '" ajoutée à "' + event.data.motAmbigu + '"</div>'
 				);
+				if (!data.liaisonExiste) {
+					costNewGlose = $('.costNewGlose');
+					updateCredits(-costNewGlose.html());
+					costNewGlose.html(parseInt(costNewGlose.html()) + parseInt(costNewGlose.data('cost')));
+				}
 				$(form).clearForm();
 			} else {
 				$(form).after('<div class="alert alert-danger">Erreur</div>');
 			}
 		},
-		error: function(){
+		error: function () {
 			loading = $("#loading");
 			next = loading.prev().nextAll();
 			loading.before('<span class="text-danger">Erreur</span>');
@@ -149,6 +154,14 @@ function addGloseModal(event) {
  */
 function messageNeedConnectionModal() {
 	setModalBody('<div class="alert alert-danger">Il faut être connecté pour utiliser cette fonctionnalité</div>');
+}
+
+function updatePoints(points) {
+	$('#points').html(parseInt($('#points').html()) + parseInt(points));
+}
+
+function updateCredits(credits) {
+	$('#credits').html(parseInt($('#credits').html()) + parseInt(credits));
 }
 
 $(document).ready(function () {
@@ -167,12 +180,12 @@ $(document).ready(function () {
 				if (response.status === 'connected') {
 					//alert('Already connected, redirect to login page to create token.');
 					/*FB.login(function (response) {
-						if (response.authResponse) {
-							FB.api('/me', {fields: 'id, email, gender'}, function (response) {
-								saveFacebookUser(response);
-							});
-						}
-					}, {scope: 'public_profile, email'});*/
+					 if (response.authResponse) {
+					 FB.api('/me', {fields: 'id, email, gender'}, function (response) {
+					 saveFacebookUser(response);
+					 });
+					 }
+					 }, {scope: 'public_profile, email'});*/
 					redirectLoginFacebook = Routing.generate('hwi_oauth_service_redirect', {service: 'facebook'});
 					document.location = redirectLoginFacebook;
 				}
@@ -184,7 +197,7 @@ $(document).ready(function () {
 							});
 							alert('Connected successfuly');
 						}
-						else{
+						else {
 							alert('Cancelled.');
 						}
 					}, {scope: 'public_profile, email'});

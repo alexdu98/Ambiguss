@@ -67,8 +67,16 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 		return $q->select('ph.id')
 			->where($q->expr()->notIn('ph.id', $sub->getDQL()))
 			->andWhere('ph.dateCreation < :dateMin')
+			->andWhere('ph.auteur != :membre')
 			->setParameter('dateMin', $dateMin->format('Y-m-d H:i:s'))
 			->setParameter('membre', $membre)
 			->getQuery()->getArrayResult();
+	}
+
+	public function countAll()
+	{
+		return $this->createQueryBuilder('p')
+			->select('count(p) nbPhrases')
+			->getQuery()->getSingleResult();
 	}
 }

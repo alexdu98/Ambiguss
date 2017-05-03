@@ -77,6 +77,12 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			->select('count(p) nbPhrases')
 			->getQuery()->getSingleResult();
 	}
+	public function getAllLimit()
+    {
+        return $this->createQueryBuilder('p')
+            ->setMaxResults(300)
+            ->getQuery()->getSingleResult();
+    }
 
 	public function getStat()
 	{

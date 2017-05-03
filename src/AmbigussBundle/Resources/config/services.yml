@@ -3,3 +3,5 @@ services:
         class: AmbigussBundle\Services\Phrase
         tags:
             - { name: twig.extension }
+    ambiguss_export:
+        class: AmbigussBundle\Controller\ExportController

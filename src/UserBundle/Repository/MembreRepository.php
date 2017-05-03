@@ -35,12 +35,26 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 			                  ->select('count(m) total')
 			                  ->getQuery()->getSingleResult()['total'];
 
+		$dateJ30 = new \DateTime();
+		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 30));
+		$array['inscriptionJ30'] = $this->createQueryBuilder('m')
+			                           ->select('count(m) inscriptionJ30')
+			                           ->where('m.dateInscription > :j30')->setParameter('j30', $dateJ30)
+			                           ->getQuery()->getSingleResult()['inscriptionJ30'];
+
 		$dateJ7 = new \DateTime();
 		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
 		$array['inscriptionJ7'] = $this->createQueryBuilder('m')
 			                          ->select('count(m) inscriptionJ7')
 			                          ->where('m.dateInscription > :j7')->setParameter('j7', $dateJ7)
 			                          ->getQuery()->getSingleResult()['inscriptionJ7'];
+
+		$dateH24 = new \DateTime();
+		$dateH24->setTimestamp($dateH24->getTimestamp() - (3600 * 24));
+		$array['inscriptionH24'] = $this->createQueryBuilder('m')
+			                           ->select('count(m) inscriptionH24')
+			                           ->where('m.dateInscription > :h24')->setParameter('h24', $dateH24)
+			                           ->getQuery()->getSingleResult()['inscriptionH24'];
 
 		$array['bannis'] = $this->createQueryBuilder('m')
 			                   ->select('count(m) bannis')

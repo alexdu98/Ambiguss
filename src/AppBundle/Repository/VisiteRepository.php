@@ -44,6 +44,20 @@ class VisiteRepository extends \Doctrine\ORM\EntityRepository
 			                  ->select('count(v) total')
 			                  ->getQuery()->getSingleResult()['total'];
 
+		$dateJ30 = new \DateTime();
+		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 30));
+		$array['j30'] = $this->createQueryBuilder('v')
+			                ->select('count(v) j30')
+			                ->where('v.dateVisite > :j30')->setParameter('j30', $dateJ30)
+			                ->getQuery()->getSingleResult()['j30'];
+
+		$dateJ7 = new \DateTime();
+		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
+		$array['j7'] = $this->createQueryBuilder('v')
+			               ->select('count(v) j7')
+			               ->where('v.dateVisite > :j7')->setParameter('j7', $dateJ7)
+			               ->getQuery()->getSingleResult()['j7'];
+
 		$dateH24 = new \DateTime();
 		$dateH24->setTimestamp($dateH24->getTimestamp() - (3600 * 24));
 		$array['h24'] = $this->createQueryBuilder('v')

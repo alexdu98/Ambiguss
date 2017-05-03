@@ -19,6 +19,13 @@ class JugementRepository extends \Doctrine\ORM\EntityRepository
 			                  ->select('count(j) total')
 			                  ->getQuery()->getSingleResult()['total'];
 
+		$dateJ30 = new \DateTime();
+		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 7));
+		$array['creationJ30'] = $this->createQueryBuilder('j')
+			                        ->select('count(j) creationJ30')
+			                        ->where('j.dateCreation > :j30')->setParameter('j30', $dateJ30)
+			                        ->getQuery()->getSingleResult()['creationJ30'];
+
 		$dateJ7 = new \DateTime();
 		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
 		$array['creationJ7'] = $this->createQueryBuilder('j')

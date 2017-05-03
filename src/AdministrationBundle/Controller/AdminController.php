@@ -13,6 +13,24 @@ class AdminController extends Controller
 		{
 			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
 			{
+				return $this->render('AdministrationBundle:Administration:accueil.html.twig', array());
+			}
+			else
+			{
+				$this->get('session')->getFlashBag()->add('erreur', "L'accès à l'administration nécessite d'être connecté sans le système d'auto-connexion.");
+
+				return $this->redirectToRoute('user_connexion');
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
+
+	public function statistiquesAction()
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
 				$stat = array();
 
 				$repoV = $this->getDoctrine()->getManager()->getRepository('AppBundle:Visite');
@@ -39,7 +57,7 @@ class AdminController extends Controller
 				$repoJ = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:Jugement');
 				$stat['jugements'] = $repoJ->getStat();
 
-				return $this->render('AdministrationBundle:Administration:accueil.html.twig', array(
+				return $this->render('AdministrationBundle:Administration:statistiques.html.twig', array(
 					'stat' => $stat,
 				));
 			}

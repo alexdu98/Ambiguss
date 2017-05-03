@@ -1,3 +1,7 @@
 administration_accueil:
     path:     /admin
-    defaults: { _controller: AdministrationBundle:Admin:Main }
+    defaults: { _controller: AdministrationBundle:Admin:main }
+
+administration_statistiques:
+    path:     /admin/statistiques
+    defaults: { _controller: AdministrationBundle:Admin:statistiques }

@@ -1,0 +1,230 @@
+{% extends '@Administration/Administration/base_admin.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+{% block titre %}{% endblock %}
+
+{% block contenu %}
+	<h3 class="green"><b>Visites</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totales</span>
+			<div class="count">{{ stat.visites.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Derniers 30j</span>
+			<div class="count">{{ stat.visites.j30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Derniers 7j</span>
+			<div class="count">{{ stat.visites.j7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.visites.h24 }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Membres</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totaux</span>
+			<div class="count">{{ stat.membres.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Derniers 30j</span>
+			<div class="count">{{ stat.membres.inscriptionJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Derniers 7j</span>
+			<div class="count">{{ stat.membres.inscriptionJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.membres.inscriptionH24 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-ban"></i> Bannis</span>
+			<div class="count">{{ stat.membres.bannis }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-ban"></i> Inactifs</span>
+			<div class="count">{{ stat.membres.inactifs }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-envelope"></i> Abonnés newsletter</span>
+			<div class="count">{{ stat.membres.newsletter }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-facebook"></i><i class="fa fa-twitter"></i> Via réseaux sociaux</span>
+			<div class="count">{{ stat.membres.social }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-male"></i> Homme</span>
+			<div class="count">{{ stat.membres.homme }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-female"></i> Femme</span>
+			<div class="count">{{ stat.membres.femme }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-money"></i> Points moyens</span>
+			<div class="count">{{ stat.membres.moyPoints|number_format(0, '.', ' ') }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-money"></i> Crédits moyens</span>
+			<div class="count">{{ stat.membres.moyCredits|number_format(0, '.', ' ') }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Phrases</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totales</span>
+			<div class="count">{{ stat.phrases.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
+			<div class="count">{{ stat.phrases.creationJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
+			<div class="count">{{ stat.phrases.creationJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.phrases.creationH24 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-flag"></i> Signalées</span>
+			<div class="count">{{ stat.phrases.signale }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-money"></i> Gains moyens</span>
+			<div class="count">{{ stat.phrases.moyGain|number_format(0) }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Mots ambigus</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totaux</span>
+			<div class="count">{{ stat.motsAmbigus.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
+			<div class="count">{{ stat.motsAmbigus.creationJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
+			<div class="count">{{ stat.motsAmbigus.creationJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.motsAmbigus.creationH24 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-flag"></i> Signalés</span>
+			<div class="count">{{ stat.motsAmbigus.signale }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Gloses</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totales</span>
+			<div class="count">{{ stat.gloses.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
+			<div class="count">{{ stat.gloses.creationJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
+			<div class="count">{{ stat.gloses.creationJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.gloses.creationH24 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-flag"></i> Signalées</span>
+			<div class="count">{{ stat.gloses.signale }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Parties</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totales</span>
+			<div class="count">{{ stat.parties.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
+			<div class="count">{{ stat.parties.joueJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
+			<div class="count">{{ stat.parties.joueJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.parties.joueH24 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-money"></i> Gains moyens</span>
+			<div class="count">{{ stat.parties.moyGain|number_format(0) }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Réponses</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totales</span>
+			<div class="count">{{ stat.reponses.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
+			<div class="count">{{ stat.reponses.reponduJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
+			<div class="count">{{ stat.reponses.reponduJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.reponses.reponduH24 }}</div>
+		</div>
+	</div>
+	<hr>
+
+	<h3 class="green"><b>Jugements</b></h3>
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-user"></i> Totaux</span>
+			<div class="count">{{ stat.jugements.total }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
+			<div class="count">{{ stat.jugements.creationJ30 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
+			<div class="count">{{ stat.jugements.creationJ7 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
+			<div class="count">{{ stat.jugements.creationH24 }}</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-hourglass-half"></i> En attente</span>
+			<div class="count">{{ stat.jugements.enAttente }}</div>
+		</div>
+	</div>
+	<hr>
+{% endblock %}

@@ -46,12 +46,26 @@ class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
 			                  ->select('count(ma) total')
 			                  ->getQuery()->getSingleResult()['total'];
 
+		$dateJ30 = new \DateTime();
+		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 30));
+		$array['creationJ30'] = $this->createQueryBuilder('ma')
+			                        ->select('count(ma) creationJ30')
+			                        ->where('ma.dateCreation > :j30')->setParameter('j30', $dateJ30)
+			                        ->getQuery()->getSingleResult()['creationJ30'];
+
 		$dateJ7 = new \DateTime();
 		$dateJ7->setTimestamp($dateJ7->getTimestamp() - (3600 * 24 * 7));
 		$array['creationJ7'] = $this->createQueryBuilder('ma')
 			                       ->select('count(ma) creationJ7')
 			                       ->where('ma.dateCreation > :j7')->setParameter('j7', $dateJ7)
 			                       ->getQuery()->getSingleResult()['creationJ7'];
+
+		$dateH24 = new \DateTime();
+		$dateH24->setTimestamp($dateH24->getTimestamp() - (3600 * 24));
+		$array['creationH24'] = $this->createQueryBuilder('ma')
+			                        ->select('count(ma) creationH24')
+			                        ->where('ma.dateCreation > :h24')->setParameter('h24', $dateH24)
+			                        ->getQuery()->getSingleResult()['creationH24'];
 
 		$array['signale'] = $this->createQueryBuilder('ma')
 			                    ->select('count(ma) signale')

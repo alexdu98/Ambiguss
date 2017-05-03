@@ -49,17 +49,11 @@
                         <td class="phrase-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
                         <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
 						H:i") }}</td>
-
                     {%  endif %}
 
                     <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm keepPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
-                            Conserver
-                        </button>
-                        <button class="btn btn-warning btn-sm editPhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
-                            Modifier
-                        </button>
+	                    <a class="btn btn-warning btn-sm" href="{{ path('ambiguss_phrase_edit', {id: row.id}) }}">Modifier</a>
                         <button class="btn btn-danger btn-sm deletePhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
                             Supprimer
                         </button>

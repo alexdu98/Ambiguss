@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Édition de phrase{% endblock %}
+{% block titre %}Édition d'une phrase{% endblock %}
+
+{% block contenu %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
+			{% for flashMessage in app.session.flashbag.get('succes') %}
+				<div class="alert alert-success">{{ flashMessage }}</div>
+			{% endfor %}
+			{% for flashMessage in app.session.flashbag.get('erreur') %}
+				<div class="alert alert-danger">{{ flashMessage }}</div>
+			{% endfor %}
+
+			{{ form_start(form , {'form-type' : 'horizontal'}) }}
+
+			{{ form_errors(form) }}
+			<div class="form-group">
+				<div id="rendu" class="size16" style="background: white; color: black; padding: 5px;" hidden></div>
+			</div>
+			{{ form_row(form.contenu, {value: phrase.contenuAmb|default('')}) }}
+			<div class="form-group">
+				<button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
+			</div>
+			{{ form_row(form.signale) }}
+			<div class="form-group text-center">
+				<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
+			</div>
+			<div class="form-group">
+				<div id="jugements" hidden>
+					{% for jugement in jugements %}
+						{{ include('@Judgment/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'categorieJugement'), description: jugement.description, lien_profil: path('user_profil', {id: jugement.auteur.id}), pseudo: jugement.auteur.pseudo, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
+					{% else %}
+						<span class="text-danger">Aucun jugement en cours</span>
+					{% endfor %}
+				</div>
+			</div>
+			{{ form_row(form.modifier) }}
+
+			{{ form_rest(form) }}
+
+			{{ form_end(form) }}
+		</div>
+	</div>
+	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpEditPhraseModal">
+		<img src="{{ asset('assets/images/infobulle.png') }}">
+	</button>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ asset('assets/vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
+	<script>
+		$(document).ready(function () {
+			var startBaliseAmbigu = '<amb>';
+			var endBaliseAmbigu = '</amb>';
+			var endBaliseAmbiguEscape = '</amb>';
+
+			// Regex pour avoir les contenus des balises <amb>
+			// Exemple : L'<amb>avocat</amb> mange des <amb>avocats</amb>.
+			// Donne : $1 = avocat, puis $1 = avocats
+			var reg = new RegExp(startBaliseAmbigu + '(.*?)' + endBaliseAmbiguEscape, 'g');
+			// Regex pour avoir les contenus des balises <amb> et leurs id
+			// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
+			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
+			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbigu, 'g');
+
+			// textarea où l'on écrit la phrase
+			var textarea = $("textarea#{{ form.contenu.vars.id }}");
+
+			// On commence par enlevé les balises (au cas ou il y avait eu une erreur)
+			textarea.val(textarea.val().replace(reg2, "$2"));
+
+			// Pour numéroter le mot ambigu
+			var index = 0;
+
+			// Au chargement (au cas ou edit, pas grave si add)
+			updatePhrase();
+			updateRendu();
+
+			// A chaque modification du textarea via le clavier
+			textarea.bind('input', function () {
+				updatePhrase();
+				updateRendu();
+			});
+
+			// Au clic sur le bouton ajout d'un mot ambigu
+			$("#addAmb").click(function () {
+				// S'il y a bien un mot séléctionné
+				if ((sel = textarea.getSelection()).text.trim() !== '') {
+					// Rajoute une espace après la balise ambigu si espace sélectionné
+					spaceOrNot = "";
+					if (textarea.val().charAt((sel.end) - 1) === " ")
+						spaceOrNot = " ";
+					// On met à jour la valeur du textarea en entourant le mot séléctionné
+					textarea.val(
+						textarea.val().slice(0, sel.start)
+						+ startBaliseAmbigu
+						+ sel.text.trim()
+						+ endBaliseAmbigu
+						+ spaceOrNot
+						+ textarea.val().slice(sel.end)
+					);
+					updatePhrase();
+					updateRendu();
+				}
+			});
+
+			// On met à jour le textarea
+			function updatePhrase() {
+				var phrase = textarea.val();
+				// Compte le nombre d'occurence de balise <amb>
+				var replaced = phrase.search(reg) >= 0;
+				// Si au moins 1
+				if (replaced) {
+					// On ajout dans la balise <amb> l'id du mot ambigu
+					var temp = phrase.replace(reg, function ($0, $1) {
+						index++;
+						return '<amb id="' + index + '">' + $1 + endBaliseAmbigu;
+					});
+					textarea.val(temp);
+				}
+			}
+
+			// On met à jour l'affichage propre de la phrase
+			function updateRendu() {
+				var phrase = textarea.val();
+				var rendu = $("#rendu");
+				var res = phrase;
+
+				// Compte le nombre d'occurence de balise <amb id="">
+				var replaced = phrase.search(reg2) >= 0;
+				// Si au moins 1
+				if (replaced) {
+					html = '<b num="__num__" class="color-red" title="Ce mot est ambigu (id : __num__)' +
+						'">__amb__</b>';
+					// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
+					res = phrase.replace(reg2, function ($0, $1, $2) {
+						return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
+					});
+				}
+				rendu.empty().append(res);
+
+				// Si le rendu est vide, on cache la div
+				if (rendu.html().length > 0)
+					rendu.show();
+				else
+					rendu.hide();
+			}
+
+			$("#toggleJugements").click(function () {
+				$("#jugements").toggle("slow");
+			});
+
+			// Au click sur le bouton, exécute la fonction
+			$('#helpEditPhraseModal').click(helpEditPhraseModal);
+			function helpEditPhraseModal(event) {
+				setModalSize('modal-lg');
+				setModalTitle('Informations sur la création de phrase');
+				setModalBody(
+					'<h4><b>Comment créer une phrase ?</b></h4>'
+					+ '<ol>'
+					+ '<li>Écrivez votre phrase complète dans le champ dédié.</li>'
+					+ '<li>'
+					+ 'Sélectionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot sélectionné ambigu".<br>'
+					+ 'Cela a pour effet d\'entourer le mot par les balises amb avec un numéro, et d\'afficher le mot en '
+					+ 'rouge dans le champ de rendu.<br>'
+					+ 'Cela crée aussi une nouvelle ligne dans le formulaire afin que vous puissiez choisir la glose de '
+					+ 'ce mot ambigu.'
+					+ '</li>'
+					+ '<li>Choisissez une glose* pour ce mot ambigu, et indiquez si celle-ci est juste, fausse, ou si vous ne savez pas.</li>'
+					+ '<li>Répétez les points 2 et 3 pour chaque mot ambigu de votre phrase.</li>'
+					+ '<li>'
+					+ 'Appuyez sur le bouton "Créer la phrase".<br>'
+					+ 'Vous aurez alors 5 minutes pour la modifier avant qu\'elle ne soit mise en jeu et jouable.'
+					+ '</li>'
+					+ '</ol>'
+					+ '<div class="alert alert-info">'
+					+ 'Si vous vous êtes trompé pour un mot ambigu, vous pouvez le supprimer à l\'aide du bouton "Supprimer le mot ambigu".'
+					+ '</div>'
+					+ '<p>'
+					+ '* Si aucune glose ne vous est proposée, ou que celles-ci ne vous satisfont pas, vous pouvez '
+					+ 'en ajouter avec le bouton "Ajouter une glose".'
+					+ '</p>'
+					+ '<div class="alert alert-info">'
+					+ 'La création d\'une phrase<br>'
+					+ '<b>coûte</b>'
+					+ '<ul>'
+					+ '<li>{{ costCreatePhraseByMotAmbiguCredits }} crédits par mot ambigu</li>'
+					+ '</ul>'
+					+ '<b>rapporte</b>'
+					+ '<ul>'
+					+ '<li>{{ gainPerLikePhrasePoints }} points par like</li>'
+					+ '<li>{{ gainPercentByGame }}% des points qu\'un joueur gagne en la jouant.</li>'
+					+ '</ul>'
+					+ '</div>'
+					+ '<h4><b>Coût de l\'ajout d\'une glose</b></h4>'
+					+ 'La formule est la suivante :<br>'
+					+ '<span class="text-primary">Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.'
+					+ '</span><br><br>'
+					+ '<b>Exemple :</b><br> Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = ' + (3 * {{ costCreateGloseByGlosesOfMotAmbigu }}) + ' crédits.'
+				);
+			}
+
+		});
+	</script>
+{% endblock %}

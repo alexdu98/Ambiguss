@@ -28,13 +28,10 @@ class GloseEditType extends AbstractType
 			->remove('dateModification')
 			->add('signale', ChoiceType::class, array(
 				'label' => 'Signalé',
-				'label_attr' => array('class' => 'OKI'),
-				'attr' => array('class' => 'OKII'),
 				'choices' => array(
 					'Oui' => 1,
 					'Non' => 0,
 				),
-				'choice_attr' => array('class' => 'oki'),
 				'expanded' => true,
 			))
 			->remove('visible')

@@ -116,10 +116,9 @@
 							var dt = new Date(data.jugements[index].dateCreation * 1000);
 							var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
 									.getMinutes();
-							clone.find('.infos').append('Par <a href="' + profil + '">' + data.jugements[index].auteur +
-								'</a>, ' +
-								'le ' + date);
-							clone.find('.actions').append('<a href="#" data-verdict="valide" class="signalement btn btn-success btn-sm">Signalement valide</a> <a href="#" data-verdict="invalide" class="signalement btn btn-danger btn-sm">Signalement invalide</a>');
+							clone.find('.lien-profil').attr('href', profil);
+							clone.find('.lien-profil').append(data.jugements[index].auteur);
+							clone.find('.date-creation').append(date);
 
 							// Ajout de l'eventlistener valide
 							clone.find('.signalement').click(function () {

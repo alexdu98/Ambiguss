@@ -1,9 +1,8 @@
 <?php
 namespace AmbigussBundle\Form;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class PhraseEditType extends AbstractType
@@ -16,22 +15,18 @@ class PhraseEditType extends AbstractType
         $builder
             ->remove('dateCreation')
             ->remove('dateModification')
-            ->remove('signale')
+	        ->add('signale', ChoiceType::class, array(
+		        'label' => 'Signalé',
+		        'choices' => array(
+			        'Oui' => 1,
+			        'Non' => 0,
+		        ),
+		        'expanded' => true,
+	        ))
             ->remove('visible')
             ->remove('auteur')
             ->remove('modificateur')
-            ->add('contenu', TextareaType::class, array(
-                'label' => false,
-                'attr' => array('placeholder' => 'Saisissez votre phrase'),
-                'invalid_message' => 'Phrase invalide'
-            ))
-            ->add('motsAmbigusPhrase', CollectionType::class, array(
-                'entry_type' => MotAmbiguAddPhraseType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'label' =>  false,
-            ))
-            ->add('creer', SubmitType::class, array(
+	        ->add('modifier', SubmitType::class, array(
                 'label' => 'Modifier la phrase',
                 'attr' => array('class' => 'btn btn-warning'),
             ));

@@ -9,6 +9,7 @@ use AmbigussBundle\Entity\Partie;
 use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
+use AmbigussBundle\Form\PhraseEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Historique;
@@ -402,8 +403,6 @@ class PhraseController extends Controller
 		{
 			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
 			{
-				$phr = new \AmbigussBundle\Entity\Phrase();
-
 				if($dateActu < $dateMax)
 				{
 					$phr = new \AmbigussBundle\Entity\Phrase();
@@ -424,19 +423,37 @@ class PhraseController extends Controller
 						'addGloseForm' => $addGloseForm->createView(),
 					));
 				}
+				else if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+				{
+					$form = $this->get('form.factory')->create(PhraseEditType::class, $phrase);
+
+					$form->handleRequest($request);
+
+					if($form->isSubmitted() && $form->isValid())
+					{
+						var_dump($phrase->getContenu(), $phrase->getMotsAmbigusPhrase()->getValues());
+						die;
+					}
+
+					$repoJ = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:Jugement');
+					$repoTO = $this->getDoctrine()->getManager()->getRepository('JudgmentBundle:TypeObjet');
+
+					$typeObj = $repoTO->findOneBy(array('typeObjet' => 'Phrase'));
+					$jugements = $repoJ->findBy(array(
+						'typeObjet' => $typeObj,
+						'verdict' => null,
+						'idObjet' => $phrase->getId(),
+					));
+
+					return $this->render('AmbigussBundle:Phrase:editModerateur.html.twig', array(
+						'form' => $form->createView(),
+						'phrase' => $phrase,
+						'jugements' => $jugements,
+					));
+				}
 				else
 				{
-					if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-					{
-
-                        $this->get('session')->getFlashBag()->add('erreur', "Le modérateur ne peut toujours pas modifier une phrase si celle ci a été crée il y a plus de 5 minutes !");
-
-                        return $this->redirectToRoute('ambiguss_game');
-					}
-					else
-					{
-						throw $this->createAccessDeniedException();
-					}
+					throw $this->createAccessDeniedException();
 				}
 			}
 			else

@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="visite", indexes={
  *     @ORM\Index(name="IDX_VISITE_IP", columns={"ip"}),
- *     @ORM\Index(name="IDX_VISITE_DATEVISITE", columns={"date_visite"})
+ *     @ORM\Index(name="IDX_VISITE_DATEVISITE", columns={"date_visite"}),
+ *     @ORM\Index(name="IDX_VISITE_USERAGENT", columns={"user_agent"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VisiteRepository")
  */
@@ -66,6 +67,16 @@ class Visite
         return $this->id;
     }
 
+	/**
+	 * Get ip
+	 *
+	 * @return string
+	 */
+	public function getIp()
+	{
+		return $this->ip;
+	}
+
     /**
      * Set ip
      *
@@ -80,15 +91,15 @@ class Visite
         return $this;
     }
 
-    /**
-     * Get ip
-     *
-     * @return string
-     */
-    public function getIp()
-    {
-        return $this->ip;
-    }
+	/**
+	 * Get userAgent
+	 *
+	 * @return string
+	 */
+	public function getUserAgent()
+	{
+		return $this->userAgent;
+	}
 
 	/**
 	 * Set userAgent
@@ -105,13 +116,13 @@ class Visite
 	}
 
 	/**
-	 * Get userAgent
+	 * Get dateVisite
 	 *
-	 * @return string
+	 * @return \DateTime
 	 */
-	public function getUserAgent()
+	public function getDateVisite()
 	{
-		return $this->userAgent;
+		return $this->dateVisite;
 	}
 
     /**
@@ -126,16 +137,6 @@ class Visite
         $this->dateVisite = $dateVisite;
 
         return $this;
-    }
-
-    /**
-     * Get dateVisite
-     *
-     * @return \DateTime
-     */
-    public function getDateVisite()
-    {
-        return $this->dateVisite;
     }
 }
 

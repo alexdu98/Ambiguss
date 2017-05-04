@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Phrase
  *
- * @ORM\Table(name="phrase")
+ * @ORM\Table(name="phrase", indexes={
+ *     @ORM\Index(name="IDX_PHRASE_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_PHRASE_DATEMODIFICATION", columns={"date_modification"})
+ * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\PhraseRepository")
  */
 class Phrase

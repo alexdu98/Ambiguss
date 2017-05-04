@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * VoteJugement
  *
- * @ORM\Table(name="vote_jugement")
+ * @ORM\Table(name="vote_jugement", indexes={
+ *     @ORM\Index(name="IDX_VOTEJUGEMENT_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_VOTEJUGEMENT_DATEMODIFICATION", columns={"date_modification"})
+ * })
  * @ORM\Entity(repositoryClass="JudgmentBundle\Repository\VoteJugementRepository")
  */
 class VoteJugement
@@ -72,6 +75,16 @@ class VoteJugement
         return $this->id;
     }
 
+	/**
+	 * Get dateCreation
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateCreation()
+	{
+		return $this->dateCreation;
+	}
+
     /**
      * Set dateCreation
      *
@@ -87,13 +100,13 @@ class VoteJugement
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+	public function getDateModification()
     {
-        return $this->dateCreation;
+	    return $this->dateModification;
     }
 
     /**
@@ -111,13 +124,13 @@ class VoteJugement
     }
 
     /**
-     * Get dateModification
+     * Get jugement
      *
-     * @return \DateTime
+     * @return \JudgmentBundle\Entity\Jugement
      */
-    public function getDateModification()
+	public function getJugement()
     {
-        return $this->dateModification;
+	    return $this->jugement;
     }
 
     /**
@@ -135,13 +148,13 @@ class VoteJugement
     }
 
     /**
-     * Get jugement
+     * Get vote
      *
-     * @return \JudgmentBundle\Entity\Jugement
+     * @return \JudgmentBundle\Entity\TypeVote
      */
-    public function getJugement()
+	public function getVote()
     {
-        return $this->jugement;
+	    return $this->vote;
     }
 
     /**
@@ -159,13 +172,13 @@ class VoteJugement
     }
 
     /**
-     * Get vote
+     * Get auteur
      *
-     * @return \JudgmentBundle\Entity\TypeVote
+     * @return \UserBundle\Entity\Membre
      */
-    public function getVote()
+	public function getAuteur()
     {
-        return $this->vote;
+	    return $this->auteur;
     }
 
     /**
@@ -180,15 +193,5 @@ class VoteJugement
         $this->auteur = $auteur;
 
         return $this;
-    }
-
-    /**
-     * Get auteur
-     *
-     * @return \UserBundle\Entity\Membre
-     */
-    public function getAuteur()
-    {
-        return $this->auteur;
     }
 }

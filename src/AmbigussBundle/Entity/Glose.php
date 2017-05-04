@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Glose
  *
- * @ORM\Table(name="glose")
+ * @ORM\Table(name="glose", indexes={
+ *     @ORM\Index(name="IDX_GLOSE_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_GLOSE_DATEMODIFICATION", columns={"date_modification"})
+ * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\GloseRepository")
  */
 class Glose

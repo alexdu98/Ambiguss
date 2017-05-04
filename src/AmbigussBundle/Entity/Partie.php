@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Partie
  *
- * @ORM\Table(name="partie")
+ * @ORM\Table(name="partie", indexes={
+ *     @ORM\Index(name="IDX_PARTIE_DATEPARTIE", columns={"date_partie"}),
+ * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\PartieRepository")
  */
 class Partie

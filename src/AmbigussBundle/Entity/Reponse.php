@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Reponse
  *
  * @ORM\Table(name="reponse", indexes={
- *     @ORM\Index(name="IDX_REPONSE_IP", columns={"ip"})
+ *     @ORM\Index(name="IDX_REPONSE_IP", columns={"ip"}),
+ *     @ORM\Index(name="IDX_REPONSE_DATEREPONSE", columns={"date_reponse"})
  * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\ReponseRepository")
  */

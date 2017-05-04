@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Commentaire
  *
  * @ORM\Table(name="commentaire", indexes={
- *     @ORM\Index(name="IDX_COMMENTAIRE_DATECREATION", columns={"date_creation"})
+ *     @ORM\Index(name="IDX_COMMENTAIRE_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_COMMENTAIRE_DATEMODIFICATION", columns={"date_modification"})
  * })
  * @ORM\Entity(repositoryClass="CommentBundle\Repository\CommentaireRepository")
  */
@@ -105,6 +106,16 @@ class Commentaire
         return $this->id;
     }
 
+	/**
+	 * Get contenu
+	 *
+	 * @return string
+	 */
+	public function getContenu()
+	{
+		return $this->contenu;
+	}
+
     /**
      * Set contenu
      *
@@ -120,13 +131,13 @@ class Commentaire
     }
 
     /**
-     * Get contenu
+     * Get dateCreation
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getContenu()
+	public function getDateCreation()
     {
-        return $this->contenu;
+	    return $this->dateCreation;
     }
 
     /**
@@ -144,13 +155,13 @@ class Commentaire
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+	public function getDateModification()
     {
-        return $this->dateCreation;
+	    return $this->dateModification;
     }
 
     /**
@@ -168,13 +179,13 @@ class Commentaire
     }
 
     /**
-     * Get dateModification
+     * Get signale
      *
-     * @return \DateTime
+     * @return bool
      */
-    public function getDateModification()
+	public function getSignale()
     {
-        return $this->dateModification;
+	    return $this->signale;
     }
 
     /**
@@ -192,13 +203,13 @@ class Commentaire
     }
 
     /**
-     * Get signale
+     * Get visible
      *
      * @return bool
      */
-    public function getSignale()
+	public function getVisible()
     {
-        return $this->signale;
+	    return $this->visible;
     }
 
     /**
@@ -216,13 +227,13 @@ class Commentaire
     }
 
     /**
-     * Get visible
+     * Get commentaireParent
      *
-     * @return bool
+     * @return \CommentBundle\Entity\Commentaire
      */
-    public function getVisible()
+	public function getCommentaireParent()
     {
-        return $this->visible;
+	    return $this->commentaireParent;
     }
 
     /**
@@ -240,13 +251,13 @@ class Commentaire
     }
 
     /**
-     * Get commentaireParent
+     * Get auteur
      *
-     * @return \CommentBundle\Entity\Commentaire
+     * @return \UserBundle\Entity\Membre
      */
-    public function getCommentaireParent()
+	public function getAuteur()
     {
-        return $this->commentaireParent;
+	    return $this->auteur;
     }
 
     /**
@@ -264,13 +275,13 @@ class Commentaire
     }
 
     /**
-     * Get auteur
+     * Get modificateur
      *
      * @return \UserBundle\Entity\Membre
      */
-    public function getAuteur()
+	public function getModificateur()
     {
-        return $this->auteur;
+	    return $this->modificateur;
     }
 
     /**
@@ -288,13 +299,13 @@ class Commentaire
     }
 
     /**
-     * Get modificateur
+     * Get jugement
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \JudgmentBundle\Entity\Jugement
      */
-    public function getModificateur()
+	public function getJugement()
     {
-        return $this->modificateur;
+	    return $this->jugement;
     }
 
     /**
@@ -312,13 +323,13 @@ class Commentaire
     }
 
     /**
-     * Get jugement
+     * Get phrase
      *
-     * @return \JudgmentBundle\Entity\Jugement
+     * @return \AmbigussBundle\Entity\Phrase
      */
-    public function getJugement()
+	public function getPhrase()
     {
-        return $this->jugement;
+	    return $this->phrase;
     }
 
     /**
@@ -333,15 +344,5 @@ class Commentaire
         $this->phrase = $phrase;
 
         return $this;
-    }
-
-    /**
-     * Get phrase
-     *
-     * @return \AmbigussBundle\Entity\Phrase
-     */
-    public function getPhrase()
-    {
-        return $this->phrase;
     }
 }

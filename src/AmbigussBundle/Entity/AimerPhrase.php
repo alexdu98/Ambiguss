@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AimerPhrase
  *
- * @ORM\Table(name="aimer_phrase")
+ * @ORM\Table(name="aimer_phrase", indexes={
+ *     @ORM\Index(name="IDX_AIMERPHRASE_DATECREATION", columns={"date_creation"})
+ * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\AimerPhraseRepository")
  */
 class AimerPhrase
@@ -67,6 +69,16 @@ class AimerPhrase
         return $this->id;
     }
 
+	/**
+	 * Get dateCreation
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateCreation()
+	{
+		return $this->dateCreation;
+	}
+
     /**
      * Set dateCreation
      *
@@ -81,15 +93,15 @@ class AimerPhrase
         return $this;
     }
 
-    /**
-     * Get dateCreation
-     *
-     * @return \DateTime
-     */
-    public function getDateCreation()
-    {
-        return $this->dateCreation;
-    }
+	/**
+	 * Get active
+	 *
+	 * @return bool
+	 */
+	public function getActive()
+	{
+		return $this->active;
+	}
 
 	/**
 	 * Set active
@@ -106,13 +118,13 @@ class AimerPhrase
 	}
 
 	/**
-	 * Get active
+	 * Get membre
 	 *
-	 * @return bool
+	 * @return \UserBundle\Entity\Membre
 	 */
-	public function getActive()
+	public function getMembre()
 	{
-		return $this->active;
+		return $this->membre;
 	}
 
     /**
@@ -130,13 +142,13 @@ class AimerPhrase
     }
 
     /**
-     * Get membre
+     * Get phrase
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AmbigussBundle\Entity\Phrase
      */
-    public function getMembre()
+	public function getPhrase()
     {
-        return $this->membre;
+	    return $this->phrase;
     }
 
     /**
@@ -151,15 +163,5 @@ class AimerPhrase
         $this->phrase = $phrase;
 
         return $this;
-    }
-
-    /**
-     * Get phrase
-     *
-     * @return \AmbigussBundle\Entity\Phrase
-     */
-    public function getPhrase()
-    {
-        return $this->phrase;
     }
 }

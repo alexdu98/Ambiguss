@@ -13,7 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="membre", indexes={
  *     @ORM\Index(name="IDX_MEMBRE_POINTSCLASSEMENT", columns={"points_classement"}),
- *     @ORM\Index(name="IDX_MEMBRE_CREDITS", columns={"credits"})
+ *     @ORM\Index(name="IDX_MEMBRE_CREDITS", columns={"credits"}),
+ *     @ORM\Index(name="IDX_MEMBRE_DATEINSCRIPTION", columns={"date_inscription"}),
+ *     @ORM\Index(name="IDX_MEMBRE_DATE_CONNEXION", columns={"date_connexion"}),
+ *     @ORM\Index(name="IDX_MEMBRE_SEXE", columns={"sexe"}),
+ *     @ORM\Index(name="IDX_MEMBRE_DATENAISSANCE", columns={"date_naissance"}),
  * })
  * @ORM\Entity(repositoryClass="UserBundle\Repository\MembreRepository")
  * @UniqueEntity(fields="pseudo", message="Ce pseudo existe déjà.")

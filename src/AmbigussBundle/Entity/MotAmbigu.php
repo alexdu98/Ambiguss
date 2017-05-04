@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MotAmbigu
  *
- * @ORM\Table(name="mot_ambigu")
+ * @ORM\Table(name="mot_ambigu", indexes={
+ *     @ORM\Index(name="IDX_MOTAMBIGU_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_MOTAMBIGU_DATEMODIFICATION", columns={"date_modification"})
+ * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\MotAmbiguRepository")
  */
 class MotAmbigu

@@ -43,36 +43,32 @@
 								    <li>
 									    <a href="{{ path('ambiguss_game') }}">Jouer<span class="sr-only">(current)</span></a>
 								    </li>
-								    {% if app.user %}
-									    <li>
-										    <a href="{{ path('ambiguss_phrase_add') }}">Créer<span class="sr-only">
-												    (current)
-											    </span></a>
-									    </li>
+								    <li>
+									    <a href="{{ path('ambiguss_phrase_add') }}">Créer<span class="sr-only">(current)</span></a>
+								    </li>
+								    <li class="dropdown">
+									    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classement
+										    <span class="caret"></span></a>
+									    <ul class="dropdown-menu">
+										    <li><a href="{{ path('ambiguss_classement_general') }}">Joueurs</a></li>
+										    <li><a href="{{ path('ambiguss_classement_phrases') }}">Phrases</a></li>
+										    <li><a href="{{ path('ambiguss_classement_personnel',{'id': app.user.id|default(0)}) }}">Mes
+												    Phrases</a></li>
+									    </ul>
+								    </li>
+								    {% if is_granted('ROLE_MODERATEUR') %}
 									    <li class="dropdown">
-										    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classement
+										    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modération
 											    <span class="caret"></span></a>
 										    <ul class="dropdown-menu">
-											    <li><a href="{{ path('ambiguss_classement_general') }}">Joueurs</a></li>
-												<li><a href="{{ path('ambiguss_classement_phrases') }}">Phrases</a></li>
-												<li><a href="{{ path('ambiguss_classement_personnel',{'id': app.user.Id|capitalize}) }}">Mes Phrases</a></li>
-
-										     </ul>
+											    {#<li><a href="{{ path('ambiguss_moderation_phrase') }}">Phrases</a></li>#}
+											    <li><a href="#">Phrases</a></li>
+											    {#<li><a href="{{ path('ambiguss_moderation_ma') }}">Mots ambigus</a></li>#}
+											    <li><a href="#">Mots ambigus</a></li>
+											    <li><a href="{{ path('ambiguss_gloses') }}">Gloses</a></li>
+											    <li><a href="{{ path('ambiguss_moderation_mag') }}">Liaisons MA-G</a></li>
+										    </ul>
 									    </li>
-									    {% if is_granted('ROLE_MODERATEUR') %}
-										    <li class="dropdown">
-											    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modération
-												    <span class="caret"></span></a>
-											    <ul class="dropdown-menu">
-												    {#<li><a href="{{ path('ambiguss_moderation_phrase') }}">Phrases</a></li>#}
-												    <li><a href="#">Phrases</a></li>
-												    {#<li><a href="{{ path('ambiguss_moderation_ma') }}">Mots ambigus</a></li>#}
-												    <li><a href="#">Mots ambigus</a></li>
-												    <li><a href="{{ path('ambiguss_gloses') }}">Gloses</a></li>
-												    <li><a href="{{ path('ambiguss_moderation_mag') }}">Liaisons MA-G</a></li>
-											    </ul>
-										    </li>
-									    {% endif %}
 								    {% endif %}
 							    </ul>
 						    </div>

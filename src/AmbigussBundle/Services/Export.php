@@ -21,7 +21,7 @@ class Export
 
 		$phrases = $repoP->findAll();
 
-		$file = fopen('web/downloads/export_phrases.json', 'w+');
+		$file = fopen('web/downloads/export_phrases.json', 'wb');
 
 		$Marray = array();
 		$finalarray = array();
@@ -51,7 +51,7 @@ class Export
 		}
 
 		fwrite($file, (json_encode(array(
-			'date' => date('d/m/Y H:i'),
+			'date' => date('d/m/Y H\hi'),
 			'data' => $finalarray,
 		), JSON_UNESCAPED_UNICODE)));
 	}
@@ -62,7 +62,7 @@ class Export
 
 		$MAs = $repoAM->findAll();
 
-		$file = fopen('web/downloads/export_motsAmbigus.json', 'w+');
+		$file = fopen('web/downloads/export_motsAmbigus.json', 'wb');
 
 		$MAGarray = array();
 		$finalarray = array();
@@ -87,7 +87,7 @@ class Export
 		}
 
 		fwrite($file, (json_encode(array(
-			'date' => date('d/m/Y H:i'),
+			'date' => date('d/m/Y H\hi'),
 			'data' => $finalarray,
 		), JSON_UNESCAPED_UNICODE)));
 	}

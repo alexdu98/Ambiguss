@@ -4,4 +4,5 @@ services:
         tags:
             - { name: twig.extension }
     ambiguss_export:
-        class: AmbigussBundle\Controller\ExportController
+        class: AmbigussBundle\Services\Export
+        arguments: ["@doctrine.orm.entity_manager"]

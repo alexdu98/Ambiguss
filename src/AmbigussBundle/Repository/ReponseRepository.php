@@ -30,38 +30,15 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getSingleResult();
 	}
 
-    public function findforExport($phrase, $Ma, $G)
+	public function findGlosesforExport($map)
     {
         return $this->createQueryBuilder('r')
-            ->select('r.contenuPhrase, r.valeurMotAmbigu,r.valeurGlose')
-            ->addSelect('count(r) as NombreDeReponsePourCetteGloses')
-            ->where('r.contenuPhrase = :phrase')
-            ->andWhere('r.valeurMotAmbigu = :mamb')
-            ->andWhere('r.valeurGlose = :glose')
-            ->setParameter('phrase',$phrase)
-            ->setParameter('mamb',$Ma)
-            ->setParameter('glose',$G)
+	        ->select('g.valeur, count(g) nbRep')
+	        ->join('r.glose', 'g')
+	        ->where('r.motAmbiguPhrase = :map')
+	        ->setParameter('map', $map)
+	        ->groupBy('g.valeur')
             ->getQuery()->getResult();
-    }
-    public function findGlosesforExport($phrase, $Ma)
-    {
-        return $this->createQueryBuilder('r')
-            ->select('distinct r.valeurGlose')
-            ->where('r.contenuPhrase = :phrase')
-            ->andWhere('r.valeurMotAmbigu = :mamb')
-            ->setParameter('phrase',$phrase)
-            ->setParameter('mamb',$Ma)
-            ->getQuery()->getResult();
-    }
-    public function findReponsesforExport($phrase, $Ma)
-    {
-        return $this->createQueryBuilder('r')
-            ->select('count(r) as nbt')
-            ->where('r.contenuPhrase = :phrase')
-            ->andWhere('r.valeurMotAmbigu = :mamb')
-            ->setParameter('phrase',$phrase)
-            ->setParameter('mamb',$Ma)
-            ->getQuery()->getSingleResult();
     }
 
 	public function getStat()

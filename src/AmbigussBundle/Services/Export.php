@@ -8,10 +8,12 @@ class Export
 {
 
 	private $em;
+	private $rep;
 
-	public function __construct(EntityManager $em)
+	public function __construct(EntityManager $em, $rootdir)
 	{
 		$this->em = $em;
+		$this->rep = $rootdir . '/../web/downloads/';
 	}
 
 	public function phrases()
@@ -21,7 +23,7 @@ class Export
 
 		$phrases = $repoP->findAll();
 
-		$file = fopen('web/downloads/export_phrases.json', 'wb');
+		$file = fopen($this->rep . 'export_phrases.json', 'wb');
 
 		$Marray = array();
 		$finalarray = array();
@@ -62,7 +64,7 @@ class Export
 
 		$MAs = $repoAM->findAll();
 
-		$file = fopen('web/downloads/export_motsAmbigus.json', 'wb');
+		$file = fopen($this->rep . 'export_motsAmbigus.json', 'wb');
 
 		$MAGarray = array();
 		$finalarray = array();

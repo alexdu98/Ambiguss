@@ -14,7 +14,7 @@ class Export
 		$this->em = $em;
 	}
 
-	public function phrasesAction()
+	public function phrases()
 	{
 		$repoR = $this->em->getRepository('AmbigussBundle:Reponse');
 		$repoP = $this->em->getRepository('AmbigussBundle:Phrase');
@@ -56,7 +56,7 @@ class Export
 		), JSON_UNESCAPED_UNICODE)));
 	}
 
-	public function motsAmbigusAction()
+	public function motsAmbigus()
 	{
 		$repoAM = $this->em->getRepository('AmbigussBundle:MotAmbigu');
 

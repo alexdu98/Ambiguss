@@ -1,1 +1,6656 @@
-{"date":"05\/05\/2017 00:27","data":[{"motAmbigu":"suis","gloses":[{"valeur":"être"},{"valeur":"suivre"}]},{"motAmbigu":"avocat","gloses":[{"valeur":"fruit"},{"valeur":"métier"},{"valeur":"individu"}]},{"motAmbigu":"avocats","gloses":[{"valeur":"fruit"},{"valeur":"métier"}]},{"motAmbigu":"souris","gloses":[{"valeur":"animal"},{"valeur":"objet"},{"valeur":"gigot"},{"valeur":"périphérique informatique"},{"valeur":"nana"}]},{"motAmbigu":"vol","gloses":[{"valeur":"voyage"},{"valeur":"crime"}]},{"motAmbigu":"orange","gloses":[{"valeur":"fruit"},{"valeur":"couleur"}]},{"motAmbigu":"casse","gloses":[{"valeur":"crime"},{"valeur":"recyclage"},{"valeur":"dégât"},{"valeur":"cambriolage"}]},{"motAmbigu":"pièce","gloses":[{"valeur":"logement"},{"valeur":"monnaie"},{"valeur":"théâtre"}]},{"motAmbigu":"chat","gloses":[{"valeur":"animal"},{"valeur":"discussion"}]},{"motAmbigu":"canette","gloses":[{"valeur":"animal"},{"valeur":"boisson"},{"valeur":"oiseau"}]},{"motAmbigu":"car","gloses":[{"valeur":"véhicule"},{"valeur":"doublet Lisp"},{"valeur":"parce que"}]},{"motAmbigu":"jumelles","gloses":[{"valeur":"objet"},{"valeur":"soeurs"}]},{"motAmbigu":"cercle","gloses":[{"valeur":"figure géométrique"},{"valeur":"association"}]},{"motAmbigu":"bridge","gloses":[{"valeur":"jeu de cartes"},{"valeur":"prothèse dentaire"}]},{"motAmbigu":"poule","gloses":[{"valeur":"oiseau"},{"valeur":"femme"},{"valeur":"prostituée"}]},{"motAmbigu":"argent","gloses":[{"valeur":"ressource monétaire"},{"valeur":"métal"}]},{"motAmbigu":"compte","gloses":[{"valeur":"dénombrer"},{"valeur":"calculer"},{"valeur":"faire confiance"},{"valeur":"tenir pour acquis"},{"valeur":"vérifier"}]},{"motAmbigu":"salade","gloses":[{"valeur":"plante"},{"valeur":"casque"},{"valeur":"préparation culinaire"}]},{"motAmbigu":"piano","gloses":[{"valeur":"instrument de musique"},{"valeur":"fourneau"},{"valeur":"doucement"},{"valeur":"ustensile de cuisine"}]},{"motAmbigu":"casserole","gloses":[{"valeur":"fourneau"},{"valeur":"ustensile de cuisine"},{"valeur":"réputation"}]},{"motAmbigu":"décolle","gloses":[{"valeur":"détacher"},{"valeur":"prendre l'air"},{"valeur":"s'élever"}]},{"motAmbigu":"piste","gloses":[{"valeur":"chemin"},{"valeur":"aviation"},{"valeur":"ski"},{"valeur":"sport"},{"valeur":"danse"},{"valeur":"indice"}]},{"motAmbigu":"défense","gloses":[{"valeur":"interdiction"},{"valeur":"dent"},{"valeur":"justice"},{"valeur":"médecine"},{"valeur":"prêt"}]},{"motAmbigu":"mûr","gloses":[{"valeur":"ski"},{"valeur":"justice"},{"valeur":"âge"},{"valeur":"prêt"},{"valeur":"maturité"},{"valeur":"affichage"},{"valeur":"maçonnerie"},{"valeur":"paroi"},{"valeur":"obstacle"}]},{"motAmbigu":"repasser","gloses":[{"valeur":"repassage"},{"valeur":"revenir"},{"valeur":"réviser"}]},{"motAmbigu":"portions","gloses":[{"valeur":"porter"},{"valeur":"part"},{"valeur":"morceau"}]},{"motAmbigu":"fier","gloses":[{"valeur":"faire confiance"},{"valeur":"fierté"},{"valeur":"hautain"}]},{"motAmbigu":"poster","gloses":[{"valeur":"envoyer"},{"valeur":"affiche"},{"valeur":"sentinelle"}]},{"motAmbigu":"est","gloses":[{"valeur":"être"},{"valeur":"région"},{"valeur":"point cardinal"}]},{"motAmbigu":"dessert","gloses":[{"valeur":"desservir"},{"valeur":"être défavorable"},{"valeur":"entremets"}]},{"motAmbigu":"père","gloses":[{"valeur":"curé"},{"valeur":"géniteur"},{"valeur":"parent"}]},{"motAmbigu":"roses","gloses":[{"valeur":"couleur"},{"valeur":"fleur"}]},{"motAmbigu":"robes","gloses":[{"valeur":"pelage"},{"valeur":"vêtement"}]},{"motAmbigu":"personne","gloses":[{"valeur":"individu"},{"valeur":"quiconque"},{"valeur":"pas une personne"}]},{"motAmbigu":"cœur","gloses":[{"valeur":"organe"},{"valeur":"forme"},{"valeur":"courage"},{"valeur":"carte à jouer"},{"valeur":"centre"},{"valeur":"affect"},{"valeur":"billet doux"}]},{"motAmbigu":"tableau","gloses":[{"valeur":"peinture"},{"valeur":"tableau noir"},{"valeur":"affichage"},{"valeur":"ensemble de données"},{"valeur":"description"}]},{"motAmbigu":"café","gloses":[{"valeur":"couleur"},{"valeur":"boisson"},{"valeur":"débit de boissons"},{"valeur":"grain"},{"valeur":"parfum"},{"valeur":"moment"},{"valeur":"lieu"},{"valeur":"paquet"}]},{"motAmbigu":"ouvrage","gloses":[{"valeur":"livre"},{"valeur":"tâche"},{"valeur":"travaux d'aiguilles"},{"valeur":"construction"}]},{"motAmbigu":"couper","gloses":[{"valeur":"découper"},{"valeur":"coupure"},{"valeur":"interrompre"},{"valeur":"couture"},{"valeur":"prendre un raccourci"},{"valeur":"fractionner"},{"valeur":"partie de cartes"},{"valeur":"trancher"},{"valeur":"être coupant"},{"valeur":"châtrer"},{"valeur":"se croiser"},{"valeur":"amputer"},{"valeur":"raccourcir"}]},{"motAmbigu":"champs","gloses":[{"valeur":"physique"},{"valeur":"agriculture"},{"valeur":"domaine"},{"valeur":"cinéma"},{"valeur":"chirurgie"},{"valeur":"espace"}]},{"motAmbigu":"suivre","gloses":[{"valeur":"comprendre"},{"valeur":"succéder à"},{"valeur":"emprunter"},{"valeur":"emboîter le pas"},{"valeur":"filature"},{"valeur":"émission"}]},{"motAmbigu":"suivi","gloses":[{"valeur":"succéder à"},{"valeur":"emboîter le pas"},{"valeur":"filature"},{"valeur":"émission"},{"valeur":"compris"}]},{"motAmbigu":"commandé","gloses":[{"valeur":"diriger"},{"valeur":"passer commande"}]},{"motAmbigu":"glace","gloses":[{"valeur":"miroir"},{"valeur":"crème glacée"},{"valeur":"eau gelée"},{"valeur":"vitre"}]},{"motAmbigu":"verre","gloses":[{"valeur":"boisson"},{"valeur":"récipient"},{"valeur":"matériau"},{"valeur":"contenu"},{"valeur":"optique"}]},{"motAmbigu":"note","gloses":[{"valeur":"évaluation"},{"valeur":"facture"},{"valeur":"musique"},{"valeur":"nuance"},{"valeur":"écrit"},{"valeur":"papier"}]},{"motAmbigu":"tomate ","gloses":[{"valeur":"fruit"},{"valeur":"cocktail"}]},{"motAmbigu":"TGV","gloses":[{"valeur":"train"},{"valeur":"cocktail"}]},{"motAmbigu":"réglé","gloses":[{"valeur":"payer"},{"valeur":"résoudre"},{"valeur":"réglage"}]},{"motAmbigu":"secrétaire","gloses":[{"valeur":"métier"},{"valeur":"meuble"},{"valeur":"personne"},{"valeur":"fonction"}]},{"motAmbigu":"baie","gloses":[{"valeur":"fruit"},{"valeur":"couleur"},{"valeur":"porte-fenêtre"},{"valeur":"golfe"},{"valeur":"informatique"},{"valeur":"tromperie"}]},{"motAmbigu":"moyenne","gloses":[{"valeur":"mathématiques"},{"valeur":"intermédiaire"},{"valeur":"scolarité"}]},{"motAmbigu":"bar","gloses":[{"valeur":"débit de boissons"},{"valeur":"poisson"},{"valeur":"pression"},{"valeur":"comptoir"}]},{"motAmbigu":"oiseau","gloses":[{"valeur":"animal"},{"valeur":"zizi"}]},{"motAmbigu":"négligent","gloses":[{"valeur":"négliger"},{"valeur":"imprévoyant"}]},{"motAmbigu":"singe ","gloses":[{"valeur":"animal"},{"valeur":"corned-beef"}]},{"motAmbigu":"triangle ","gloses":[{"valeur":"figure géométrique"},{"valeur":"instrument de musique"}]},{"motAmbigu":"son ","gloses":[{"valeur":"bruit"},{"valeur":"céréale"},{"valeur":"le sien"}]},{"motAmbigu":"baguettes ","gloses":[{"valeur":"pains"},{"valeur":"morceaux de bois"}]},{"motAmbigu":"diabolo","gloses":[{"valeur":"boisson"},{"valeur":"jonglerie"}]},{"motAmbigu":"ficelle ","gloses":[{"valeur":"tour de main"},{"valeur":"pain"},{"valeur":"fil"},{"valeur":"String"}]},{"motAmbigu":"parent","gloses":[{"valeur":"orner"},{"valeur":"parenté"}]},{"motAmbigu":"couvent","gloses":[{"valeur":"couver"},{"valeur":"monastère"}]},{"motAmbigu":"vis","gloses":[{"valeur":"voir"},{"valeur":"quincaillerie"}]},{"motAmbigu":"content","gloses":[{"valeur":"satisfait"},{"valeur":"conter"}]},{"motAmbigu":"cultivé","gloses":[{"valeur":"agriculture"},{"valeur":"instruit"}]},{"motAmbigu":"niveau","gloses":[{"valeur":"hauteur"},{"valeur":"étage"},{"valeur":"compétence"},{"valeur":"jeu"},{"valeur":"position"},{"valeur":"intensité"},{"valeur":"outil"}]},{"motAmbigu":"excellent","gloses":[{"valeur":"exceller"},{"valeur":"délicieux"},{"valeur":"remarquable"}]},{"motAmbigu":"composer","gloses":[{"valeur":"musique"},{"valeur":"dissertation"},{"valeur":"fabriquer"},{"valeur":"arranger"}]},{"motAmbigu":"pot","gloses":[{"valeur":"boisson"},{"valeur":"récipient"},{"valeur":"chance"},{"valeur":"pot d'échappement"},{"valeur":"poterie"},{"valeur":"cannabis"},{"valeur":"mises"}]},{"motAmbigu":"prendre","gloses":[{"valeur":"saisir"},{"valeur":"se solidifier"},{"valeur":"capturer"},{"valeur":"passer par"},{"valeur":"choisir"},{"valeur":"consommer"},{"valeur":"embaucher"},{"valeur":"posséder sexuellement"},{"valeur":"acheter"}]},{"motAmbigu":"terrasse","gloses":[{"valeur":"bistrot"},{"valeur":"balcon"},{"valeur":"restanque"},{"valeur":"terrasser"},{"valeur":"anéantir"}]},{"motAmbigu":"nouvelle","gloses":[{"valeur":"information"},{"valeur":"genre littéraire"},{"valeur":"nouvelle venue"},{"valeur":"nouveau"}]},{"motAmbigu":"affluent","gloses":[{"valeur":"affluer"},{"valeur":"cours d'eau"}]},{"motAmbigu":"convient","gloses":[{"valeur":"convier"},{"valeur":"convenir"}]},{"motAmbigu":"costume","gloses":[{"valeur":"costard"},{"valeur":"déguisement"},{"valeur":"vêtement folklorique"}]},{"motAmbigu":"raser","gloses":[{"valeur":"rasage"},{"valeur":"s'ennuyer"},{"valeur":"frôler"}]},{"motAmbigu":"accrocher","gloses":[{"valeur":"suspendre"},{"valeur":"cuisson"},{"valeur":"heurter"},{"valeur":"fixer"},{"valeur":"s'intéresser à"}]},{"motAmbigu":"passant","gloses":[{"valeur":"passer"},{"valeur":"piéton"},{"valeur":"ceinture"},{"valeur":"fréquenté"}]},{"motAmbigu":"légende","gloses":[{"valeur":"personne"},{"valeur":"explication"},{"valeur":"titre"},{"valeur":"racontar"},{"valeur":"récit"}]},{"motAmbigu":"carte","gloses":[{"valeur":"carte à jouer"},{"valeur":"carte de crédit"},{"valeur":"carte de géographie"},{"valeur":"carte postale"},{"valeur":"carte de visite"},{"valeur":"carte de membre"},{"valeur":"restaurant"},{"valeur":"ordinateur"},{"valeur":"plan"}]},{"motAmbigu":"claire","gloses":[{"valeur":"limpide"},{"valeur":"tonalité"},{"valeur":"intelligible"},{"valeur":"évident"},{"valeur":"éclairé"}]},{"motAmbigu":"nez ","gloses":[{"valeur":"anatomie"},{"valeur":"partie avant"},{"valeur":"intuition"}]},{"motAmbigu":"pistolets","gloses":[{"valeur":"arme à feu"},{"valeur":"urinal"}]},{"motAmbigu":"sardine","gloses":[{"valeur":"poisson"},{"valeur":"piquet"},{"valeur":"galon"}]},{"motAmbigu":"expédient","gloses":[{"valeur":"expédier"},{"valeur":"moyen"}]},{"motAmbigu":"violent","gloses":[{"valeur":"intense"},{"valeur":"agressif"},{"valeur":"agression sexuelle"},{"valeur":"contrevenir à"},{"valeur":"profaner"},{"valeur":"trahir"}]},{"motAmbigu":"primaires","gloses":[{"valeur":"école élémentaire"},{"valeur":"élections"},{"valeur":"simpliste"},{"valeur":"primitif"},{"valeur":"initial"},{"valeur":"élèves d'école élémentaire"}]},{"motAmbigu":"maternelles","gloses":[{"valeur":"élèves d'école maternelle"},{"valeur":"école maternelle"},{"valeur":"mère"}]},{"motAmbigu":"cour","gloses":[{"valeur":"monarchie"},{"valeur":"tribunal"},{"valeur":"école"},{"valeur":"parlement"},{"valeur":"drague"},{"valeur":"patio"}]},{"motAmbigu":"maternelle","gloses":[{"valeur":"mère"},{"valeur":"école"},{"valeur":"origine"}]},{"motAmbigu":"maîtresse","gloses":[{"valeur":"institutrice"},{"valeur":"amante"},{"valeur":"patronne"},{"valeur":"animal domestique"}]},{"motAmbigu":"tue","gloses":[{"valeur":"tuer"},{"valeur":"se taire"}]},{"motAmbigu":"rue","gloses":[{"valeur":"plante"},{"valeur":"ruer"},{"valeur":"voie de circulation"},{"valeur":"peuple"}]},{"motAmbigu":"dame","gloses":[{"valeur":"femme"},{"valeur":"damer"}]},{"motAmbigu":"sol","gloses":[{"valeur":"note de musique"},{"valeur":"terre"},{"valeur":"plancher"}]},{"motAmbigu":"surfe","gloses":[{"valeur":"glisse"},{"valeur":"internet"}]},{"motAmbigu":"bouteille ","gloses":[{"valeur":"récipient"},{"valeur":"contenu"}]},{"motAmbigu":"trait","gloses":[{"valeur":"ligne"},{"valeur":"flèche"},{"valeur":"rasade"}]},{"motAmbigu":"englouti","gloses":[{"valeur":"submerger"},{"valeur":"consumer"},{"valeur":"manger"},{"valeur":"boire"}]},{"motAmbigu":"âne","gloses":[{"valeur":"animal"},{"valeur":"andouille"}]},{"motAmbigu":"électricien","gloses":[{"valeur":"substance"},{"valeur":"électricité"},{"valeur":"unité monétaire"},{"valeur":"personne s'occupant de l'électri"}]},{"motAmbigu":"gourmet","gloses":[{"valeur":"vin"},{"valeur":"nourriture"}]},{"motAmbigu":"faille","gloses":[{"valeur":"informatique"},{"valeur":"falloir"},{"valeur":"défaut"},{"valeur":"étoffe"}]},{"motAmbigu":"charlotte","gloses":[{"valeur":"pâtisserie"},{"valeur":"coiffure"},{"valeur":"pomme de terre"},{"valeur":"fraise"}]},{"motAmbigu":"feuilles","gloses":[{"valeur":"arbre"},{"valeur":"papier"},{"valeur":"journal"}]},{"motAmbigu":"charlottes","gloses":[{"valeur":"pâtisserie"},{"valeur":"coiffures"},{"valeur":"fraises"},{"valeur":"pommes de terre"}]},{"motAmbigu":"feuille","gloses":[{"valeur":"arbre"},{"valeur":"papier"},{"valeur":"journal"},{"valeur":"lamelle"},{"valeur":"oreille"}]},{"motAmbigu":"loupe","gloses":[{"valeur":"optique"},{"valeur":"louper"},{"valeur":"forge"},{"valeur":"joailllerie"},{"valeur":"botanique"},{"valeur":"kyste"}]},{"motAmbigu":"mot","gloses":[{"valeur":"terme"},{"valeur":"texte"},{"valeur":"chose à dire"},{"valeur":"message"}]},{"motAmbigu":"failles","gloses":[{"valeur":"informatique"},{"valeur":"défaut"},{"valeur":"étoffe"},{"valeur":"géologie"}]},{"motAmbigu":"paille","gloses":[{"valeur":"couleur"},{"valeur":"défaut"},{"valeur":"tuyau"},{"valeur":"foin"}]},{"motAmbigu":"demeure","gloses":[{"valeur":"demeurer"},{"valeur":"maison"}]},{"motAmbigu":"soirées","gloses":[{"valeur":"soir"},{"valeur":"réception"}]},{"motAmbigu":"rochers","gloses":[{"valeur":"métal"},{"valeur":"bloc de pierre"},{"valeur":"sucrerie"},{"valeur":"oreille interne"},{"valeur":"personne insensible"}]},{"motAmbigu":"hôtes","gloses":[{"valeur":"parasitisme"},{"valeur":"invité"},{"valeur":"maître de maison"}]},{"motAmbigu":"badine","gloses":[{"valeur":"badiner"},{"valeur":"cravache"},{"valeur":"badin"}]},{"motAmbigu":"monture","gloses":[{"valeur":"animal"},{"valeur":"lunettes"}]},{"motAmbigu":"nerveuse","gloses":[{"valeur":"viande"},{"valeur":"nervosité"},{"valeur":"nerf"}]},{"motAmbigu":"banane ","gloses":[{"valeur":"fruit"},{"valeur":"couleur"},{"valeur":"coiffure"},{"valeur":"sacoche"},{"valeur":"hélicoptère"}]},{"motAmbigu":"blouson noir","gloses":[{"valeur":"vêtement"},{"valeur":"voyou"}]},{"motAmbigu":"épluche","gloses":[{"valeur":"examiner"},{"valeur":"peler"}]},{"motAmbigu":"pompes","gloses":[{"valeur":"chaussures"},{"valeur":"appareil hydraulique"},{"valeur":"pompe à essence"},{"valeur":"culture physique"},{"valeur":"antisèche"}]},{"motAmbigu":"pompe","gloses":[{"valeur":"appareil hydraulique"},{"valeur":"antisèche"},{"valeur":"chaussure"},{"valeur":"exercice physique"},{"valeur":"appareil de gonflage"}]},{"motAmbigu":"examen","gloses":[{"valeur":"scolarité"},{"valeur":"médical"}]},{"motAmbigu":"sucre","gloses":[{"valeur":"substance"},{"valeur":"électricité"},{"valeur":"programmation informatique"},{"valeur":"chimie"}]},{"motAmbigu":"permis","gloses":[{"valeur":"permettre"},{"valeur":"autorisation"},{"valeur":"permis de conduire"},{"valeur":"autorisé"}]},{"motAmbigu":"passer","gloses":[{"valeur":"examen"},{"valeur":"franchir"},{"valeur":"mourir"},{"valeur":"se décolorer"},{"valeur":"être acceptable"},{"valeur":"filtrer"},{"valeur":"omettre"},{"valeur":"être admis"},{"valeur":"être diffusé"}]},{"motAmbigu":"conduite","gloses":[{"valeur":"véhicule"},{"valeur":"direction"},{"valeur":"canalisation"},{"valeur":"comportement"},{"valeur":"accompagnement"}]},{"motAmbigu":"renvoi","gloses":[{"valeur":"rot"},{"valeur":"éviction"},{"valeur":"référence"},{"valeur":"licenciement"},{"valeur":"ré-expédition"}]},{"motAmbigu":"rompre","gloses":[{"valeur":"interrompre"},{"valeur":"se séparer"},{"valeur":"se briser"}]},{"motAmbigu":"quartier","gloses":[{"valeur":"fruit"},{"valeur":"partie de ville"},{"valeur":"militaire"},{"valeur":"lune"},{"valeur":"pitié"}]},{"motAmbigu":"butor","gloses":[{"valeur":"oiseau"},{"valeur":"grossier personnage"}]},{"motAmbigu":"baignait","gloses":[{"valeur":"donner un bain"},{"valeur":"envelopper"},{"valeur":"être immergé"}]},{"motAmbigu":"clarté","gloses":[{"valeur":"lumière"},{"valeur":"intelligibilité"},{"valeur":"luminosité"},{"valeur":"transparence"}]},{"motAmbigu":"vers","gloses":[{"valeur":"asticots"},{"valeur":"poésie"},{"valeur":"en direction de"},{"valeur":"aux environs de"}]},{"motAmbigu":"verres","gloses":[{"valeur":"récipient"},{"valeur":"lunettes"}]},{"motAmbigu":"étalons","gloses":[{"valeur":"référence"},{"valeur":"étaler"},{"valeur":"cheval"}]},{"motAmbigu":"percherons","gloses":[{"valeur":"percher"},{"valeur":"cheval de trait"}]},{"motAmbigu":"hommes","gloses":[{"valeur":"personnes de sexe masculin"},{"valeur":"soldats"},{"valeur":"êtres humains"}]},{"motAmbigu":"cochon ","gloses":[{"valeur":"animal"},{"valeur":"viande"},{"valeur":"tirelire"},{"valeur":"personne sale"},{"valeur":"personne obscène"}]},{"motAmbigu":"frégate","gloses":[{"valeur":"oiseau"},{"valeur":"navire"},{"valeur":"voiture"}]},{"motAmbigu":"impact","gloses":[{"valeur":"choc"},{"valeur":"conséquence"}]},{"motAmbigu":"frégates","gloses":[{"valeur":"navires"},{"valeur":"oiseaux"}]},{"motAmbigu":"affection","gloses":[{"valeur":"sentiment"},{"valeur":"maladie"}]},{"motAmbigu":"scanner","gloses":[{"valeur":"informatique"},{"valeur":"radiologie"}]},{"motAmbigu":"foies","gloses":[{"valeur":"anatomie"},{"valeur":"gastronomie"}]},{"motAmbigu":"dîner","gloses":[{"valeur":"repas"},{"valeur":"invitation"}]},{"motAmbigu":"pied","gloses":[{"valeur":"anatomie"},{"valeur":"botanique"},{"valeur":"poésie"},{"valeur":"pied d'objet"},{"valeur":"unité de mesure"},{"valeur":"zoologie"}]},{"motAmbigu":"aile","gloses":[{"valeur":"oiseau"},{"valeur":"automobile"},{"valeur":"bâtiment"},{"valeur":"morceau de viande"},{"valeur":"partie plane d'un avion"},{"valeur":"élément de carrosserie"},{"valeur":"organe des oiseaux"},{"valeur":"côté d'une surface sportive"},{"valeur":"côté d'une chose"}]},{"motAmbigu":"livres","gloses":[{"valeur":"monnaie"},{"valeur":"lecture"},{"valeur":"demi-kilogramme"}]},{"motAmbigu":"thons","gloses":[{"valeur":"poisson"},{"valeur":"fille laide"}]},{"motAmbigu":"pris","gloses":[{"valeur":"saisir"},{"valeur":"capturer"},{"valeur":"choisir"},{"valeur":"posséder sexuellement"},{"valeur":"monter dedans"},{"valeur":"durcir"}]},{"motAmbigu":"clair","gloses":[{"valeur":"luminosité"},{"valeur":"compréhensible"}]},{"motAmbigu":"coupe","gloses":[{"valeur":"récipient"},{"valeur":"blessure"}]},{"motAmbigu":"loup","gloses":[{"valeur":"animal"},{"valeur":"poisson"},{"valeur":"défaut"},{"valeur":"activité sexuelle"},{"valeur":"sexe"},{"valeur":"masque"}]},{"motAmbigu":"corse","gloses":[{"valeur":"île de Beauté"},{"valeur":"habitante"},{"valeur":"geste technique du volleyball"},{"valeur":"difficile"}]},{"motAmbigu":"plonger","gloses":[{"valeur":"descendre"},{"valeur":"s'immerger"},{"valeur":"se jeter"}]},{"motAmbigu":"déséquilibre","gloses":[{"valeur":"instabilité psychologique"},{"valeur":"position instable"},{"valeur":"instabilité kinétique"},{"valeur":"inégalité"},{"valeur":"situation instable"}]},{"motAmbigu":"roucoulette","gloses":[{"valeur":"geste technique du handball"},{"valeur":"parade amoureuse"}]},{"motAmbigu":"poulet","gloses":[{"valeur":"oiseau"},{"valeur":"viande"},{"valeur":"policier"},{"valeur":"billet doux"}]},{"motAmbigu":"retraite","gloses":[{"valeur":"militaire"},{"valeur":"cessation d'activité"},{"valeur":"isolement"}]},{"motAmbigu":"exercice","gloses":[{"valeur":"sport"},{"valeur":"militaire"},{"valeur":"scolaire"},{"valeur":"usage"},{"valeur":"finance"},{"valeur":"pratique"}]},{"motAmbigu":"chatte","gloses":[{"valeur":"sexe de la femme"},{"valeur":"femelle du chat"}]},{"motAmbigu":"canapé","gloses":[{"valeur":"petit four"},{"valeur":"sofa"}]},{"motAmbigu":"pomme","gloses":[{"valeur":"fruit"},{"valeur":"stupide"},{"valeur":"diffuseur"},{"valeur":"couleur verte"}]},{"motAmbigu":"chien","gloses":[{"valeur":"animal"},{"valeur":"arme à feu"},{"valeur":"tarot"}]},{"motAmbigu":"court","gloses":[{"valeur":"tennis"},{"valeur":"courir"},{"valeur":"durée"},{"valeur":"taille"}]},{"motAmbigu":"balle","gloses":[{"valeur":"monnaie"},{"valeur":"arme à feu"},{"valeur":"foin"},{"valeur":"ballon"}]},{"motAmbigu":"lettre","gloses":[{"valeur":"courrier"},{"valeur":"alphabet"},{"valeur":"caractère"}]},{"motAmbigu":"courte","gloses":[{"valeur":"durée"},{"valeur":"dimension"},{"valeur":"brièveté"}]},{"motAmbigu":"chapitre","gloses":[{"valeur":"partie"},{"valeur":"religion"},{"valeur":"sujet"}]},{"motAmbigu":"cuisiner","gloses":[{"valeur":"faire la cuisine"},{"valeur":"interroger"}]},{"motAmbigu":"cracher","gloses":[{"valeur":"dire"},{"valeur":"avouer"},{"valeur":"salive"},{"valeur":"expectorer"}]},{"motAmbigu":"identité","gloses":[{"valeur":"mathématiques"},{"valeur":"similitude"},{"valeur":"état-civil"}]},{"motAmbigu":"poulets","gloses":[{"valeur":"policier"},{"valeur":"volaille"}]},{"motAmbigu":"mulot","gloses":[{"valeur":"campagnol"},{"valeur":"souris d'ordinateur"}]},{"motAmbigu":"chaton","gloses":[{"valeur":"joailllerie"},{"valeur":"botanique"},{"valeur":"chat"},{"valeur":"terme d'affection"}]},{"motAmbigu":"câble","gloses":[{"valeur":"électricité"},{"valeur":"message"},{"valeur":"cordage"},{"valeur":"télévision"},{"valeur":"mesure de longueur"}]},{"motAmbigu":"langue","gloses":[{"valeur":"forme"},{"valeur":"gastronomie"},{"valeur":"langage"},{"valeur":"organe musculaire"}]},{"motAmbigu":"alimentation","gloses":[{"valeur":"nourriture"},{"valeur":"dispositif"}]},{"motAmbigu":"duvet","gloses":[{"valeur":"poils"},{"valeur":"sac de couchage"}]},{"motAmbigu":"PC","gloses":[{"valeur":"ordinateur"},{"valeur":"parti communiste"},{"valeur":"poste de commandement"}]},{"motAmbigu":"cruches","gloses":[{"valeur":"récipents"},{"valeur":"filles sottes"}]},{"motAmbigu":"oies","gloses":[{"valeur":"oiseaux"},{"valeur":"filles sottes"}]},{"motAmbigu":"thon","gloses":[{"valeur":"poisson"},{"valeur":"fille laide"},{"valeur":"aliment"}]},{"motAmbigu":"aubergine","gloses":[{"valeur":"plante"},{"valeur":"légume"},{"valeur":"policière"}]},{"motAmbigu":"dragons","gloses":[{"valeur":"animal fantastique"},{"valeur":"soldat"},{"valeur":"enfant turbulent"},{"valeur":"reptile"}]},{"motAmbigu":"chargèrent","gloses":[{"valeur":"arme à feu"},{"valeur":"assaut"},{"valeur":"accabler"},{"valeur":"poids"}]},{"motAmbigu":"sabre","gloses":[{"valeur":"poisson"},{"valeur":"arme"}]},{"motAmbigu":"perçant","gloses":[{"valeur":"strident"},{"valeur":"percer"},{"valeur":"inquisiteur"},{"valeur":"regard"}]},{"motAmbigu":"bouchon","gloses":[{"valeur":"restaurant"},{"valeur":"bouteille"},{"valeur":"embouteillage"},{"valeur":"pêche à la ligne"},{"valeur":"cochonnet"},{"valeur":"tampon"},{"valeur":"cérumen"},{"valeur":"plomberie"}]},{"motAmbigu":"ondes","gloses":[{"valeur":"radio"},{"valeur":"eaux"}]},{"motAmbigu":"tentes","gloses":[{"valeur":"tenter"},{"valeur":"camping"}]},{"motAmbigu":"sardines","gloses":[{"valeur":"poisson"},{"valeur":"piquet"}]},{"motAmbigu":"four","gloses":[{"valeur":"appareil électroménager"},{"valeur":"échec"},{"valeur":"céramique"},{"valeur":"endroit chaud"}]},{"motAmbigu":"logement","gloses":[{"valeur":"habitation"},{"valeur":"cavité"}]},{"motAmbigu":"fond","gloses":[{"valeur":"sport"},{"valeur":"position"},{"valeur":"profondeur"},{"valeur":"fondre"},{"valeur":"art culinaire"}]},{"motAmbigu":"niche","gloses":[{"valeur":"chien"},{"valeur":"renfoncement"},{"valeur":"écologie"}]},{"motAmbigu":"sculpture","gloses":[{"valeur":"art"},{"valeur":"statue"}]},{"motAmbigu":"dépliant","gloses":[{"valeur":"déplier"},{"valeur":"prospectus"}]},{"motAmbigu":"siège","gloses":[{"valeur":"meuble"},{"valeur":"blocus"},{"valeur":"siéger"},{"valeur":"postérieur"},{"valeur":"siège social"},{"valeur":"localisation"}]},{"motAmbigu":"fabrique","gloses":[{"valeur":"fabriquer"},{"valeur":"usine"}]},{"motAmbigu":"pipes","gloses":[{"valeur":"informatique"},{"valeur":"tabac"},{"valeur":"fellation"}]},{"motAmbigu":"ampoule","gloses":[{"valeur":"lumière"},{"valeur":"cloque"},{"valeur":"fiole"}]},{"motAmbigu":"aiguille","gloses":[{"valeur":"aiguille à coudre"},{"valeur":"montre"},{"valeur":"conifère"},{"valeur":"seringue"},{"valeur":"montagne"},{"valeur":"aiguille à tricoter"}]},{"motAmbigu":"rouillée","gloses":[{"valeur":"corrosion"},{"valeur":"papillon"}]},{"motAmbigu":"investissant ","gloses":[{"valeur":"finance"},{"valeur":"envahir"}]},{"motAmbigu":"centre","gloses":[{"valeur":"sport"},{"valeur":"milieu"},{"valeur":"centre-ville"},{"valeur":"sensibilité politique"}]},{"motAmbigu":"lueur","gloses":[{"valeur":"lumière"},{"valeur":"apparence"},{"valeur":"manifestation"},{"valeur":"petite quantité"}]},{"motAmbigu":"chassent","gloses":[{"valeur":"chasseur"},{"valeur":"faire partir"},{"valeur":"rechercher"},{"valeur":"éjecter"},{"valeur":"dissiper"}]},{"motAmbigu":"représentants","gloses":[{"valeur":"représenter"},{"valeur":"mandataire"},{"valeur":"voyageur de commerce"},{"valeur":"membre"},{"valeur":"spécimen"},{"valeur":"porte-parole"}]},{"motAmbigu":"classe","gloses":[{"valeur":"informatique"},{"valeur":"catégorie"},{"valeur":"enseignement"},{"valeur":"taxonomie"},{"valeur":"distingué"},{"valeur":"transports"},{"valeur":"groupe social"}]},{"motAmbigu":"zones","gloses":[{"valeur":"informatique"},{"valeur":"anatomie"},{"valeur":"géologie"},{"valeur":"portion de l'espace"},{"valeur":"urbanisme"},{"valeur":"bazar"},{"valeur":"quartier défavorisé"},{"valeur":"astronomie"}]},{"motAmbigu":"périphériques","gloses":[{"valeur":"informatique"},{"valeur":"voie de circulation"},{"valeur":"périurbain"}]},{"motAmbigu":"soignée","gloses":[{"valeur":"médecine"},{"valeur":"bichonner"},{"valeur":"fait avec soin"},{"valeur":"raffinée"}]},{"motAmbigu":"dépression","gloses":[{"valeur":"anatomie"},{"valeur":"géographie"},{"valeur":"météorologie"},{"valeur":"état dépressif"}]},{"motAmbigu":"tenue","gloses":[{"valeur":"tenir"},{"valeur":"habillement"},{"valeur":"prolongée"},{"valeur":"éduquée"},{"valeur":"obligée"},{"valeur":"dignité"},{"valeur":"réunion"}]},{"motAmbigu":"trompés","gloses":[{"valeur":"faire erreur"},{"valeur":"adultère"},{"valeur":"tahis"}]},{"motAmbigu":"se tromper","gloses":[{"valeur":"faire erreur"},{"valeur":"adultère"}]},{"motAmbigu":"cheville","gloses":[{"valeur":"anatomie"},{"valeur":"menuiserie"},{"valeur":"boucherie"}]},{"motAmbigu":"vidé","gloses":[{"valeur":"expulser"},{"valeur":"éviscérer"},{"valeur":"exténuer"},{"valeur":"rendre vide"},{"valeur":"finir"}]},{"motAmbigu":"investi","gloses":[{"valeur":"finance"},{"valeur":"envahir"},{"valeur":"dignité"},{"valeur":"cerner"}]},{"motAmbigu":"affaire","gloses":[{"valeur":"possession"},{"valeur":"litige"},{"valeur":"entreprise"},{"valeur":"scandale"}]},{"motAmbigu":"rendu","gloses":[{"valeur":"vomir"},{"valeur":"faire devenir"},{"valeur":"redonner"}]},{"motAmbigu":"costumes","gloses":[{"valeur":"costard"},{"valeur":"déguisement"},{"valeur":"tenue folklorique"}]},{"motAmbigu":"oie blanche","gloses":[{"valeur":"fille sotte"},{"valeur":"volatile"}]},{"motAmbigu":"se présenter","gloses":[{"valeur":"état-civil"},{"valeur":"élection"},{"valeur":"survenir"}]},{"motAmbigu":"exploitant","gloses":[{"valeur":"se servir de"},{"valeur":"mettre en valeur"},{"valeur":"esclavage"}]},{"motAmbigu":"campagne","gloses":[{"valeur":"élections"},{"valeur":"militaire"},{"valeur":"zone rurale"},{"valeur":"publicité"}]},{"motAmbigu":"thème","gloses":[{"valeur":"musique"},{"valeur":"sujet"},{"valeur":"traduction"},{"valeur":"astrologie"}]},{"motAmbigu":"se pose","gloses":[{"valeur":"atterrir"},{"valeur":"question"},{"valeur":"passer pour"},{"valeur":"faire une pause"}]},{"motAmbigu":"presse","gloses":[{"valeur":"presser"},{"valeur":"media"},{"valeur":"imprimerie"},{"valeur":"appareil"}]},{"motAmbigu":"pouvoir","gloses":[{"valeur":"être capable"},{"valeur":"risquer"},{"valeur":"procuration"},{"valeur":"autorité"},{"valeur":"politique"},{"valeur":"avoir la permission"}]},{"motAmbigu":"écrans","gloses":[{"valeur":"cinéma"},{"valeur":"moniteur"},{"valeur":"protection"},{"valeur":"interface d'affichage"},{"valeur":"crème solaire"}]},{"motAmbigu":"répandus","gloses":[{"valeur":"diffusé"},{"valeur":"renversé"},{"valeur":"fréquent"}]},{"motAmbigu":"buse","gloses":[{"valeur":"oiseau"},{"valeur":"canalisation"},{"valeur":"idiot"}]},{"motAmbigu":"répandu","gloses":[{"valeur":"diffusé"},{"valeur":"fréquent"},{"valeur":"renverser"}]},{"motAmbigu":"écran","gloses":[{"valeur":"cinéma"},{"valeur":"moniteur"},{"valeur":"protection"},{"valeur":"interface d'affichage"},{"valeur":"crème solaire"}]},{"motAmbigu":"serviette","gloses":[{"valeur":"sacoche"},{"valeur":"serviette de table"},{"valeur":"serviette hygiénique"},{"valeur":"serviette de toilette"},{"valeur":"serviette de bain"}]},{"motAmbigu":"lait","gloses":[{"valeur":"aliment"},{"valeur":"suc végétal"},{"valeur":"liquide blanc"},{"valeur":"cosmétique"}]},{"motAmbigu":"végétal","gloses":[{"valeur":"plante"},{"valeur":"relatif aux végétaux"},{"valeur":"d'origine végétale"}]},{"motAmbigu":"vache","gloses":[{"valeur":"poisson"},{"valeur":"viande"},{"valeur":"mammifère"},{"valeur":"pas sympa"},{"valeur":"fromage"},{"valeur":"cartable"}]},{"motAmbigu":"cuisine","gloses":[{"valeur":"art culinaire"},{"valeur":"cuisiner"},{"valeur":"pièce"}]},{"motAmbigu":"disque","gloses":[{"valeur":"sport"},{"valeur":"informatique"},{"valeur":"microsillon"},{"valeur":"géométrie"},{"valeur":"objet en forme de disque"}]},{"motAmbigu":"coton","gloses":[{"valeur":"plante"},{"valeur":"difficile"},{"valeur":"textile"},{"valeur":"fibre"},{"valeur":"ouate"}]},{"motAmbigu":"soucoupe","gloses":[{"valeur":"récipient"},{"valeur":"ovni"}]},{"motAmbigu":"minou","gloses":[{"valeur":"sexe"},{"valeur":"chat"},{"valeur":"terme affectueux"}]},{"motAmbigu":"Se reproduire","gloses":[{"valeur":"se produire à nouveau"},{"valeur":"sexualité"}]},{"motAmbigu":"débouche sur","gloses":[{"valeur":"lieu"},{"valeur":"conséquence"}]},{"motAmbigu":"appauvrissement","gloses":[{"valeur":"diminution"},{"valeur":"perte de diversité"},{"valeur":"perte de ressources"}]},{"motAmbigu":"patrimoine","gloses":[{"valeur":"ensemble des biens"},{"valeur":"hérédité"},{"valeur":"bien commun"}]},{"motAmbigu":"chemise","gloses":[{"valeur":"vêtement"},{"valeur":"dossier"}]},{"motAmbigu":"composé","gloses":[{"valeur":"musique"},{"valeur":"constitué"},{"valeur":"rédigé"}]},{"motAmbigu":"vieux","gloses":[{"valeur":"âge"},{"valeur":"usage"},{"valeur":"personne âgée"},{"valeur":"ancien"},{"valeur":"père"},{"valeur":"démodé"},{"valeur":"de longue date"}]},{"motAmbigu":"pêche","gloses":[{"valeur":"fruit"},{"valeur":"couleur"},{"valeur":"action de pêcher"},{"valeur":"vitalité"},{"valeur":"coup"},{"valeur":"étron"}]},{"motAmbigu":"moules","gloses":[{"valeur":"ustensile de cuisine"},{"valeur":"chance"},{"valeur":"sexe"},{"valeur":"mollusque"},{"valeur":"moulage"},{"valeur":"mouler"},{"valeur":"sexe féminin"}]},{"motAmbigu":"vue","gloses":[{"valeur":"vision"},{"valeur":"façon de voir"},{"valeur":"projet"},{"valeur":"panorama"},{"valeur":"photo"}]},{"motAmbigu":"panoramique","gloses":[{"valeur":"cinéma"},{"valeur":"radiographie"},{"valeur":"très large"}]},{"motAmbigu":"réaction","gloses":[{"valeur":"médecine"},{"valeur":"chimie"},{"valeur":"comportement"},{"valeur":"réacteur"},{"valeur":"propos"}]},{"motAmbigu":"traduit","gloses":[{"valeur":"justice"},{"valeur":"langue"},{"valeur":"signifier"},{"valeur":"illustrer"},{"valeur":"être la conséquence de"}]},{"motAmbigu":"singulier","gloses":[{"valeur":"unique"},{"valeur":"grammaire"},{"valeur":"étonnant"}]},{"motAmbigu":"défaut","gloses":[{"valeur":"imperfection"},{"valeur":"manque"},{"valeur":"anomalie"}]},{"motAmbigu":"milieux","gloses":[{"valeur":"centre"},{"valeur":"classe sociale"},{"valeur":"environnement"}]},{"motAmbigu":"voiture","gloses":[{"valeur":"train"},{"valeur":"automobile"}]},{"motAmbigu":"bateau","gloses":[{"valeur":"trottoir surbaissé"},{"valeur":"embarcation"}]},{"motAmbigu":"lentille","gloses":[{"valeur":"optique"},{"valeur":"graine"},{"valeur":"grain de beauté"}]},{"motAmbigu":"chercher","gloses":[{"valeur":"s'efforcer de trouver"},{"valeur":"réfléchir"},{"valeur":"taquiner"},{"valeur":"provoquer"},{"valeur":"tenter d'obtenir"}]},{"motAmbigu":"regarde","gloses":[{"valeur":"examiner"},{"valeur":"être spectateur"},{"valeur":"être tourné vers"},{"valeur":"observer"}]},{"motAmbigu":"protocole","gloses":[{"valeur":"informatique"},{"valeur":"diplomatie"},{"valeur":"cérémonial"},{"valeur":"traité"},{"valeur":"expérience"}]},{"motAmbigu":"véreux","gloses":[{"valeur":"plein de vers"},{"valeur":"corrompu"}]},{"motAmbigu":"boîte","gloses":[{"valeur":"entreprise"},{"valeur":"contenant"},{"valeur":"conserve"},{"valeur":"boîte de nuit"}]},{"motAmbigu":"coulé","gloses":[{"valeur":"fabriquer"},{"valeur":"sombrer"},{"valeur":"envoyé par le fond"},{"valeur":"liquide"},{"valeur":"ruiner"}]},{"motAmbigu":"agitait","gloses":[{"valeur":"remuer"},{"valeur":"préoccuper"},{"valeur":"exciter"}]},{"motAmbigu":"corne","gloses":[{"valeur":"zoologie"},{"valeur":"callosité"},{"valeur":"matière"},{"valeur":"instrument sonore"}]},{"motAmbigu":"fixant","gloses":[{"valeur":"fixatif"},{"valeur":"assujettir"},{"valeur":"renseigner"},{"valeur":"regarder"},{"valeur":"décider"},{"valeur":"histologie"},{"valeur":"photographie"}]},{"motAmbigu":"air","gloses":[{"valeur":"apparence"},{"valeur":"mélodie"},{"valeur":"atmosphère"},{"valeur":"vent"}]},{"motAmbigu":"doux","gloses":[{"valeur":"sucré"},{"valeur":"gentil"},{"valeur":"toucher"},{"valeur":"modéré"}]},{"motAmbigu":"girafe","gloses":[{"valeur":"animal"},{"valeur":"verre à bière"}]},{"motAmbigu":"gorille","gloses":[{"valeur":"grand singe"},{"valeur":"garde du corps"}]},{"motAmbigu":"aborder","gloses":[{"valeur":"marine"},{"valeur":"s'adresser à"}]},{"motAmbigu":"traitement","gloses":[{"valeur":"médecine"},{"valeur":"chimie"},{"valeur":"salaire"},{"valeur":"analyse"}]},{"motAmbigu":"données","gloses":[{"valeur":"information"},{"valeur":"donner"}]},{"motAmbigu":"enquêtes","gloses":[{"valeur":"police"},{"valeur":"opinion"}]},{"motAmbigu":"sondages","gloses":[{"valeur":"médecine"},{"valeur":"opinion"},{"valeur":"forage"}]},{"motAmbigu":"permet","gloses":[{"valeur":"rendre possible"},{"valeur":"autoriser"}]},{"motAmbigu":"estimer","gloses":[{"valeur":"admirer"},{"valeur":"évaluer"}]},{"motAmbigu":"échelle","gloses":[{"valeur":"ordre de grandeur"},{"valeur":"hiérarchie"},{"valeur":"escabeau"}]},{"motAmbigu":"aide","gloses":[{"valeur":"assistance"},{"valeur":"assistant"},{"valeur":"soutien"},{"valeur":"secours"},{"valeur":"aider"}]},{"motAmbigu":"assistance","gloses":[{"valeur":"aide"},{"valeur":"public"},{"valeur":"assurance"}]},{"motAmbigu":"retenait","gloses":[{"valeur":"tenir"},{"valeur":"mémoriser"},{"valeur":"réprimer"},{"valeur":"réserver"},{"valeur":"garder"}]},{"motAmbigu":"souffle","gloses":[{"valeur":"vent"},{"valeur":"respiration"},{"valeur":"souffler"}]},{"motAmbigu":"pastis","gloses":[{"valeur":"pâtisserie"},{"valeur":"apéritif"}]},{"motAmbigu":"malin","gloses":[{"valeur":"médecine"},{"valeur":"malicieux"},{"valeur":"rusé"},{"valeur":"mauvais"},{"valeur":"diable"}]},{"motAmbigu":"notes","gloses":[{"valeur":"facture"},{"valeur":"musique"},{"valeur":"écrit"},{"valeur":"scolarité"}]},{"motAmbigu":"prélude","gloses":[{"valeur":"musique"},{"valeur":"informatique"},{"valeur":"début"}]},{"motAmbigu":"jouer","gloses":[{"valeur":"musique"},{"valeur":"risquer"},{"valeur":"s'amuser"},{"valeur":"comédien"},{"valeur":"avoir du jeu"},{"valeur":"feindre"}]},{"motAmbigu":"bureau","gloses":[{"valeur":"ordinateur"},{"valeur":"pièce"},{"valeur":"mobilier"},{"valeur":"lieu de travail"},{"valeur":"administration"},{"valeur":"instance décisionnelle"}]},{"motAmbigu":"chausson","gloses":[{"valeur":"pâtisserie"},{"valeur":"pantoufle"}]},{"motAmbigu":"mesure","gloses":[{"valeur":"musique"},{"valeur":"dimension"},{"valeur":"mesurer"},{"valeur":"modération"},{"valeur":"décision"},{"valeur":"limite"}]},{"motAmbigu":"risques","gloses":[{"valeur":"risquer"},{"valeur":"dangers"},{"valeur":"assurance"}]},{"motAmbigu":"gros","gloses":[{"valeur":"personne"},{"valeur":"beaucoup"},{"valeur":"volumineux"}]},{"motAmbigu":"marché","gloses":[{"valeur":"lieu"},{"valeur":"bourse"},{"valeur":"transaction"},{"valeur":"clientèle"},{"valeur":"marcher"}]},{"motAmbigu":"gorgée","gloses":[{"valeur":"imbibée"},{"valeur":"goulée"}]},{"motAmbigu":"flotte","gloses":[{"valeur":"flotter"},{"valeur":"flotille"},{"valeur":"flotte aérienne"},{"valeur":"eau"},{"valeur":"ensemble de navires"}]},{"motAmbigu":"saumon","gloses":[{"valeur":"couleur"},{"valeur":"poisson"},{"valeur":"aliment"}]},{"motAmbigu":"pneu","gloses":[{"valeur":"message"},{"valeur":"roue"}]},{"motAmbigu":"vélo","gloses":[{"valeur":"sport"},{"valeur":"bicyclette"}]},{"motAmbigu":"dégonflé","gloses":[{"valeur":"à plat"},{"valeur":"lâche"}]},{"motAmbigu":"bise","gloses":[{"valeur":"couleur"},{"valeur":"vent"},{"valeur":"baiser"}]},{"motAmbigu":"claquant","gloses":[{"valeur":"bruit"},{"valeur":"mourir"},{"valeur":"dilapider"},{"valeur":"frapper"},{"valeur":"fermer"}]},{"motAmbigu":"baigneur","gloses":[{"valeur":"poupon"},{"valeur":"cul"},{"valeur":"se baigner"}]},{"motAmbigu":"glaciale","gloses":[{"valeur":"température"},{"valeur":"inamicale"}]},{"motAmbigu":"pavillon","gloses":[{"valeur":"oreille"},{"valeur":"maison"},{"valeur":"drapeau"}]},{"motAmbigu":"claquait","gloses":[{"valeur":"bruit"},{"valeur":"mourir"},{"valeur":"dilapider"},{"valeur":"fermer"},{"valeur":"gifler"}]},{"motAmbigu":"hampe","gloses":[{"valeur":"musique"},{"valeur":"botanique"},{"valeur":"boucherie"},{"valeur":"manche"},{"valeur":"pénis"},{"valeur":"vénerie"}]},{"motAmbigu":"claqué","gloses":[{"valeur":"bruit"},{"valeur":"mourir"},{"valeur":"dilapidé"},{"valeur":"giflé"},{"valeur":"fermé"},{"valeur":"casser"}]},{"motAmbigu":"fausse route","gloses":[{"valeur":"avaler de travers"},{"valeur":"se tromper"}]},{"motAmbigu":"claquer","gloses":[{"valeur":"bruit"},{"valeur":"mourir"},{"valeur":"dilapider"},{"valeur":"frapper"},{"valeur":"fermer"}]},{"motAmbigu":"manchot","gloses":[{"valeur":"oiseau"},{"valeur":"estropié"},{"valeur":"maladroit"}]},{"motAmbigu":"traiter","gloses":[{"valeur":"insulter"},{"valeur":"soigner"},{"valeur":"être relatif à"},{"valeur":"régler"},{"valeur":"prendre en compte"}]},{"motAmbigu":"invalide","gloses":[{"valeur":"invalider"},{"valeur":"non valable"},{"valeur":"infirme"}]},{"motAmbigu":"urnes","gloses":[{"valeur":"récipient"},{"valeur":"élections"},{"valeur":"botanique"},{"valeur":"urne funéraire"}]},{"motAmbigu":"vice","gloses":[{"valeur":"défaut"},{"valeur":"perversion"},{"valeur":"adjoint"}]},{"motAmbigu":"forme","gloses":[{"valeur":"morphologie"},{"valeur":"santé"},{"valeur":"expression"},{"valeur":"manière"},{"valeur":"former"},{"valeur":"procédure"}]},{"motAmbigu":"mendient","gloses":[{"valeur":"quémander"},{"valeur":"faire la manche"}]},{"motAmbigu":"place","gloses":[{"valeur":"village"},{"valeur":"spectacle"},{"valeur":"stationnement"},{"valeur":"emplacement"},{"valeur":"rang"},{"valeur":"situation professionnelle"},{"valeur":"espace libre"},{"valeur":"placer"}]},{"motAmbigu":"passants","gloses":[{"valeur":"piétons"},{"valeur":"ceinture"}]},{"motAmbigu":"prend","gloses":[{"valeur":"saisir"},{"valeur":"posséder sexuellement"},{"valeur":"durcir"}]},{"motAmbigu":"semelle","gloses":[{"valeur":"viande"},{"valeur":"chaussure"}]},{"motAmbigu":"boucher","gloses":[{"valeur":"boucherie"},{"valeur":"obstruer"},{"valeur":"barbare"}]},{"motAmbigu":"vendu","gloses":[{"valeur":"commercer"},{"valeur":"dénoncer"}]},{"motAmbigu":"chenille","gloses":[{"valeur":"véhicule"},{"valeur":"insecte"},{"valeur":"manège"}]},{"motAmbigu":"miches","gloses":[{"valeur":"pain"},{"valeur":"fesses"}]},{"motAmbigu":"endroit","gloses":[{"valeur":"lieu"},{"valeur":"face"}]},{"motAmbigu":"coiffé","gloses":[{"valeur":"peigné"},{"valeur":"couvre-chef"},{"valeur":"surmonté"}]},{"motAmbigu":"melon","gloses":[{"valeur":"fruit"},{"valeur":"chapeau"},{"valeur":"grosse tête"}]},{"motAmbigu":"sœur","gloses":[{"valeur":"frangine"},{"valeur":"religieuse"}]},{"motAmbigu":"aube","gloses":[{"valeur":"aurore"},{"valeur":"roue à aubes"},{"valeur":"commencement"},{"valeur":"vêtement liturgique"}]},{"motAmbigu":"voile","gloses":[{"valeur":"coiffure"},{"valeur":"gréement"},{"valeur":"obscurcissement"},{"valeur":"tissu"},{"valeur":"plaisance"}]},{"motAmbigu":"se tapa","gloses":[{"valeur":"posséder sexuellement"},{"valeur":"ingurgiter"},{"valeur":"se frapper"}]},{"motAmbigu":"religieuse","gloses":[{"valeur":"pâtisserie"},{"valeur":"nonne"},{"valeur":"religieux"}]},{"motAmbigu":"éclair","gloses":[{"valeur":"pâtisserie"},{"valeur":"foudre"},{"valeur":"rapidité"}]},{"motAmbigu":"tentant","gloses":[{"valeur":"essayer"},{"valeur":"désirable"},{"valeur":"donner envie"}]},{"motAmbigu":"planter","gloses":[{"valeur":"jardinage"},{"valeur":"enfoncer"},{"valeur":"quitter"},{"valeur":"poignarder"},{"valeur":"arnaquer"},{"valeur":"dysfonctionner"}]},{"motAmbigu":"punaise","gloses":[{"valeur":"insecte"},{"valeur":"clou"},{"valeur":"juron"}]},{"motAmbigu":"planté","gloses":[{"valeur":"jardinage"},{"valeur":"enfoncer"},{"valeur":"poignarder"},{"valeur":"plaquer"},{"valeur":"dysfonctionnement"}]},{"motAmbigu":"cruche","gloses":[{"valeur":"femme idiote"},{"valeur":"vase"}]},{"motAmbigu":"table","gloses":[{"valeur":"meuble"},{"valeur":"gastronomie"},{"valeur":"tableau d'informations"}]},{"motAmbigu":"peint","gloses":[{"valeur":"art"},{"valeur":"décrire"},{"valeur":"bricolage"}]},{"motAmbigu":"portrait","gloses":[{"valeur":"description"},{"valeur":"représentation"}]},{"motAmbigu":"piqué","gloses":[{"valeur":"emprunter"},{"valeur":"insecte"},{"valeur":"voler"},{"valeur":"euthanasier"},{"valeur":"darder"},{"valeur":"prendre"}]},{"motAmbigu":"phares","gloses":[{"valeur":"véhicule"},{"valeur":"aéronautique"},{"valeur":"maritime"},{"valeur":"modèle"}]},{"motAmbigu":"permettent","gloses":[{"valeur":"rendre possible"},{"valeur":"autoriser"}]},{"motAmbigu":"bâtiments","gloses":[{"valeur":"construction"},{"valeur":"navire"},{"valeur":"secteur d'activité"}]},{"motAmbigu":"brouillard","gloses":[{"valeur":"météorologie"},{"valeur":"ophtalmologie"},{"valeur":"comptabilité"},{"valeur":"incertitude"}]},{"motAmbigu":"tarte","gloses":[{"valeur":"préparation culinaire"},{"valeur":"claque"}]},{"motAmbigu":"bonne","gloses":[{"valeur":"savoureux"},{"valeur":"aide ménagère"},{"valeur":"douée"},{"valeur":"sexy"}]},{"motAmbigu":"épuisé","gloses":[{"valeur":"fatiguer"},{"valeur":"vider"}]},{"motAmbigu":"banc","gloses":[{"valeur":"étal"},{"valeur":"haut-fond"},{"valeur":"poissons"},{"valeur":"siège"}]},{"motAmbigu":"marée","gloses":[{"valeur":"mer"},{"valeur":"produit de la pêche"},{"valeur":"affluence"}]},{"motAmbigu":"sirène","gloses":[{"valeur":"femme-poisson"},{"valeur":"appareil sonore"}]},{"motAmbigu":"sirènes","gloses":[{"valeur":"femme-poisson"},{"valeur":"appareil sonore"}]},{"motAmbigu":"enfler","gloses":[{"valeur":"arnaquer"},{"valeur":"gonfler"},{"valeur":"augmenter d'intensité"},{"valeur":"prendre de l'ampleur"},{"valeur":"exagérer"}]},{"motAmbigu":"progressant","gloses":[{"valeur":"avancer"},{"valeur":"faire des progrès"}]},{"motAmbigu":"lacets","gloses":[{"valeur":"cordon"},{"valeur":"chaussures"},{"valeur":"méandres"}]},{"motAmbigu":"vierge","gloses":[{"valeur":"astrologie"},{"valeur":"virginité"}]},{"motAmbigu":"scorpions","gloses":[{"valeur":"astrologie"},{"valeur":"arachnide"}]},{"motAmbigu":"poissons","gloses":[{"valeur":"zoologie"},{"valeur":"aliment"},{"valeur":"astrologie"}]},{"motAmbigu":"signes","gloses":[{"valeur":"indice"},{"valeur":"mathématiques"},{"valeur":"astrologie"},{"valeur":"signer"},{"valeur":"geste"},{"valeur":"présage"},{"valeur":"linguistique"}]},{"motAmbigu":"bélier","gloses":[{"valeur":"animal"},{"valeur":"astrologie"},{"valeur":"machine de guerre"}]},{"motAmbigu":"enfoncer","gloses":[{"valeur":"défoncer"},{"valeur":"dénigrer"},{"valeur":"faire pénétrer"},{"valeur":"adversaire"}]},{"motAmbigu":"grille","gloses":[{"valeur":"portail"},{"valeur":"clôture"},{"valeur":"mots croisés"},{"valeur":"tableau quadrillé"},{"valeur":"code secret"}]},{"motAmbigu":"parc","gloses":[{"valeur":"enclos"},{"valeur":"jardin"},{"valeur":"jardin public"},{"valeur":"parc d'attraction"},{"valeur":"puériculture"},{"valeur":"conchyliculture"}]},{"motAmbigu":"changé","gloses":[{"valeur":"monnaie"},{"valeur":"modifier"},{"valeur":"échanger"},{"valeur":"couche"},{"valeur":"se transformer"}]},{"motAmbigu":"déposé","gloses":[{"valeur":"faire une déposition"},{"valeur":"démonter"},{"valeur":"poser"},{"valeur":"banque"}]},{"motAmbigu":"poussin","gloses":[{"valeur":"terme d'affection"},{"valeur":"jaune"},{"valeur":"sportif"},{"valeur":"poule"},{"valeur":"oisillon"}]},{"motAmbigu":"couche","gloses":[{"valeur":"strate"},{"valeur":"pellicule"},{"valeur":"bébé"},{"valeur":"lit"},{"valeur":"coucher"}]},{"motAmbigu":"cheval","gloses":[{"valeur":"animal"},{"valeur":"fille laide"}]},{"motAmbigu":"robe","gloses":[{"valeur":"pelage"},{"valeur":"vêtement"}]},{"motAmbigu":"code","gloses":[{"valeur":"code secret"},{"valeur":"code de la route"},{"valeur":"feux de route"},{"valeur":"enssemble de règles"}]},{"motAmbigu":"génoises","gloses":[{"valeur":"pâtisserie"},{"valeur":"architecture"}]},{"motAmbigu":"cocotte","gloses":[{"valeur":"prostituée"},{"valeur":"médecine"},{"valeur":"couture"},{"valeur":"musique"},{"valeur":"terme affectueux"},{"valeur":"poule"},{"valeur":"marmite"}]},{"motAmbigu":"noix","gloses":[{"valeur":"petite quantité"},{"valeur":"boucherie"},{"valeur":"fruit à coque"}]},{"motAmbigu":"belle-mère","gloses":[{"valeur":"mère du conjoint"},{"valeur":"nouvelle épouse du père (enfant)"}]},{"motAmbigu":"charmante","gloses":[{"valeur":"ironie"},{"valeur":"plaisant"}]},{"motAmbigu":"crevettes","gloses":[{"valeur":"crustacés"},{"valeur":"femme galante"},{"valeur":"couleur rose"}]},{"motAmbigu":"pâtisserie","gloses":[{"valeur":"gâteau"},{"valeur":"commerce"}]},{"motAmbigu":"sacristain","gloses":[{"valeur":"pâtisserie"},{"valeur":"homme d'église"}]},{"motAmbigu":"tentaient","gloses":[{"valeur":"essayer"},{"valeur":"faire envie"}]},{"motAmbigu":"langue de chat","gloses":[{"valeur":"langue"},{"valeur":"biscuit"},{"valeur":"pratique sexuelle"},{"valeur":"burin"},{"valeur":"truelle"}]},{"motAmbigu":"tuile","gloses":[{"valeur":"informatique"},{"valeur":"biscuit"},{"valeur":"toit"},{"valeur":"problème"}]},{"motAmbigu":"fondre","gloses":[{"valeur":"métallurgie"},{"valeur":"unir"},{"valeur":"maigrir"},{"valeur":"liquéfier"},{"valeur":"dissoudre"},{"valeur":"s'attendrir"}]},{"motAmbigu":"poilu","gloses":[{"valeur":"soldat"},{"valeur":"poil"}]},{"motAmbigu":"grenade","gloses":[{"valeur":"fruit"},{"valeur":"projectile"}]},{"motAmbigu":"garçon","gloses":[{"valeur":"enfant"},{"valeur":"serveur"},{"valeur":"personne de sexe masculin"},{"valeur":"descendant"}]},{"motAmbigu":"phare","gloses":[{"valeur":"automobile"},{"valeur":"maritime"}]},{"motAmbigu":"test","gloses":[{"valeur":"ok"},{"valeur":"bien"},{"valeur":"test"},{"valeur":"wtf"}]},{"motAmbigu":"Test","gloses":[{"valeur":"bien"}]},{"motAmbigu":"aigle","gloses":[{"valeur":"oiseau"},{"valeur":"pupitre"},{"valeur":"légion romaine"},{"valeur":"grand homme"}]},{"motAmbigu":"ciel","gloses":[{"valeur":"couleur"},{"valeur":"religion"},{"valeur":"atmosphère"},{"valeur":"voûte"}]},{"motAmbigu":"fixait","gloses":[{"valeur":"assujettir"},{"valeur":"regarder"},{"valeur":"décider"}]},{"motAmbigu":"morde","gloses":[{"valeur":"empiéter"},{"valeur":"croquer"},{"valeur":"prendre goût à"},{"valeur":"morsure"},{"valeur":"pêche"}]},{"motAmbigu":"pousser","gloses":[{"valeur":"exagérer"},{"valeur":"croître"},{"valeur":"bousculer"},{"valeur":"cri"},{"valeur":"accouchement"},{"valeur":"inciter"},{"valeur":"déplacer"}]},{"motAmbigu":"herbe","gloses":[{"valeur":"marijuana"},{"valeur":"plante herbacée"}]},{"motAmbigu":"a poussé","gloses":[{"valeur":"exagérer"},{"valeur":"croître"},{"valeur":"bousculer"},{"valeur":"cri"},{"valeur":"accouchement"},{"valeur":"inciter"},{"valeur":"faire avancer"}]},{"motAmbigu":"voie","gloses":[{"valeur":"chemin de fer"},{"valeur":"filière"},{"valeur":"route"}]},{"motAmbigu":"cabinet","gloses":[{"valeur":"meuble"},{"valeur":"pièce"},{"valeur":"toilettes"},{"valeur":"profession libérale"},{"valeur":"gouvernement"}]},{"motAmbigu":"queue","gloses":[{"valeur":"fruit"},{"valeur":"animal"},{"valeur":"train"},{"valeur":"pénis"},{"valeur":"partie postérieure"},{"valeur":"file d'attente"},{"valeur":"poignée"},{"valeur":"billard"},{"valeur":"avion"}]},{"motAmbigu":"chocolat","gloses":[{"valeur":"couleur"},{"valeur":"boisson"},{"valeur":"sucrerie"}]},{"motAmbigu":"ménage","gloses":[{"valeur":"tâches ménagères"},{"valeur":"couple"}]},{"motAmbigu":"plaquée","gloses":[{"valeur":"quitter"},{"valeur":"recouvrir"},{"valeur":"maintenir"},{"valeur":"rugby"},{"valeur":"appliquer"},{"valeur":"geste brutal"}]},{"motAmbigu":"blonde","gloses":[{"valeur":"cigarette"},{"valeur":"bière"},{"valeur":"fille"},{"valeur":"idiote"},{"valeur":"couleur de cheveux"}]},{"motAmbigu":"louche","gloses":[{"valeur":"ustensile de cuisine"},{"valeur":"suspect"},{"valeur":"bigleux"},{"valeur":"glauque"},{"valeur":"main"},{"valeur":"loucher"}]},{"motAmbigu":"allume","gloses":[{"valeur":"lumière"},{"valeur":"enflammer"},{"valeur":"mettre en marche"},{"valeur":"draguer"},{"valeur":"engueuler"}]},{"motAmbigu":"entendu","gloses":[{"valeur":"compris"},{"valeur":"accord"},{"valeur":"ouï"},{"valeur":"connivence"}]},{"motAmbigu":"commande","gloses":[{"valeur":"diriger"},{"valeur":"passer commande"},{"valeur":"ordonner"},{"valeur":"contrôler"}]},{"motAmbigu":"bière","gloses":[{"valeur":"boisson"},{"valeur":"cercueil"}]},{"motAmbigu":"courses","gloses":[{"valeur":"commissions"},{"valeur":"courses hippiques"}]},{"motAmbigu":"new","gloses":[{"valeur":"oki"},{"valeur":"loool"}]}]}
+{
+  "date": "05\/05\/2017 09:57",
+  "data": [
+    {
+      "motAmbigu": "suis",
+      "gloses": [
+        {
+          "valeur": "être"
+        },
+        {
+          "valeur": "suivre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "avocat",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "métier"
+        },
+        {
+          "valeur": "individu"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "avocats",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "métier"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "souris",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "objet"
+        },
+        {
+          "valeur": "gigot"
+        },
+        {
+          "valeur": "périphérique informatique"
+        },
+        {
+          "valeur": "nana"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vol",
+      "gloses": [
+        {
+          "valeur": "voyage"
+        },
+        {
+          "valeur": "crime"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "orange",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "couleur"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "casse",
+      "gloses": [
+        {
+          "valeur": "crime"
+        },
+        {
+          "valeur": "recyclage"
+        },
+        {
+          "valeur": "dégât"
+        },
+        {
+          "valeur": "cambriolage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pièce",
+      "gloses": [
+        {
+          "valeur": "logement"
+        },
+        {
+          "valeur": "monnaie"
+        },
+        {
+          "valeur": "théâtre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chat",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "discussion"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "canette",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "oiseau"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "car",
+      "gloses": [
+        {
+          "valeur": "véhicule"
+        },
+        {
+          "valeur": "doublet Lisp"
+        },
+        {
+          "valeur": "parce que"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "jumelles",
+      "gloses": [
+        {
+          "valeur": "objet"
+        },
+        {
+          "valeur": "soeurs"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cercle",
+      "gloses": [
+        {
+          "valeur": "figure géométrique"
+        },
+        {
+          "valeur": "association"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bridge",
+      "gloses": [
+        {
+          "valeur": "jeu de cartes"
+        },
+        {
+          "valeur": "prothèse dentaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poule",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "femme"
+        },
+        {
+          "valeur": "prostituée"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "argent",
+      "gloses": [
+        {
+          "valeur": "ressource monétaire"
+        },
+        {
+          "valeur": "métal"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "compte",
+      "gloses": [
+        {
+          "valeur": "dénombrer"
+        },
+        {
+          "valeur": "calculer"
+        },
+        {
+          "valeur": "faire confiance"
+        },
+        {
+          "valeur": "tenir pour acquis"
+        },
+        {
+          "valeur": "vérifier"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "salade",
+      "gloses": [
+        {
+          "valeur": "plante"
+        },
+        {
+          "valeur": "casque"
+        },
+        {
+          "valeur": "préparation culinaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "piano",
+      "gloses": [
+        {
+          "valeur": "instrument de musique"
+        },
+        {
+          "valeur": "fourneau"
+        },
+        {
+          "valeur": "doucement"
+        },
+        {
+          "valeur": "ustensile de cuisine"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "casserole",
+      "gloses": [
+        {
+          "valeur": "fourneau"
+        },
+        {
+          "valeur": "ustensile de cuisine"
+        },
+        {
+          "valeur": "réputation"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "décolle",
+      "gloses": [
+        {
+          "valeur": "détacher"
+        },
+        {
+          "valeur": "prendre l'air"
+        },
+        {
+          "valeur": "s'élever"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "piste",
+      "gloses": [
+        {
+          "valeur": "chemin"
+        },
+        {
+          "valeur": "aviation"
+        },
+        {
+          "valeur": "ski"
+        },
+        {
+          "valeur": "sport"
+        },
+        {
+          "valeur": "danse"
+        },
+        {
+          "valeur": "indice"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "défense",
+      "gloses": [
+        {
+          "valeur": "interdiction"
+        },
+        {
+          "valeur": "dent"
+        },
+        {
+          "valeur": "justice"
+        },
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "prêt"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "mûr",
+      "gloses": [
+        {
+          "valeur": "ski"
+        },
+        {
+          "valeur": "justice"
+        },
+        {
+          "valeur": "âge"
+        },
+        {
+          "valeur": "prêt"
+        },
+        {
+          "valeur": "maturité"
+        },
+        {
+          "valeur": "affichage"
+        },
+        {
+          "valeur": "maçonnerie"
+        },
+        {
+          "valeur": "paroi"
+        },
+        {
+          "valeur": "obstacle"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "repasser",
+      "gloses": [
+        {
+          "valeur": "repassage"
+        },
+        {
+          "valeur": "revenir"
+        },
+        {
+          "valeur": "réviser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "portions",
+      "gloses": [
+        {
+          "valeur": "porter"
+        },
+        {
+          "valeur": "part"
+        },
+        {
+          "valeur": "morceau"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fier",
+      "gloses": [
+        {
+          "valeur": "faire confiance"
+        },
+        {
+          "valeur": "fierté"
+        },
+        {
+          "valeur": "hautain"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poster",
+      "gloses": [
+        {
+          "valeur": "envoyer"
+        },
+        {
+          "valeur": "affiche"
+        },
+        {
+          "valeur": "sentinelle"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "est",
+      "gloses": [
+        {
+          "valeur": "être"
+        },
+        {
+          "valeur": "région"
+        },
+        {
+          "valeur": "point cardinal"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dessert",
+      "gloses": [
+        {
+          "valeur": "desservir"
+        },
+        {
+          "valeur": "être défavorable"
+        },
+        {
+          "valeur": "entremets"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "père",
+      "gloses": [
+        {
+          "valeur": "curé"
+        },
+        {
+          "valeur": "géniteur"
+        },
+        {
+          "valeur": "parent"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "roses",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "fleur"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "robes",
+      "gloses": [
+        {
+          "valeur": "pelage"
+        },
+        {
+          "valeur": "vêtement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "personne",
+      "gloses": [
+        {
+          "valeur": "individu"
+        },
+        {
+          "valeur": "quiconque"
+        },
+        {
+          "valeur": "pas une personne"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cœur",
+      "gloses": [
+        {
+          "valeur": "organe"
+        },
+        {
+          "valeur": "forme"
+        },
+        {
+          "valeur": "courage"
+        },
+        {
+          "valeur": "carte à jouer"
+        },
+        {
+          "valeur": "centre"
+        },
+        {
+          "valeur": "affect"
+        },
+        {
+          "valeur": "billet doux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tableau",
+      "gloses": [
+        {
+          "valeur": "peinture"
+        },
+        {
+          "valeur": "tableau noir"
+        },
+        {
+          "valeur": "affichage"
+        },
+        {
+          "valeur": "ensemble de données"
+        },
+        {
+          "valeur": "description"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "café",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "débit de boissons"
+        },
+        {
+          "valeur": "grain"
+        },
+        {
+          "valeur": "parfum"
+        },
+        {
+          "valeur": "moment"
+        },
+        {
+          "valeur": "lieu"
+        },
+        {
+          "valeur": "paquet"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "ouvrage",
+      "gloses": [
+        {
+          "valeur": "livre"
+        },
+        {
+          "valeur": "tâche"
+        },
+        {
+          "valeur": "travaux d'aiguilles"
+        },
+        {
+          "valeur": "construction"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "couper",
+      "gloses": [
+        {
+          "valeur": "découper"
+        },
+        {
+          "valeur": "coupure"
+        },
+        {
+          "valeur": "interrompre"
+        },
+        {
+          "valeur": "couture"
+        },
+        {
+          "valeur": "prendre un raccourci"
+        },
+        {
+          "valeur": "fractionner"
+        },
+        {
+          "valeur": "partie de cartes"
+        },
+        {
+          "valeur": "trancher"
+        },
+        {
+          "valeur": "être coupant"
+        },
+        {
+          "valeur": "châtrer"
+        },
+        {
+          "valeur": "se croiser"
+        },
+        {
+          "valeur": "amputer"
+        },
+        {
+          "valeur": "raccourcir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "champs",
+      "gloses": [
+        {
+          "valeur": "physique"
+        },
+        {
+          "valeur": "agriculture"
+        },
+        {
+          "valeur": "domaine"
+        },
+        {
+          "valeur": "cinéma"
+        },
+        {
+          "valeur": "chirurgie"
+        },
+        {
+          "valeur": "espace"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "suivre",
+      "gloses": [
+        {
+          "valeur": "comprendre"
+        },
+        {
+          "valeur": "succéder à"
+        },
+        {
+          "valeur": "emprunter"
+        },
+        {
+          "valeur": "emboîter le pas"
+        },
+        {
+          "valeur": "filature"
+        },
+        {
+          "valeur": "émission"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "suivi",
+      "gloses": [
+        {
+          "valeur": "succéder à"
+        },
+        {
+          "valeur": "emboîter le pas"
+        },
+        {
+          "valeur": "filature"
+        },
+        {
+          "valeur": "émission"
+        },
+        {
+          "valeur": "compris"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "commandé",
+      "gloses": [
+        {
+          "valeur": "diriger"
+        },
+        {
+          "valeur": "passer commande"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "glace",
+      "gloses": [
+        {
+          "valeur": "miroir"
+        },
+        {
+          "valeur": "crème glacée"
+        },
+        {
+          "valeur": "eau gelée"
+        },
+        {
+          "valeur": "vitre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "verre",
+      "gloses": [
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "matériau"
+        },
+        {
+          "valeur": "contenu"
+        },
+        {
+          "valeur": "optique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "note",
+      "gloses": [
+        {
+          "valeur": "évaluation"
+        },
+        {
+          "valeur": "facture"
+        },
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "nuance"
+        },
+        {
+          "valeur": "écrit"
+        },
+        {
+          "valeur": "papier"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tomate ",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "cocktail"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "TGV",
+      "gloses": [
+        {
+          "valeur": "train"
+        },
+        {
+          "valeur": "cocktail"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "réglé",
+      "gloses": [
+        {
+          "valeur": "payer"
+        },
+        {
+          "valeur": "résoudre"
+        },
+        {
+          "valeur": "réglage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "secrétaire",
+      "gloses": [
+        {
+          "valeur": "métier"
+        },
+        {
+          "valeur": "meuble"
+        },
+        {
+          "valeur": "personne"
+        },
+        {
+          "valeur": "fonction"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "baie",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "porte-fenêtre"
+        },
+        {
+          "valeur": "golfe"
+        },
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "tromperie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "moyenne",
+      "gloses": [
+        {
+          "valeur": "mathématiques"
+        },
+        {
+          "valeur": "intermédiaire"
+        },
+        {
+          "valeur": "scolarité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bar",
+      "gloses": [
+        {
+          "valeur": "débit de boissons"
+        },
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "pression"
+        },
+        {
+          "valeur": "comptoir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "oiseau",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "zizi"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "négligent",
+      "gloses": [
+        {
+          "valeur": "négliger"
+        },
+        {
+          "valeur": "imprévoyant"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "singe ",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "corned-beef"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "triangle ",
+      "gloses": [
+        {
+          "valeur": "figure géométrique"
+        },
+        {
+          "valeur": "instrument de musique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "son ",
+      "gloses": [
+        {
+          "valeur": "bruit"
+        },
+        {
+          "valeur": "céréale"
+        },
+        {
+          "valeur": "le sien"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "baguettes ",
+      "gloses": [
+        {
+          "valeur": "pains"
+        },
+        {
+          "valeur": "morceaux de bois"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "diabolo",
+      "gloses": [
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "jonglerie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "ficelle ",
+      "gloses": [
+        {
+          "valeur": "tour de main"
+        },
+        {
+          "valeur": "pain"
+        },
+        {
+          "valeur": "fil"
+        },
+        {
+          "valeur": "String"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "parent",
+      "gloses": [
+        {
+          "valeur": "orner"
+        },
+        {
+          "valeur": "parenté"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "couvent",
+      "gloses": [
+        {
+          "valeur": "couver"
+        },
+        {
+          "valeur": "monastère"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vis",
+      "gloses": [
+        {
+          "valeur": "voir"
+        },
+        {
+          "valeur": "quincaillerie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "content",
+      "gloses": [
+        {
+          "valeur": "satisfait"
+        },
+        {
+          "valeur": "conter"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cultivé",
+      "gloses": [
+        {
+          "valeur": "agriculture"
+        },
+        {
+          "valeur": "instruit"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "niveau",
+      "gloses": [
+        {
+          "valeur": "hauteur"
+        },
+        {
+          "valeur": "étage"
+        },
+        {
+          "valeur": "compétence"
+        },
+        {
+          "valeur": "jeu"
+        },
+        {
+          "valeur": "position"
+        },
+        {
+          "valeur": "intensité"
+        },
+        {
+          "valeur": "outil"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "excellent",
+      "gloses": [
+        {
+          "valeur": "exceller"
+        },
+        {
+          "valeur": "délicieux"
+        },
+        {
+          "valeur": "remarquable"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "composer",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "dissertation"
+        },
+        {
+          "valeur": "fabriquer"
+        },
+        {
+          "valeur": "arranger"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pot",
+      "gloses": [
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "chance"
+        },
+        {
+          "valeur": "pot d'échappement"
+        },
+        {
+          "valeur": "poterie"
+        },
+        {
+          "valeur": "cannabis"
+        },
+        {
+          "valeur": "mises"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "prendre",
+      "gloses": [
+        {
+          "valeur": "saisir"
+        },
+        {
+          "valeur": "se solidifier"
+        },
+        {
+          "valeur": "capturer"
+        },
+        {
+          "valeur": "passer par"
+        },
+        {
+          "valeur": "choisir"
+        },
+        {
+          "valeur": "consommer"
+        },
+        {
+          "valeur": "embaucher"
+        },
+        {
+          "valeur": "posséder sexuellement"
+        },
+        {
+          "valeur": "acheter"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "terrasse",
+      "gloses": [
+        {
+          "valeur": "bistrot"
+        },
+        {
+          "valeur": "balcon"
+        },
+        {
+          "valeur": "restanque"
+        },
+        {
+          "valeur": "terrasser"
+        },
+        {
+          "valeur": "anéantir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "nouvelle",
+      "gloses": [
+        {
+          "valeur": "information"
+        },
+        {
+          "valeur": "genre littéraire"
+        },
+        {
+          "valeur": "nouvelle venue"
+        },
+        {
+          "valeur": "nouveau"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "affluent",
+      "gloses": [
+        {
+          "valeur": "affluer"
+        },
+        {
+          "valeur": "cours d'eau"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "convient",
+      "gloses": [
+        {
+          "valeur": "convier"
+        },
+        {
+          "valeur": "convenir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "costume",
+      "gloses": [
+        {
+          "valeur": "costard"
+        },
+        {
+          "valeur": "déguisement"
+        },
+        {
+          "valeur": "vêtement folklorique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "raser",
+      "gloses": [
+        {
+          "valeur": "rasage"
+        },
+        {
+          "valeur": "s'ennuyer"
+        },
+        {
+          "valeur": "frôler"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "accrocher",
+      "gloses": [
+        {
+          "valeur": "suspendre"
+        },
+        {
+          "valeur": "cuisson"
+        },
+        {
+          "valeur": "heurter"
+        },
+        {
+          "valeur": "fixer"
+        },
+        {
+          "valeur": "s'intéresser à"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "passant",
+      "gloses": [
+        {
+          "valeur": "passer"
+        },
+        {
+          "valeur": "piéton"
+        },
+        {
+          "valeur": "ceinture"
+        },
+        {
+          "valeur": "fréquenté"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "légende",
+      "gloses": [
+        {
+          "valeur": "personne"
+        },
+        {
+          "valeur": "explication"
+        },
+        {
+          "valeur": "titre"
+        },
+        {
+          "valeur": "racontar"
+        },
+        {
+          "valeur": "récit"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "carte",
+      "gloses": [
+        {
+          "valeur": "carte à jouer"
+        },
+        {
+          "valeur": "carte de crédit"
+        },
+        {
+          "valeur": "carte de géographie"
+        },
+        {
+          "valeur": "carte postale"
+        },
+        {
+          "valeur": "carte de visite"
+        },
+        {
+          "valeur": "carte de membre"
+        },
+        {
+          "valeur": "restaurant"
+        },
+        {
+          "valeur": "ordinateur"
+        },
+        {
+          "valeur": "plan"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "claire",
+      "gloses": [
+        {
+          "valeur": "limpide"
+        },
+        {
+          "valeur": "tonalité"
+        },
+        {
+          "valeur": "intelligible"
+        },
+        {
+          "valeur": "évident"
+        },
+        {
+          "valeur": "éclairé"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "nez ",
+      "gloses": [
+        {
+          "valeur": "anatomie"
+        },
+        {
+          "valeur": "partie avant"
+        },
+        {
+          "valeur": "intuition"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pistolets",
+      "gloses": [
+        {
+          "valeur": "arme à feu"
+        },
+        {
+          "valeur": "urinal"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sardine",
+      "gloses": [
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "piquet"
+        },
+        {
+          "valeur": "galon"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "expédient",
+      "gloses": [
+        {
+          "valeur": "expédier"
+        },
+        {
+          "valeur": "moyen"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "violent",
+      "gloses": [
+        {
+          "valeur": "intense"
+        },
+        {
+          "valeur": "agressif"
+        },
+        {
+          "valeur": "agression sexuelle"
+        },
+        {
+          "valeur": "contrevenir à"
+        },
+        {
+          "valeur": "profaner"
+        },
+        {
+          "valeur": "trahir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "primaires",
+      "gloses": [
+        {
+          "valeur": "école élémentaire"
+        },
+        {
+          "valeur": "élections"
+        },
+        {
+          "valeur": "simpliste"
+        },
+        {
+          "valeur": "primitif"
+        },
+        {
+          "valeur": "initial"
+        },
+        {
+          "valeur": "élèves d'école élémentaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "maternelles",
+      "gloses": [
+        {
+          "valeur": "élèves d'école maternelle"
+        },
+        {
+          "valeur": "école maternelle"
+        },
+        {
+          "valeur": "mère"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cour",
+      "gloses": [
+        {
+          "valeur": "monarchie"
+        },
+        {
+          "valeur": "tribunal"
+        },
+        {
+          "valeur": "école"
+        },
+        {
+          "valeur": "parlement"
+        },
+        {
+          "valeur": "drague"
+        },
+        {
+          "valeur": "patio"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "maternelle",
+      "gloses": [
+        {
+          "valeur": "mère"
+        },
+        {
+          "valeur": "école"
+        },
+        {
+          "valeur": "origine"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "maîtresse",
+      "gloses": [
+        {
+          "valeur": "institutrice"
+        },
+        {
+          "valeur": "amante"
+        },
+        {
+          "valeur": "patronne"
+        },
+        {
+          "valeur": "animal domestique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tue",
+      "gloses": [
+        {
+          "valeur": "tuer"
+        },
+        {
+          "valeur": "se taire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "rue",
+      "gloses": [
+        {
+          "valeur": "plante"
+        },
+        {
+          "valeur": "ruer"
+        },
+        {
+          "valeur": "voie de circulation"
+        },
+        {
+          "valeur": "peuple"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dame",
+      "gloses": [
+        {
+          "valeur": "femme"
+        },
+        {
+          "valeur": "damer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sol",
+      "gloses": [
+        {
+          "valeur": "note de musique"
+        },
+        {
+          "valeur": "terre"
+        },
+        {
+          "valeur": "plancher"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "surfe",
+      "gloses": [
+        {
+          "valeur": "glisse"
+        },
+        {
+          "valeur": "internet"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bouteille ",
+      "gloses": [
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "contenu"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "trait",
+      "gloses": [
+        {
+          "valeur": "ligne"
+        },
+        {
+          "valeur": "flèche"
+        },
+        {
+          "valeur": "rasade"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "englouti",
+      "gloses": [
+        {
+          "valeur": "submerger"
+        },
+        {
+          "valeur": "consumer"
+        },
+        {
+          "valeur": "manger"
+        },
+        {
+          "valeur": "boire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "âne",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "andouille"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "électricien",
+      "gloses": [
+        {
+          "valeur": "substance"
+        },
+        {
+          "valeur": "électricité"
+        },
+        {
+          "valeur": "unité monétaire"
+        },
+        {
+          "valeur": "personne s'occupant de l'électri"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "gourmet",
+      "gloses": [
+        {
+          "valeur": "vin"
+        },
+        {
+          "valeur": "nourriture"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "faille",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "falloir"
+        },
+        {
+          "valeur": "défaut"
+        },
+        {
+          "valeur": "étoffe"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "charlotte",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "coiffure"
+        },
+        {
+          "valeur": "pomme de terre"
+        },
+        {
+          "valeur": "fraise"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "feuilles",
+      "gloses": [
+        {
+          "valeur": "arbre"
+        },
+        {
+          "valeur": "papier"
+        },
+        {
+          "valeur": "journal"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "charlottes",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "coiffures"
+        },
+        {
+          "valeur": "fraises"
+        },
+        {
+          "valeur": "pommes de terre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "feuille",
+      "gloses": [
+        {
+          "valeur": "arbre"
+        },
+        {
+          "valeur": "papier"
+        },
+        {
+          "valeur": "journal"
+        },
+        {
+          "valeur": "lamelle"
+        },
+        {
+          "valeur": "oreille"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "loupe",
+      "gloses": [
+        {
+          "valeur": "optique"
+        },
+        {
+          "valeur": "louper"
+        },
+        {
+          "valeur": "forge"
+        },
+        {
+          "valeur": "joailllerie"
+        },
+        {
+          "valeur": "botanique"
+        },
+        {
+          "valeur": "kyste"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "mot",
+      "gloses": [
+        {
+          "valeur": "terme"
+        },
+        {
+          "valeur": "texte"
+        },
+        {
+          "valeur": "chose à dire"
+        },
+        {
+          "valeur": "message"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "failles",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "défaut"
+        },
+        {
+          "valeur": "étoffe"
+        },
+        {
+          "valeur": "géologie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "paille",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "défaut"
+        },
+        {
+          "valeur": "tuyau"
+        },
+        {
+          "valeur": "foin"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "demeure",
+      "gloses": [
+        {
+          "valeur": "demeurer"
+        },
+        {
+          "valeur": "maison"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "soirées",
+      "gloses": [
+        {
+          "valeur": "soir"
+        },
+        {
+          "valeur": "réception"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "rochers",
+      "gloses": [
+        {
+          "valeur": "métal"
+        },
+        {
+          "valeur": "bloc de pierre"
+        },
+        {
+          "valeur": "sucrerie"
+        },
+        {
+          "valeur": "oreille interne"
+        },
+        {
+          "valeur": "personne insensible"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "hôtes",
+      "gloses": [
+        {
+          "valeur": "parasitisme"
+        },
+        {
+          "valeur": "invité"
+        },
+        {
+          "valeur": "maître de maison"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "badine",
+      "gloses": [
+        {
+          "valeur": "badiner"
+        },
+        {
+          "valeur": "cravache"
+        },
+        {
+          "valeur": "badin"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "monture",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "lunettes"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "nerveuse",
+      "gloses": [
+        {
+          "valeur": "viande"
+        },
+        {
+          "valeur": "nervosité"
+        },
+        {
+          "valeur": "nerf"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "banane ",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "coiffure"
+        },
+        {
+          "valeur": "sacoche"
+        },
+        {
+          "valeur": "hélicoptère"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "blouson noir",
+      "gloses": [
+        {
+          "valeur": "vêtement"
+        },
+        {
+          "valeur": "voyou"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "épluche",
+      "gloses": [
+        {
+          "valeur": "examiner"
+        },
+        {
+          "valeur": "peler"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pompes",
+      "gloses": [
+        {
+          "valeur": "chaussures"
+        },
+        {
+          "valeur": "appareil hydraulique"
+        },
+        {
+          "valeur": "pompe à essence"
+        },
+        {
+          "valeur": "culture physique"
+        },
+        {
+          "valeur": "antisèche"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pompe",
+      "gloses": [
+        {
+          "valeur": "appareil hydraulique"
+        },
+        {
+          "valeur": "antisèche"
+        },
+        {
+          "valeur": "chaussure"
+        },
+        {
+          "valeur": "exercice physique"
+        },
+        {
+          "valeur": "appareil de gonflage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "examen",
+      "gloses": [
+        {
+          "valeur": "scolarité"
+        },
+        {
+          "valeur": "médical"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sucre",
+      "gloses": [
+        {
+          "valeur": "substance"
+        },
+        {
+          "valeur": "électricité"
+        },
+        {
+          "valeur": "programmation informatique"
+        },
+        {
+          "valeur": "chimie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "permis",
+      "gloses": [
+        {
+          "valeur": "permettre"
+        },
+        {
+          "valeur": "autorisation"
+        },
+        {
+          "valeur": "permis de conduire"
+        },
+        {
+          "valeur": "autorisé"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "passer",
+      "gloses": [
+        {
+          "valeur": "examen"
+        },
+        {
+          "valeur": "franchir"
+        },
+        {
+          "valeur": "mourir"
+        },
+        {
+          "valeur": "se décolorer"
+        },
+        {
+          "valeur": "être acceptable"
+        },
+        {
+          "valeur": "filtrer"
+        },
+        {
+          "valeur": "omettre"
+        },
+        {
+          "valeur": "être admis"
+        },
+        {
+          "valeur": "être diffusé"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "conduite",
+      "gloses": [
+        {
+          "valeur": "véhicule"
+        },
+        {
+          "valeur": "direction"
+        },
+        {
+          "valeur": "canalisation"
+        },
+        {
+          "valeur": "comportement"
+        },
+        {
+          "valeur": "accompagnement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "renvoi",
+      "gloses": [
+        {
+          "valeur": "rot"
+        },
+        {
+          "valeur": "éviction"
+        },
+        {
+          "valeur": "référence"
+        },
+        {
+          "valeur": "licenciement"
+        },
+        {
+          "valeur": "ré-expédition"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "rompre",
+      "gloses": [
+        {
+          "valeur": "interrompre"
+        },
+        {
+          "valeur": "se séparer"
+        },
+        {
+          "valeur": "se briser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "quartier",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "partie de ville"
+        },
+        {
+          "valeur": "militaire"
+        },
+        {
+          "valeur": "lune"
+        },
+        {
+          "valeur": "pitié"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "butor",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "grossier personnage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "baignait",
+      "gloses": [
+        {
+          "valeur": "donner un bain"
+        },
+        {
+          "valeur": "envelopper"
+        },
+        {
+          "valeur": "être immergé"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "clarté",
+      "gloses": [
+        {
+          "valeur": "lumière"
+        },
+        {
+          "valeur": "intelligibilité"
+        },
+        {
+          "valeur": "luminosité"
+        },
+        {
+          "valeur": "transparence"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vers",
+      "gloses": [
+        {
+          "valeur": "asticots"
+        },
+        {
+          "valeur": "poésie"
+        },
+        {
+          "valeur": "en direction de"
+        },
+        {
+          "valeur": "aux environs de"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "verres",
+      "gloses": [
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "lunettes"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "étalons",
+      "gloses": [
+        {
+          "valeur": "référence"
+        },
+        {
+          "valeur": "étaler"
+        },
+        {
+          "valeur": "cheval"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "percherons",
+      "gloses": [
+        {
+          "valeur": "percher"
+        },
+        {
+          "valeur": "cheval de trait"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "hommes",
+      "gloses": [
+        {
+          "valeur": "personnes de sexe masculin"
+        },
+        {
+          "valeur": "soldats"
+        },
+        {
+          "valeur": "êtres humains"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cochon ",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "viande"
+        },
+        {
+          "valeur": "tirelire"
+        },
+        {
+          "valeur": "personne sale"
+        },
+        {
+          "valeur": "personne obscène"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "frégate",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "navire"
+        },
+        {
+          "valeur": "voiture"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "impact",
+      "gloses": [
+        {
+          "valeur": "choc"
+        },
+        {
+          "valeur": "conséquence"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "frégates",
+      "gloses": [
+        {
+          "valeur": "navires"
+        },
+        {
+          "valeur": "oiseaux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "affection",
+      "gloses": [
+        {
+          "valeur": "sentiment"
+        },
+        {
+          "valeur": "maladie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "scanner",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "radiologie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "foies",
+      "gloses": [
+        {
+          "valeur": "anatomie"
+        },
+        {
+          "valeur": "gastronomie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dîner",
+      "gloses": [
+        {
+          "valeur": "repas"
+        },
+        {
+          "valeur": "invitation"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pied",
+      "gloses": [
+        {
+          "valeur": "anatomie"
+        },
+        {
+          "valeur": "botanique"
+        },
+        {
+          "valeur": "poésie"
+        },
+        {
+          "valeur": "pied d'objet"
+        },
+        {
+          "valeur": "unité de mesure"
+        },
+        {
+          "valeur": "zoologie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aile",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "automobile"
+        },
+        {
+          "valeur": "bâtiment"
+        },
+        {
+          "valeur": "morceau de viande"
+        },
+        {
+          "valeur": "partie plane d'un avion"
+        },
+        {
+          "valeur": "élément de carrosserie"
+        },
+        {
+          "valeur": "organe des oiseaux"
+        },
+        {
+          "valeur": "côté d'une surface sportive"
+        },
+        {
+          "valeur": "côté d'une chose"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "livres",
+      "gloses": [
+        {
+          "valeur": "monnaie"
+        },
+        {
+          "valeur": "lecture"
+        },
+        {
+          "valeur": "demi-kilogramme"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "thons",
+      "gloses": [
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "fille laide"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pris",
+      "gloses": [
+        {
+          "valeur": "saisir"
+        },
+        {
+          "valeur": "capturer"
+        },
+        {
+          "valeur": "choisir"
+        },
+        {
+          "valeur": "posséder sexuellement"
+        },
+        {
+          "valeur": "monter dedans"
+        },
+        {
+          "valeur": "durcir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "clair",
+      "gloses": [
+        {
+          "valeur": "luminosité"
+        },
+        {
+          "valeur": "compréhensible"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "coupe",
+      "gloses": [
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "blessure"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "loup",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "défaut"
+        },
+        {
+          "valeur": "activité sexuelle"
+        },
+        {
+          "valeur": "sexe"
+        },
+        {
+          "valeur": "masque"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "corse",
+      "gloses": [
+        {
+          "valeur": "île de Beauté"
+        },
+        {
+          "valeur": "habitante"
+        },
+        {
+          "valeur": "geste technique du volleyball"
+        },
+        {
+          "valeur": "difficile"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "plonger",
+      "gloses": [
+        {
+          "valeur": "descendre"
+        },
+        {
+          "valeur": "s'immerger"
+        },
+        {
+          "valeur": "se jeter"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "déséquilibre",
+      "gloses": [
+        {
+          "valeur": "instabilité psychologique"
+        },
+        {
+          "valeur": "position instable"
+        },
+        {
+          "valeur": "instabilité kinétique"
+        },
+        {
+          "valeur": "inégalité"
+        },
+        {
+          "valeur": "situation instable"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "roucoulette",
+      "gloses": [
+        {
+          "valeur": "geste technique du handball"
+        },
+        {
+          "valeur": "parade amoureuse"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poulet",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "viande"
+        },
+        {
+          "valeur": "policier"
+        },
+        {
+          "valeur": "billet doux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "retraite",
+      "gloses": [
+        {
+          "valeur": "militaire"
+        },
+        {
+          "valeur": "cessation d'activité"
+        },
+        {
+          "valeur": "isolement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "exercice",
+      "gloses": [
+        {
+          "valeur": "sport"
+        },
+        {
+          "valeur": "militaire"
+        },
+        {
+          "valeur": "scolaire"
+        },
+        {
+          "valeur": "usage"
+        },
+        {
+          "valeur": "finance"
+        },
+        {
+          "valeur": "pratique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chatte",
+      "gloses": [
+        {
+          "valeur": "sexe de la femme"
+        },
+        {
+          "valeur": "femelle du chat"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "canapé",
+      "gloses": [
+        {
+          "valeur": "petit four"
+        },
+        {
+          "valeur": "sofa"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pomme",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "stupide"
+        },
+        {
+          "valeur": "diffuseur"
+        },
+        {
+          "valeur": "couleur verte"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chien",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "arme à feu"
+        },
+        {
+          "valeur": "tarot"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "court",
+      "gloses": [
+        {
+          "valeur": "tennis"
+        },
+        {
+          "valeur": "courir"
+        },
+        {
+          "valeur": "durée"
+        },
+        {
+          "valeur": "taille"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "balle",
+      "gloses": [
+        {
+          "valeur": "monnaie"
+        },
+        {
+          "valeur": "arme à feu"
+        },
+        {
+          "valeur": "foin"
+        },
+        {
+          "valeur": "ballon"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "lettre",
+      "gloses": [
+        {
+          "valeur": "courrier"
+        },
+        {
+          "valeur": "alphabet"
+        },
+        {
+          "valeur": "caractère"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "courte",
+      "gloses": [
+        {
+          "valeur": "durée"
+        },
+        {
+          "valeur": "dimension"
+        },
+        {
+          "valeur": "brièveté"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chapitre",
+      "gloses": [
+        {
+          "valeur": "partie"
+        },
+        {
+          "valeur": "religion"
+        },
+        {
+          "valeur": "sujet"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cuisiner",
+      "gloses": [
+        {
+          "valeur": "faire la cuisine"
+        },
+        {
+          "valeur": "interroger"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cracher",
+      "gloses": [
+        {
+          "valeur": "dire"
+        },
+        {
+          "valeur": "avouer"
+        },
+        {
+          "valeur": "salive"
+        },
+        {
+          "valeur": "expectorer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "identité",
+      "gloses": [
+        {
+          "valeur": "mathématiques"
+        },
+        {
+          "valeur": "similitude"
+        },
+        {
+          "valeur": "état-civil"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poulets",
+      "gloses": [
+        {
+          "valeur": "policier"
+        },
+        {
+          "valeur": "volaille"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "mulot",
+      "gloses": [
+        {
+          "valeur": "campagnol"
+        },
+        {
+          "valeur": "souris d'ordinateur"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chaton",
+      "gloses": [
+        {
+          "valeur": "joailllerie"
+        },
+        {
+          "valeur": "botanique"
+        },
+        {
+          "valeur": "chat"
+        },
+        {
+          "valeur": "terme d'affection"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "câble",
+      "gloses": [
+        {
+          "valeur": "électricité"
+        },
+        {
+          "valeur": "message"
+        },
+        {
+          "valeur": "cordage"
+        },
+        {
+          "valeur": "télévision"
+        },
+        {
+          "valeur": "mesure de longueur"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "langue",
+      "gloses": [
+        {
+          "valeur": "forme"
+        },
+        {
+          "valeur": "gastronomie"
+        },
+        {
+          "valeur": "langage"
+        },
+        {
+          "valeur": "organe musculaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "alimentation",
+      "gloses": [
+        {
+          "valeur": "nourriture"
+        },
+        {
+          "valeur": "dispositif"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "duvet",
+      "gloses": [
+        {
+          "valeur": "poils"
+        },
+        {
+          "valeur": "sac de couchage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "PC",
+      "gloses": [
+        {
+          "valeur": "ordinateur"
+        },
+        {
+          "valeur": "parti communiste"
+        },
+        {
+          "valeur": "poste de commandement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cruches",
+      "gloses": [
+        {
+          "valeur": "récipents"
+        },
+        {
+          "valeur": "filles sottes"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "oies",
+      "gloses": [
+        {
+          "valeur": "oiseaux"
+        },
+        {
+          "valeur": "filles sottes"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "thon",
+      "gloses": [
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "fille laide"
+        },
+        {
+          "valeur": "aliment"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aubergine",
+      "gloses": [
+        {
+          "valeur": "plante"
+        },
+        {
+          "valeur": "légume"
+        },
+        {
+          "valeur": "policière"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dragons",
+      "gloses": [
+        {
+          "valeur": "animal fantastique"
+        },
+        {
+          "valeur": "soldat"
+        },
+        {
+          "valeur": "enfant turbulent"
+        },
+        {
+          "valeur": "reptile"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chargèrent",
+      "gloses": [
+        {
+          "valeur": "arme à feu"
+        },
+        {
+          "valeur": "assaut"
+        },
+        {
+          "valeur": "accabler"
+        },
+        {
+          "valeur": "poids"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sabre",
+      "gloses": [
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "arme"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "perçant",
+      "gloses": [
+        {
+          "valeur": "strident"
+        },
+        {
+          "valeur": "percer"
+        },
+        {
+          "valeur": "inquisiteur"
+        },
+        {
+          "valeur": "regard"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bouchon",
+      "gloses": [
+        {
+          "valeur": "restaurant"
+        },
+        {
+          "valeur": "bouteille"
+        },
+        {
+          "valeur": "embouteillage"
+        },
+        {
+          "valeur": "pêche à la ligne"
+        },
+        {
+          "valeur": "cochonnet"
+        },
+        {
+          "valeur": "tampon"
+        },
+        {
+          "valeur": "cérumen"
+        },
+        {
+          "valeur": "plomberie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "ondes",
+      "gloses": [
+        {
+          "valeur": "radio"
+        },
+        {
+          "valeur": "eaux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tentes",
+      "gloses": [
+        {
+          "valeur": "tenter"
+        },
+        {
+          "valeur": "camping"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sardines",
+      "gloses": [
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "piquet"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "four",
+      "gloses": [
+        {
+          "valeur": "appareil électroménager"
+        },
+        {
+          "valeur": "échec"
+        },
+        {
+          "valeur": "céramique"
+        },
+        {
+          "valeur": "endroit chaud"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "logement",
+      "gloses": [
+        {
+          "valeur": "habitation"
+        },
+        {
+          "valeur": "cavité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fond",
+      "gloses": [
+        {
+          "valeur": "sport"
+        },
+        {
+          "valeur": "position"
+        },
+        {
+          "valeur": "profondeur"
+        },
+        {
+          "valeur": "fondre"
+        },
+        {
+          "valeur": "art culinaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "niche",
+      "gloses": [
+        {
+          "valeur": "chien"
+        },
+        {
+          "valeur": "renfoncement"
+        },
+        {
+          "valeur": "écologie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sculpture",
+      "gloses": [
+        {
+          "valeur": "art"
+        },
+        {
+          "valeur": "statue"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dépliant",
+      "gloses": [
+        {
+          "valeur": "déplier"
+        },
+        {
+          "valeur": "prospectus"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "siège",
+      "gloses": [
+        {
+          "valeur": "meuble"
+        },
+        {
+          "valeur": "blocus"
+        },
+        {
+          "valeur": "siéger"
+        },
+        {
+          "valeur": "postérieur"
+        },
+        {
+          "valeur": "siège social"
+        },
+        {
+          "valeur": "localisation"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fabrique",
+      "gloses": [
+        {
+          "valeur": "fabriquer"
+        },
+        {
+          "valeur": "usine"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pipes",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "tabac"
+        },
+        {
+          "valeur": "fellation"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "ampoule",
+      "gloses": [
+        {
+          "valeur": "lumière"
+        },
+        {
+          "valeur": "cloque"
+        },
+        {
+          "valeur": "fiole"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aiguille",
+      "gloses": [
+        {
+          "valeur": "aiguille à coudre"
+        },
+        {
+          "valeur": "montre"
+        },
+        {
+          "valeur": "conifère"
+        },
+        {
+          "valeur": "seringue"
+        },
+        {
+          "valeur": "montagne"
+        },
+        {
+          "valeur": "aiguille à tricoter"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "rouillée",
+      "gloses": [
+        {
+          "valeur": "corrosion"
+        },
+        {
+          "valeur": "papillon"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "investissant ",
+      "gloses": [
+        {
+          "valeur": "finance"
+        },
+        {
+          "valeur": "envahir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "centre",
+      "gloses": [
+        {
+          "valeur": "sport"
+        },
+        {
+          "valeur": "milieu"
+        },
+        {
+          "valeur": "centre-ville"
+        },
+        {
+          "valeur": "sensibilité politique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "lueur",
+      "gloses": [
+        {
+          "valeur": "lumière"
+        },
+        {
+          "valeur": "apparence"
+        },
+        {
+          "valeur": "manifestation"
+        },
+        {
+          "valeur": "petite quantité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chassent",
+      "gloses": [
+        {
+          "valeur": "chasseur"
+        },
+        {
+          "valeur": "faire partir"
+        },
+        {
+          "valeur": "rechercher"
+        },
+        {
+          "valeur": "éjecter"
+        },
+        {
+          "valeur": "dissiper"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "représentants",
+      "gloses": [
+        {
+          "valeur": "représenter"
+        },
+        {
+          "valeur": "mandataire"
+        },
+        {
+          "valeur": "voyageur de commerce"
+        },
+        {
+          "valeur": "membre"
+        },
+        {
+          "valeur": "spécimen"
+        },
+        {
+          "valeur": "porte-parole"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "classe",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "catégorie"
+        },
+        {
+          "valeur": "enseignement"
+        },
+        {
+          "valeur": "taxonomie"
+        },
+        {
+          "valeur": "distingué"
+        },
+        {
+          "valeur": "transports"
+        },
+        {
+          "valeur": "groupe social"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "zones",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "anatomie"
+        },
+        {
+          "valeur": "géologie"
+        },
+        {
+          "valeur": "portion de l'espace"
+        },
+        {
+          "valeur": "urbanisme"
+        },
+        {
+          "valeur": "bazar"
+        },
+        {
+          "valeur": "quartier défavorisé"
+        },
+        {
+          "valeur": "astronomie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "périphériques",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "voie de circulation"
+        },
+        {
+          "valeur": "périurbain"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "soignée",
+      "gloses": [
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "bichonner"
+        },
+        {
+          "valeur": "fait avec soin"
+        },
+        {
+          "valeur": "raffinée"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dépression",
+      "gloses": [
+        {
+          "valeur": "anatomie"
+        },
+        {
+          "valeur": "géographie"
+        },
+        {
+          "valeur": "météorologie"
+        },
+        {
+          "valeur": "état dépressif"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tenue",
+      "gloses": [
+        {
+          "valeur": "tenir"
+        },
+        {
+          "valeur": "habillement"
+        },
+        {
+          "valeur": "prolongée"
+        },
+        {
+          "valeur": "éduquée"
+        },
+        {
+          "valeur": "obligée"
+        },
+        {
+          "valeur": "dignité"
+        },
+        {
+          "valeur": "réunion"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "trompés",
+      "gloses": [
+        {
+          "valeur": "faire erreur"
+        },
+        {
+          "valeur": "adultère"
+        },
+        {
+          "valeur": "tahis"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "se tromper",
+      "gloses": [
+        {
+          "valeur": "faire erreur"
+        },
+        {
+          "valeur": "adultère"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cheville",
+      "gloses": [
+        {
+          "valeur": "anatomie"
+        },
+        {
+          "valeur": "menuiserie"
+        },
+        {
+          "valeur": "boucherie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vidé",
+      "gloses": [
+        {
+          "valeur": "expulser"
+        },
+        {
+          "valeur": "éviscérer"
+        },
+        {
+          "valeur": "exténuer"
+        },
+        {
+          "valeur": "rendre vide"
+        },
+        {
+          "valeur": "finir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "investi",
+      "gloses": [
+        {
+          "valeur": "finance"
+        },
+        {
+          "valeur": "envahir"
+        },
+        {
+          "valeur": "dignité"
+        },
+        {
+          "valeur": "cerner"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "affaire",
+      "gloses": [
+        {
+          "valeur": "possession"
+        },
+        {
+          "valeur": "litige"
+        },
+        {
+          "valeur": "entreprise"
+        },
+        {
+          "valeur": "scandale"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "rendu",
+      "gloses": [
+        {
+          "valeur": "vomir"
+        },
+        {
+          "valeur": "faire devenir"
+        },
+        {
+          "valeur": "redonner"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "costumes",
+      "gloses": [
+        {
+          "valeur": "costard"
+        },
+        {
+          "valeur": "déguisement"
+        },
+        {
+          "valeur": "tenue folklorique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "oie blanche",
+      "gloses": [
+        {
+          "valeur": "fille sotte"
+        },
+        {
+          "valeur": "volatile"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "se présenter",
+      "gloses": [
+        {
+          "valeur": "état-civil"
+        },
+        {
+          "valeur": "élection"
+        },
+        {
+          "valeur": "survenir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "exploitant",
+      "gloses": [
+        {
+          "valeur": "se servir de"
+        },
+        {
+          "valeur": "mettre en valeur"
+        },
+        {
+          "valeur": "esclavage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "campagne",
+      "gloses": [
+        {
+          "valeur": "élections"
+        },
+        {
+          "valeur": "militaire"
+        },
+        {
+          "valeur": "zone rurale"
+        },
+        {
+          "valeur": "publicité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "thème",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "sujet"
+        },
+        {
+          "valeur": "traduction"
+        },
+        {
+          "valeur": "astrologie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "se pose",
+      "gloses": [
+        {
+          "valeur": "atterrir"
+        },
+        {
+          "valeur": "question"
+        },
+        {
+          "valeur": "passer pour"
+        },
+        {
+          "valeur": "faire une pause"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "presse",
+      "gloses": [
+        {
+          "valeur": "presser"
+        },
+        {
+          "valeur": "media"
+        },
+        {
+          "valeur": "imprimerie"
+        },
+        {
+          "valeur": "appareil"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pouvoir",
+      "gloses": [
+        {
+          "valeur": "être capable"
+        },
+        {
+          "valeur": "risquer"
+        },
+        {
+          "valeur": "procuration"
+        },
+        {
+          "valeur": "autorité"
+        },
+        {
+          "valeur": "politique"
+        },
+        {
+          "valeur": "avoir la permission"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "écrans",
+      "gloses": [
+        {
+          "valeur": "cinéma"
+        },
+        {
+          "valeur": "moniteur"
+        },
+        {
+          "valeur": "protection"
+        },
+        {
+          "valeur": "interface d'affichage"
+        },
+        {
+          "valeur": "crème solaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "répandus",
+      "gloses": [
+        {
+          "valeur": "diffusé"
+        },
+        {
+          "valeur": "renversé"
+        },
+        {
+          "valeur": "fréquent"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "buse",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "canalisation"
+        },
+        {
+          "valeur": "idiot"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "répandu",
+      "gloses": [
+        {
+          "valeur": "diffusé"
+        },
+        {
+          "valeur": "fréquent"
+        },
+        {
+          "valeur": "renverser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "écran",
+      "gloses": [
+        {
+          "valeur": "cinéma"
+        },
+        {
+          "valeur": "moniteur"
+        },
+        {
+          "valeur": "protection"
+        },
+        {
+          "valeur": "interface d'affichage"
+        },
+        {
+          "valeur": "crème solaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "serviette",
+      "gloses": [
+        {
+          "valeur": "sacoche"
+        },
+        {
+          "valeur": "serviette de table"
+        },
+        {
+          "valeur": "serviette hygiénique"
+        },
+        {
+          "valeur": "serviette de toilette"
+        },
+        {
+          "valeur": "serviette de bain"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "lait",
+      "gloses": [
+        {
+          "valeur": "aliment"
+        },
+        {
+          "valeur": "suc végétal"
+        },
+        {
+          "valeur": "liquide blanc"
+        },
+        {
+          "valeur": "cosmétique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "végétal",
+      "gloses": [
+        {
+          "valeur": "plante"
+        },
+        {
+          "valeur": "relatif aux végétaux"
+        },
+        {
+          "valeur": "d'origine végétale"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vache",
+      "gloses": [
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "viande"
+        },
+        {
+          "valeur": "mammifère"
+        },
+        {
+          "valeur": "pas sympa"
+        },
+        {
+          "valeur": "fromage"
+        },
+        {
+          "valeur": "cartable"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cuisine",
+      "gloses": [
+        {
+          "valeur": "art culinaire"
+        },
+        {
+          "valeur": "cuisiner"
+        },
+        {
+          "valeur": "pièce"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "disque",
+      "gloses": [
+        {
+          "valeur": "sport"
+        },
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "microsillon"
+        },
+        {
+          "valeur": "géométrie"
+        },
+        {
+          "valeur": "objet en forme de disque"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "coton",
+      "gloses": [
+        {
+          "valeur": "plante"
+        },
+        {
+          "valeur": "difficile"
+        },
+        {
+          "valeur": "textile"
+        },
+        {
+          "valeur": "fibre"
+        },
+        {
+          "valeur": "ouate"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "soucoupe",
+      "gloses": [
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "ovni"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "minou",
+      "gloses": [
+        {
+          "valeur": "sexe"
+        },
+        {
+          "valeur": "chat"
+        },
+        {
+          "valeur": "terme affectueux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "Se reproduire",
+      "gloses": [
+        {
+          "valeur": "se produire à nouveau"
+        },
+        {
+          "valeur": "sexualité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "débouche sur",
+      "gloses": [
+        {
+          "valeur": "lieu"
+        },
+        {
+          "valeur": "conséquence"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "appauvrissement",
+      "gloses": [
+        {
+          "valeur": "diminution"
+        },
+        {
+          "valeur": "perte de diversité"
+        },
+        {
+          "valeur": "perte de ressources"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "patrimoine",
+      "gloses": [
+        {
+          "valeur": "ensemble des biens"
+        },
+        {
+          "valeur": "hérédité"
+        },
+        {
+          "valeur": "bien commun"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chemise",
+      "gloses": [
+        {
+          "valeur": "vêtement"
+        },
+        {
+          "valeur": "dossier"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "composé",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "constitué"
+        },
+        {
+          "valeur": "rédigé"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vieux",
+      "gloses": [
+        {
+          "valeur": "âge"
+        },
+        {
+          "valeur": "usage"
+        },
+        {
+          "valeur": "personne âgée"
+        },
+        {
+          "valeur": "ancien"
+        },
+        {
+          "valeur": "père"
+        },
+        {
+          "valeur": "démodé"
+        },
+        {
+          "valeur": "de longue date"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pêche",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "action de pêcher"
+        },
+        {
+          "valeur": "vitalité"
+        },
+        {
+          "valeur": "coup"
+        },
+        {
+          "valeur": "étron"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "moules",
+      "gloses": [
+        {
+          "valeur": "ustensile de cuisine"
+        },
+        {
+          "valeur": "chance"
+        },
+        {
+          "valeur": "sexe"
+        },
+        {
+          "valeur": "mollusque"
+        },
+        {
+          "valeur": "moulage"
+        },
+        {
+          "valeur": "mouler"
+        },
+        {
+          "valeur": "sexe féminin"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vue",
+      "gloses": [
+        {
+          "valeur": "vision"
+        },
+        {
+          "valeur": "façon de voir"
+        },
+        {
+          "valeur": "projet"
+        },
+        {
+          "valeur": "panorama"
+        },
+        {
+          "valeur": "photo"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "panoramique",
+      "gloses": [
+        {
+          "valeur": "cinéma"
+        },
+        {
+          "valeur": "radiographie"
+        },
+        {
+          "valeur": "très large"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "réaction",
+      "gloses": [
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "chimie"
+        },
+        {
+          "valeur": "comportement"
+        },
+        {
+          "valeur": "réacteur"
+        },
+        {
+          "valeur": "propos"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "traduit",
+      "gloses": [
+        {
+          "valeur": "justice"
+        },
+        {
+          "valeur": "langue"
+        },
+        {
+          "valeur": "signifier"
+        },
+        {
+          "valeur": "illustrer"
+        },
+        {
+          "valeur": "être la conséquence de"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "singulier",
+      "gloses": [
+        {
+          "valeur": "unique"
+        },
+        {
+          "valeur": "grammaire"
+        },
+        {
+          "valeur": "étonnant"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "défaut",
+      "gloses": [
+        {
+          "valeur": "imperfection"
+        },
+        {
+          "valeur": "manque"
+        },
+        {
+          "valeur": "anomalie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "milieux",
+      "gloses": [
+        {
+          "valeur": "centre"
+        },
+        {
+          "valeur": "classe sociale"
+        },
+        {
+          "valeur": "environnement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "voiture",
+      "gloses": [
+        {
+          "valeur": "train"
+        },
+        {
+          "valeur": "automobile"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bateau",
+      "gloses": [
+        {
+          "valeur": "trottoir surbaissé"
+        },
+        {
+          "valeur": "embarcation"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "lentille",
+      "gloses": [
+        {
+          "valeur": "optique"
+        },
+        {
+          "valeur": "graine"
+        },
+        {
+          "valeur": "grain de beauté"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chercher",
+      "gloses": [
+        {
+          "valeur": "s'efforcer de trouver"
+        },
+        {
+          "valeur": "réfléchir"
+        },
+        {
+          "valeur": "taquiner"
+        },
+        {
+          "valeur": "provoquer"
+        },
+        {
+          "valeur": "tenter d'obtenir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "regarde",
+      "gloses": [
+        {
+          "valeur": "examiner"
+        },
+        {
+          "valeur": "être spectateur"
+        },
+        {
+          "valeur": "être tourné vers"
+        },
+        {
+          "valeur": "observer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "protocole",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "diplomatie"
+        },
+        {
+          "valeur": "cérémonial"
+        },
+        {
+          "valeur": "traité"
+        },
+        {
+          "valeur": "expérience"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "véreux",
+      "gloses": [
+        {
+          "valeur": "plein de vers"
+        },
+        {
+          "valeur": "corrompu"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "boîte",
+      "gloses": [
+        {
+          "valeur": "entreprise"
+        },
+        {
+          "valeur": "contenant"
+        },
+        {
+          "valeur": "conserve"
+        },
+        {
+          "valeur": "boîte de nuit"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "coulé",
+      "gloses": [
+        {
+          "valeur": "fabriquer"
+        },
+        {
+          "valeur": "sombrer"
+        },
+        {
+          "valeur": "envoyé par le fond"
+        },
+        {
+          "valeur": "liquide"
+        },
+        {
+          "valeur": "ruiner"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "agitait",
+      "gloses": [
+        {
+          "valeur": "remuer"
+        },
+        {
+          "valeur": "préoccuper"
+        },
+        {
+          "valeur": "exciter"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "corne",
+      "gloses": [
+        {
+          "valeur": "zoologie"
+        },
+        {
+          "valeur": "callosité"
+        },
+        {
+          "valeur": "matière"
+        },
+        {
+          "valeur": "instrument sonore"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fixant",
+      "gloses": [
+        {
+          "valeur": "fixatif"
+        },
+        {
+          "valeur": "assujettir"
+        },
+        {
+          "valeur": "renseigner"
+        },
+        {
+          "valeur": "regarder"
+        },
+        {
+          "valeur": "décider"
+        },
+        {
+          "valeur": "histologie"
+        },
+        {
+          "valeur": "photographie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "air",
+      "gloses": [
+        {
+          "valeur": "apparence"
+        },
+        {
+          "valeur": "mélodie"
+        },
+        {
+          "valeur": "atmosphère"
+        },
+        {
+          "valeur": "vent"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "doux",
+      "gloses": [
+        {
+          "valeur": "sucré"
+        },
+        {
+          "valeur": "gentil"
+        },
+        {
+          "valeur": "toucher"
+        },
+        {
+          "valeur": "modéré"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "girafe",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "verre à bière"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "gorille",
+      "gloses": [
+        {
+          "valeur": "grand singe"
+        },
+        {
+          "valeur": "garde du corps"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aborder",
+      "gloses": [
+        {
+          "valeur": "marine"
+        },
+        {
+          "valeur": "s'adresser à"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "traitement",
+      "gloses": [
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "chimie"
+        },
+        {
+          "valeur": "salaire"
+        },
+        {
+          "valeur": "analyse"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "données",
+      "gloses": [
+        {
+          "valeur": "information"
+        },
+        {
+          "valeur": "donner"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "enquêtes",
+      "gloses": [
+        {
+          "valeur": "police"
+        },
+        {
+          "valeur": "opinion"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sondages",
+      "gloses": [
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "opinion"
+        },
+        {
+          "valeur": "forage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "permet",
+      "gloses": [
+        {
+          "valeur": "rendre possible"
+        },
+        {
+          "valeur": "autoriser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "estimer",
+      "gloses": [
+        {
+          "valeur": "admirer"
+        },
+        {
+          "valeur": "évaluer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "échelle",
+      "gloses": [
+        {
+          "valeur": "ordre de grandeur"
+        },
+        {
+          "valeur": "hiérarchie"
+        },
+        {
+          "valeur": "escabeau"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aide",
+      "gloses": [
+        {
+          "valeur": "assistance"
+        },
+        {
+          "valeur": "assistant"
+        },
+        {
+          "valeur": "soutien"
+        },
+        {
+          "valeur": "secours"
+        },
+        {
+          "valeur": "aider"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "assistance",
+      "gloses": [
+        {
+          "valeur": "aide"
+        },
+        {
+          "valeur": "public"
+        },
+        {
+          "valeur": "assurance"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "retenait",
+      "gloses": [
+        {
+          "valeur": "tenir"
+        },
+        {
+          "valeur": "mémoriser"
+        },
+        {
+          "valeur": "réprimer"
+        },
+        {
+          "valeur": "réserver"
+        },
+        {
+          "valeur": "garder"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "souffle",
+      "gloses": [
+        {
+          "valeur": "vent"
+        },
+        {
+          "valeur": "respiration"
+        },
+        {
+          "valeur": "souffler"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pastis",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "apéritif"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "malin",
+      "gloses": [
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "malicieux"
+        },
+        {
+          "valeur": "rusé"
+        },
+        {
+          "valeur": "mauvais"
+        },
+        {
+          "valeur": "diable"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "notes",
+      "gloses": [
+        {
+          "valeur": "facture"
+        },
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "écrit"
+        },
+        {
+          "valeur": "scolarité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "prélude",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "début"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "jouer",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "risquer"
+        },
+        {
+          "valeur": "s'amuser"
+        },
+        {
+          "valeur": "comédien"
+        },
+        {
+          "valeur": "avoir du jeu"
+        },
+        {
+          "valeur": "feindre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bureau",
+      "gloses": [
+        {
+          "valeur": "ordinateur"
+        },
+        {
+          "valeur": "pièce"
+        },
+        {
+          "valeur": "mobilier"
+        },
+        {
+          "valeur": "lieu de travail"
+        },
+        {
+          "valeur": "administration"
+        },
+        {
+          "valeur": "instance décisionnelle"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chausson",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "pantoufle"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "mesure",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "dimension"
+        },
+        {
+          "valeur": "mesurer"
+        },
+        {
+          "valeur": "modération"
+        },
+        {
+          "valeur": "décision"
+        },
+        {
+          "valeur": "limite"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "risques",
+      "gloses": [
+        {
+          "valeur": "risquer"
+        },
+        {
+          "valeur": "dangers"
+        },
+        {
+          "valeur": "assurance"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "gros",
+      "gloses": [
+        {
+          "valeur": "personne"
+        },
+        {
+          "valeur": "beaucoup"
+        },
+        {
+          "valeur": "volumineux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "marché",
+      "gloses": [
+        {
+          "valeur": "lieu"
+        },
+        {
+          "valeur": "bourse"
+        },
+        {
+          "valeur": "transaction"
+        },
+        {
+          "valeur": "clientèle"
+        },
+        {
+          "valeur": "marcher"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "gorgée",
+      "gloses": [
+        {
+          "valeur": "imbibée"
+        },
+        {
+          "valeur": "goulée"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "flotte",
+      "gloses": [
+        {
+          "valeur": "flotter"
+        },
+        {
+          "valeur": "flotille"
+        },
+        {
+          "valeur": "flotte aérienne"
+        },
+        {
+          "valeur": "eau"
+        },
+        {
+          "valeur": "ensemble de navires"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "saumon",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "poisson"
+        },
+        {
+          "valeur": "aliment"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pneu",
+      "gloses": [
+        {
+          "valeur": "message"
+        },
+        {
+          "valeur": "roue"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vélo",
+      "gloses": [
+        {
+          "valeur": "sport"
+        },
+        {
+          "valeur": "bicyclette"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "dégonflé",
+      "gloses": [
+        {
+          "valeur": "à plat"
+        },
+        {
+          "valeur": "lâche"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bise",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "vent"
+        },
+        {
+          "valeur": "baiser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "claquant",
+      "gloses": [
+        {
+          "valeur": "bruit"
+        },
+        {
+          "valeur": "mourir"
+        },
+        {
+          "valeur": "dilapider"
+        },
+        {
+          "valeur": "frapper"
+        },
+        {
+          "valeur": "fermer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "baigneur",
+      "gloses": [
+        {
+          "valeur": "poupon"
+        },
+        {
+          "valeur": "cul"
+        },
+        {
+          "valeur": "se baigner"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "glaciale",
+      "gloses": [
+        {
+          "valeur": "température"
+        },
+        {
+          "valeur": "inamicale"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pavillon",
+      "gloses": [
+        {
+          "valeur": "oreille"
+        },
+        {
+          "valeur": "maison"
+        },
+        {
+          "valeur": "drapeau"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "claquait",
+      "gloses": [
+        {
+          "valeur": "bruit"
+        },
+        {
+          "valeur": "mourir"
+        },
+        {
+          "valeur": "dilapider"
+        },
+        {
+          "valeur": "fermer"
+        },
+        {
+          "valeur": "gifler"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "hampe",
+      "gloses": [
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "botanique"
+        },
+        {
+          "valeur": "boucherie"
+        },
+        {
+          "valeur": "manche"
+        },
+        {
+          "valeur": "pénis"
+        },
+        {
+          "valeur": "vénerie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "claqué",
+      "gloses": [
+        {
+          "valeur": "bruit"
+        },
+        {
+          "valeur": "mourir"
+        },
+        {
+          "valeur": "dilapidé"
+        },
+        {
+          "valeur": "giflé"
+        },
+        {
+          "valeur": "fermé"
+        },
+        {
+          "valeur": "casser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fausse route",
+      "gloses": [
+        {
+          "valeur": "avaler de travers"
+        },
+        {
+          "valeur": "se tromper"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "claquer",
+      "gloses": [
+        {
+          "valeur": "bruit"
+        },
+        {
+          "valeur": "mourir"
+        },
+        {
+          "valeur": "dilapider"
+        },
+        {
+          "valeur": "frapper"
+        },
+        {
+          "valeur": "fermer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "manchot",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "estropié"
+        },
+        {
+          "valeur": "maladroit"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "traiter",
+      "gloses": [
+        {
+          "valeur": "insulter"
+        },
+        {
+          "valeur": "soigner"
+        },
+        {
+          "valeur": "être relatif à"
+        },
+        {
+          "valeur": "régler"
+        },
+        {
+          "valeur": "prendre en compte"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "invalide",
+      "gloses": [
+        {
+          "valeur": "invalider"
+        },
+        {
+          "valeur": "non valable"
+        },
+        {
+          "valeur": "infirme"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "urnes",
+      "gloses": [
+        {
+          "valeur": "récipient"
+        },
+        {
+          "valeur": "élections"
+        },
+        {
+          "valeur": "botanique"
+        },
+        {
+          "valeur": "urne funéraire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vice",
+      "gloses": [
+        {
+          "valeur": "défaut"
+        },
+        {
+          "valeur": "perversion"
+        },
+        {
+          "valeur": "adjoint"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "forme",
+      "gloses": [
+        {
+          "valeur": "morphologie"
+        },
+        {
+          "valeur": "santé"
+        },
+        {
+          "valeur": "expression"
+        },
+        {
+          "valeur": "manière"
+        },
+        {
+          "valeur": "former"
+        },
+        {
+          "valeur": "procédure"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "mendient",
+      "gloses": [
+        {
+          "valeur": "quémander"
+        },
+        {
+          "valeur": "faire la manche"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "place",
+      "gloses": [
+        {
+          "valeur": "village"
+        },
+        {
+          "valeur": "spectacle"
+        },
+        {
+          "valeur": "stationnement"
+        },
+        {
+          "valeur": "emplacement"
+        },
+        {
+          "valeur": "rang"
+        },
+        {
+          "valeur": "situation professionnelle"
+        },
+        {
+          "valeur": "espace libre"
+        },
+        {
+          "valeur": "placer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "passants",
+      "gloses": [
+        {
+          "valeur": "piétons"
+        },
+        {
+          "valeur": "ceinture"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "prend",
+      "gloses": [
+        {
+          "valeur": "saisir"
+        },
+        {
+          "valeur": "posséder sexuellement"
+        },
+        {
+          "valeur": "durcir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "semelle",
+      "gloses": [
+        {
+          "valeur": "viande"
+        },
+        {
+          "valeur": "chaussure"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "boucher",
+      "gloses": [
+        {
+          "valeur": "boucherie"
+        },
+        {
+          "valeur": "obstruer"
+        },
+        {
+          "valeur": "barbare"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vendu",
+      "gloses": [
+        {
+          "valeur": "commercer"
+        },
+        {
+          "valeur": "dénoncer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chenille",
+      "gloses": [
+        {
+          "valeur": "véhicule"
+        },
+        {
+          "valeur": "insecte"
+        },
+        {
+          "valeur": "manège"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "miches",
+      "gloses": [
+        {
+          "valeur": "pain"
+        },
+        {
+          "valeur": "fesses"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "endroit",
+      "gloses": [
+        {
+          "valeur": "lieu"
+        },
+        {
+          "valeur": "face"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "coiffé",
+      "gloses": [
+        {
+          "valeur": "peigné"
+        },
+        {
+          "valeur": "couvre-chef"
+        },
+        {
+          "valeur": "surmonté"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "melon",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "chapeau"
+        },
+        {
+          "valeur": "grosse tête"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sœur",
+      "gloses": [
+        {
+          "valeur": "frangine"
+        },
+        {
+          "valeur": "religieuse"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aube",
+      "gloses": [
+        {
+          "valeur": "aurore"
+        },
+        {
+          "valeur": "roue à aubes"
+        },
+        {
+          "valeur": "commencement"
+        },
+        {
+          "valeur": "vêtement liturgique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "voile",
+      "gloses": [
+        {
+          "valeur": "coiffure"
+        },
+        {
+          "valeur": "gréement"
+        },
+        {
+          "valeur": "obscurcissement"
+        },
+        {
+          "valeur": "tissu"
+        },
+        {
+          "valeur": "plaisance"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "se tapa",
+      "gloses": [
+        {
+          "valeur": "posséder sexuellement"
+        },
+        {
+          "valeur": "ingurgiter"
+        },
+        {
+          "valeur": "se frapper"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "religieuse",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "nonne"
+        },
+        {
+          "valeur": "religieux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "éclair",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "foudre"
+        },
+        {
+          "valeur": "rapidité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tentant",
+      "gloses": [
+        {
+          "valeur": "essayer"
+        },
+        {
+          "valeur": "désirable"
+        },
+        {
+          "valeur": "donner envie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "planter",
+      "gloses": [
+        {
+          "valeur": "jardinage"
+        },
+        {
+          "valeur": "enfoncer"
+        },
+        {
+          "valeur": "quitter"
+        },
+        {
+          "valeur": "poignarder"
+        },
+        {
+          "valeur": "arnaquer"
+        },
+        {
+          "valeur": "dysfonctionner"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "punaise",
+      "gloses": [
+        {
+          "valeur": "insecte"
+        },
+        {
+          "valeur": "clou"
+        },
+        {
+          "valeur": "juron"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "planté",
+      "gloses": [
+        {
+          "valeur": "jardinage"
+        },
+        {
+          "valeur": "enfoncer"
+        },
+        {
+          "valeur": "poignarder"
+        },
+        {
+          "valeur": "plaquer"
+        },
+        {
+          "valeur": "dysfonctionnement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cruche",
+      "gloses": [
+        {
+          "valeur": "femme idiote"
+        },
+        {
+          "valeur": "vase"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "table",
+      "gloses": [
+        {
+          "valeur": "meuble"
+        },
+        {
+          "valeur": "gastronomie"
+        },
+        {
+          "valeur": "tableau d'informations"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "peint",
+      "gloses": [
+        {
+          "valeur": "art"
+        },
+        {
+          "valeur": "décrire"
+        },
+        {
+          "valeur": "bricolage"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "portrait",
+      "gloses": [
+        {
+          "valeur": "description"
+        },
+        {
+          "valeur": "représentation"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "piqué",
+      "gloses": [
+        {
+          "valeur": "emprunter"
+        },
+        {
+          "valeur": "insecte"
+        },
+        {
+          "valeur": "voler"
+        },
+        {
+          "valeur": "euthanasier"
+        },
+        {
+          "valeur": "darder"
+        },
+        {
+          "valeur": "prendre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "phares",
+      "gloses": [
+        {
+          "valeur": "véhicule"
+        },
+        {
+          "valeur": "aéronautique"
+        },
+        {
+          "valeur": "maritime"
+        },
+        {
+          "valeur": "modèle"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "permettent",
+      "gloses": [
+        {
+          "valeur": "rendre possible"
+        },
+        {
+          "valeur": "autoriser"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bâtiments",
+      "gloses": [
+        {
+          "valeur": "construction"
+        },
+        {
+          "valeur": "navire"
+        },
+        {
+          "valeur": "secteur d'activité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "brouillard",
+      "gloses": [
+        {
+          "valeur": "météorologie"
+        },
+        {
+          "valeur": "ophtalmologie"
+        },
+        {
+          "valeur": "comptabilité"
+        },
+        {
+          "valeur": "incertitude"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tarte",
+      "gloses": [
+        {
+          "valeur": "préparation culinaire"
+        },
+        {
+          "valeur": "claque"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bonne",
+      "gloses": [
+        {
+          "valeur": "savoureux"
+        },
+        {
+          "valeur": "aide ménagère"
+        },
+        {
+          "valeur": "douée"
+        },
+        {
+          "valeur": "sexy"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "épuisé",
+      "gloses": [
+        {
+          "valeur": "fatiguer"
+        },
+        {
+          "valeur": "vider"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "banc",
+      "gloses": [
+        {
+          "valeur": "étal"
+        },
+        {
+          "valeur": "haut-fond"
+        },
+        {
+          "valeur": "poissons"
+        },
+        {
+          "valeur": "siège"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "marée",
+      "gloses": [
+        {
+          "valeur": "mer"
+        },
+        {
+          "valeur": "produit de la pêche"
+        },
+        {
+          "valeur": "affluence"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sirène",
+      "gloses": [
+        {
+          "valeur": "femme-poisson"
+        },
+        {
+          "valeur": "appareil sonore"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sirènes",
+      "gloses": [
+        {
+          "valeur": "femme-poisson"
+        },
+        {
+          "valeur": "appareil sonore"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "enfler",
+      "gloses": [
+        {
+          "valeur": "arnaquer"
+        },
+        {
+          "valeur": "gonfler"
+        },
+        {
+          "valeur": "augmenter d'intensité"
+        },
+        {
+          "valeur": "prendre de l'ampleur"
+        },
+        {
+          "valeur": "exagérer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "progressant",
+      "gloses": [
+        {
+          "valeur": "avancer"
+        },
+        {
+          "valeur": "faire des progrès"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "lacets",
+      "gloses": [
+        {
+          "valeur": "cordon"
+        },
+        {
+          "valeur": "chaussures"
+        },
+        {
+          "valeur": "méandres"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "vierge",
+      "gloses": [
+        {
+          "valeur": "astrologie"
+        },
+        {
+          "valeur": "virginité"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "scorpions",
+      "gloses": [
+        {
+          "valeur": "astrologie"
+        },
+        {
+          "valeur": "arachnide"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poissons",
+      "gloses": [
+        {
+          "valeur": "zoologie"
+        },
+        {
+          "valeur": "aliment"
+        },
+        {
+          "valeur": "astrologie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "signes",
+      "gloses": [
+        {
+          "valeur": "indice"
+        },
+        {
+          "valeur": "mathématiques"
+        },
+        {
+          "valeur": "astrologie"
+        },
+        {
+          "valeur": "signer"
+        },
+        {
+          "valeur": "geste"
+        },
+        {
+          "valeur": "présage"
+        },
+        {
+          "valeur": "linguistique"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bélier",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "astrologie"
+        },
+        {
+          "valeur": "machine de guerre"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "enfoncer",
+      "gloses": [
+        {
+          "valeur": "défoncer"
+        },
+        {
+          "valeur": "dénigrer"
+        },
+        {
+          "valeur": "faire pénétrer"
+        },
+        {
+          "valeur": "adversaire"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "grille",
+      "gloses": [
+        {
+          "valeur": "portail"
+        },
+        {
+          "valeur": "clôture"
+        },
+        {
+          "valeur": "mots croisés"
+        },
+        {
+          "valeur": "tableau quadrillé"
+        },
+        {
+          "valeur": "code secret"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "parc",
+      "gloses": [
+        {
+          "valeur": "enclos"
+        },
+        {
+          "valeur": "jardin"
+        },
+        {
+          "valeur": "jardin public"
+        },
+        {
+          "valeur": "parc d'attraction"
+        },
+        {
+          "valeur": "puériculture"
+        },
+        {
+          "valeur": "conchyliculture"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "changé",
+      "gloses": [
+        {
+          "valeur": "monnaie"
+        },
+        {
+          "valeur": "modifier"
+        },
+        {
+          "valeur": "échanger"
+        },
+        {
+          "valeur": "couche"
+        },
+        {
+          "valeur": "se transformer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "déposé",
+      "gloses": [
+        {
+          "valeur": "faire une déposition"
+        },
+        {
+          "valeur": "démonter"
+        },
+        {
+          "valeur": "poser"
+        },
+        {
+          "valeur": "banque"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poussin",
+      "gloses": [
+        {
+          "valeur": "terme d'affection"
+        },
+        {
+          "valeur": "jaune"
+        },
+        {
+          "valeur": "sportif"
+        },
+        {
+          "valeur": "poule"
+        },
+        {
+          "valeur": "oisillon"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "couche",
+      "gloses": [
+        {
+          "valeur": "strate"
+        },
+        {
+          "valeur": "pellicule"
+        },
+        {
+          "valeur": "bébé"
+        },
+        {
+          "valeur": "lit"
+        },
+        {
+          "valeur": "coucher"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cheval",
+      "gloses": [
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "fille laide"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "robe",
+      "gloses": [
+        {
+          "valeur": "pelage"
+        },
+        {
+          "valeur": "vêtement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "code",
+      "gloses": [
+        {
+          "valeur": "code secret"
+        },
+        {
+          "valeur": "code de la route"
+        },
+        {
+          "valeur": "feux de route"
+        },
+        {
+          "valeur": "enssemble de règles"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "génoises",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "architecture"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cocotte",
+      "gloses": [
+        {
+          "valeur": "prostituée"
+        },
+        {
+          "valeur": "médecine"
+        },
+        {
+          "valeur": "couture"
+        },
+        {
+          "valeur": "musique"
+        },
+        {
+          "valeur": "terme affectueux"
+        },
+        {
+          "valeur": "poule"
+        },
+        {
+          "valeur": "marmite"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "noix",
+      "gloses": [
+        {
+          "valeur": "petite quantité"
+        },
+        {
+          "valeur": "boucherie"
+        },
+        {
+          "valeur": "fruit à coque"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "belle-mère",
+      "gloses": [
+        {
+          "valeur": "mère du conjoint"
+        },
+        {
+          "valeur": "nouvelle épouse du père (enfant)"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "charmante",
+      "gloses": [
+        {
+          "valeur": "ironie"
+        },
+        {
+          "valeur": "plaisant"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "crevettes",
+      "gloses": [
+        {
+          "valeur": "crustacés"
+        },
+        {
+          "valeur": "femme galante"
+        },
+        {
+          "valeur": "couleur rose"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pâtisserie",
+      "gloses": [
+        {
+          "valeur": "gâteau"
+        },
+        {
+          "valeur": "commerce"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "sacristain",
+      "gloses": [
+        {
+          "valeur": "pâtisserie"
+        },
+        {
+          "valeur": "homme d'église"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tentaient",
+      "gloses": [
+        {
+          "valeur": "essayer"
+        },
+        {
+          "valeur": "faire envie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "langue de chat",
+      "gloses": [
+        {
+          "valeur": "langue"
+        },
+        {
+          "valeur": "biscuit"
+        },
+        {
+          "valeur": "pratique sexuelle"
+        },
+        {
+          "valeur": "burin"
+        },
+        {
+          "valeur": "truelle"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "tuile",
+      "gloses": [
+        {
+          "valeur": "informatique"
+        },
+        {
+          "valeur": "biscuit"
+        },
+        {
+          "valeur": "toit"
+        },
+        {
+          "valeur": "problème"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fondre",
+      "gloses": [
+        {
+          "valeur": "métallurgie"
+        },
+        {
+          "valeur": "unir"
+        },
+        {
+          "valeur": "maigrir"
+        },
+        {
+          "valeur": "liquéfier"
+        },
+        {
+          "valeur": "dissoudre"
+        },
+        {
+          "valeur": "s'attendrir"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "poilu",
+      "gloses": [
+        {
+          "valeur": "soldat"
+        },
+        {
+          "valeur": "poil"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "grenade",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "projectile"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "garçon",
+      "gloses": [
+        {
+          "valeur": "enfant"
+        },
+        {
+          "valeur": "serveur"
+        },
+        {
+          "valeur": "personne de sexe masculin"
+        },
+        {
+          "valeur": "descendant"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "phare",
+      "gloses": [
+        {
+          "valeur": "automobile"
+        },
+        {
+          "valeur": "maritime"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "test",
+      "gloses": [
+        {
+          "valeur": "ok"
+        },
+        {
+          "valeur": "bien"
+        },
+        {
+          "valeur": "test"
+        },
+        {
+          "valeur": "wtf"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "Test",
+      "gloses": [
+        {
+          "valeur": "bien"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "aigle",
+      "gloses": [
+        {
+          "valeur": "oiseau"
+        },
+        {
+          "valeur": "pupitre"
+        },
+        {
+          "valeur": "légion romaine"
+        },
+        {
+          "valeur": "grand homme"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "ciel",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "religion"
+        },
+        {
+          "valeur": "atmosphère"
+        },
+        {
+          "valeur": "voûte"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "fixait",
+      "gloses": [
+        {
+          "valeur": "assujettir"
+        },
+        {
+          "valeur": "regarder"
+        },
+        {
+          "valeur": "décider"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "morde",
+      "gloses": [
+        {
+          "valeur": "empiéter"
+        },
+        {
+          "valeur": "croquer"
+        },
+        {
+          "valeur": "prendre goût à"
+        },
+        {
+          "valeur": "morsure"
+        },
+        {
+          "valeur": "pêche"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "pousser",
+      "gloses": [
+        {
+          "valeur": "exagérer"
+        },
+        {
+          "valeur": "croître"
+        },
+        {
+          "valeur": "bousculer"
+        },
+        {
+          "valeur": "cri"
+        },
+        {
+          "valeur": "accouchement"
+        },
+        {
+          "valeur": "inciter"
+        },
+        {
+          "valeur": "déplacer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "herbe",
+      "gloses": [
+        {
+          "valeur": "marijuana"
+        },
+        {
+          "valeur": "plante herbacée"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "a poussé",
+      "gloses": [
+        {
+          "valeur": "exagérer"
+        },
+        {
+          "valeur": "croître"
+        },
+        {
+          "valeur": "bousculer"
+        },
+        {
+          "valeur": "cri"
+        },
+        {
+          "valeur": "accouchement"
+        },
+        {
+          "valeur": "inciter"
+        },
+        {
+          "valeur": "faire avancer"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "voie",
+      "gloses": [
+        {
+          "valeur": "chemin de fer"
+        },
+        {
+          "valeur": "filière"
+        },
+        {
+          "valeur": "route"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "cabinet",
+      "gloses": [
+        {
+          "valeur": "meuble"
+        },
+        {
+          "valeur": "pièce"
+        },
+        {
+          "valeur": "toilettes"
+        },
+        {
+          "valeur": "profession libérale"
+        },
+        {
+          "valeur": "gouvernement"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "queue",
+      "gloses": [
+        {
+          "valeur": "fruit"
+        },
+        {
+          "valeur": "animal"
+        },
+        {
+          "valeur": "train"
+        },
+        {
+          "valeur": "pénis"
+        },
+        {
+          "valeur": "partie postérieure"
+        },
+        {
+          "valeur": "file d'attente"
+        },
+        {
+          "valeur": "poignée"
+        },
+        {
+          "valeur": "billard"
+        },
+        {
+          "valeur": "avion"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "chocolat",
+      "gloses": [
+        {
+          "valeur": "couleur"
+        },
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "sucrerie"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "ménage",
+      "gloses": [
+        {
+          "valeur": "tâches ménagères"
+        },
+        {
+          "valeur": "couple"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "plaquée",
+      "gloses": [
+        {
+          "valeur": "quitter"
+        },
+        {
+          "valeur": "recouvrir"
+        },
+        {
+          "valeur": "maintenir"
+        },
+        {
+          "valeur": "rugby"
+        },
+        {
+          "valeur": "appliquer"
+        },
+        {
+          "valeur": "geste brutal"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "blonde",
+      "gloses": [
+        {
+          "valeur": "cigarette"
+        },
+        {
+          "valeur": "bière"
+        },
+        {
+          "valeur": "fille"
+        },
+        {
+          "valeur": "idiote"
+        },
+        {
+          "valeur": "couleur de cheveux"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "louche",
+      "gloses": [
+        {
+          "valeur": "ustensile de cuisine"
+        },
+        {
+          "valeur": "suspect"
+        },
+        {
+          "valeur": "bigleux"
+        },
+        {
+          "valeur": "glauque"
+        },
+        {
+          "valeur": "main"
+        },
+        {
+          "valeur": "loucher"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "allume",
+      "gloses": [
+        {
+          "valeur": "lumière"
+        },
+        {
+          "valeur": "enflammer"
+        },
+        {
+          "valeur": "mettre en marche"
+        },
+        {
+          "valeur": "draguer"
+        },
+        {
+          "valeur": "engueuler"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "entendu",
+      "gloses": [
+        {
+          "valeur": "compris"
+        },
+        {
+          "valeur": "accord"
+        },
+        {
+          "valeur": "ouï"
+        },
+        {
+          "valeur": "connivence"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "commande",
+      "gloses": [
+        {
+          "valeur": "diriger"
+        },
+        {
+          "valeur": "passer commande"
+        },
+        {
+          "valeur": "ordonner"
+        },
+        {
+          "valeur": "contrôler"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "bière",
+      "gloses": [
+        {
+          "valeur": "boisson"
+        },
+        {
+          "valeur": "cercueil"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "courses",
+      "gloses": [
+        {
+          "valeur": "commissions"
+        },
+        {
+          "valeur": "courses hippiques"
+        }
+      ]
+    },
+    {
+      "motAmbigu": "new",
+      "gloses": [
+        {
+          "valeur": "oki"
+        },
+        {
+          "valeur": "loool"
+        }
+      ]
+    }
+  ]
+}

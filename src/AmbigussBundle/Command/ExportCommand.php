@@ -16,10 +16,10 @@ class ExportCommand extends ContainerAwareCommand {
 			'Export des phrases...',
 		]);
 		$start = microtime(true);
-		$ser->phrasesAction();
+		$ser->phrases();
 		$nbSec = microtime(true) - $start;
 		$output->writeln([
-			ceil($nbSec) . ' secondes',
+			number_format($nbSec, 2, '.', '') . ' secondes',
 			'',
 		]);
 
@@ -27,10 +27,10 @@ class ExportCommand extends ContainerAwareCommand {
 			'Export des mots ambigus...',
 		]);
 		$start = microtime(true);
-		$ser->motsAmbigusAction();
+		$ser->motsAmbigus();
 		$nbSec = microtime(true) - $start;
 		$output->writeln([
-			ceil($nbSec) . ' secondes',
+			number_format($nbSec, 2, '.', '') . ' secondes',
 			'',
 		]);
 

@@ -56,6 +56,8 @@ class Export
 			'date' => date('d/m/Y H\hi'),
 			'data' => $finalarray,
 		), JSON_UNESCAPED_UNICODE)));
+
+		return count($phrases);
 	}
 
 	public function motsAmbigus()
@@ -75,8 +77,7 @@ class Export
 
 			foreach($mag as $glose)
 			{
-				$Garray = array('valeur' => $glose->getValeur());
-				array_push($MAGarray, $Garray);
+				array_push($MAGarray, $glose->getValeur());
 			}
 
 			$Marray = array(
@@ -92,5 +93,7 @@ class Export
 			'date' => date('d/m/Y H\hi'),
 			'data' => $finalarray,
 		), JSON_UNESCAPED_UNICODE)));
+
+		return count($MAs);
 	}
 }

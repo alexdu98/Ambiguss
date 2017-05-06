@@ -6,7 +6,8 @@
 	<meta property="og:url" content="{{ url('ambiguss_game', {id: phrase_id}) }}"/>
 	<meta property="og:type" content="website"/>
 	<meta property="og:title" content="Ambiguss"/>
-	<meta property="og:description" content="{{ phrasePur }}"/>
+	<meta property="og:description" content="\" {{ phrasePur }}\". Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
+	joueurs."/>
 	<meta property="og:image" content="{{ absolute_url(asset('assets/images/avocat1024.png')) }}"/>
 {% endblock %}
 
@@ -41,7 +42,7 @@
 						<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 						J'aime cette phrase
 					</button>
-					<div class="fb-share-button" data-href="{{ url('ambiguss_game', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true" style="display: none">
+					<div class="fb-share-button" data-href="{{ url('ambiguss_game', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true">
 						<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('ambiguss_game', {id: phrase_id})|url_encode }};src=sdkpreparse">Partager</a>
 					</div>
 					<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">

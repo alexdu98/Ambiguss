@@ -5,10 +5,10 @@
 {% block meta %}
 	<meta property="og:url" content="{{ url('ambiguss_game', {id: phrase_id}) }}"/>
 	<meta property="og:type" content="website"/>
-	<meta property="og:title" content="Ambiguss"/>
-	<meta property="og:description" content="\" {{ phrasePur }}\". Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
+	<meta property="og:title" content="Ambiguss, le jeu de désambiguïsation lexicale."/>
+	<meta property="og:description" content="'{{ phrasePur }}'. Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
 	joueurs."/>
-	<meta property="og:image" content="{{ absolute_url(asset('assets/images/avocat1024.png')) }}"/>
+	<meta property="og:image" content="{{ absolute_url(asset('favicon.png')) }}"/>
 {% endblock %}
 
 {% block contenu %}

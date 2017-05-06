@@ -44,12 +44,35 @@ class PhraseController extends Controller
 				$res = $phrase->isValid();
 				$succes = $res['succes'];
 
+				$phrD = null;
 				if(!$edit && $succes)
 				{
 					if($this->getUser()->getCredits() < $this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($res['motsAmbigus']))
 					{
 						$succes = false;
 						$res['message'] = "Vous n'avez pas assez de crédits pour créer une phrase avec " . count($res['motsAmbigus']) . " mots ambigus.";
+					}
+				}
+				else if($edit)
+				{
+					$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+					$phrD = $repoP->find($_POST['phrase_id']);
+
+					$dateMax = $phrD->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
+					$dateActu = new \DateTime();
+					$dateActu = $dateActu->getTimestamp();
+
+					// Si jamais il modifie le champ à la main il peut changé n'importe quelle phrase
+					if($phrD->getAuteur() != $this->getUser() || !$this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
+					{
+						$succes = false;
+						$res['message'] = "Vous ne pouvez pas modifier cette phrase car vous n'êtes pas son auteur.";
+					}
+
+					if($dateActu > $dateMax && $phrD->getParties()->count() > 1)
+					{
+						$succes = false;
+						$res['message'] = "Les " . $this->getParameter('dureeAvantJouabiliteSecondes') . " secondes sont passées et un joueur a joué votre phrase, vous ne pouvez donc plus la modifier. Signalez-là, un modérateur s'occupera de votre demande.";
 					}
 				}
 
@@ -107,7 +130,7 @@ class PhraseController extends Controller
 						}
 						else
 						{
-							$histJoueur->setValeur("Modification d'une phrase (n° ? => n°" . $phrase->getId() . ").");
+							$histJoueur->setValeur("Modification d'une phrase (n° " . $_POST['phrase_id'] . " => n°" . $phrase->getId() . ").");
 						}
 						$histJoueur->setMembre($this->getUser());
 						$em->persist($histJoueur);
@@ -160,8 +183,6 @@ class PhraseController extends Controller
 
 						if($edit)
 						{
-							$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-							$phrD = $repoP->find($_POST['phrase_id']);
 							$em->remove($phrD);
 						}
 

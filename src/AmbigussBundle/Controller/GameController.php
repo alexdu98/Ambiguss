@@ -306,6 +306,7 @@ class GameController extends Controller
 			'phrase_id' => $phraseOBJ->getId(),
 			'motsAmbigus' => json_encode($motsAmbigus),
 			'phraseHTMLEscape' => $phraseHTMLEscape,
+			'phrasePur' => preg_replace('#"#', '\"', $phraseOBJ->getContenuPur()),
 			'liked' => $liked,
 			'alreadyPlayed' => $allPhrasesPlayed,
 			'signal' => $signal,

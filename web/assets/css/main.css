@@ -28,29 +28,36 @@ h1{
 	display: block;
 	font-size: 48px;
 	font-family: "MV Boli", "cursive";
+	color: #000;
 	color: var(--color-black);
 	text-align: center;
 	margin-bottom: 15px;
 }
 a{
+	color: #8B4513;
 	color: var(--color-brown);
 	transition-duration: 0.5s;
 }
 a:hover{
+	color: #8B4513;
 	color: var(--color-brown);
 	text-decoration: none;
 	transition-duration: 0.5s;
 }
 .bg-green{
+	background: #A0D233;
 	background: var(--color-green);
 }
 .bg-yellow{
+	background: #FFFCBC;
 	background: var(--color-yellow);
 }
 .color-red{
+	color: #C51B10;
 	color: var(--color-red);
 }
 .color-green{
+	color: #A0D233;
 	color: var(--color-green);
 }
 .row-eq-height{
@@ -70,6 +77,7 @@ a:hover{
 	list-style-type: none;
 }
 *::selection{
+	background: #A0D233;
 	background: var(--color-green);
 	color: #FFF;
 }
@@ -77,6 +85,7 @@ hr{
 	border-top: 1px solid var(--color-green);
 }
 thead, tfoot{
+	background: #A0D233;
 	background: var(--color-green);
 }
 .size16{
@@ -101,12 +110,10 @@ thead, tfoot{
     #####################################################################
 */
 
-#nav-login{
-	background: var(--color-green) !important;
-	color: var(--color-white) !important;
-}
 #nav-main{
+	background: #FFF !important;
 	background: var(--color-white) !important;
+	color: #FFF !important;
 	color: var(--color-black) !important;
 	border-bottom: 1px solid #D3D2D2;
 	padding-top: 10px;
@@ -116,6 +123,7 @@ nav .navbar-brand{
 	font-size: 28px;
 }
 nav .navbar-brand>span{
+	color: #A0D233;
 	color: var(--color-green);
 }
 nav .navbar-brand>img{
@@ -129,7 +137,9 @@ nav .navbar-brand>img{
 	border: none;
 }
 .navbar-default .navbar-nav>li>a:hover{
+	background: #A0D233;
 	background: var(--color-green);
+	color: #FFF;
 	color: var(--color-white);
 }
 nav ul{
@@ -142,6 +152,7 @@ nav li:not(.divider){
 	padding: 5px 10px;
 }
 nav li a{
+	color: #A0D233;
 	color: var(--color-green);
 }
 
@@ -167,7 +178,7 @@ article > .container-fluid{
 */
 
 footer{
-	background: var(--color-yellow);
+	color: #8B4513;
 	color: var(--color-brown);
 	box-shadow: 0 0 3px #444;
 }
@@ -187,22 +198,25 @@ footer #footer-link a{
 	color: #989494;
 }
 footer #footer-link a:hover{
+	color: #A0D233;
 	color: var(--color-green);
 }
 footer #footer-copyright{
-	background: var(--color-green);
 	padding-top: 3px;
 	padding-bottom: 3px;
+	color: #FFF;
 	color: var(--color-white);
-
 }
 footer #footer-copyright a{
+	color: #FFF;
 	color: var(--color-white);
 }
 footer #footer-copyright a:hover{
+	color: #8B4513;
 	color: var(--color-brown);
 }
 footer h4{
+	color: #FFF;
 	color: var(--color-white);
 }
 
@@ -266,12 +280,15 @@ button.infobulle img{
 .bulle{
 	padding: 50px 40px;
 	text-align: center;
+	color: #000000;
 	color: var(--color-black);
+	background: #FFFCBC;
 	background: var(--color-yellow);
 	border-radius: 220px / 120px;
 	box-shadow: 0 0 5px rgba(160, 210, 51, .5);
 }
 .bulle a:not(.btn):hover{
+	color: #A0D233;
 	color: var(--color-green);
 }
 /*
@@ -280,10 +297,14 @@ button.infobulle img{
     #####################################################################
 */
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{
+	background: #A0D233;
 	background: var(--color-green);
-	color: var(--color-brown)
+	color: #8B4513;
+	color: var(--color-brown);
 }
 .nav-tabs > li > a:hover{
+	background: #A0D233;
 	background: var(--color-green);
+	color: #8B4513 !important;
 	color: var(--color-brown) !important;
 }

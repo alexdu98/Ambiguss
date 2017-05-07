@@ -35,7 +35,7 @@ class MotAmbiguPhrase
 	private $phrase;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\MotAmbigu")
+	 * @ORM\ManyToOne(targetEntity="AmbigussBundle\Entity\MotAmbigu", cascade={"persist"})
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $motAmbigu;
@@ -45,6 +45,13 @@ class MotAmbiguPhrase
 	 */
 	private $reponses;
 
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+	}
 
     /**
      * Get id
@@ -55,6 +62,16 @@ class MotAmbiguPhrase
     {
         return $this->id;
     }
+
+	/**
+	 * Get ordre
+	 *
+	 * @return int
+	 */
+	public function getOrdre()
+	{
+		return $this->ordre;
+	}
 
     /**
      * Set ordre
@@ -71,13 +88,13 @@ class MotAmbiguPhrase
     }
 
     /**
-     * Get ordre
+     * Get phrase
      *
-     * @return int
+     * @return \AmbigussBundle\Entity\Phrase
      */
-    public function getOrdre()
+	public function getPhrase()
     {
-        return $this->ordre;
+	    return $this->phrase;
     }
 
     /**
@@ -95,13 +112,13 @@ class MotAmbiguPhrase
     }
 
     /**
-     * Get phrase
+     * Get motAmbigu
      *
-     * @return \AmbigussBundle\Entity\Phrase
+     * @return \AmbigussBundle\Entity\MotAmbigu
      */
-    public function getPhrase()
+	public function getMotAmbigu()
     {
-        return $this->phrase;
+	    return $this->motAmbigu;
     }
 
     /**
@@ -116,23 +133,6 @@ class MotAmbiguPhrase
         $this->motAmbigu = $motAmbigu;
 
         return $this;
-    }
-
-    /**
-     * Get motAmbigu
-     *
-     * @return \AmbigussBundle\Entity\MotAmbigu
-     */
-    public function getMotAmbigu()
-    {
-        return $this->motAmbigu;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

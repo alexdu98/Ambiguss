@@ -2,6 +2,7 @@
 namespace AmbigussBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -26,6 +27,12 @@ class PhraseEditType extends AbstractType
             ->remove('visible')
             ->remove('auteur')
             ->remove('modificateur')
+	        ->add('motsAmbigusPhrase', CollectionType::class, array(
+		        'entry_type' => MotAmbiguAddPhraseType::class,
+		        'allow_add' => true,
+		        'allow_delete' => true,
+		        'label' => false,
+	        ))
 	        ->add('modifier', SubmitType::class, array(
                 'label' => 'Modifier la phrase',
                 'attr' => array('class' => 'btn btn-warning'),

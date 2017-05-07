@@ -6,6 +6,18 @@
 {% block contenu %}
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
+			{% if newPhrase is not null %}
+				{{ include('@Ambiguss/Phrase/displayPhrase.html.twig', {'add': false, 'modo': true, 'phraseDisplay' : newPhrase}) }}
+			{% endif %}
+			<div class="alert alert-danger">
+				<b>TRÈS IMPORTANT :</b><br>
+				Modifications sur la phrase hors mots ambigus, aucun problème.<br>
+				<b>Ajout</b> d'un mot mot ambigu, celui-ci doit avoir un id supérieur à ceux déjà existants. (Ajoute une réponse)<br>
+				<b>Suppression</b> d'un mot ambigu, il suffit de cliquer sur le bouton de suppression correspondant. (Supprime les réponses)<br>
+				<b>Modification</b> d'un mot ambigu, si le sens du mot ambigu ne change pas (faute d'orthographe par exemple), vous pouvez éditer
+				le mot ambigu en veillant à ce que l'id ne change pas. Par contre, si ce n'est plus vraiment le même mot ambigu, il faut supprimer le
+				mot ambigu et le recréer.<br>
+			</div>
 			{% for flashMessage in app.session.flashbag.get('succes') %}
 				<div class="alert alert-success">{{ flashMessage }}</div>
 			{% endfor %}
@@ -17,12 +29,27 @@
 
 			{{ form_errors(form) }}
 			<div class="form-group">
+				Phrase originale :
+				<div class="size16" style="background: white; color: black; padding: 5px;">{{ phraseOri.contenuHTML|raw }}</div>
+			</div>
+			<div class="form-group">
 				<div id="rendu" class="size16" style="background: white; color: black; padding: 5px;" hidden></div>
 			</div>
-			{{ form_row(form.contenu, {value: phrase.contenuAmb|default('')}) }}
+			{% if newPhrase %}
+				{{ form_row(form.contenu) }}
+			{% else %}
+				{{ form_row(form.contenu, {value: phraseOri.contenuAmb|default('')}) }}
+			{% endif %}
 			<div class="form-group">
 				<button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
 			</div>
+			<div class="form-group">
+				<div id="phrase_edit_motsAmbigusPhrase" data-prototype="
+					{{ include('AmbigussBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}
+				"></div>
+			</div>
+			{% do form.motsAmbigusPhrase.setRendered %}
+
 			{{ form_row(form.signale) }}
 			<div class="form-group text-center">
 				<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
@@ -64,6 +91,9 @@
 			// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
 			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
 			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbigu, 'g');
+
+			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
+			var $container = $('div#phrase_edit_motsAmbigusPhrase');
 
 			// textarea où l'on écrit la phrase
 			var textarea = $("textarea#{{ form.contenu.vars.id }}");
@@ -116,6 +146,7 @@
 					// On ajout dans la balise <amb> l'id du mot ambigu
 					var temp = phrase.replace(reg, function ($0, $1) {
 						index++;
+						addReponse($container, $1);
 						return '<amb id="' + index + '">' + $1 + endBaliseAmbigu;
 					});
 					textarea.val(temp);
@@ -148,6 +179,76 @@
 					rendu.hide();
 			}
 
+			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
+			function addReponse($container, motAmbigu) {
+				// On ajoute le nom unique et l'id
+				var template = $container.attr('data-prototype')
+					.replace(/__name__label__/g, '')
+					.replace(/__name__/g, index)
+					.replace(/__id__/g, index)
+					.replace(/__MA__/g, motAmbigu);
+				var $prototype = $(template);
+				// Trouve la balise qui à la class amb
+				var amb = $prototype.find('.amb');
+				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
+				amb.val(motAmbigu);
+				$prototype.attr('id', 'amb' + index);
+				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
+				addDeleteLink($prototype);
+				$prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
+				getGloses($prototype.find('select.gloses'), motAmbigu);
+				$container.append($prototype);
+			}
+
+			function updateMotAmbiguInPhrase(event) {
+				var phrase = textarea.val();
+				// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
+				var reg3 = new RegExp('<amb id="' + event.data.id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+				// Met à jour le mot ambigu dans la phrase
+				textarea.val(phrase.replace(reg3, '<amb id="' + event.data.id + '">' + $(event.target).val() + endBaliseAmbiguEscape));
+				updateRendu();
+				getGloses($(event.target).parent().next().find('select.gloses'), $(event.target).val());
+			}
+
+			function addGloseButtonIsClicked(event) {
+				setModalTitle('Ajouter une glose à "' + event.data.motAmbigu + '"');
+				{% if app.user is empty %}
+				messageNeedConnectionModal();
+				{% else %}
+				nbGloses = $(event.target).closest('.row').find('select.gloses option').length - 1;
+				console.log($(event.target).closest('.row'));
+				console.log($(event.target).closest('.row').find('select.gloses option'));
+				console.log(nbGloses);
+				cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
+				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédits.</div><br>');
+				if ($('#credits').html() > cost) {
+					setModalBody('{{ include('AmbigussBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
+					addGloseModal(event);
+				}
+				{% endif %}
+			}
+
+			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
+			function addDeleteLink($prototype) {
+				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot ambigu</a>');
+				$prototype.find('.deleteLink').append($deleteLink);
+
+				// Au clic sur le bouton de suppression
+				$deleteLink.click(function (e) {
+					var phrase = textarea.val();
+					// On récupère l'id qui est dans l'attribut id (id="amb1"), en supprimant le amb
+					var id = $prototype.attr('id').replace(/amb/, '');
+					// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
+					var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+					// Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu
+					textarea.val(phrase.replace(reg3, '$1'));
+					updateRendu();
+					$prototype.remove();
+					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+					return false;
+				});
+			}
+
 			$("#toggleJugements").click(function () {
 				$("#jugements").toggle("slow");
 			});
@@ -156,49 +257,9 @@
 			$('#helpEditPhraseModal').click(helpEditPhraseModal);
 			function helpEditPhraseModal(event) {
 				setModalSize('modal-lg');
-				setModalTitle('Informations sur la création de phrase');
+				setModalTitle('Informations sur l\'édition de phrase');
 				setModalBody(
-					'<h4><b>Comment créer une phrase ?</b></h4>'
-					+ '<ol>'
-					+ '<li>Écrivez votre phrase complète dans le champ dédié.</li>'
-					+ '<li>'
-					+ 'Sélectionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot sélectionné ambigu".<br>'
-					+ 'Cela a pour effet d\'entourer le mot par les balises amb avec un numéro, et d\'afficher le mot en '
-					+ 'rouge dans le champ de rendu.<br>'
-					+ 'Cela crée aussi une nouvelle ligne dans le formulaire afin que vous puissiez choisir la glose de '
-					+ 'ce mot ambigu.'
-					+ '</li>'
-					+ '<li>Choisissez une glose* pour ce mot ambigu, et indiquez si celle-ci est juste, fausse, ou si vous ne savez pas.</li>'
-					+ '<li>Répétez les points 2 et 3 pour chaque mot ambigu de votre phrase.</li>'
-					+ '<li>'
-					+ 'Appuyez sur le bouton "Créer la phrase".<br>'
-					+ 'Vous aurez alors 5 minutes pour la modifier avant qu\'elle ne soit mise en jeu et jouable.'
-					+ '</li>'
-					+ '</ol>'
-					+ '<div class="alert alert-info">'
-					+ 'Si vous vous êtes trompé pour un mot ambigu, vous pouvez le supprimer à l\'aide du bouton "Supprimer le mot ambigu".'
-					+ '</div>'
-					+ '<p>'
-					+ '* Si aucune glose ne vous est proposée, ou que celles-ci ne vous satisfont pas, vous pouvez '
-					+ 'en ajouter avec le bouton "Ajouter une glose".'
-					+ '</p>'
-					+ '<div class="alert alert-info">'
-					+ 'La création d\'une phrase<br>'
-					+ '<b>coûte</b>'
-					+ '<ul>'
-					+ '<li>{{ costCreatePhraseByMotAmbiguCredits }} crédits par mot ambigu</li>'
-					+ '</ul>'
-					+ '<b>rapporte</b>'
-					+ '<ul>'
-					+ '<li>{{ gainPerLikePhrasePoints }} points par like</li>'
-					+ '<li>{{ gainPercentByGame }}% des points qu\'un joueur gagne en la jouant.</li>'
-					+ '</ul>'
-					+ '</div>'
-					+ '<h4><b>Coût de l\'ajout d\'une glose</b></h4>'
-					+ 'La formule est la suivante :<br>'
-					+ '<span class="text-primary">Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.'
-					+ '</span><br><br>'
-					+ '<b>Exemple :</b><br> Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = ' + (3 * {{ costCreateGloseByGlosesOfMotAmbigu }}) + ' crédits.'
+					'<h4><b>Comment éditer une phrase ?</b></h4>'
 				);
 			}
 

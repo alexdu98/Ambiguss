@@ -20,8 +20,10 @@
 {% else %}
 	<div class="alert alert-success alert-dismissible fade in" role="alert">
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-		La phrase a bien été modifiée. Vous disposez de <b>5 minutes</b> pour
-		<b><a href="{{ path('ambiguss_phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
+		{% if modo is not defined %}
+			La phrase a bien été modifiée. Vous disposez de <b>5 minutes</b> pour
+			<b><a href="{{ path('ambiguss_phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
+		{% endif %}
 		<h3 id="result" class="text-center">
 			{{ phraseDisplay.contenuHTML|raw }}
 		</h3>

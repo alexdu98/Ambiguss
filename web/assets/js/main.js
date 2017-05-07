@@ -40,11 +40,17 @@ $('#modal').on('hidden.bs.modal', cleanModal);
  * @param motAmbigu
  */
 function getGloses(select, motAmbigu) {
-	select.html('<option selected disabled value>Choisissez une glose</option>');
+	select.html('<option selected disabled value>Choisissez une glose (...)</option>');
 	// Empêche la sélection pendant le chargement
 	select.attr('disabled', 'disabled').addClass('loading');
 	var url = Routing.generate('ambiguss_glose_get_by_motambigu');
 	$.post(url, {motAmbigu: motAmbigu}, function (data) {
+		var indication = "";
+		if (data.length > 1)
+			indication = data.length + ' existantes';
+		else
+			indication = data.length + ' existante';
+		select.html('<option selected disabled value>Choisissez une glose (' + indication + ')</option>');
 		$.each(data, function (index) {
 			select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>');
 		});
@@ -133,7 +139,9 @@ function addGloseModal(event) {
 				if (!data.liaisonExiste) {
 					costNewGlose = $('.costNewGlose');
 					updateCredits(-costNewGlose.html());
-					costNewGlose.html(parseInt(costNewGlose.html()) + parseInt(costNewGlose.data('cost')));
+					opt = event.data.prototype.find('select.gloses option').length - 1;
+					if (opt >= 2)
+						costNewGlose.html(opt * parseInt(costNewGlose.data('cost')));
 				}
 				$(form).clearForm();
 			} else {

@@ -57,7 +57,8 @@ class APIController extends Controller
 				$repoMA = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbigu');
 
 				$ma = $repoMA->findOneBy(array('valeur' => $request->request->get('glose_add')['motAmbigu']));
-				$nbGloses = !empty($ma) ? $ma->getGloses()->count() : 0;
+				// 2 premières gratuites
+				$nbGloses = !empty($ma) && $ma->getGloses()->count() >= 2 ? $ma->getGloses()->count() : 0;
 
 				$cout = -($nbGloses * $this->getParameter('costCreateGloseByGlosesOfMotAmbigu'));
 				$this->getUser()->updateCredits($cout);

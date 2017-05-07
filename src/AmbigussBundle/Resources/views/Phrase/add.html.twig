@@ -214,11 +214,11 @@
 					messageNeedConnectionModal();
 				{% else %}
 				nbGloses = $(event.target).closest('.row').find('select.gloses option').length - 1;
-				console.log($(event.target).closest('.row'));
-				console.log($(event.target).closest('.row').find('select.gloses option'));
-				console.log(nbGloses);
-				cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
-				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédits.</div><br>');
+				if (nbGloses >= 2)
+					cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
+				else
+					cost = 0;
+				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédit(s).</div><br>');
 				if ($('#credits').html() > cost) {
 					setModalBody('{{ include('AmbigussBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
 					addGloseModal(event);
@@ -291,8 +291,8 @@
 					+ '</div>'
 					+ '<h4><b>Coût de l\'ajout d\'une glose</b></h4>'
 					+ 'La formule est la suivante :<br>'
-					+ '<span class="text-primary">Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.'
-					+ '</span><br><br>'
+					+ '<span class="text-primary">Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.<br>'
+					+ 'Les deux premières gloses sont gratuites.</span><br><br>'
 					+ '<b>Exemple :</b><br> Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = ' + (3 * {{ costCreateGloseByGlosesOfMotAmbigu }}) + ' crédits.'
 				);
 			}

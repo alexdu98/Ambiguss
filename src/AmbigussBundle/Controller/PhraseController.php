@@ -427,7 +427,7 @@ class PhraseController extends Controller
 		{
 			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
 			{
-				if($dateActu < $dateMax)
+				if($dateActu < $dateMax && !$this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
 				{
 					$phr = new \AmbigussBundle\Entity\Phrase();
 					$form = $this->get('form.factory')->create(PhraseAddType::class, $phr, array('action' => $this->generateUrl('ambiguss_phrase_add')));
@@ -546,6 +546,7 @@ class PhraseController extends Controller
 							}
 
 							$em->getConnection()->beginTransaction();
+							$em->getConnection()->setAutoCommit(false);
 							try
 							{
 
@@ -570,26 +571,32 @@ class PhraseController extends Controller
 
 								$mapsRep = $request->request->get('phrase_edit')['motsAmbigusPhrase'];
 
+								$newRep = array();
 								foreach($phrase->getMotsAmbigusPhrase() as $map)
 								{
+									$rep = new Reponse();
+									// -1 car l'ordre commence à 1 et le reorder à 0
+									$keyForMotsAmbigusPhrase = $mots_ambigu[ $map->getOrdre() - 1 ][1];
+									$idGlose = $mapsRep[ $keyForMotsAmbigusPhrase ]['gloses'];
+									if(empty($idGlose))
+									{
+										throw new \Exception("Tous les mots ambigus doivent avoir une glose");
+									}
+									$glose = $repository3->find($idGlose);
+
+									$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
+
+									$rep->setValeurGlose($glose->getValeur());
+									$rep->setPoidsReponse($repository1->find($poidsReponse));
+
+									$newRep[ $map->getId() ] = $rep;
+
 									// Si il n'y a pas de réponse (nouveau MA)
 									if($map->getReponses()->count() == 0)
 									{
-										$rep = new Reponse();
 										$rep->setContenuPhrase($phrase->getContenu());
 										$rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
-										// -1 car l'ordre commence à 1 et le reorder à 0
-										$keyForMotsAmbigusPhrase = $mots_ambigu[ $map->getOrdre() - 1 ][1];
-										$idGlose = $mapsRep[ $keyForMotsAmbigusPhrase ]['gloses'];
-										if(empty($idGlose))
-										{
-											throw new \Exception("Tous les mots ambigus doivent avoir une glose");
-										}
-										$glose = $repository3->find($idGlose);
-										$rep->setValeurGlose($glose->getValeur());
 										$rep->setAuteur($this->getUser());
-										$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
-										$rep->setPoidsReponse($repository1->find($poidsReponse));
 										$rep->setNiveau($repository2->findOneByTitre('Facile'));
 										$rep->setGlose($glose);
 										$rep->setMotAmbiguPhrase($map);
@@ -605,7 +612,6 @@ class PhraseController extends Controller
 										$em->persist($rep);
 									}
 								}
-
 								$em->flush();
 								$em->getConnection()->commit();
 
@@ -620,9 +626,15 @@ class PhraseController extends Controller
 
 								$phrase->removeMotsAmbigusPhrase();
 
-								foreach($maps as $map)
+								foreach($maps as $key => $map)
 								{
-									$phrase->addMotAmbiguPhrase($map);
+									$phrase->addMotAmbiguPhrase($maps[ $key ]);
+								}
+
+								foreach($phrase->getMotsAmbigusPhrase() as $key => $map)
+								{
+									$map->getReponses()->clear();
+									$map->addReponse($newRep[ $map->getId() ]);
 								}
 
 								$newPhrase = $phrase;

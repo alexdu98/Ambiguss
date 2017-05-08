@@ -102,6 +102,8 @@
 			// Pour numéroter le mot ambigu
 			var index = 0;
 
+			var motsAmbigus = {};
+
 			// Au chargement (au cas ou edit, pas grave si add)
 			updatePhrase();
 			updateRendu();
@@ -149,7 +151,28 @@
 					});
 					textarea.val(temp);
 				}
+				updateMotAmbiguInReponse();
 			}
+
+			// Met à jours la valeur des mots ambigus dans le formulaire des réponses
+			function updateMotAmbiguInReponse() {
+				var phrase = textarea.val();
+				res = phrase.replace(reg2, function ($0, $1, $2) {
+					if (motsAmbigus[$1] != $2) {
+						$('#phrase_add_motsAmbigusPhrase_' + $1 + '_valeur').val($2).css('color', 'red');
+					}
+				});
+			}
+
+			textarea.focusout(function () {
+				var phrase = textarea.val();
+				res = phrase.replace(reg2, function ($0, $1, $2) {
+					if (motsAmbigus[$1] != $2) {
+						$('#phrase_add_motsAmbigusPhrase_' + $1 + '_valeur').trigger('focusout');
+						motsAmbigus[$1] = $2;
+					}
+				});
+			});
 
 			// On met à jour l'affichage propre de la phrase
 			function updateRendu(){
@@ -179,6 +202,7 @@
 
 			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addReponse($container, motAmbigu) {
+				motsAmbigus[index] = motAmbigu;
 				// On ajoute le nom unique et l'id
 				var template = $container.attr('data-prototype')
 					.replace(/__name__label__/g, '')
@@ -194,11 +218,16 @@
 				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
 				addDeleteLink($prototype);
 				$prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
+				$prototype.find('.amb').bind('input', function () {
+					$(this).css('color', 'red');
+				});
 				getGloses($prototype.find('select.gloses'), motAmbigu);
 				$container.append($prototype);
 			}
 
 			function updateMotAmbiguInPhrase(event){
+				$(event.target).css('color', '');
+				motsAmbigus[event.data.id] = $(event.target).val();
 				var phrase = textarea.val();
 				// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
 				var reg3 = new RegExp('<amb id="' + event.data.id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
@@ -236,6 +265,7 @@
 					var phrase = textarea.val();
 					// On récupère l'id qui est dans l'attribut id (id="amb1"), en supprimant le amb
 					var id = $prototype.attr('id').replace(/amb/, '');
+					delete motsAmbigus[id];
 					// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
 					var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
 					// Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu

@@ -9,15 +9,7 @@
 			{% if newPhrase is not null %}
 				{{ include('@Ambiguss/Phrase/displayPhrase.html.twig', {'add': false, 'modo': true, 'phraseDisplay' : newPhrase}) }}
 			{% endif %}
-			<div class="alert alert-danger">
-				<b>TRÈS IMPORTANT :</b><br>
-				Modifications sur la phrase hors mots ambigus, aucun problème.<br>
-				<b>Ajout</b> d'un mot mot ambigu, celui-ci doit avoir un id supérieur à ceux déjà existants. (Ajoute une réponse)<br>
-				<b>Suppression</b> d'un mot ambigu, il suffit de cliquer sur le bouton de suppression correspondant. (Supprime les réponses)<br>
-				<b>Modification</b> d'un mot ambigu, si le sens du mot ambigu ne change pas (faute d'orthographe par exemple), vous pouvez éditer
-				le mot ambigu en veillant à ce que l'id ne change pas. Par contre, si ce n'est plus vraiment le même mot ambigu, il faut supprimer le
-				mot ambigu et le recréer.<br>
-			</div>
+
 			{% for flashMessage in app.session.flashbag.get('succes') %}
 				<div class="alert alert-success">{{ flashMessage }}</div>
 			{% endfor %}
@@ -104,6 +96,8 @@
 			// Pour numéroter le mot ambigu
 			var index = 0;
 
+			var motsAmbigus = {};
+
 			// Au chargement (au cas ou edit, pas grave si add)
 			updatePhrase();
 			updateRendu();
@@ -151,7 +145,28 @@
 					});
 					textarea.val(temp);
 				}
+				updateMotAmbiguInReponse();
 			}
+
+			// Met à jours la valeur des mots ambigus dans le formulaire des réponses
+			function updateMotAmbiguInReponse() {
+				var phrase = textarea.val();
+				res = phrase.replace(reg2, function ($0, $1, $2) {
+					if (motsAmbigus[$1] != $2) {
+						$('#phrase_edit_motsAmbigusPhrase_' + $1 + '_valeur').val($2).css('color', 'red');
+					}
+				});
+			}
+
+			textarea.focusout(function () {
+				var phrase = textarea.val();
+				res = phrase.replace(reg2, function ($0, $1, $2) {
+					if (motsAmbigus[$1] != $2) {
+						$('#phrase_edit_motsAmbigusPhrase_' + $1 + '_valeur').trigger('focusout');
+						motsAmbigus[$1] = $2;
+					}
+				});
+			});
 
 			// On met à jour l'affichage propre de la phrase
 			function updateRendu() {
@@ -181,6 +196,7 @@
 
 			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addReponse($container, motAmbigu) {
+				motsAmbigus[index] = motAmbigu;
 				// On ajoute le nom unique et l'id
 				var template = $container.attr('data-prototype')
 					.replace(/__name__label__/g, '')
@@ -196,11 +212,16 @@
 				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
 				addDeleteLink($prototype);
 				$prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
+				$prototype.find('.amb').bind('input', function () {
+					$(this).css('color', 'red');
+				});
 				getGloses($prototype.find('select.gloses'), motAmbigu);
 				$container.append($prototype);
 			}
 
 			function updateMotAmbiguInPhrase(event) {
+				$(event.target).css('color', '');
+				motsAmbigus[event.data.id] = $(event.target).val();
 				var phrase = textarea.val();
 				// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
 				var reg3 = new RegExp('<amb id="' + event.data.id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
@@ -238,6 +259,7 @@
 					var phrase = textarea.val();
 					// On récupère l'id qui est dans l'attribut id (id="amb1"), en supprimant le amb
 					var id = $prototype.attr('id').replace(/amb/, '');
+					delete motsAmbigus[id];
 					// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
 					var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
 					// Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu
@@ -245,6 +267,7 @@
 					updateRendu();
 					$prototype.remove();
 					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+
 					return false;
 				});
 			}
@@ -260,8 +283,26 @@
 				setModalTitle('Informations sur l\'édition de phrase');
 				setModalBody(
 					'<h4><b>Comment éditer une phrase ?</b></h4>'
+					+ '<span class="text-info">Comme pour la création de phrase, l\'ordre des id n\'a pas d\'importance.<br>'
+					+ 'Les modifications sur la phrase qui ne touchent pas un mot ambigu ne posent aucun problème.</span><br><br>'
+					+ '<div class="alert alert-danger">'
+					+ '<b>TRÈS IMPORTANT :</b><br>'
+					+ '<b>Ajout</b> d\'un mot mot ambigu : celui-ci doit avoir un id supérieur à ceux déjà existants.<br>'
+					+ '<b>Suppression</b> d\'un mot ambigu : il suffit de cliquer sur le bouton de suppression correspondant.<br>'
+					+ '<b>Modification</b> d\'un mot ambigu : si le sens du mot ambigu ne change pas (faute d\'orthographe par exemple), vous pouvez '
+					+ 'éditer le mot ambigu en veillant à ce que l\'id ne change pas. Par contre, si ce n\'est plus vraiment le même mot ambigu, il '
+					+ 'faut supprimer le mot ambigu et le recréer.<br>'
+					+ '</div>'
+					+ '<span class="text-info">En cas d\'erreur, vous pouvez réinitialiser le formulaire en actualisant la page.</span><br>'
+					+ '<br><div class="alert alert-info">Vous pouvez ré-ouvrir ce message à l\'aide du bouton "INFO" situé en bas à droite de '
+					+ 'la page.</div>'
 				);
 			}
+
+			{% if not app.request.cookies.has('helpEditModoPhraseV1') %}
+			$('#helpEditPhraseModal').trigger('click');
+			$.cookie('helpEditModoPhraseV1', 'true');
+			{% endif %}
 
 		});
 	</script>

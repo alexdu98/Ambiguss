@@ -75,20 +75,17 @@
 			// Au click sur le bouton, exécute la fonction
 			$('#helpResultatModal').click(helpResultatModal);
 			function helpResultatModal(event) {
+				// Place le cookie pendant 30 jours
+				$.cookie('helpResultatV1', 'true');
 				setModalSize('modal-lg');
-				setModalTitle('Comment sont calculés les points ?');
-				setModalBody(
-					'La formule du calcul des points et des crédits est la suivante :<br>'
-					+ '<span class="text-primary">On additionne pour chaque glose son pourcentage de votes.</span><br><br>'
-					+ '<b>Exemple :</b><br>'
-					+ 'Un <b class="color-red" title="Ce mot est ambigu">avocat</b> mange '
-					+ 'des <b class="color-red" title="Ce mot est ambigu">avocats</b>.<br>'
-					+ 'Imaginons que l\'on réponde "métier" pour "avocat" et que cette glose corresponde à 80% des réponses '
-					+ 'et que l\'on réponde "fruit" pour "avocats" et que cette glose correponde à 95% des réponses.<br><br>'
-					+ 'Le calcul est donc : 80 + 95 = 175.<br>'
-					+ 'Vous gagnerez alors 175 points et 175 crédits.'
-				);
+				setModalTitle('Informations sur le résultat');
+				setModalBody('{{ include('@Ambiguss/InfosModal/afterPlay.html.twig')|e('js') }}');
 			}
+
+			// Affiche automatiquement la modal si le visiteur n'a pas le cookie comme quoi il a déjà vu les infos
+			{% if not app.request.cookies.has('helpResultatV1') %}
+			$('#helpResultatModal').trigger('click');
+			{% endif %}
 		});
 
 

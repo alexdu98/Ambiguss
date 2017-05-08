@@ -45,7 +45,7 @@ class MembreType extends AbstractType
 		        'required' => false
 	        ))
 	        ->add('Conditions', CheckboxType::class, array(
-		        'label' => "J'accepte les CGU du site",
+		        'label' => "J'accepte les conditions d'utilisation du site",
 		        'required' => true,
 		        'mapped' => false
 	        ))

@@ -8,7 +8,7 @@
 	<meta property="og:title" content="Ambiguss, le jeu de désambiguïsation lexicale."/>
 	<meta property="og:description" content="'{{ phrasePur }}'. Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
 	joueurs."/>
-	<meta property="og:image" content="{{ absolute_url(asset('favicon.png')) }}"/>
+	<meta property="og:image" content="{{ absolute_url(asset('assets/images/avocat128.png')) }}"/>
 {% endblock %}
 
 {% block contenu %}
@@ -42,9 +42,11 @@
 						<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 						J'aime cette phrase
 					</button>
-					<div class="fb-share-button" data-href="{{ url('ambiguss_game', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true">
-						<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('ambiguss_game', {id: phrase_id})|url_encode }};src=sdkpreparse">Partager</a>
-					</div>
+				{% endif %}
+				<div class="fb-share-button" data-href="{{ url('ambiguss_game', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true">
+					<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('ambiguss_game', {id: phrase_id})|url_encode }};src=sdkpreparse">Partager</a>
+				</div>
+				{% if app.user %}
 					<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
 						<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
 						Signaler un élément

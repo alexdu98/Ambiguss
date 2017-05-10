@@ -7,7 +7,7 @@
 <div class="collapse" id="toggleBut">
 	Une phrase est composée d'un ou plusieurs mots ambigus (en rouge).<br>
 	Vous devez indiquer pour chacun de ces mots ambigus, quel est son sens selon vous.<br>
-	Pour cela, vous devez choisir une de ses gloses qui se trouve dans son menu déroulant.<br>
+	Pour cela, vous devez choisir une glose dans le menu déroulant.<br>
 </div>
 <hr><h4>
 	<b>Les gloses</b>
@@ -16,11 +16,11 @@
 	</a>
 </h4>
 <div class="collapse" id="toggleGloses">
-	Définition de glose : "Explication de quelques mots qui éclaircit le sens d'autres mots".<br>
+	Définition de glose : "Explication de un ou plusieurs mots qui éclaircit le sens d'autres mots".<br>
 	Vous pouvez ajouter une glose si celles déjà présentes ne vous conviennent pas, mais ce n'est pas une obligation.<br><br>
 	La formule du coût de création d'une glose est la suivante :<br>
 	<span class="text-primary">
-		Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.<br>
+		Nombre de gloses pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.<br>
 		Les deux premières gloses d'un mot ambigu sont gratuites.
 	</span><br>
 	<b>Exemple :</b><br>
@@ -35,13 +35,13 @@
 </h4>
 <div class="collapse" id="toggleTiragePhrase">
 	<b>Mode connecté :</b><br>
-	La phrase est tirée au hasard parmis celles dont vous n'êtes pas l'auteur, et dont vous n'avez pas encore joué.
-	Si vous avez joué toutes les phrases, en tire une au hasard parmis toutes celles existantes.<br>
+	La phrase est tirée au hasard parmi celles dont vous n'êtes pas l'auteur, et que vous n'avez pas encore jouées.
+	Si vous avez joué toutes les phrases, on en tire une au hasard parmi toutes celles existantes.<br>
 	<b>Mode non connecté :</b><br>
 	Prend les 100 phrases les plus anciennes que votre IP n'a pas joué depuis plus de 3 jours et en tire une au hasard.<br>
 	Si toutes les phrases ont été jouées, en tire une au hasard parmis toutes les phrases existantes.<br><br>
 	<span class="text-info">
-		Si vous passez la phrase, vous appliquez le même algorithme, ce qui peut donc redonner la même phrase, s'il ne vous reste pas beacoup de phrases non jouées par exemple.
+		Si vous décidez de passer la phrase, le même algorithme s’appliquera pour vous en proposer une autre. Sachez donc que s’il ne vous reste plus ou presque plus de phrases non jouées, cette même phrase risque de vous être à nouveau proposée.
 	</span><br>
 </div>
 <hr>

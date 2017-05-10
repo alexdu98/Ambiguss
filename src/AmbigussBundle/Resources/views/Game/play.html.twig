@@ -8,7 +8,9 @@
 	<meta property="og:title" content="Ambiguss, le jeu de désambiguïsation lexicale."/>
 	<meta property="og:description" content="'{{ phrasePur }}'. Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
 	joueurs."/>
-	<meta property="og:image" content="{{ absolute_url(asset('assets/images/avocat128.png')) }}"/>
+	<meta property="og:image" content="{{ absolute_url(asset('assets/images/avocat256.png')) }}"/>
+
+	<link rel="canonical" href="{{ url('ambiguss_game', {id: phrase_id}) }}">
 {% endblock %}
 
 {% block contenu %}
@@ -46,6 +48,7 @@
 				<div class="fb-share-button" data-href="{{ url('ambiguss_game', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true">
 					<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('ambiguss_game', {id: phrase_id})|url_encode }};src=sdkpreparse">Partager</a>
 				</div>
+				<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text='{{ phrasePur }}'. Ambigu non %3F&hashtags=Ambiguss">Partager</a>
 				{% if app.user %}
 					<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
 						<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
@@ -89,6 +92,24 @@
 			js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.9&appId=1793610560900722";
 			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
+	</script>
+	<script>
+		window.twttr = (function (d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0],
+				t = window.twttr || {};
+			if (d.getElementById(id)) return t;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "https://platform.twitter.com/widgets.js";
+			fjs.parentNode.insertBefore(js, fjs);
+
+			t._e = [];
+			t.ready = function (f) {
+				t._e.push(f);
+			};
+
+			return t;
+		}(document, "script", "twitter-wjs"));
 	</script>
 	<script>
 		$(document).ready(function () {

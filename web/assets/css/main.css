@@ -270,7 +270,12 @@ button.infobulle img{
 	background: #FFF;
 	color: #1b95e0;
 }
-
+.fb_iframe_widget{
+	vertical-align: text-bottom !important;
+}
+.twitter-share-button{
+	vertical-align: text-bottom !important;
+}
 
 /*
     #####################################################################

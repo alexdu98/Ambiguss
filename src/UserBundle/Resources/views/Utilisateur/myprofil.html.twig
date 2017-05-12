@@ -46,6 +46,7 @@
 					<div class="col-md-6 text-right">
 						<p><b>Date d'inscription :</b> {{ user.dateInscription|date('d/m/Y à H:i') }}</p>
 						<p><b>Dernière connexion :</b> {{ user.dateConnexion|date('d/m/Y à H:i') }}</p>
+						<p><b>Email :</b> {{ user.email }}</p>
 						<p><b>Groupe :</b> {{ user.groupe.nom }}</p>
 						<p><b>Date de naissance :</b> {{ user.dateNaissance|date('d/m/Y') }}</p>
 						<p><b>Newsletter :</b> {% if user.newsletter %}abonné{% else %}non abonné{% endif %}</p>

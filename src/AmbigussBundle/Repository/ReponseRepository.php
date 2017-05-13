@@ -50,7 +50,7 @@ class ReponseRepository extends \Doctrine\ORM\EntityRepository
 			                  ->getQuery()->getSingleResult()['total'];
 
 		$dateJ30 = new \DateTime();
-		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 7));
+		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 30));
 		$array['reponduJ30'] = $this->createQueryBuilder('r')
 			                       ->select('count(r) reponduJ30')
 			                       ->where('r.dateReponse > :j30')->setParameter('j30', $dateJ30)

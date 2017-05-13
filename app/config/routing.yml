@@ -46,10 +46,6 @@ app:
     resource: "@AppBundle/Resources/config/routing.yml"
     prefix:   /
 
-comment:
-    resource: "@CommentBundle/Resources/config/routing.yml"
-    prefix:   /
-
 judgment:
     resource: "@JudgmentBundle/Resources/config/routing.yml"
     prefix:   /

@@ -29,7 +29,7 @@ class PartieRepository extends \Doctrine\ORM\EntityRepository
 			                  ->getQuery()->getSingleResult()['total'];
 
 		$dateJ30 = new \DateTime();
-		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 7));
+		$dateJ30->setTimestamp($dateJ30->getTimestamp() - (3600 * 24 * 30));
 		$array['joueJ30'] = $this->createQueryBuilder('pa')
 			                    ->select('count(pa) joueJ30')
 			                    ->where('pa.datePartie > :j30')->setParameter('j30', $dateJ30)

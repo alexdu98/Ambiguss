@@ -19,7 +19,6 @@ class AppKernel extends Kernel
 	        new AmbigussBundle\AmbigussBundle(),
 	        new UserBundle\UserBundle(),
 	        new JudgmentBundle\JudgmentBundle(),
-	        new CommentBundle\CommentBundle(),
 	        new AppBundle\AppBundle(),
 	        new AdministrationBundle\AdministrationBundle(),
 	        new FOS\JsRoutingBundle\FOSJsRoutingBundle(),

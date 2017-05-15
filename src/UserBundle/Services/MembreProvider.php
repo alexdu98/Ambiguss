@@ -1,17 +1,15 @@
 <?php
 
-namespace UserBundle\Security;
+namespace UserBundle\Services;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\Exception\DisabledException;
-use Symfony\Component\Security\Core\Exception\LockedException;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use HWI\Bundle\OAuthBundle\Security\Core\User as HWIOAuth;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\User as HWIOAuth;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use UserBundle\Entity\Membre;
 
 class MembreProvider implements UserProviderInterface, HWIOAuth\OAuthAwareUserProviderInterface
@@ -39,22 +37,25 @@ class MembreProvider implements UserProviderInterface, HWIOAuth\OAuthAwareUserPr
 	/**
 	 * {@inheritdoc}
 	 */
+	public function refreshUser(UserInterface $user)
+	{
+		if(!$user instanceof Membre)
+		{
+			throw new UnsupportedUserException(sprintf('Instances de "%s" non supportées.', get_class($user)));
+		}
+
+		return $this->loadUserByUsername($user->getUsername());
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function loadUserByUsername($username){
 		$membre = $this->em->getRepository('UserBundle:Membre')->findOneBy(array('pseudo' => $username));
 		if($membre != null){
 			return $membre;
 		}
 		throw new UsernameNotFoundException(sprintf('Le pseudo "%s" n\'existe pas.', $username));
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function refreshUser(UserInterface $user){
-		if (!$user instanceof Membre) {
-			throw new UnsupportedUserException(sprintf('Instances de "%s" non supportées.', get_class($user)));
-		}
-		return $this->loadUserByUsername($user->getUsername());
 	}
 
 	/**

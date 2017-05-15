@@ -1,4 +1,8 @@
 services:
+    user.membre_provider:
+        class: UserBundle\Services\MembreProvider
+        arguments: ["@doctrine.orm.default_entity_manager"]
+
     user.security.authentification.success:
         class: UserBundle\Listeners\AuthentificationListener
         arguments: ["@doctrine.orm.entity_manager"]

@@ -11,7 +11,7 @@
 				<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
 				<small>({{ map.getOrdre }})</small> :
 				{% for reponse in map.reponses %}
-					{{ reponse.valeurGlose }} -> {{ reponse.poidsReponse.label }}
+					{{ reponse.valeurGlose }} {#-> {{ reponse.poidsReponse.label }}#}
 				{% endfor %}
 				<br>
 			{% endfor %}
@@ -32,7 +32,7 @@
 				<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
 				<small>({{ map.getOrdre }})</small> :
 				{% for reponse in map.reponses %}
-					{{ reponse.valeurGlose }} -> {{ reponse.poidsReponse.label }}
+					{{ reponse.valeurGlose }} {#-> {{ reponse.poidsReponse.label }}#}
 				{% endfor %}
 				<br>
 			{% endfor %}

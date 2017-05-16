@@ -159,8 +159,8 @@ class PhraseController extends Controller
 							$glose = $repository3->find($idGlose);
 							$rep->setValeurGlose($glose->getValeur());
 							$rep->setAuteur($this->getUser());
-							$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
-							$rep->setPoidsReponse($repository1->find($poidsReponse));
+							//$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
+							$rep->setPoidsReponse($repository1->findOneBy(array('label' => 'juste')));
 							$rep->setNiveau($repository2->findOneByTitre('Facile'));
 							$rep->setGlose($glose);
 							$rep->setMotAmbiguPhrase($map);
@@ -584,10 +584,10 @@ class PhraseController extends Controller
 									}
 									$glose = $repository3->find($idGlose);
 
-									$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
+									//$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
 
 									$rep->setValeurGlose($glose->getValeur());
-									$rep->setPoidsReponse($repository1->find($poidsReponse));
+									$rep->setPoidsReponse($repository1->findOneBy(array('label' => 'juste')));
 
 									$newRep[ $map->getId() ] = $rep;
 

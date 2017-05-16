@@ -301,6 +301,13 @@ class GameController extends Controller
 			'action' => $this->generateUrl('jugement_add'),
 		));
 
+		// Ordonne les mots ambigus sur leur ordre
+		uasort($motsAmbigus, function($a, $b)
+		{
+			return ($a[2] < $b[2]) ? -1 : 1;
+		});
+		$motsAmbigus = array_values($motsAmbigus);
+
 		return $this->render('AmbigussBundle:Game:play.html.twig', array(
 			'form' => $form->createView(),
 			'phrase_id' => $phraseOBJ->getId(),

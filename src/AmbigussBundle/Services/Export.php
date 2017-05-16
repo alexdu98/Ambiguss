@@ -23,7 +23,7 @@ class Export
 
 		$phrases = $repoP->findAll();
 
-		$file = fopen($this->rep . 'export_phrases.json', 'wb');
+		$file = fopen($this->rep . 'export_phrases.json', 'wb+');
 
 		$Marray = array();
 		$finalarray = array();
@@ -67,7 +67,7 @@ class Export
 
 		$MAs = $repoAM->findAll();
 
-		$file = fopen($this->rep . 'export_motsAmbigus.json', 'wb');
+		$file = fopen($this->rep . 'export_motsAmbigus.json', 'wb+');
 
 		$MAGarray = array();
 		$finalarray = array();

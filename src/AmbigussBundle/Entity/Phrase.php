@@ -422,8 +422,8 @@ class Phrase
 	 */
 	public function normalize()
 	{
-		// Supprime les espaces multiples
-		$this->setContenu(preg_replace('#\s+#', ' ', $this->getContenu()));
+		// Supprime les espaces multiples, option u car sinon les caractères utf8 partent en vrille
+		$this->setContenu(preg_replace('#\s+#u', ' ', $this->getContenu()));
 
 		// Met la première lettre en majuscule
 		$this->setContenu(preg_replace_callback('#^(\<amb id\="[0-9]+"\>)?([a-z])(.*)#', function($matches)

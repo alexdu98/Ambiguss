@@ -242,6 +242,14 @@ button.infobulle{
 button.infobulle img{
 	width: 100px;
 }
+@media (max-width: 768px){
+	.text-left-xs{
+		text-align: left;
+	}
+	.row-eq-height{
+		display: block;
+	}
+}
 
 
 /*

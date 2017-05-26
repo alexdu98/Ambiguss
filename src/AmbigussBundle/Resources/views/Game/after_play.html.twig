@@ -30,7 +30,7 @@
 				        {% transchoice nb_point %}
 					        {0} Dommage, vous n'avez pas gagné de point cette fois. |
 					        {1} Bravo, vous avez gagné 1 point. |]1,
-				        Inf[ Félicitation, vous avez gagné <span id="fun-level">0</span> points !
+				        Inf[ Félicitation, vous avez gagné <span id="fun-level">%nb_point%</span> points !
 				        {% endtranschoice %}
 						<div >
 							<img src="{{ asset('avogif.gif') }} " alt="gif">
@@ -94,9 +94,9 @@
 	<script src="{{ asset('assets/js/jquery.animateNumber.js') }}"></script>
 
     <script>
-        var number_step = $.animateNumber.numberStepFactories.append(' ');
+        var number_step = $.animateNumber.numberStepFactories.append('');
 
-        $('#fun-level').animateNumber(
+        $('#fun-level').prop('number', 0).animateNumber(
             {
                 number: {{ nb_point }},
                 style: "color: black",

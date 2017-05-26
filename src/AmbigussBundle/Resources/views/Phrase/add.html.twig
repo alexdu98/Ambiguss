@@ -234,7 +234,7 @@
 				// Met à jour le mot ambigu dans la phrase
 				textarea.val(phrase.replace(reg3, '<amb id="' + event.data.id + '">'+ $(event.target).val() + endBaliseAmbiguEscape));
 				updateRendu();
-				getGloses($(event.target).parent().next().find('select.gloses'), $(event.target).val());
+				getGloses($(event.target).closest('.colAmb').next().find('select.gloses'), $(event.target).val());
 			}
 
 			function addGloseButtonIsClicked(event){

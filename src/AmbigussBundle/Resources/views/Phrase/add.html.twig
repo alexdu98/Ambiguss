@@ -281,7 +281,7 @@
 			$('#helpAddPhraseModal').click(helpAddPhraseModal);
 			function helpAddPhraseModal(event){
 				// Place le cookie pendant 30 jours
-				$.cookie('helpAddPhraseV1', 'true');
+				$.cookie('helpAddPhraseV1', 'true', {expires: 30});
 				setModalSize('modal-lg');
 				setModalTitle('Informations sur la création de phrase');
 				setModalBody('{{ include('@Ambiguss/InfosModal/addPhrase.html.twig')|e('js') }}');

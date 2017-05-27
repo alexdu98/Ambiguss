@@ -32,8 +32,9 @@
 					        {1} Bravo, vous avez gagné 1 point. |]1,
 				        Inf[ Félicitation, vous avez gagné <span id="fun-level">%nb_point%</span> points !
 				        {% endtranschoice %}
-						<div >
-							<img src="{{ asset('avogif.gif') }} " alt="gif">
+
+				        <div>
+							<img src="{{ asset('avogif.gif') }} " alt="gif" width="100%">
 						</div>
 			        {% endif %}
 		        {% else %}
@@ -76,7 +77,7 @@
 			$('#helpResultatModal').click(helpResultatModal);
 			function helpResultatModal(event) {
 				// Place le cookie pendant 30 jours
-				$.cookie('helpResultatV1', 'true');
+				$.cookie('helpResultatV1', 'true', {expires: 30});
 				setModalSize('modal-lg');
 				setModalTitle('Informations sur le résultat');
 				setModalBody('{{ include('@Ambiguss/InfosModal/afterPlay.html.twig')|e('js') }}');
@@ -104,7 +105,10 @@
                 easing: 'easeInQuad',
                 numberStep:number_step
             },
-	        1500
+	        1500,
+	        function () {
+		        $('#fun-level').text("{{ nb_point }}");
+	        }
         );
 
 	</script>

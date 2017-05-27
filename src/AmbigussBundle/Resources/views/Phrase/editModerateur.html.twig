@@ -280,7 +280,7 @@
 			$('#helpEditPhraseModal').click(helpEditPhraseModal);
 			function helpEditPhraseModal(event) {
 				// Place le cookie pendant 30 jours
-				$.cookie('helpEditModoPhraseV1', 'true');
+				$.cookie('helpEditModoPhraseV1', 'true', {expires: 30});
 				setModalSize('modal-lg');
 				setModalTitle('Informations sur l\'édition de phrase');
 				setModalBody('{{ include('@Ambiguss/InfosModal/editPhraseModo.html.twig')|e('js') }}');

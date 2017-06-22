@@ -81,7 +81,7 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 	public function findLike($contenuPur)
 	{
 		return $this->createQueryBuilder('p')
-			->select('p.id, p.contenu, p.auteur, p.dateCreation, p.modificateur, p.dateModification, p.signale, p.visible, p.gainCreateur')
+			->select('p.id, p.contenu, IDENTITY(p.auteur), p.dateCreation, IDENTITY(p.modificateur), p.dateModification, p.signale, p.visible, p.gainCreateur')
 			->where('p.contenuPur LIKE :contenuPur')->setParameter('contenuPur', '%' . $contenuPur . '%')
 			->getQuery()->getResult();
 	}

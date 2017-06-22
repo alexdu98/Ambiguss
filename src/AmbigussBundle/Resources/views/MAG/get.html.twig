@@ -117,9 +117,14 @@
 
 						$('#res').empty().append('<hr><h4 class=text-center>Liaisons ' + other + '</h4>' + inputs);
 
-						$('.deleteLink').click(function () {
+						$('.deleteLink').click(function (event) {
+							event.preventDefault();
+
 							g_id = $(this).data('g');
 							ma_id = $(this).data('ma');
+
+							// On affiche l'image laoding en attendant la réponse
+							$(this).after('<img src="' + urlImageLoading + '" id="loading">');
 
 							var url = Routing.generate('ambiguss_mag_delete');
 							$.post(url, {motAmbigu: ma_id, glose: g_id, token: '{{ csrf_token('delete_mag') }}'}, function (data) {
@@ -131,7 +136,13 @@
 								else {
 									liaison.append('<span class="text-danger">' + data.message + '</span>');
 								}
-							}, "json");
+							}, "json")
+								.fail(function () {
+									$(this).after('<span class="text-danger">Erreur</span>');
+								})
+								.always(function () {
+									$('#loading').remove();
+								});
 						});
 					} else {
 						$('#res').empty().append('<span class="text-danger">Erreur</span>');

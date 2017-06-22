@@ -279,8 +279,11 @@
 			});
 
 			// Ajout de l'eventlistener valide
-			$('.signalement').click(function () {
+			$('.signalement').click(function (event) {
+				event.preventDefault();
 				var bouton = $(this);
+				// On affiche l'image laoding en attendant la réponse
+				$(this).after('<img src="' + urlImageLoading + '" id="loading">');
 				$.post('{{ path('jugement_edit') }}', {
 					id: $(this).data('id'), verdict: $(this).data('verdict'), token: '{{ csrf_token
 					('jugement_vote') }}'
@@ -292,7 +295,13 @@
 					else {
 						bouton.closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
 					}
-				});
+				})
+					.fail(function () {
+						$(this).after('<span class="text-danger">Erreur</span>');
+					})
+					.always(function () {
+						$('#loading').remove();
+					});
 			});
 
 			// Au click sur le bouton, exécute la fonction

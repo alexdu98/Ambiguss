@@ -121,7 +121,12 @@
 							clone.find('.date-creation').append(date);
 
 							// Ajout de l'eventlistener valide
-							clone.find('.signalement').click(function () {
+							clone.find('.signalement').click(function (event) {
+								event.preventDefault();
+
+								// On affiche l'image laoding en attendant la réponse
+								$(this).after('<img src="' + urlImageLoading + '" id="loading">');
+
 								$.post('{{ path('jugement_edit') }}', {
 									id: data.jugements[index].id, verdict: $(this).data('verdict'), token: '{{ csrf_token
 									('jugement_vote') }}'
@@ -133,7 +138,13 @@
 									else {
 										clone.append('<span class="text-danger">Erreur (' + data.message + ')</span>')
 									}
-								});
+								})
+									.fail(function () {
+										$(this).after('<span class="text-danger">Erreur</span>');
+									})
+									.always(function () {
+										$('#loading').remove();
+									});
 							});
 
 							divJugement.append(clone);

@@ -19,31 +19,6 @@ class MotAmbiguPhraseRepository extends \Doctrine\ORM\EntityRepository
 	}
 
 	/**
-	 * Retoune un tableau de tableau avec un champ correspondant à l'id d'une phrase non joué et existante depuis plus de $dureeAv par l'ip depuis since
-	 *
-	 * @param $ip
-	 * @param $since
-	 * @param $maxResult
-	 * @param $dureeAvantJouabiliteSecondes
-	 *
-	 * @return array
-	 */
-	public function findIdPhrasesNotPlayedByIpSince($ip, $since, $maxResult, $dureeAvantJouabiliteSecondes)
-	{
-		$date = new \DateTime();
-		$dateMin = $date->setTimestamp($date->getTimestamp() - $dureeAvantJouabiliteSecondes);
-
-		return $this->createQueryBuilder('pma')->select('identity(pma.phrase) id')->distinct()
-			->leftJoin('pma.reponses', 'r', "WITH", "pma.id = r.motAmbiguPhrase AND r.ip = :ip AND r.dateReponse >= :since")
-			->join('pma.phrase', 'p', "WITH", "pma.phrase = p.id")
-			->setParameter('ip', $ip)->setParameter('since', $since)
-			->where('r.id is null')
-			->andWhere('p.dateCreation < :dateMin')->setParameter('dateMin', $dateMin->format('Y-m-d H:i:s'))
-			->setMaxResults($maxResult)
-			->getQuery()->getArrayResult();
-	}
-
-	/**
 	 * Retourne un tableau de tableau avec un champ correspondant à l'id d'une phrase et existante depuis plus de $dureeAv
 	 * @param $dureeAvantJouabiliteSecondes
 	 *
@@ -58,6 +33,7 @@ class MotAmbiguPhraseRepository extends \Doctrine\ORM\EntityRepository
 			->leftJoin('pma.reponses', 'r', "WITH", "pma.id = r.motAmbiguPhrase")
 			->join('pma.phrase', 'p', "WITH", "pma.phrase = p.id")
 			->where('p.dateCreation < :dateMin')->setParameter('dateMin', $dateMin->format('Y-m-d H:i:s'))
+			->andWhere('p.visible = 1')
 			->groupBy('pma.phrase')
 			->getQuery()->getArrayResult();
 	}

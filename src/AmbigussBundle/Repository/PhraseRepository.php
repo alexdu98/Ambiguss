@@ -65,6 +65,7 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			->where($q->expr()->notIn('ph.id', $sub->getDQL()))
 			->andWhere('ph.dateCreation < :dateMin')
 			->andWhere('ph.auteur != :membre')
+			->andWhere('ph.visible = 1')
 			->setParameter('dateMin', $dateMin->format('Y-m-d H:i:s'))
 			->setParameter('membre', $membre)
 			->getQuery()->getArrayResult();

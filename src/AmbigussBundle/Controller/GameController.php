@@ -222,13 +222,6 @@ class GameController extends Controller
 			{
 				$phrases = $repository->findIdPhrasesNotPlayedByMembre($this->getUser(), $this->getParameter('dureeAvantJouabiliteSecondes'));
 			}
-			else
-			{
-				$date = new \DateTime();
-				// Date d'il y a 3 jours
-				$date = $date->getTimestamp() - (3600 * 24 * 3);
-				$phrases = $repmap->findIdPhrasesNotPlayedByIpSince($_SERVER['REMOTE_ADDR'], $date, 100, $this->getParameter('dureeAvantJouabiliteSecondes'));
-			}
 
 			// Si toutes les phrases ont été joués
 			$allPhrasesPlayed = false;

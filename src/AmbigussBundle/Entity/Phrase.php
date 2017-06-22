@@ -196,6 +196,19 @@ class Phrase implements \JsonSerializable
 		return $this;
 	}
 
+	/**
+	 * Met à jour les gains
+	 * @param $gainCreateur
+	 *
+	 * @return $this
+	 */
+    public function updateGainCreateur($gainCreateur){
+    	$this->gainCreateur += $gainCreateur;
+    	if($this->gainCreateur < 0)
+		    $this->gainCreateur = 0;
+    	return $this;
+    }
+
     /**
      * Get signale
      *

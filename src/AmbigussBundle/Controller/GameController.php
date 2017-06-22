@@ -160,7 +160,7 @@ class GameController extends Controller
 
 						$partie->setJoue(true);
 						$partie->setGainJoueur(ceil($nb_points));
-						$partie->getPhrase()->setGainCreateur($gainCreateur);
+						$partie->getPhrase()->updateGainCreateur($gainCreateur);
 
 						// On enregistre dans l'historique du joueur
 						$histJoueur = new Historique();

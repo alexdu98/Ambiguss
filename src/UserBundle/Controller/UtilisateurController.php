@@ -17,7 +17,7 @@ class UtilisateurController extends Controller
 		}
 
 		$repoPh = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
-		$nbPhrases = $repoPh->countAll();
+		$nbPhrases = $repoPh->countAllVisible();
 
 		$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
 

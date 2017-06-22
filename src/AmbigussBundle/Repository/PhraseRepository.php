@@ -71,10 +71,11 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getArrayResult();
 	}
 
-	public function countAll()
+	public function countAllVisible()
 	{
 		return $this->createQueryBuilder('p')
 			->select('count(p) nbPhrases')
+			->where('p.visible = 1')
 			->getQuery()->getSingleResult();
 	}
 

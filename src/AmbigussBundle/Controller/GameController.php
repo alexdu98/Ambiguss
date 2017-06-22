@@ -138,7 +138,7 @@ class GameController extends Controller
 						}
 
 						// On ajoute les points et crédits au createur de la phrase
-						$gainCreateur = ceil(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
+						$gainCreateur = ceil(($gainJoueur * $this->getParameter('gainPercentByGame')) / 100);
 						$auteur = $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur();
 						$auteur->updatePoints($gainCreateur);
 						$auteur->updateCredits($gainCreateur);
@@ -159,7 +159,7 @@ class GameController extends Controller
 						}
 
 						$partie->setJoue(true);
-						$partie->setGainJoueur(ceil($nb_points));
+						$partie->setGainJoueur($gainJoueur);
 						$partie->getPhrase()->updateGainCreateur($gainCreateur);
 
 						// On enregistre dans l'historique du joueur
@@ -170,7 +170,7 @@ class GameController extends Controller
 
 						// On enregistre dans l'historique du createur de la phrase
 						$histAuteur = new Historique();
-						$histAuteur->setValeur("Un joueur a joué votre phrase n°" . $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId() . " (+" . $gainCreateur . " crédits).");
+						$histAuteur->setValeur("Un joueur a joué votre phrase n°" . $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId() . " (+" . $gainCreateur . " crédits/points).");
 						$histAuteur->setMembre($auteur);
 
 						$em->persist($partie);

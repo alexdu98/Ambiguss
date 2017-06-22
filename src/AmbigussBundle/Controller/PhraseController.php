@@ -130,7 +130,7 @@ class PhraseController extends Controller
 						$histJoueur = new Historique();
 						if(!$edit)
 						{
-							$histJoueur->setValeur("Création de la phrase n°" . $phrase->getId() . ".");
+							$histJoueur->setValeur("Création de la phrase n°" . $phrase->getId() . " (+ " . $this->getParameter('gainCreatePhrasePoints') . " points).");
 						}
 						else
 						{

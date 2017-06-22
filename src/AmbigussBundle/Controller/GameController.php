@@ -126,8 +126,9 @@ class GameController extends Controller
 					if(empty($partie) || ($partie->getJoue() == 0 && $partie->getPhrase()->getAuteur() != $this->getUser()))
 					{
 						// On lui ajoute les points et crédits au joueur
-						$this->getUser()->setPointsClassement($this->getUser()->getPointsClassement() + ceil($nb_points));
-						$this->getUser()->setCredits($this->getUser()->getCredits() + ceil($nb_points));
+						$gainJoueur = ceil($nb_points);
+						$this->getUser()->updatePoints($gainJoueur);
+						$this->getUser()->updateCredits($gainJoueur);
 
 						// On vérifie le niveau du joueur
 						$niveauSuivant = $this->getUser()->getNiveau()->getNiveauParent();
@@ -136,9 +137,10 @@ class GameController extends Controller
 							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
 						}
 
-						// On ajoute les crédits au createur de la phrase
+						// On ajoute les points et crédits au createur de la phrase
 						$gainCreateur = ceil(($nb_points * $this->getParameter('gainPercentByGame')) / 100);
 						$auteur = $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur();
+						$auteur->updatePoints($gainCreateur);
 						$auteur->updateCredits($gainCreateur);
 
 						// On vérifie le niveau du createur
@@ -195,6 +197,7 @@ class GameController extends Controller
 					}
 				}
 
+				$this->get('session')->getFlashBag()->add('phrase_id', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId());
 				$this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
 				$this->get('session')->getFlashBag()->add('auteur', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur());
 				$this->get('session')->getFlashBag()->add('stats', $hash);
@@ -325,6 +328,7 @@ class GameController extends Controller
 
 	public function resultatAction(Request $request)
 	{
+		$phrase_id = $this->get('session')->getFlashBag()->get('phrase_id');
 		$phrase = $this->get('session')->getFlashBag()->get('phrase');
 		$auteur = $this->get('session')->getFlashBag()->get('auteur');
 		$isAuteur = $this->get('session')->getFlashBag()->get('isAuteur');
@@ -332,8 +336,14 @@ class GameController extends Controller
 		$alreadyPlayed = $this->get('session')->getFlashBag()->get('alreadyPlayed');
 		$nb_points = $this->get('session')->getFlashBag()->get('nb_points');
 
-		if(!empty($phrase) && !empty($auteur) && !empty($isAuteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
+		if(!empty($phrase_id) && !empty($phrase) && !empty($auteur) && !empty($isAuteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
 		{
+			// jugement (cas signalement)
+			$jug = new Jugement();
+			$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
+				'action' => $this->generateUrl('jugement_add'),
+			));
+
 			return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
 				'phrase' => $phrase[0],
 				'auteur' => $auteur[0],
@@ -341,6 +351,9 @@ class GameController extends Controller
 				'stats' => $stats[0],
 				'alreadyPlayed' => $alreadyPlayed[0],
 				'nb_point' => $nb_points[0],
+				'phraseHTMLEscape' => preg_replace('#"#', '\"', $phrase[0]),
+				'addJugementForm' => $addJugementForm->createView(),
+				'phrase_id' => $phrase_id[0],
 			));
 		}
 		throw $this->createNotFoundException();

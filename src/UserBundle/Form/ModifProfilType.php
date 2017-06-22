@@ -3,7 +3,9 @@
 namespace UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -21,7 +23,12 @@ class ModifProfilType extends AbstractType
         $builder
 	        ->remove('Pseudo')
 	        ->remove('Valider')
-
+	        ->add('mdpActu', PasswordType::class, array(
+		        'label' => 'Mot de passe actuel',
+		        'required' => false,
+		        'mapped' => false,
+		        'attr' => array('placeholder' => 'Mot de passe actuel'),
+	        ))
             ->add('Mdp', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'options' => array('attr' => array('class' => 'password-field')),
@@ -58,7 +65,25 @@ class ModifProfilType extends AbstractType
 		        'data' => $options['newsletter'],
 		        'required' => false,
 	        ))
-	        ->add('ValiderNewsletter', SubmitType::class, array(
+	        ->add('Sexe', ChoiceType::class, array(
+		        'choices' => array(
+			        'Homme' => 'Homme',
+			        'Femme' => 'Femme',
+		        ),
+		        'label' => "Genre",
+		        'data' => $options['sexe'],
+		        'required' => false,
+	        ))
+	        ->add('dateNaissance', BirthdayType::class, array(
+		        'label' => 'Date de naissance',
+		        'data' => $options['dateNaissance'],
+		        'placeholder' => array(
+			        'year' => 'Année',
+			        'month' => 'Mois',
+			        'day' => 'Jour',
+		        ),
+	        ))
+	        ->add('ValiderInfos', SubmitType::class, array(
 		        'label' => 'Valider',
 		        'attr' => array(
 			        'class' => 'btn btn-primary',
@@ -72,7 +97,7 @@ class ModifProfilType extends AbstractType
 
 
     public function getParent(){
-        return MembreType::class;
+	    return MembreInscriptionType::class;
     }
 
 }

@@ -27,14 +27,17 @@
 
 					{{ form_errors(form) }}
 
+					{{ form_row(form.mdpActu) }}
 					{{ form_row(form.Mdp) }}
 					{{ form_row(form.ValiderMdp) }}
 					<hr>
 					{{ form_row(form.Email) }}
 					{{ form_row(form.ValiderEmail) }}
 					<hr>
+					{{ form_row(form.Sexe) }}
+					{{ form_row(form.dateNaissance) }}
 					{{ form_row(form.Newsletter) }}
-					{{ form_row(form.ValiderNewsletter) }}
+					{{ form_row(form.ValiderInfos) }}
 
 					{{ form_rest(form) }}
 					{{ form_end(form) }}

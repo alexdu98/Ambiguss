@@ -124,7 +124,7 @@
 							clone.find('.signalement').click(function () {
 								$.post('{{ path('jugement_edit') }}', {
 									id: data.jugements[index].id, verdict: $(this).data('verdict'), token: '{{ csrf_token
-									('jugement_glose') }}'
+									('jugement_vote') }}'
 								}, function
 									(data) {
 									if (data.succes) {

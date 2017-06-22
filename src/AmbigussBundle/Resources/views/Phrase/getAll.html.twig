@@ -85,7 +85,8 @@
             responsive: true,
             language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
         });
-        // Au click sur le bouton, exécute la fonction
+
+	    // Au click sur le bouton, exécute la fonction
         $('.deletePhraseButton').click(deletePhraseModal);
         function deletePhraseModal(event) {
             var button = $(this);

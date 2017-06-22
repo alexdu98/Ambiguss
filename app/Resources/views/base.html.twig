@@ -26,7 +26,7 @@
 		    {% endif %}
 		    <nav class="navbar navbar-default navbar-static-top" id="nav-main">
 			    <div class="container-fluid">
-				    <div class="row row-eq-heigh">
+				    <div class="row row-eq-height">
 					    <div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-1">
 						    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 							    <span class="sr-only">Toggle navigation</span>
@@ -35,11 +35,10 @@
 							    <span class="icon-bar"></span>
 						    </button>
 						    <a class="navbar-brand" href="{{ path('app_accueil') }}">
-							    <img alt="Ambiguss logo" src="{{ asset('favicon.png') }}">
-							    <span>Amb</span>iguss
+							    <img id="logo" alt="Ambiguss logo" src="{{ asset('assets/images/logo.png') }}">
+							    <span class="color-green">Amb</span>iguss
 						    </a>
 					    </div>
-					    <div class="clearfix visible-xs-block"></div>
 					    <div class="col-xs-12 col-sm-12 col-sm-9 col-md-5">
 						    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							    <ul class="nav navbar-nav">
@@ -50,7 +49,7 @@
 									    <a href="{{ path('ambiguss_phrase_add') }}">Créer<span class="sr-only">(current)</span></a>
 								    </li>
 								    <li class="dropdown">
-									    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classement
+									    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classements
 										    <span class="caret"></span></a>
 									    <ul class="dropdown-menu">
 										    <li><a href="{{ path('ambiguss_classement_general') }}">Joueurs</a></li>
@@ -61,16 +60,21 @@
 								    </li>
 								    {% if is_granted('ROLE_MODERATEUR') %}
 									    <li class="dropdown">
-										    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modération
-											    <span class="caret"></span></a>
+										    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+											    Modération <span class="badge">{{ nbPhrasesSignale() + nbGlosesSignale() }}</span>
+											    <span class="caret"></span>
+										    </a>
 										    <ul class="dropdown-menu">
-											    <li><a href="{{ path('ambiguss_moderation_phrase') }}">Phrases</a></li>
-											    {% if app.environment == 'dev' %}
-												    <li><a href="{{ path('ambiguss_moderation_ma') }}">Mots ambigus</a></li>
-											    {% else %}
-												    <li><a href="#">Mots ambigus</a></li>
-											    {% endif %}
-											    <li><a href="{{ path('ambiguss_gloses') }}">Gloses</a></li>
+											    <li>
+												    <a href="{{ path('ambiguss_moderation_phrase') }}">
+													    Phrases <span class="badge">{{ nbPhrasesSignale() }}</span>
+												    </a>
+											    </li>
+											    <li>
+												    <a href="{{ path('ambiguss_gloses') }}">
+													    Gloses <span class="badge">{{ nbGlosesSignale() }}</span>
+												    </a>
+											    </li>
 											    <li><a href="{{ path('ambiguss_moderation_mag') }}">Liaisons MA-G</a></li>
 										    </ul>
 									    </li>
@@ -79,11 +83,10 @@
 						    </div>
 					    </div>
 					    <div class="col-xs-12 col-sm-12 col-md-3 text-right">
-						    <ul>
+						    <ul class="coDecoMenu">
 							    {% if app.user %}
-								    <li><a href="{{ path('user_profil') }}">{{ app.user.pseudo|capitalize }} </a></li> •
-								    <li><a href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
-								    <br>
+								    <li><a class="linkCoMenu" href="{{ path('user_profil') }}">{{ app.user.pseudo }} </a></li> •
+								    <li><a class="linkCoMenu" href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
 								    <div>
 									    Points : <span id="points">{{ app.user.pointsClassement|capitalize }}</span> |
 									    Crédits : <span id="credits">{{ app.user.Credits|capitalize }}</span>

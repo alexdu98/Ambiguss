@@ -140,7 +140,7 @@ class APIController extends Controller
 			{
 				$data = $request->request->all();
 
-				if($this->isCsrfTokenValid('jugement_glose', $data['token']))
+				if($this->isCsrfTokenValid('jugement_vote', $data['token']))
 				{
 					if(!empty($data['id']) && is_numeric($data['id']))
 					{
@@ -150,14 +150,7 @@ class APIController extends Controller
 						$jugement = $repoJ->find($data['id']);
 						$jugement->setDateDeliberation(new \DateTime());
 						$jugement->setJuge($this->getUser());
-						if($data['verdict'] == 'valide')
-						{
-							$jugement->setVerdict($repoTV->findOneBy(array('typeVote' => 'Valide')));
-						}
-						else
-						{
-							$jugement->setVerdict($repoTV->findOneBy(array('typeVote' => 'Non valide')));
-						}
+						$jugement->setVerdict($repoTV->findOneBy(array('typeVote' => $data['verdict'])));
 
 						// On enregistre dans l'historique du joueur
 						$histJoueur = new Historique();

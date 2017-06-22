@@ -78,6 +78,22 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getSingleResult();
 	}
 
+	public function findLike($contenuPur)
+	{
+		return $this->createQueryBuilder('p')
+			->select('p.id, p.contenu, p.auteur, p.dateCreation, p.modificateur, p.dateModification, p.signale, p.visible, p.gainCreateur')
+			->where('p.contenuPur LIKE :contenuPur')->setParameter('contenuPur', '%' . $contenuPur . '%')
+			->getQuery()->getResult();
+	}
+
+	public function countSignale()
+	{
+		return $this->createQueryBuilder('p')
+			       ->select('count(p) signale')
+			       ->where('p.signale = 1')
+			       ->getQuery()->getSingleResult()['signale'];
+	}
+
 	public function getStat()
 	{
 		$array = array();

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\PhraseRepository")
  */
-class Phrase
+class Phrase implements \JsonSerializable
 {
     /**
      * @var int
@@ -30,6 +30,13 @@ class Phrase
      * @ORM\Column(name="contenu", type="string", length=1024)
      */
     private $contenu;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="contenu_pur", type="string", length=255, unique=true)
+	 */
+	private $contenuPur;
 
 	/**
 	 * @var int
@@ -327,14 +334,10 @@ class Phrase
         return $this->motsAmbigusPhrase;
     }
 
-    /**
-     * AUTRES
-     */
-
-    public function getContenuHTML(){
-	    return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b id="ma$1" class="ma color-red" title="Ce mot est ambigu (id : $1)">$2</b>',
-		    $this->getContenu());
-    }
+	public function getContenuAmb()
+	{
+		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<amb>$2</amb>', $this->getContenu());
+	}
 
 	/**
 	 * Get contenu
@@ -356,18 +359,9 @@ class Phrase
 	public function setContenu($contenu)
 	{
 		$this->contenu = $contenu;
+		$this->setContenuPur($contenu);
 
 		return $this;
-	}
-
-	public function getContenuAmb()
-	{
-		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<amb>$2</amb>', $this->getContenu());
-	}
-
-	public function getContenuPur()
-	{
-		return strip_tags($this->getContenu());
 	}
 
     /**
@@ -479,6 +473,15 @@ class Phrase
 			    return array('succes' => false, 'message' => 'Il ne faut pas de balise imbriquée');
 	    }
 
+	    // Contenu pur ne dépassent pas 255 caractères
+	    if(strlen($this->getContenuPur()) > 255)
+	    {
+		    return array(
+			    'succes' => false,
+			    'message' => 'La phrase est trop longue (255 caractères maximum hors balise <amb>)',
+		    );
+	    }
+
 	    // Mot mal sélectionné
 	    preg_match_all('#[a-zA-Z]\<amb|amb\>[a-zA-Z]#', $this->getContenu(), $arr, PREG_SET_ORDER);
 	    if(!empty($arr))
@@ -518,6 +521,30 @@ class Phrase
     }
 
 	/**
+	 * Get contenu pur
+	 *
+	 * @return string
+	 */
+	public function getContenuPur()
+	{
+		return $this->contenuPur;
+	}
+
+	/**
+	 * Set contenu pur
+	 *
+	 * @param string $contenu
+	 *
+	 * @return Phrase
+	 */
+	public function setContenuPur($contenu)
+	{
+		$this->contenuPur = strip_tags($contenu);
+
+		return $this;
+	}
+
+	/**
 	 * Add party
 	 *
 	 * @param \AmbigussBundle\Entity\Partie $party
@@ -550,4 +577,37 @@ class Phrase
 	{
 		return $this->parties;
 	}
+
+	/**
+	 * IMPLEMENTS JsonSerializable
+	 */
+
+	public function jsonSerialize()
+	{
+		$modificateur = !empty($this->modificateur) ? $this->modificateur->getPseudo() : '';
+		$dateModification = !empty($this->dateModification) ? $this->dateModification->getTimestamp() : '';
+
+		return array(
+			$this->id,
+			$this->getContenuHTML(),
+			$this->auteur->getPseudo(),
+			$this->dateCreation->getTimestamp(),
+			$modificateur,
+			$dateModification,
+			$this->signale,
+			$this->visible,
+			$this->gainCreateur,
+		);
+	}
+
+	/**
+	 * AUTRES
+	 */
+
+	public function getContenuHTML()
+	{
+		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b id="ma$1" class="ma color-red" title="Ce mot est ambigu (id : $1)">$2</b>',
+			$this->getContenu());
+	}
+
 }

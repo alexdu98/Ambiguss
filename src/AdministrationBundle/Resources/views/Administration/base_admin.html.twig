@@ -18,7 +18,7 @@
 			<div class="col-md-3 left_col">
 				<div class="left_col scroll-view">
 					<div class="navbar nav_title" style="border: 0;">
-						<a href="{{ path('administration_accueil') }}" class="site_title"><img src="{{ asset('favicon.png') }}"><span>Ambiguss</span></a>
+						<a href="{{ path('administration_accueil') }}" class="site_title"><img src="{{ asset('assets/images/avocat64.png') }}"><span>Ambiguss</span></a>
 					</div>
 					<div class="clearfix"></div>
 					<!-- menu profile quick info -->
@@ -45,10 +45,12 @@
 									</ul>
 								</li>
 								<li>
-									<a><i class="fa fa-home"></i> Administration <span class="fa fa-chevron-down"></span></a>
+									<a><i class="fa fa-cog"></i> Administration <span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="{{ path('administration_accueil') }}">Accueil administration</a></li>
 										<li><a href="{{ path('administration_statistiques') }}">Statistiques</a></li>
+										<li><a href="{{ path('administration_membres') }}">Membres</a></li>
+										<li><a href="{{ path('administration_phrases') }}">Phrases</a></li>
 									</ul>
 								</li>
 							</ul>

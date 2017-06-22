@@ -104,12 +104,16 @@ thead, tfoot{
 	font-size: 24px;
 }
 
+
 /*
     #####################################################################
     ################################ MENU ###############################
     #####################################################################
 */
-
+.navbar-brand{
+	padding: 0 15px;
+	height: 100%;
+}
 #nav-main{
 	background: #FFF !important;
 	background: var(--color-white) !important;
@@ -148,12 +152,19 @@ nav ul{
 nav li:not(.divider){
 	list-style-type: none;
 	display: inline-block;
-	font-size: 18px;
+	font-size: 20px;
 	padding: 5px 10px;
 }
-nav li a{
+nav ul.coDecoMenu li a{
 	color: #A0D233;
 	color: var(--color-green);
+}
+nav ul.coDecoMenu li a:hover{
+	color: #8B4513;
+}
+nav ul.coDecoMenu li a:not(.linkCoMenu){
+	display: block;
+	padding: 10px 0;
 }
 
 
@@ -250,7 +261,20 @@ button.infobulle img{
 		display: block;
 	}
 }
-
+.classementMe{
+	text-align: center;
+}
+.classementMe > span{
+	color: #C51B10;
+	font-weight: bold;
+}
+.classementTableMe{
+	background: #FFFCBC !important;
+	font-weight: bold;
+}
+.badge{
+	background: #f0ad4e;
+}
 
 /*
     #####################################################################

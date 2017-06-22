@@ -2,7 +2,6 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity;
 use Doctrine\ORM\EntityManager;
 
 class Visite extends \Twig_Extension{

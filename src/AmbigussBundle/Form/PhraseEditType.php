@@ -18,13 +18,22 @@ class PhraseEditType extends AbstractType
             ->remove('dateModification')
 	        ->add('signale', ChoiceType::class, array(
 		        'label' => 'Signalé',
+		        'data' => $options['signale'],
 		        'choices' => array(
 			        'Oui' => 1,
 			        'Non' => 0,
 		        ),
 		        'expanded' => true,
 	        ))
-            ->remove('visible')
+	        ->add('visible', ChoiceType::class, array(
+		        'label' => 'Visible',
+		        'data' => $options['visible'],
+		        'choices' => array(
+			        'Oui' => 1,
+			        'Non' => 0,
+		        ),
+		        'expanded' => true,
+	        ))
             ->remove('auteur')
             ->remove('modificateur')
 	        ->add('motsAmbigusPhrase', CollectionType::class, array(

@@ -43,13 +43,15 @@
 			{% do form.motsAmbigusPhrase.setRendered %}
 
 			{{ form_row(form.signale) }}
+			{{ form_row(form.visible) }}
+
 			<div class="form-group text-center">
 				<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
 			</div>
 			<div class="form-group">
 				<div id="jugements" hidden>
 					{% for jugement in jugements %}
-						{{ include('@Judgment/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'categorieJugement'), description: jugement.description, lien_profil: path('user_profil', {id: jugement.auteur.id}), pseudo: jugement.auteur.pseudo, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
+						{{ include('@Judgment/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'categorieJugement'), id: jugement.id, description: jugement.description, lien_profil: path('user_profil', {id: jugement.auteur.id}), pseudo: jugement.auteur.pseudo, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
 					{% else %}
 						<span class="text-danger">Aucun jugement en cours</span>
 					{% endfor %}
@@ -274,6 +276,23 @@
 
 			$("#toggleJugements").click(function () {
 				$("#jugements").toggle("slow");
+			});
+
+			// Ajout de l'eventlistener valide
+			$('.signalement').click(function () {
+				var bouton = $(this);
+				$.post('{{ path('jugement_edit') }}', {
+					id: $(this).data('id'), verdict: $(this).data('verdict'), token: '{{ csrf_token
+					('jugement_vote') }}'
+				}, function
+					(data) {
+					if (data.succes) {
+						bouton.closest('.panel').remove();
+					}
+					else {
+						bouton.closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
+					}
+				});
 			});
 
 			// Au click sur le bouton, exécute la fonction

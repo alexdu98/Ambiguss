@@ -47,6 +47,8 @@ class UtilisateurController extends Controller
         $form = $this->get('form.factory')->create(ModifProfilType::class, $membre, array(
 	        'email' => $this->getUser()->getEmail(),
 	        'newsletter' => $this->getUser()->getNewsletter(),
+	        'sexe' => $this->getUser()->getSexe(),
+	        'dateNaissance' => $this->getUser()->getDateNaissance(),
         ));
 
         $form->handleRequest($request);
@@ -62,26 +64,47 @@ class UtilisateurController extends Controller
 	        $histJoueur = new Historique();
 	        $histJoueur->setMembre($this->getUser());
 
-	        if(!empty($data->getEmail()))
-	        {
-		        $histJoueur->setValeur("Modification de l'email (IP : " . $_SERVER['REMOTE_ADDR'] . " / " . $this->getUser()->getEmail() . " => " . $data->getEmail() . ").");
-		        $membre->setEmail($data->getEmail());
-	        }
-	        else if(!empty($data->getMdp()))
-            {
-                // Hash le Mdp
-                $encoder = $this->get('security.password_encoder');
-                $hash = $encoder->encodePassword($membre, $data->getMdp());
+	        $success = true;
 
-                $membre->setMdp($hash);
-	            $histJoueur->setValeur("Modification du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
-            }
-	        else if($data->getNewsletter() !== null)
+	        if(isset($request->request->get('modif_profil')['ValiderEmail']))
 	        {
-		        $valactu = $this->getUser()->getNewsletter() === false ? 'non abonné' : 'abonné';
-		        $valnew = $data->getNewsletter() === false ? 'non abonné' : 'abonné';
+		        $membre->setEmail($data->getEmail());
+		        $histJoueur->setValeur("Modification de l'email (IP : " . $_SERVER['REMOTE_ADDR'] . " / " . $this->getUser()->getEmail() . " => " . $data->getEmail() . ").");
+	        }
+	        else if(isset($request->request->get('modif_profil')['ValiderMdp']))
+            {
+	            $mdpActu = $request->request->get('modif_profil')['mdpActu'];
+
+	            if(password_verify($mdpActu, $this->getUser()->getMdp()))
+	            {
+		            // Hash le Mdp
+		            $encoder = $this->get('security.password_encoder');
+		            $hash = $encoder->encodePassword($membre, $data->getMdp());
+
+		            $membre->setMdp($hash);
+		            $histJoueur->setValeur("Modification du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
+	            }
+	            else
+	            {
+		            $success = false;
+		            $this->get('session')->getFlashBag()->add('erreur', 'Mot de passe actuel incorrect.');
+	            }
+            }
+	        else if(isset($request->request->get('modif_profil')['ValiderInfos']))
+	        {
+		        $oldSexe = $this->getUser()->getSexe();
+		        $newSexe = $data->getSexe();
+		        $membre->setSexe($data->getSexe());
+
+		        $oldDateNaissance = $this->getUser()->getDateNaissance()->format('d/m/Y');
+		        $newDateNaissance = $data->getDateNaissance()->format('d/m/Y');
+		        $membre->setDateNaissance($data->getDateNaissance());
+
+		        $oldNewsletter = $this->getUser()->getNewsletter() === false ? 'non abonné' : 'abonné';
+		        $newNewsletter = $data->getNewsletter() === false ? 'non abonné' : 'abonné';
 		        $membre->setNewsletter($data->getNewsletter());
-		        $histJoueur->setValeur("Modification de l'inscription à la newsletter (" . $valactu . " => " . $valnew . ").");
+
+		        $histJoueur->setValeur("Modification des informations (sexe : " . $oldSexe . ", date de naissance : " . $oldDateNaissance . ", newsletter : " . $oldNewsletter . " => sexe : " . $newSexe . ", date de naissance : " . $newDateNaissance . ", newsletter : " . $newNewsletter . ").");
 	        }
 
 	        $em = $this->getDoctrine()->getManager();
@@ -89,22 +112,28 @@ class UtilisateurController extends Controller
 	        $em->persist($membre);
 	        $em->persist($histJoueur);
 
-	        try
+	        if($success)
 	        {
-		        $em->flush();
-		        $this->get('session')->getFlashBag()->add('succes', 'Vos informations ont bien été modifiées');
-            }
-            catch(\Exception $e)
-            {
-	            $this->get('session')->getFlashBag()->add('erreur', 'Erreur');
-            }
+		        try
+		        {
+			        $em->flush();
+			        $this->get('session')->getFlashBag()->add('succes', 'Vos informations ont bien été modifiées');
+		        }
+		        catch(\Exception $e)
+		        {
+			        $this->get('session')->getFlashBag()->add('erreur', 'Erreur');
+		        }
+	        }
 
 	        // Réinitialise le formulaire
 	        $membre = new \UserBundle\Entity\Membre();
 	        $form = $this->get('form.factory')->create(ModifProfilType::class, $membre, array(
 		        'email' => $this->getUser()->getEmail(),
 		        'newsletter' => $this->getUser()->getNewsletter(),
+		        'sexe' => $this->getUser()->getSexe(),
+		        'dateNaissance' => $this->getUser()->getDateNaissance(),
 	        ));
+
         }
 
 	    return $this->render('UserBundle:Utilisateur:modifProfil.html.twig', array(

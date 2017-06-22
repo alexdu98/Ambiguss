@@ -10,6 +10,7 @@
 
 {% block contenu %}
 	<div class="well">
+		<h4 class="classementMe">Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement.</h4>
 		<table id="classement" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
 			<thead>
 				<tr>
@@ -35,19 +36,21 @@
 			</tfoot>
 			<tbody>
 				{% for row in classement %}
-					<tr>
+					<tr {% if row.id == app.user.id %}class="classementTableMe"{% endif %}>
 						<td>{{ loop.index }}</td>
 						<td><a href="{{ path('user_profil' , {'id':row.id}) }}">{{ row.pseudo }}</a></td>
 						<td>
-							{% if loop.index==1 %}
+							{% if loop.index == 1 %}
 								Ambigator
-								{% elseif loop.index>1 and loop.index< 5 %}
+							{% elseif loop.index >= 2 and loop.index < 5 %}
 								Grand Maître
-                                {% elseif loop.index>=5 and loop.index< 11 %}
+							{% elseif loop.index >= 5 and loop.index < 10 %}
+								Maître
+							{% elseif loop.index >= 10 and loop.index < 20 %}
 								Cavalier
-                                {% elseif loop.index>=11 and row.pointsClassement> 1500 %}
+							{% elseif loop.index >= 20 and row.pointsClassement >= 3000 %}
 								Challenger
-                                {% else %}
+							{% else %}
 								Novice
 							{% endif %}
 						</td>

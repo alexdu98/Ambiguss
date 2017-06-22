@@ -26,7 +26,7 @@
 				</div>
 				<div class="col-md-6 text-right">
 					<p><b>Date d'inscription :</b> {{ user.dateInscription|date('d/m/Y à H:i') }}</p>
-					<p><b>Dernière connexion :</b> {{ user.dateConnexion|date('d/m/Y à H:i') }}</p>
+					<p><b>Dernière connexion :</b> {{ user.dateConnexion is empty ? "~" : user.dateConnexion|date('d/m/Y à H:i') }}</p>
 					<p><b>Groupe :</b> {{ user.groupe.nom }}</p>
 				</div>
 			</div>

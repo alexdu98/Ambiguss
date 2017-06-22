@@ -10,6 +10,7 @@ use AmbigussBundle\Entity\Reponse;
 use AmbigussBundle\Form\GloseAddType;
 use AmbigussBundle\Form\PhraseAddType;
 use AmbigussBundle\Form\PhraseEditType;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Historique;
@@ -195,6 +196,11 @@ class PhraseController extends Controller
 						// Réinitialise le formulaire
 						$phrase = new \AmbigussBundle\Entity\Phrase();
 						$form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
+					}
+					catch(UniqueConstraintViolationException $e)
+					{
+						$em->getConnection()->rollBack();
+						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> la phrase existe déjà.");
 					}
 					catch(\Exception $e)
 					{
@@ -450,7 +456,10 @@ class PhraseController extends Controller
 				else if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
 				{
 					$phr = new \AmbigussBundle\Entity\Phrase();
-					$form = $this->get('form.factory')->create(PhraseEditType::class, $phr);
+					$form = $this->get('form.factory')->create(PhraseEditType::class, $phr, array(
+						'signale' => $phrase->getSignale(),
+						'visible' => $phrase->getVisible(),
+					));
 
 					$form->handleRequest($request);
 
@@ -464,6 +473,7 @@ class PhraseController extends Controller
 						$phrase->setDateModification(new \DateTime());
 						$phrase->setModificateur($this->getUser());
 						$phrase->setSignale($data->getSignale());
+						$phrase->setVisible($data->getVisible());
 
 						// Normalise la phrase
 						$data->normalize();
@@ -549,7 +559,6 @@ class PhraseController extends Controller
 							$em->getConnection()->setAutoCommit(false);
 							try
 							{
-
 								$em->persist($phrase);
 								$em->flush();
 
@@ -642,6 +651,11 @@ class PhraseController extends Controller
 								// Réinitialise le formulaire
 								$phrase = new \AmbigussBundle\Entity\Phrase();
 								$form = $this->get('form.factory')->create(PhraseEditType::class, $phrase);
+							}
+							catch(UniqueConstraintViolationException $e)
+							{
+								$em->getConnection()->rollBack();
+								$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> la phrase existe déjà.");
 							}
 							catch(\Exception $e)
 							{

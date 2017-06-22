@@ -43,6 +43,14 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getResult();
 	}
 
+	public function countSignale()
+	{
+		return $this->createQueryBuilder('g')
+			       ->select('count(g) signale')
+			       ->where('g.signale = 1')
+			       ->getQuery()->getSingleResult()['signale'];
+	}
+
 	public function getStat()
 	{
 		$array = array();

@@ -19,9 +19,13 @@ class ClassementController extends Controller
 		{
 			$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
 			$classement = $repository->getClassementGeneral($this->getParameter('maxResultForClassementGeneral'));
+			$position = $repository->getPositionClassement($this->getUser())['position'] + 1;
+			$nbMembreTotal = $repository->count()['total'];
 
 			return $this->render('AmbigussBundle:Classement:points.html.twig', array(
 				'classement' => $classement,
+				'position' => $position,
+				'nbMembreTotal' => $nbMembreTotal,
 			));
 		}
 		else

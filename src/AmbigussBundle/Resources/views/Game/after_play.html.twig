@@ -45,6 +45,14 @@
 	        <span class="color-green size18">La phrase était :</span><br>
 	        <span class="size24">{{ phrase|raw }}</span><br>
 	        <span class="size16">par <a href="{{ path('user_profil', {id: auteur.id}) }}">{{ auteur.pseudo }}</a></span><br>
+	        <div class="form-group">
+		        {% if app.user %}
+			        <button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
+				        <i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+				        Signaler un élément
+			        </button>
+		        {% endif %}
+	        </div>
 	        <br>
 	        <ul><span class="color-green size18">Les votes précédents étaient :</span>
 		        {% for ordre, ma in stats %}
@@ -87,6 +95,72 @@
 			{% if not app.request.cookies.has('helpResultatV1') %}
 			$('#helpResultatModal').trigger('click');
 			{% endif %}
+
+			// Signalement
+			$("#phraseSignal").click(function () {
+				var boutonSignal = $(this);
+				setModalSize('modal-lg');
+				setModalTitle("Signaler un élément de la phrase \"{{ phraseHTMLEscape|raw }}\"");
+				setModalBody('{{ include('JudgmentBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
+				$("#modal").modal("show");
+
+				// MAJ type objet signalement
+				$("#jugement_add_typeObjet").on('change', function () {
+					var idTypeObjet = $(this).val();
+					var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
+					if (typeObjet === 'Glose') {
+						$('#signalementIdObjet').show();
+						$('#jugement_add_signaler').prop('disabled', false);
+						$('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
+						$('.gloses').each(function () {
+							var ma = $(this).next().val();
+							var opts = $(this).clone();
+							opts.find('option').eq(0).remove();
+							$('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+						})
+					}
+					else if (typeObjet === 'Phrase') {
+						$('#signalementIdObjet').hide();
+						$('#jugement_add_signaler').prop('disabled', false);
+						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase_id }}">{{ phrase_id }}</option>');
+					}
+					else {
+						$('#signalementIdObjet').show();
+						$('#jugement_add_signaler').prop('disabled', true);
+					}
+				});
+				$("#jugement_add_typeObjet").trigger('change');
+
+
+				// On envoit le formulaire par ajax
+				$('form[name="jugement_add"]').ajaxForm({
+					beforeSubmit: function (arr, form, opt) {
+						// On affiche l'image laoding en attendant la réponse
+						$(form).after('<img src="' + urlImageLoading + '" id="loading">');
+					},
+					// Quand la réponse Ajax sera reçu, on appelle ce callback
+					success: function (data, status, xhr, form) {
+						// On supprime l'image loading
+						$(form).next().remove();
+						if (data.succes) {
+							$(form).after(
+								'<div class="alert alert-success alert-dismissible fade in" role="alert">'
+								+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+								+ 'Élément signalé</div>'
+							);
+						}
+						else {
+							$(form).after('<div class="alert alert-danger">Erreur</div>');
+						}
+					},
+					error: function () {
+						loading = $("#loading");
+						next = loading.prev().nextAll();
+						loading.before('<span class="text-danger">Erreur</span>');
+						next.remove();
+					}
+				});
+			});
 		});
 
 

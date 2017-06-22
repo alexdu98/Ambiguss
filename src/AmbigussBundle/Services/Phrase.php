@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alexandre
- * Date: 08/04/2017
- * Time: 23:35
- */
 
 namespace AmbigussBundle\Services;
 

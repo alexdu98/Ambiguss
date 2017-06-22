@@ -17,14 +17,39 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getOneOrNullResult();
 	}
 
+	public function getByPseudoOrEmail($pseudoOrEmail)
+	{
+		return $this->createQueryBuilder('m')->select('m.id, m.pseudo, m.email')
+			->where("m.pseudo LIKE :pseudo")->setParameter("pseudo", $pseudoOrEmail . "%")
+			->orWhere("m.email = :email")->setParameter("email", $pseudoOrEmail . "%")
+			->getQuery()->getResult();
+	}
+
 	public function getClassementGeneral($limit){
 		return $this->createQueryBuilder('m')->select('m.id, m.pseudo, m.dateInscription, m.pointsClassement')
 			->leftJoin("m.phrases", "p")->addSelect('count(distinct p.id) as nbPhrases')
 			->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(distinct lp.id) as nbLikes')
+			->where("m.pointsClassement > 0")
 			->groupBy('m.id')
 			->orderBy('m.pointsClassement', 'DESC')
 			->setMaxResults($limit)
 			->getQuery()->getResult();
+	}
+
+	public function getPositionClassement($membre)
+	{
+		return $this->createQueryBuilder('m')
+			->select('count(m) position')
+			->where("m.pointsClassement > :points")->setParameter("points", $membre->getPointsClassement())
+			->orderBy('m.pointsClassement', 'DESC')
+			->getQuery()->getOneOrNullResult();
+	}
+
+	public function count()
+	{
+		return $this->createQueryBuilder('m')
+			->select('count(m) total')
+			->getQuery()->getSingleResult();
 	}
 
 	public function getStat()

@@ -499,30 +499,6 @@ class Membre implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-    /**
-     * Get dateDeban
-     *
-     * @return \DateTime
-     */
-	public function getDateDeban()
-    {
-	    return $this->dateDeban;
-    }
-
-    /**
-     * Set dateDeban
-     *
-     * @param \DateTime $dateDeban
-     *
-     * @return Membre
-     */
-    public function setDateDeban($dateDeban)
-    {
-        $this->dateDeban = $dateDeban;
-
-        return $this;
-    }
-
 	/**
 	 * Get idFacebook
 	 *
@@ -769,7 +745,36 @@ class Membre implements AdvancedUserInterface, \Serializable
 	 * @return bool
 	 */
 	public function isAccountNonLocked(){
-		return !$this->getBanni();
+		if($this->getDateDeban() == null)
+		{
+			return !$this->getBanni();
+		}
+
+		return !($this->getBanni() && $this->getDateDeban() > new \DateTime());
+	}
+
+	/**
+	 * Get dateDeban
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateDeban()
+	{
+		return $this->dateDeban;
+	}
+
+	/**
+	 * Set dateDeban
+	 *
+	 * @param \DateTime $dateDeban
+	 *
+	 * @return Membre
+	 */
+	public function setDateDeban($dateDeban)
+	{
+		$this->dateDeban = $dateDeban;
+
+		return $this;
 	}
 
 	/**

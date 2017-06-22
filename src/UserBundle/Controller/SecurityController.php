@@ -6,9 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Historique;
 use UserBundle\Form\MembreConnexionType;
+use UserBundle\Form\MembreInscriptionType;
 use UserBundle\Form\MembreOubliPassResetType;
 use UserBundle\Form\MembreOubliPassType;
-use UserBundle\Form\MembreType;
 
 class SecurityController extends Controller
 {
@@ -40,7 +40,7 @@ class SecurityController extends Controller
         $membre = new \UserBundle\Entity\Membre();
 
         //ajout des attributs qu'on veut afficher dans le formulaire
-        $form = $this->get('form.factory')->create(MembreType::class, $membre);
+	    $form = $this->get('form.factory')->create(MembreInscriptionType::class, $membre);
 
         // Si la requête est en POST
         if ($request->isMethod('POST')) {

@@ -70,6 +70,16 @@
 	        <br>
 
             <a href="{{ path('ambiguss_game') }}" class="btn btn-primary">Rejouer</a>
+	        <div id="glosesBlock" hidden>
+		        {% for ma in pma %}
+			        <select class="gloses">
+				        {% for g in ma.motAmbigu.gloses %}
+					        <option value="{{ g.id }}">{{ g.valeur }}</option>
+				        {% endfor %}
+			        </select>
+			        <input type="hidden" value="{{ ma.motAmbigu.valeur }}">
+		        {% endfor %}
+	        </div>
         </div>
     </div>
 	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpResultatModal">
@@ -115,7 +125,7 @@
 						$('.gloses').each(function () {
 							var ma = $(this).next().val();
 							var opts = $(this).clone();
-							opts.find('option').eq(0).remove();
+							//opts.find('option').eq(0).remove();
 							$('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
 						})
 					}

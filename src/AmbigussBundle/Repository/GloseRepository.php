@@ -34,6 +34,13 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 		return $entity;
 	}
 
+	public function findLike($valeur)
+	{
+		return $this->createQueryBuilder('g')
+			->where('g.valeur LIKE :valeur')->setParameter('valeur', '%' . $valeur . '%')
+			->getQuery()->getResult();
+	}
+
 	public function getSignale()
 	{
 		return $this->createQueryBuilder('g')

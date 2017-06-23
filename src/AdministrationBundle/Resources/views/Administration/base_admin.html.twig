@@ -51,6 +51,7 @@
 										<li><a href="{{ path('administration_statistiques') }}">Statistiques</a></li>
 										<li><a href="{{ path('administration_membres') }}">Membres</a></li>
 										<li><a href="{{ path('administration_phrases') }}">Phrases</a></li>
+										<li><a href="{{ path('administration_gloses') }}">Gloses</a></li>
 									</ul>
 								</li>
 							</ul>
@@ -89,6 +90,20 @@
 				<div class="clearfix"></div>
 			</footer>
 			<!-- /footer content -->
+		</div>
+	</div>
+	<div class="modal fade" id="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" id="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modal-title"></h4>
+				</div>
+				<div class="modal-body" id="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script>

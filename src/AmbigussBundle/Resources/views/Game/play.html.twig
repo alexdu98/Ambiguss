@@ -27,7 +27,7 @@
 
 			{% if auteur == app.user %}
 				<p class="text-warning size16">Vous êtes l'auteur cette phrase, vous ne gagnerez donc pas de points.</p>
-			{% elseif alreadyPlayed %}
+			{% elseif alreadyPlayed and app.user %}
 				<p class="text-warning size16">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
 			{% endif %}
 

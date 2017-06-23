@@ -2,8 +2,10 @@
 
 namespace AdministrationBundle\Controller;
 
+use AdministrationBundle\Form\SearchGloseType;
 use AdministrationBundle\Form\SearchMembreType;
 use AdministrationBundle\Form\SearchPhraseType;
+use AmbigussBundle\Form\GloseEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Historique;
@@ -202,6 +204,67 @@ class AdminController extends Controller
 
 				return $this->render('AdministrationBundle:Administration:phrases.html.twig', array(
 					'form' => $form->createView(),
+				));
+			}
+			else
+			{
+				$this->get('session')->getFlashBag()->add('erreur', "L'accès à l'administration nécessite d'être connecté sans le système d'auto-connexion.");
+
+				return $this->redirectToRoute('user_connexion');
+			}
+		}
+		throw $this->createAccessDeniedException();
+	}
+
+	public function glosesAction(Request $request)
+	{
+		if($this->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR'))
+		{
+			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+			{
+				$form = $this->get('form.factory')->create(SearchGloseType::class);
+
+				$form->handleRequest($request);
+
+				if($form->isSubmitted() && $form->isValid())
+				{
+					$data = $request->request->get('administrationbundle_glose');
+
+					$repG = $this->getDoctrine()->getRepository('AmbigussBundle:Glose');
+					$res = null;
+					if(!empty($data['idGlose']))
+					{
+						$res = $repG->findBy(array('id' => $data['idGlose']));
+					}
+					else
+					{
+						if(!empty($data['contenuGlose']))
+						{
+							$res = $repG->findLike($data['contenuGlose']);
+						}
+						else
+						{
+							if(!empty($data['idAuteur']))
+							{
+								$res = $repG->findBy(array('auteur' => $data['idAuteur']));
+							}
+						}
+					}
+
+					return $this->json(array(
+						'succes' => true,
+						'gloses' => $res,
+					));
+				}
+
+				$glose = new \AmbigussBundle\Entity\Glose();
+				$editGloseForm = $this->get('form.factory')->create(GloseEditType::class, $glose, array(
+					'action' => $this->generateUrl('ambiguss_glose_edit'),
+				));
+
+				return $this->render('AdministrationBundle:Administration:gloses.html.twig', array(
+					'form' => $form->createView(),
+					'editGloseForm' => $editGloseForm->createView(),
 				));
 			}
 			else

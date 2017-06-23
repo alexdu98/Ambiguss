@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity(repositoryClass="AmbigussBundle\Repository\GloseRepository")
  */
-class Glose
+class Glose implements \JsonSerializable
 {
     /**
      * @var int
@@ -309,5 +309,26 @@ class Glose
 		$this->valeur = $valeur;
 
 		return $this;
+	}
+
+	/**
+	 * IMPLEMENTS JsonSerializable
+	 */
+
+	public function jsonSerialize()
+	{
+		$modificateur = !empty($this->modificateur) ? $this->modificateur->getPseudo() : '';
+		$dateModification = !empty($this->dateModification) ? $this->dateModification->getTimestamp() : '';
+
+		return array(
+			$this->id,
+			$this->valeur,
+			$this->auteur->getPseudo(),
+			$this->dateCreation->getTimestamp(),
+			$modificateur,
+			$dateModification,
+			$this->signale,
+			$this->visible,
+		);
 	}
 }

@@ -19,3 +19,7 @@ administration_membre_edit:
 administration_phrases:
     path:     /admin/phrases
     defaults: { _controller: AdministrationBundle:Admin:phrases }
+
+administration_gloses:
+    path:     /admin/gloses
+    defaults: { _controller: AdministrationBundle:Admin:gloses }

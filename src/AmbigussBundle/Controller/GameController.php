@@ -188,7 +188,8 @@ class GameController extends Controller
 							$this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
 						}
 					}
-					elseif($partie->getPhrase()->getAuteur() == $this->getUser()){
+					else if($partie->getPhrase()->getAuteur() == $this->getUser())
+					{
 						$isAuteur = true;
 					}
 					else
@@ -216,43 +217,54 @@ class GameController extends Controller
 		{
 			$repository = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
 			$repmap = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+			$phraseOBJ = null;
 
-			$phrases = null;
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+			if($id != null)
 			{
-				$phrases = $repository->findIdPhrasesNotPlayedByMembre($this->getUser(), $this->getParameter('dureeAvantJouabiliteSecondes'));
-			}
-
-			// Si toutes les phrases ont été joués
-			$allPhrasesPlayed = false;
-			if(empty($phrases))
-			{
-				$allPhrasesPlayed = true;
-				$phrases = $repmap->findAllIdPhrases($this->getParameter('dureeAvantJouabiliteSecondes'));
-			}
-
-			// Rend une clé au hasard
-			if($id == null)
-			{
-				$phrase_id = $phrases[ array_rand($phrases) ]['id'];
-				$phraseOBJ = $repository->find($phrase_id);
-			}
-			else
-			{
-				$phrase_id = $id;
-
-				$phraseOBJ = $repository->find($phrase_id);
-
+				$phraseOBJ = $id;
 				$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
-				if($repoP->findOneBy(array(
-					'joueur' => $this->getUser(),
-					'phrase' => $phraseOBJ,
-					'joue' => true,
-				))
-				)
+
+				$date = new \DateTime();
+				$dateMin = $date->setTimestamp($date->getTimestamp() - $this->getParameter('dureeAvantJouabiliteSecondes'));
+
+				if($phraseOBJ->getVisible() && $phraseOBJ->getDateCreation() < $dateMin)
+				{
+					$joue = $repoP->findOneBy(array(
+						'joueur' => $this->getUser(),
+						'phrase' => $phraseOBJ,
+						'joue' => true,
+					));
+					if($joue)
+					{
+						$allPhrasesPlayed = true;
+					}
+				}
+				else
+				{
+					$phraseOBJ = null;
+				}
+
+			}
+
+			if($phraseOBJ == null)
+			{
+				$phrases = null;
+
+				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+				{
+					$phrases = $repository->findIdPhrasesNotPlayedByMembre($this->getUser(), $this->getParameter('dureeAvantJouabiliteSecondes'));
+				}
+
+				// Si toutes les phrases ont été joués
+				$allPhrasesPlayed = false;
+				if(empty($phrases))
 				{
 					$allPhrasesPlayed = true;
+					$phrases = $repmap->findAllIdPhrases($this->getParameter('dureeAvantJouabiliteSecondes'));
 				}
+
+				$phrase_id = $phrases[ array_rand($phrases) ]['id'];
+				$phraseOBJ = $repository->find($phrase_id);
 			}
 
 			// recup champ signal
@@ -337,6 +349,9 @@ class GameController extends Controller
 				'action' => $this->generateUrl('jugement_add'),
 			));
 
+			$repP = $this->getDoctrine()->getRepository('AmbigussBundle:MotAmbiguPhrase');
+			$pma = $repP->findBy(array('phrase' => $phrase_id[0]));
+
 			return $this->render('AmbigussBundle:Game:after_play.html.twig', array(
 				'phrase' => $phrase[0],
 				'auteur' => $auteur[0],
@@ -347,6 +362,7 @@ class GameController extends Controller
 				'phraseHTMLEscape' => preg_replace('#"#', '\"', $phrase[0]),
 				'addJugementForm' => $addJugementForm->createView(),
 				'phrase_id' => $phrase_id[0],
+				'pma' => $pma,
 			));
 		}
 		throw $this->createNotFoundException();

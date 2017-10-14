@@ -30,7 +30,8 @@ parameters:
         # Email: "Nom"
         alexdu98@gmx.fr: "Alexandre"
         lafourcade@lirmm.fr: "Mathieu Lafourcade"
-
+    # Visite
+    timeBetweenTwoVisitesSecondes: 86400 # 1 jour
 
 framework:
     #esi:             ~

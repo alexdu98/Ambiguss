@@ -1,8 +1,11 @@
 services:
     app.recaptcha:
         class: AppBundle\Services\Recaptcha
-    app.twig.visite:
+    app.visite.service:
         class: AppBundle\Services\Visite
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "%timeBetweenTwoVisitesSecondes%"]
+    app.visite.listener:
+        class: AppBundle\Listeners\VisiteListener
+        arguments: ["@app.visite.service"]
         tags:
-            - {name: twig.extension}
+            - { name: kernel.event_listener, event: kernel.request, method: process}

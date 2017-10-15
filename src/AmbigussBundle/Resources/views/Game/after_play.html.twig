@@ -30,7 +30,7 @@
 				        {% transchoice nb_point %}
 					        {0} Dommage, vous n'avez pas gagné de point cette fois. |
 					        {1} Bravo, vous avez gagné 1 point. |]1,
-				        Inf[ Félicitation, vous avez gagné <span id="fun-level">%nb_point%</span> points !
+				        Inf[ Félicitation, vous avez gagné <span id="fun-level" style="color: #C51B10;">0</span> points !
 				        {% endtranschoice %}
 
 				        <div>
@@ -173,27 +173,18 @@
 			});
 		});
 
-
 	</script>
 
 	<script src="{{ asset('assets/js/jquery.animateNumber.js') }}"></script>
 
     <script>
-        var number_step = $.animateNumber.numberStepFactories.append('');
-
-        $('#fun-level').prop('number', 0).animateNumber(
+        $('#fun-level').animateNumber(
             {
                 number: {{ nb_point }},
-                style: "color: black",
                 'font-size': '30px',
-                easing: 'easeInQuad',
-                numberStep:number_step
+                easing: 'easeInQuad'
             },
-	        1500,
-	        function () {
-		        $('#fun-level').text("{{ nb_point }}");
-	        }
+	        1500
         );
-
 	</script>
 {% endblock %}

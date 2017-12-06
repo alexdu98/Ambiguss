@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use UserBundle\Entity\Membre;
 
-class MembreProvider implements UserProviderInterface, HWIOAuth\OAuthAwareUserProviderInterface
+class MembreProvider implements UserProviderInterface
 {
 
 	/**

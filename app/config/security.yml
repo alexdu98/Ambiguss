@@ -15,10 +15,6 @@ security:
   providers:
     webservice:
       id: user.membre_provider
-    #main:
-      #entity:
-        #class: UserBundle\Entity\Membre
-        #property: pseudo
 
   firewalls:
     dev:
@@ -34,6 +30,7 @@ security:
         path: /
         name: jeton
         remember_me_parameter: 'userbundle_membre[KeepCo]'
+      logout_on_user_change: true
       form_login:
         login_path: /connexion
         check_path: /connexion/verification
@@ -45,15 +42,7 @@ security:
     # A mettre avant le main pour HWI
     secured_area:
       anonymous: ~
-      oauth:
-        resource_owners:
-          facebook:   "/login/check-facebook"
-          twitter:    "/login/check-twitter"
-        login_path:        /login
-        use_forward:       false
-        failure_path:      /login
-        oauth_user_provider:
-          service: user.membre_provider
+      logout_on_user_change: true
 
   access_control:
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}

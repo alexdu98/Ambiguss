@@ -22,7 +22,6 @@ class AppKernel extends Kernel
 	        new AppBundle\AppBundle(),
 	        new AdministrationBundle\AdministrationBundle(),
 	        new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-	        new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

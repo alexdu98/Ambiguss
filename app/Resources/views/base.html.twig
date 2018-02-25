@@ -19,11 +19,6 @@
     </head>
     <body>
 	    <header>
-		    {% if app.environment == 'dev' %}
-			    <div class="text-center" style="background: {% if dbname == 'ambiguss' %}red{% else %}orange{% endif %}; color: white;">
-				    <b>DEV -> BD : {{ dbname }}</b>
-			    </div>
-		    {% endif %}
 		    <nav class="navbar navbar-default navbar-static-top" id="nav-main">
 			    <div class="container-fluid">
 				    <div class="row row-eq-height">

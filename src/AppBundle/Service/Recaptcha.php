@@ -4,10 +4,14 @@ namespace AppBundle\Service;
 
 class Recaptcha{
 
-	const CLE_PRIVEE_V2 = "6LdIRhgTAAAAAMKShVrZyBTvvJP08hHu2la0P_ks";
-	const CLE_PRIVEE_V3 = "6LcXBhkUAAAAAOXVtSYLei5DUOfYh1ZEfsIhz0yv";
+    private $key;
 	public $succes;
 	public $erreurs = array();
+
+    public function __construct($key)
+    {
+        $this->key = $key;
+    }
 
 	/**
 	 * Vérifie si un captcha est valide
@@ -16,7 +20,7 @@ class Recaptcha{
 	 */
 	public function check($captcha){
 		if(!empty($captcha)){
-			$res = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . self::CLE_PRIVEE_V3 . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
+			$res = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $this->key . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
 			$res = json_decode($res);
 			$this->succes = $res->success;
 			if(!$this->succes)

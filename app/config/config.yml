@@ -31,6 +31,8 @@ parameters:
     timeBetweenTwoVisitesSecondes: 86400 # 1 jour
     # Download directory
     downloadDirectory: "%kernel.project_dir%/web/download/"
+    # Recaptcha key
+    recaptchaKey: "6LcXBhkUAAAAAOXVtSYLei5DUOfYh1ZEfsIhz0yv"
 
 framework:
     #esi:             ~

@@ -34,7 +34,7 @@ class MainController extends Controller
 		{
 			$data = $form->getData();
 
-			$recaptcha = $this->get('AppBundle\Services\Recaptcha');
+			$recaptcha = $this->get('AppBundle\Service\Recaptcha');
 			$recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
 			if($recap->succes)
 			{

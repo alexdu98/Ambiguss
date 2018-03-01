@@ -7,3 +7,7 @@ services:
     AppBundle\Service\Export:
         autowire: true
         arguments: { $downloadDir: "%downloadDirectory%" }
+
+    AppBundle\Service\Recaptcha:
+        autowire: true
+        arguments: { $key: "%recaptchaKey%" }

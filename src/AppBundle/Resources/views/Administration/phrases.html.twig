@@ -1,0 +1,195 @@
+{% extends '@App/Administration/base_admin.html.twig' %}
+
+{% block title %}Phrases{% endblock %}
+{% block titre %}Phrases{% endblock %}
+
+{% block contenu %}
+	<div class="col-md-8 col-md-offset-2 well">
+		{{ form_start(form) }}
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-3">
+					{{ form_label(form.idPhrase) }} {{ form_widget(form.idPhrase) }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-12">
+					{{ form_label(form.contenuPhrase) }} {{ form_widget(form.contenuPhrase) }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-3">
+					{{ form_label(form.idAuteur) }} {{ form_widget(form.idAuteur) }}
+				</div>
+				<div class="col-md-9">
+					{{ form_label(form.PseudoOrEmailAuteur) }} {{ form_widget(form.PseudoOrEmailAuteur) }}
+				</div>
+			</div>
+		</div>
+		{{ form_row(form.Chercher) }}
+
+		{{ form_rest(form) }}
+		{{ form_end(form) }}
+	</div>
+
+	<div class="col-md-12 well">
+		<table id="phrasesTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Valeur</th>
+				<th>Auteur</th>
+				<th>Date de création</th>
+				<th>Modificateur</th>
+				<th>Date de modification</th>
+				<th>Signalée</th>
+				<th>Visible</th>
+				<th>Gains</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Valeur</th>
+				<th>Auteur</th>
+				<th>Date de création</th>
+				<th>Modificateur</th>
+				<th>Date de modification</th>
+				<th>Signalée</th>
+				<th>Visible</th>
+				<th>Gains</th>
+				<th>Actions</th>
+			</tr>
+			</tfoot>
+			<tbody></tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ asset('assets/vendor/DataTables/datatables.js') }}"></script>
+	<script>
+		$(document).ready(function () {
+
+			// Autocomplete le champ
+			var input = $('#administrationbundle_phrase_PseudoOrEmailAuteur');
+			input.autocomplete({
+				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
+				source: function (request, response) {
+					var url = "{{ path('user_get_pseudo_email') }}";
+					$.getJSON(url + '?term=' + request.term, function (data) {
+						input.parent().append('<div id="resnul" class="text-danger" hidden>Aucun membre ne corespond à la recherche</div>');
+						if (data.length === 0) {
+							input.parent().find('#resnul').show();
+						} else {
+							input.parent().find('#resnul').hide();
+						}
+						// On récupère une liste d'objet, on veut l'attribut valeur de l'objet
+						response($.map(data, function (item) {
+							tab = {
+								label: item.pseudo + " (" + item.email + ")",
+								value: item.id
+							};
+							return tab;
+						}));
+					});
+				},
+				select: function (e, ui) {
+					e.preventDefault();
+					$('#administrationbundle_phrase_idAuteur').val(ui.item.value);
+					$('#administrationbundle_phrase_PseudoOrEmailAuteur').val(ui.item.label);
+				}
+			}).data("ui-autocomplete")._renderItem = function (ul, item) {
+				return $("<li>")
+					.attr("data-value", item.value)
+					.append($("<a>").html(item.label.replace(new RegExp(this.term, 'gi'), "<b>$&</b>")))
+					.appendTo(ul);
+			};
+
+			var table = $('#phrasesTable').DataTable({
+				stateSave: true, // Enregistre les configurations
+				stateSaveParams: function (settings, data) {
+					data.start = 0; // On enregistre pas la page
+					data.order = [[0, "desc"]]; // On ordonne sur l'id
+					data.search = {}; // On enregistre pas la recherche
+				},
+				stateDuration: 0, // pour une durée illimitée
+				columnDefs: [
+					{targets: 9, orderable: false}
+				],
+				order: [[0, 'asc']], // On ordonne sur l'id
+				responsive: true,
+				language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
+			});
+
+			// On envoit le formulaire par ajax
+			$('form[name="administrationbundle_phrase"]').ajaxForm({
+				beforeSubmit: function (arr, form, opt) {
+					// On affiche l'image laoding en attendant la réponse
+					$(form).after('<img src="' + urlImageLoading + '" id="loading">');
+				},
+				// Quand la réponse Ajax sera reçu, on appelle ce callback
+				success: function (data, status, xhr, form) {
+					// On supprime l'image loading
+					$(form).next().remove();
+					if (data.succes) {
+						table.clear();
+						$.each(data.phrases, function () {
+							var urlModif = Routing.generate('ambiguss_phrase_edit', {'id': this[0]});
+							this.push('<a class="btn btn-warning btn-sm" href="' + urlModif + '">Modifier</a>');
+
+							var dateC = new Date(this[3] * 1000);
+							if (this[3] != '') {
+								dateCC = dateC.getDate() + '/' + (dateC.getMonth() + 1) + '/' + dateC.getFullYear() + ' ' +
+									dateC.getHours() + ':' + dateC.getMinutes();
+							}
+							else {
+								dateCC = '';
+							}
+
+							var dateM = new Date(this[5] * 1000);
+							if (this[5] != '') {
+								dateMC = dateM.getDate() + '/' + (dateM.getMonth() + 1) + '/' + dateM.getFullYear() + ' ' +
+									dateM.getHours() + ':' + dateM.getMinutes();
+							}
+							else {
+								dateMC = '';
+							}
+
+							table.row.add($('<tr>' +
+								'<td>' + this[0] + '</td>' +
+								'<td>' + this[1] + '</td>' +
+								'<td>' + this[2] + '</td>' +
+								'<td data-order="' + this[3] + '">' + dateCC + '</td>' +
+								'<td>' + this[4] + '</td>' +
+								'<td data-order="' + this[5] + '">' + dateMC + '</td>' +
+								'<td>' + this[6] + '</td>' +
+								'<td>' + this[7] + '</td>' +
+								'<td>' + this[8] + '</td>' +
+								'<td>' + this[9] + '</td></tr>'));
+						});
+						table.draw();
+					}
+					else {
+						$(form).after('<div class="alert alert-danger alert-dismissible fade in" role="alert">'
+							+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+							+ 'Erreur</div>');
+					}
+				},
+				error: function () {
+					loading = $("#loading");
+					next = loading.prev().nextAll();
+					loading.before('<div class="alert alert-danger alert-dismissible fade in" role="alert">'
+						+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+						+ 'Erreur</div>');
+					next.remove();
+				}
+			});
+		});
+	</script>
+{% endblock %}

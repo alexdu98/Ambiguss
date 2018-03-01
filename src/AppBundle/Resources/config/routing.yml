@@ -17,3 +17,205 @@ app_contact:
 app_apropos:
     path:     /a-propos
     defaults: { _controller: AppBundle:Main:aPropos }
+
+administration_accueil:
+    path:     /admin
+    defaults: { _controller: AppBundle:Admin:main }
+
+administration_statistiques:
+    path:     /admin/statistiques
+    defaults: { _controller: AppBundle:Admin:statistiques }
+
+administration_membres:
+    path:     /admin/membres
+    defaults: { _controller: AppBundle:Admin:membres }
+
+administration_membre_edit:
+    path:     /admin/membre/edit/{id}
+    defaults: { _controller: AppBundle:Admin:editMembre }
+    requirements:
+        id: \d+|$
+
+administration_phrases:
+    path:     /admin/phrases
+    defaults: { _controller: AppBundle:Admin:phrases }
+
+administration_gloses:
+    path:     /admin/gloses
+    defaults: { _controller: AppBundle:Admin:gloses }
+
+jugement_add:
+    path: /jugement/add
+    defaults:
+        _controller: AppBundle:API:addJugement
+
+jugement_edit:
+    path: /jugement/edit
+    defaults:
+        _controller: AppBundle:API:edit
+
+jugement_glose:
+    path: /ambiguss/jugement/glose
+    defaults:
+        _controller: AppBundle:API:Glose
+
+ambiguss_phrase_add:
+    path: /ambiguss/phrase/add
+    defaults: {_controller: AppBundle:Phrase:add }
+
+ambiguss_phrase_edit:
+    path: /ambiguss/phrase/edit/{id}
+    defaults:
+        _controller: AppBundle:Phrase:edit
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+ambiguss_phrase_delete:
+    path: /ambiguss/phrase/delete/{id}
+    defaults:
+        _controller: AppBundle:Phrase:delete
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+ambiguss_game_result:
+    path: /ambiguss/jeu/resultat
+    defaults:
+        _controller: AppBundle:Game:resultat
+
+ambiguss_game:
+    path: /ambiguss/jeu/{id}
+    defaults:
+        {_controller: AppBundle:Game:main,id: null}
+
+ambiguss_glose_get_autocomplete:
+    path: /ambiguss/glose/get/autocomplete
+    defaults:
+        _controller: AppBundle:API:autocompleteGlose
+    options:
+        expose: true
+
+ambiguss_motambigu_get_autocomplete:
+    path: /ambiguss/motambigu/get/autocomplete
+    defaults:
+        _controller: AppBundle:API:autocompleteMotAmbigu
+    options:
+        expose: true
+
+ambiguss_glose_add:
+    path: /ambiguss/glose/add
+    defaults:
+        _controller: AppBundle:API:addGlose
+
+ambiguss_glose_edit:
+    path: /ambiguss/glose/edit/{id}
+    defaults:
+        _controller: AppBundle:Glose:editGlose
+        id: null
+
+ambiguss_glose_delete:
+    path: /ambiguss/glose/delete/{id}
+    defaults:
+        _controller: AppBundle:Glose:deleteGlose
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+ambiguss_glose_link:
+    path: /ambiguss/glose/link/{id}
+    defaults:
+        _controller: AppBundle:Glose:linkGlose
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+ambiguss_glose_get_by_motambigu:
+    path: /ambiguss/glose/getByMotAmbigu
+    defaults:
+        _controller: AppBundle:API:getGlosesByMotAmbigu
+    options:
+        expose: true
+
+ambiguss_classement_general:
+    path: /ambiguss/classement/general
+    defaults:
+        _controller: AppBundle:Classement:classementGeneral
+
+ambiguss_classement_personnel:
+    path: /ambiguss/classement/personnel
+    defaults:
+        _controller: AppBundle:Classement:classementPersonnel
+
+ambiguss_classement_phrases:
+    path: /ambiguss/classement/phrases
+    defaults:
+        _controller: AppBundle:Classement:classementPhrases
+
+ambiguss_phrase_like:
+    path: /ambiguss/phrase/like/{id}
+    defaults:
+        _controller: AppBundle:Phrase:like
+    requirements:
+        id: \d+
+
+ambiguss_phrase_signal:
+    path: /ambiguss/phrase/signal/{id}
+    defaults:
+        _controller: AppBundle:Phrase:signal
+    requirements:
+        id: \d+
+
+ambiguss_export:
+    path: /ambiguss/export
+    defaults:
+        _controller: AppBundle:Export:main
+
+ambiguss_gloses:
+    path: /ambiguss/gloses
+    defaults:
+        _controller: AppBundle:Glose:main
+
+ambiguss_moderation_phrase:
+    path: /ambiguss/moderation/phrases
+    defaults:
+        _controller: AppBundle:Phrase:moderation
+
+ambiguss_moderation_ma:
+    path: /ambiguss/moderation/mots_ambigus
+    defaults:
+        _controller: AppBundle:MotAmbigu:moderation_ma
+
+ambiguss_moderation_mag:
+    path: /ambiguss/moderation/mag
+    defaults:
+        _controller: AppBundle:MAG:get
+
+ambiguss_mag_delete:
+    path: /ambiguss/moderation/mag/delete
+    defaults:
+        _controller: AppBundle:MAG:delete
+    options:
+        expose: true
+
+ambiguss_motambigu_keep:
+    path: /ambiguss/motambigu/keep/{id}
+    defaults:
+        _controller: AppBundle:MotAmbigu:keep
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+ambiguss_phrase_keep:
+    path: /ambiguss/phrase/keep/{id}
+    defaults:
+        _controller: AppBundle:Phrase:keep
+    requirements:
+        id: \d+
+    options:
+        expose: true

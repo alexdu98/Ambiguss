@@ -1,6 +1,0 @@
-services:
-    app.twig.jugement:
-        class: JudgmentBundle\Services\Jugement
-        arguments: ["@doctrine.orm.entity_manager"]
-        tags:
-            - {name: twig.extension}

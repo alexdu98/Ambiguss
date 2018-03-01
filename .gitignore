@@ -18,5 +18,6 @@
 /backup
 /ambiguss.log
 /dumpBD.default
-/web/downloads/
+/web/download/*
+!web/download/.gitkeep
 dumpBD

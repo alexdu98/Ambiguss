@@ -1,11 +1,9 @@
 services:
-    app.recaptcha:
-        class: AppBundle\Services\Recaptcha
-    app.visite.service:
-        class: AppBundle\Services\Visite
-        arguments: ["@doctrine.orm.entity_manager", "%timeBetweenTwoVisitesSecondes%"]
-    app.visite.listener:
-        class: AppBundle\Listeners\VisiteListener
-        arguments: ["@app.visite.service"]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: process}
+
+    AppBundle\Service\Visite:
+        autowire: true
+        arguments: { $timeBetweenTwoVisites: "%timeBetweenTwoVisitesSecondes%" }
+
+    AppBundle\Service\Export:
+        autowire: true
+        arguments: { $downloadDir: "%downloadDirectory%" }

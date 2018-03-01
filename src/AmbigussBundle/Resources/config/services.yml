@@ -1,8 +1,0 @@
-services:
-    ambiguss.phraseHTML:
-        class: AmbigussBundle\Services\Phrase
-        tags:
-            - { name: twig.extension }
-    ambiguss_export:
-        class: AmbigussBundle\Services\Export
-        arguments: ["@doctrine.orm.entity_manager", "%kernel.root_dir%"]

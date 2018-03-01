@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\ContactType;
+use AppBundle\Form\Main\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,7 +34,7 @@ class MainController extends Controller
 		{
 			$data = $form->getData();
 
-			$recaptcha = $this->get('app.recaptcha');
+			$recaptcha = $this->get('AppBundle\Services\Recaptcha');
 			$recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
 			if($recap->succes)
 			{

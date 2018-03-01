@@ -212,17 +212,17 @@ class Membre implements AdvancedUserInterface, \Serializable
     private $membreRoles;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\Phrase", mappedBy="auteur")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Phrase", mappedBy="auteur")
 	 */
     private $phrases;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\Glose", mappedBy="auteur")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Glose", mappedBy="auteur")
 	 */
     private $gloses;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AmbigussBundle\Entity\MotAmbigu", mappedBy="auteur")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\MotAmbigu", mappedBy="auteur")
 	 */
 	private $motsAmbigus;
 
@@ -888,11 +888,11 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * Add phrase
      *
-     * @param \AmbigussBundle\Entity\Phrase $phrase
+     * @param \AppBundle\Entity\Phrase $phrase
      *
      * @return Membre
      */
-    public function addPhrase(\AmbigussBundle\Entity\Phrase $phrase)
+    public function addPhrase(\AppBundle\Entity\Phrase $phrase)
     {
         $this->phrases[] = $phrase;
 
@@ -902,9 +902,9 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * Remove phrase
      *
-     * @param \AmbigussBundle\Entity\Phrase $phrase
+     * @param \AppBundle\Entity\Phrase $phrase
      */
-    public function removePhrase(\AmbigussBundle\Entity\Phrase $phrase)
+    public function removePhrase(\AppBundle\Entity\Phrase $phrase)
     {
         $this->phrases->removeElement($phrase);
     }
@@ -948,11 +948,11 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * Add glose
      *
-     * @param \AmbigussBundle\Entity\Glose $glose
+     * @param \AppBundle\Entity\Glose $glose
      *
      * @return Membre
      */
-    public function addGlose(\AmbigussBundle\Entity\Glose $glose)
+    public function addGlose(\AppBundle\Entity\Glose $glose)
     {
         $this->gloses[] = $glose;
 
@@ -962,9 +962,9 @@ class Membre implements AdvancedUserInterface, \Serializable
     /**
      * Remove glose
      *
-     * @param \AmbigussBundle\Entity\Glose $glose
+     * @param \AppBundle\Entity\Glose $glose
      */
-    public function removeGlose(\AmbigussBundle\Entity\Glose $glose)
+    public function removeGlose(\AppBundle\Entity\Glose $glose)
     {
         $this->gloses->removeElement($glose);
     }
@@ -982,11 +982,11 @@ class Membre implements AdvancedUserInterface, \Serializable
 	/**
 	 * Add motsAmbigus
 	 *
-	 * @param \AmbigussBundle\Entity\MotAmbigu $motsAmbigus
+	 * @param \AppBundle\Entity\MotAmbigu $motsAmbigus
 	 *
 	 * @return Membre
 	 */
-	public function addMotsAmbigus(\AmbigussBundle\Entity\MotAmbigu $motsAmbigus)
+	public function addMotsAmbigus(\AppBundle\Entity\MotAmbigu $motsAmbigus)
 	{
 		$this->motsAmbigus[] = $motsAmbigus;
 
@@ -996,9 +996,9 @@ class Membre implements AdvancedUserInterface, \Serializable
 	/**
 	 * Remove motsAmbigus
 	 *
-	 * @param \AmbigussBundle\Entity\MotAmbigu $motsAmbigus
+	 * @param \AppBundle\Entity\MotAmbigu $motsAmbigus
 	 */
-	public function removeMotsAmbigus(\AmbigussBundle\Entity\MotAmbigu $motsAmbigus)
+	public function removeMotsAmbigus(\AppBundle\Entity\MotAmbigu $motsAmbigus)
 	{
 		$this->motsAmbigus->removeElement($motsAmbigus);
 	}

@@ -1,17 +1,5 @@
-administration:
-    resource: "@AdministrationBundle/Resources/config/routing.yml"
-    prefix:   /
-
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
-    prefix:   /
-
-judgment:
-    resource: "@JudgmentBundle/Resources/config/routing.yml"
-    prefix:   /
-
-ambiguss:
-    resource: "@AmbigussBundle/Resources/config/routing.yml"
     prefix:   /
 
 user:

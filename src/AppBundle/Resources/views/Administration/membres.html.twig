@@ -1,0 +1,74 @@
+{% extends '@App/Administration/base_admin.html.twig' %}
+
+{% block title %}Membres{% endblock %}
+{% block titre %}Membres{% endblock %}
+
+{% block contenu %}
+	<div class="col-md-8 col-md-offset-2 well">
+		{{ form_start(form) }}
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-3">
+					{{ form_label(form.Id) }} {{ form_widget(form.Id) }}
+				</div>
+				<div class="col-md-9">
+					{{ form_label(form.PseudoOrEmail) }} {{ form_widget(form.PseudoOrEmail) }}
+				</div>
+			</div>
+		</div>
+		{{ form_row(form.Chercher) }}
+
+		{{ form_rest(form) }}
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script>
+		$(document).ready(function () {
+
+			var action = $('form[name="administrationbundle_membre"]');
+			var url = action.attr('action');
+
+			$('#administrationbundle_membre_Id').bind('input', function (e) {
+				action.attr('action', url + $(this).val());
+			});
+
+			// Autocomplete le champ
+			var input = $('#administrationbundle_membre_PseudoOrEmail');
+			input.autocomplete({
+				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
+				source: function (request, response) {
+					var url = "{{ path('user_get_pseudo_email') }}";
+					$.getJSON(url + '?term=' + request.term, function (data) {
+						input.parent().append('<div id="resnul" class="text-danger" hidden>Aucun membre ne corespond à la recherche</div>');
+						if (data.length === 0) {
+							input.parent().find('#resnul').show();
+						} else {
+							input.parent().find('#resnul').hide();
+						}
+						// On récupère une liste d'objet, on veut l'attribut valeur de l'objet
+						response($.map(data, function (item) {
+							tab = {
+								label: item.pseudo + " (" + item.email + ")",
+								value: item.id
+							};
+							return tab;
+						}));
+					});
+				},
+				select: function (e, ui) {
+					e.preventDefault();
+					$('#administrationbundle_membre_Id').val(ui.item.value);
+					$('#administrationbundle_membre_PseudoOrEmail').val(ui.item.label);
+					action.attr('action', url + ui.item.value);
+				}
+			}).data("ui-autocomplete")._renderItem = function (ul, item) {
+				return $("<li>")
+					.attr("data-value", item.value)
+					.append($("<a>").html(item.label.replace(new RegExp(this.term, 'gi'), "<b>$&</b>")))
+					.appendTo(ul);
+			};
+		});
+	</script>
+{% endblock %}

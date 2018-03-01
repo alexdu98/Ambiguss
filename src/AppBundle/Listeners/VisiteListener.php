@@ -2,9 +2,11 @@
 
 namespace AppBundle\Listeners;
 
-use AppBundle\Services\Visite;
+use AppBundle\Service\Visite;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-class VisiteListener
+class VisiteListener implements EventSubscriberInterface
 {
 
 	private $visite;
@@ -13,6 +15,13 @@ class VisiteListener
 	{
 		$this->visite = $visite;
 	}
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::REQUEST => 'process'
+        ];
+    }
 
 	public function process(){
 		$this->visite->checkAndAdd();

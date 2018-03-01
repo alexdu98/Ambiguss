@@ -1,0 +1,15 @@
+<div class="form-group row reponseGroupe" id="rep__ordre__">
+	<div id="AppBundle_game_reponses___name__">
+		<div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-2 text-right text-left-xs">
+			<label class="control-label required" for="AppBundle_game_reponses___name___glose"><span class="color-red size16" title="Ce mot est ambigu (id : __ordre__)">__motAmbigu__</span>
+			</label>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			{{ form_widget(form.glose) }}
+			{{ form_widget(form.motAmbigu) }}
+		</div>
+		<div class="col-xs-12 col-sm-3 col-md-2 addGloseButton">
+		</div>
+		{{ form_widget(form.idMotAmbiguPhrase) }}
+	</div>
+</div>

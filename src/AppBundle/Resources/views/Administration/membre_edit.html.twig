@@ -1,0 +1,118 @@
+{% extends '@App/Administration/base_admin.html.twig' %}
+
+{% block title %}Édition d'un membre{% endblock %}
+{% block titre %}Édition d'un membre{% endblock %}
+
+{% block contenu %}
+	<div class="well">
+		{% for flashMessage in app.session.flashbag.get('succes') %}
+			<div class="alert alert-success">{{ flashMessage }}</div>
+		{% endfor %}
+		{% for flashMessage in app.session.flashbag.get('erreur') %}
+			<div class="alert alert-danger">{{ flashMessage }}</div>
+		{% endfor %}
+
+		{{ form_start(form) }}
+
+		{{ form_errors(form) }}
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-5">
+					{{ form_label(form.pseudo) }} {{ form_widget(form.pseudo) }}
+				</div>
+				<div class="col-md-7">
+					{{ form_label(form.email) }} {{ form_widget(form.email) }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-5">
+					{{ form_label(form.mdp) }} {{ form_widget(form.mdp) }}
+				</div>
+				<div class="col-md-7">
+					{{ form_label(form.cleOubliMdp) }} {{ form_widget(form.cleOubliMdp) }}
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-4">
+					{{ form_label(form.dateInscription) }} {{ form_widget(form.dateInscription) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_label(form.dateConnexion) }} {{ form_widget(form.dateConnexion) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_label(form.dateNaissance) }} {{ form_widget(form.dateNaissance) }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-4">
+					{{ form_label(form.sexe) }} {{ form_widget(form.sexe) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_label(form.groupe) }} {{ form_widget(form.groupe) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_label(form.niveau) }} {{ form_widget(form.niveau) }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-2">
+					{{ form_label(form.actif) }} {{ form_widget(form.actif) }}
+				</div>
+				<div class="col-md-2">
+					{{ form_label(form.newsletter) }} {{ form_widget(form.newsletter) }}
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-2">
+					{{ form_label(form.pointsClassement) }} {{ form_widget(form.pointsClassement) }}
+				</div>
+				<div class="col-md-2">
+					{{ form_label(form.credits) }} {{ form_widget(form.credits) }}
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-1">
+					{{ form_label(form.banni) }} {{ form_widget(form.banni) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_label(form.dateDeban) }} {{ form_widget(form.dateDeban) }}
+				</div>
+				<div class="col-md-5">
+					Si banni est actif :<br> pas de date de déban = banni à vie, sinon banni jusqu'à la date de déban
+				</div>
+			</div>
+		</div>
+		{{ form_row(form.commentaireBan) }}
+		<hr>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-6">
+					{{ form_label(form.idFacebook) }} {{ form_widget(form.idFacebook) }}
+				</div>
+				<div class="col-md-6">
+					{{ form_label(form.idTwitter) }} {{ form_widget(form.idTwitter) }}
+				</div>
+			</div>
+		</div>
+		{{ form_rest(form) }}
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

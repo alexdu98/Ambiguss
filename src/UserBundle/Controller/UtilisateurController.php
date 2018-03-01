@@ -16,10 +16,10 @@ class UtilisateurController extends Controller
 			return $this->redirectToRoute('user_connexion');
 		}
 
-		$repoPh = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Phrase');
+		$repoPh = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
 		$nbPhrases = $repoPh->countAllVisible();
 
-		$repoP = $this->getDoctrine()->getManager()->getRepository('AmbigussBundle:Partie');
+		$repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Partie');
 
 		if($user == null)
 		{

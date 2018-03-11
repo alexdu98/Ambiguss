@@ -28,7 +28,7 @@
 						</div>
 						<div class="profile_info">
 							<span>Bienvenue,</span>
-							<h2>{{ app.user.pseudo }}</h2>
+							<h2>{{ app.user.username }}</h2>
 						</div>
 						<div class="clearfix"></div>
 					</div>
@@ -50,6 +50,7 @@
 										<li><a href="{{ path('administration_accueil') }}">Accueil administration</a></li>
 										<li><a href="{{ path('administration_statistiques') }}">Statistiques</a></li>
 										<li><a href="{{ path('administration_membres') }}">Membres</a></li>
+										<li><a href="{{ path('fos_user_group_list') }}">Groupes</a></li>
 										<li><a href="{{ path('administration_phrases') }}">Phrases</a></li>
 										<li><a href="{{ path('administration_gloses') }}">Gloses</a></li>
 									</ul>

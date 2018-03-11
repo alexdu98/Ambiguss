@@ -22,10 +22,10 @@ class SearchMembreType extends AbstractType
 				'attr' => array('placeholder' => 'Id'),
 				'required' => true,
 			))
-			->add('PseudoOrEmail', TextType::class, array(
+			->add('Pseudo', TextType::class, array(
 				'mapped' => false,
-				'label' => 'Pseudo ou email',
-				'attr' => array('placeholder' => 'Pseudo ou email'),
+				'label' => 'Pseudo',
+				'attr' => array('placeholder' => 'Pseudo'),
 				'required' => false,
 			))
 			->add('Chercher', SubmitType::class);
@@ -37,7 +37,7 @@ class SearchMembreType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'UserBundle\Entity\Membre',
+			'data_class' => 'AppBundle\Entity\Membre',
 		));
 	}
 

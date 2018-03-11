@@ -10,7 +10,7 @@ use AppBundle\Entity\Jugement;
 use AppBundle\Form\Jugement\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use UserBundle\Entity\Historique;
+use AppBundle\Entity\Historique;
 
 class GameController extends Controller
 {
@@ -34,7 +34,7 @@ class GameController extends Controller
 
 			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbiguPhrase');
 			$repository2 = $this->getDoctrine()->getManager()->getRepository('AppBundle:PoidsReponse');
-			$repository3 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+			$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Niveau');
 
 			$em = $this->getDoctrine()->getManager();
 			$valid = true;

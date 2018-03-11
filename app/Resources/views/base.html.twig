@@ -80,15 +80,16 @@
 					    <div class="col-xs-12 col-sm-12 col-md-3 text-right">
 						    <ul class="coDecoMenu">
 							    {% if app.user %}
-								    <li><a class="linkCoMenu" href="{{ path('user_profil') }}">{{ app.user.pseudo }} </a></li> •
-								    <li><a class="linkCoMenu" href="{{ path('user_deconnexion') }}">Se déconnecter</a></li>
+								    <li><a class="linkCoMenu" href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}
+										</a></li> •
+								    <li><a class="linkCoMenu" href="{{ path('fos_user_security_logout') }}">Se déconnecter</a></li>
 								    <div>
 									    Points : <span id="points">{{ app.user.pointsClassement|capitalize }}</span> |
 									    Crédits : <span id="credits">{{ app.user.Credits|capitalize }}</span>
 								    </div>
 							    {% else %}
-								    <li><a href="{{ path('user_inscription') }}">S'inscrire</a></li>
-								    <li><a href="{{ path('user_connexion') }}">Se connecter</a></li>
+								    <li><a href="{{ path('fos_user_registration_register') }}">S'inscrire</a></li>
+								    <li><a href="{{ path('fos_user_security_login') }}">Se connecter</a></li>
 							    {% endif %}
 						    </ul>
 					    </div>

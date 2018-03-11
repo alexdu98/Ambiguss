@@ -1,0 +1,20 @@
+{% extends "@App/Administration/base_admin.html.twig" %}
+
+{% block title %}Groupe{% endblock %}
+
+{% block titre %}Groupe{% endblock %}
+
+{% block contenu %}
+    <div class="fos_user_group_show">
+        <a href="{{ path('fos_user_group_edit', {groupName: group.name}) }}" class="btn btn-primary">Modifier</a>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal">Supprimer</button>
+        <hr>
+        <p><b>Nom :</b> {{ group.name }}</p>
+        <b>Roles :</b>
+        <ul>
+            {% for role in group.roles %}
+                <li>{{ role }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

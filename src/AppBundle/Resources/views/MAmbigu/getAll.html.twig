@@ -42,16 +42,16 @@
                 <tr id="mambigu-{{ row.id }}">
                     <td>{{ row.id }}</td>
                     <td class="mambigu-valeur">{{ row.valeur }}</td>
-                    <td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
+                    <td><a href="{{ path('fos_user_profile_show' , {'id':row.auteur.id}) }}">{{ row.auteur.username }}</a></td>
                     <td> a venir</td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
 
                     {% if row.Modificateur %}
-                        <td class="mambigu-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="mambigu-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':row.modificateur.id}) }}">{{ row.modificateur.username|default('') }}</a></td>
                         <td class="mambigu-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
 						H:i") }}</td>
                     {% else %}
-                        <td class="mambigu-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="mambigu-modificateur"><a href="#">{{ row.modificateur.username|default('') }}</a></td>
                         <td class="mambigu-dateModification" data-order=""></td></td>
 
                     {% endif %}

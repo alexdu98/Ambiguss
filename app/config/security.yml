@@ -1,20 +1,10 @@
 security:
   encoders:
-    Symfony\Component\Security\Core\User\User:
-      algorithm: bcrypt
-      cost: 10
-    UserBundle\Entity\Membre:
-      algorithm: bcrypt
-      cost: 10
-
-  role_hierarchy:
-    ROLE_MEMBRE:          ROLE_VISITEUR
-    ROLE_MODERATEUR:      ROLE_MEMBRE
-    ROLE_ADMINISTRATEUR:  ROLE_MODERATEUR
+    FOS\UserBundle\Model\UserInterface: bcrypt
 
   providers:
-    webservice:
-      id: user.membre_provider
+    fos_userbundle:
+      id: fos_user.user_provider.username
 
   firewalls:
     dev:
@@ -23,27 +13,27 @@ security:
     main:
       pattern: ^/
       anonymous: true
-      provider:     webservice
       remember_me:
         secret: '%secret%'
         lifetime: 604800 # 7 jours
         path: /
         name: jeton
-        remember_me_parameter: 'userbundle_membre[KeepCo]'
       logout_on_user_change: true
       form_login:
-        login_path: /connexion
-        check_path: /connexion/verification
-        username_parameter: userbundle_membre[Pseudo]
-        password_parameter: userbundle_membre[Mdp]
+        provider: fos_userbundle
+        login_path: fos_user_security_login
+        failure_path: fos_user_security_login
+        check_path: fos_user_security_check
+        default_target_path: app_accueil
+        csrf_token_generator: security.csrf.token_manager
+        use_referer: true
       logout:
-        path:       /deconnexion
-        target:     /
-    # A mettre avant le main pour HWI
-    secured_area:
-      anonymous: ~
-      logout_on_user_change: true
+        path: fos_user_security_logout
+        target: fos_user_security_login
 
   access_control:
-    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-    - { path: ^/admin, roles: ROLE_ADMINISTRATEUR }
+    - { path: ^/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/deconnexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/reinitialisation, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/admin/, role: ROLE_ADMINISTRATEUR }

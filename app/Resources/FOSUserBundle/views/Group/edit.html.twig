@@ -1,0 +1,29 @@
+{% extends "@App/Administration/base_admin.html.twig" %}
+
+{% block title %}Modifier un groupe{% endblock %}
+
+{% block titre %}Modifier un groupe{% endblock %}
+
+{% block contenu %}
+    {{ form_start(form, {'form-type' : 'horizontal'}) }}
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" id="addRole">Ajouter un role</button>
+    </div>
+
+    {{ form_row(form.roles) }}
+
+    {{ form_rest(form) }}
+
+    <input type="submit" class="btn btn-warning" id="_submit" name="_submit" value="Modifier" />
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block js %}
+    <script>formRoleId = "{{ form.roles.vars.id }}"</script>
+    <script src="{{ asset('js/nestedFormRole.js') }}"></script>
+{% endblock %}

@@ -6,7 +6,7 @@ use AppBundle\Entity\Jugement;
 use AppBundle\Form\Jugement\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use UserBundle\Entity\Historique;
+use AppBundle\Entity\Historique;
 
 class APIController extends Controller
 {
@@ -120,7 +120,7 @@ class APIController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -177,7 +177,7 @@ class APIController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -297,5 +297,12 @@ class APIController extends Controller
         $gloses = $repository->findGlosesValueByMotAmbiguValue($request->request->get('motAmbigu'));
 
         return $this->json($gloses);
+    }
+
+    public function getMembreByPseudoAction(Request $request)
+    {
+        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
+        $membres = $repository->getByPseudo($request->get('term'));
+        return $this->json($membres);
     }
 }

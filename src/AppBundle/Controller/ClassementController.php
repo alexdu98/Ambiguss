@@ -11,7 +11,7 @@ class ClassementController extends Controller
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
-			$repository = $this->getDoctrine()->getManager()->getRepository('UserBundle:Membre');
+			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
 			$classement = $repository->getClassementGeneral($this->getParameter('maxResultForClassementGeneral'));
 			$position = $repository->getPositionClassement($this->getUser())['position'] + 1;
 			$nbMembreTotal = $repository->count()['total'];
@@ -27,7 +27,7 @@ class ClassementController extends Controller
 
 			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
 
-			return $this->redirectToRoute('user_connexion');
+			return $this->redirectToRoute('fos_user_security_login');
 		}
 	}
 
@@ -48,7 +48,7 @@ class ClassementController extends Controller
 
 			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
 
-			return $this->redirectToRoute('user_connexion');
+			return $this->redirectToRoute('fos_user_security_login');
 		}
 	}
 
@@ -68,7 +68,7 @@ class ClassementController extends Controller
 
 			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
 
-			return $this->redirectToRoute('user_connexion');
+			return $this->redirectToRoute('fos_user_security_login');
 		}
 	}
 

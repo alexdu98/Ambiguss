@@ -97,7 +97,7 @@ class MAGController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -158,7 +158,7 @@ class MAGController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();

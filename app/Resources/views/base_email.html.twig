@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>{{ subject }}</title>
+	<style>
+		body{font-size: 1.0em; font-family: "MV Boli", "cursive";}
+		#ambiguss{font-size: 1.5em; color: #777; text-decoration: none;}
+		article a{color: #A0D233; text-decoration: none; font-weight: bold;}
+		article a:hover{border-bottom: 1px dashed #A0D233;}
+		footer{margin-top: 10px; padding: 5px; display: table;}
+		.info{font-size: .7em;}
+		.color-green{color: #A0D233;}
+	</style>
+</head>
+<body>
+	<header>
+		<a href="{{ url('app_accueil') }}"><img src="{{ absolute_url('assets/images/logo.png') }}" alt="Logo Ambiguss"></a>
+		<a href="{{ url('app_accueil') }}" id="ambiguss"><span class="color-green">Amb</span>iguss</a>
+	</header>
+
+	<article>
+		<p>
+			Bonjour {{ recipient.username }},
+		</p>
+		<div>
+			{% block content %}{% endblock %}
+		</div>
+	</article>
+
+	<footer>
+		<p>
+			Cordialement,<br>
+			L'équipe <span class="color-green">Amb</span>iguss.
+		</p>
+		<p class="info">
+			IP : {{ app.request.server.get("REMOTE_ADDR") }}<br>
+			Date : {{ "now"|date("d/m/Y à H:i") }}
+		</p>
+	</footer>
+</body>
+</html>

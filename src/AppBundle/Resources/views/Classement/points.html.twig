@@ -38,7 +38,7 @@
 				{% for row in classement %}
 					<tr {% if row.id == app.user.id %}class="classementTableMe"{% endif %}>
 						<td>{{ loop.index }}</td>
-						<td><a href="{{ path('user_profil' , {'id':row.id}) }}">{{ row.pseudo }}</a></td>
+						<td><a href="{{ path('fos_user_profile_show' , {'id':row.id}) }}">{{ row.username }}</a></td>
 						<td>
 							{% if loop.index == 1 %}
 								Ambigator

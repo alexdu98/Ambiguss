@@ -3,7 +3,6 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
-    - { resource: "@UserBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -23,15 +22,15 @@ parameters:
     # Jugement
     dureeDeliberationSecondes: 432000 # 5 jours
     # Emails contact
-    emailsContact:
-        # Email: "Nom"
-        alexdu98@gmx.fr: "Alexandre"
-        lafourcade@lirmm.fr: "Mathieu Lafourcade"
+    emailContact: "alexdu98@gmx.fr"
+    # Email from
+    emailFrom: "noreply@ambiguss.fr"
     # Visite
     timeBetweenTwoVisitesSecondes: 86400 # 1 jour
     # Download directory
     downloadDirectory: "%kernel.project_dir%/web/download/"
     # Recaptcha key
+    recaptcha: "6LcXBhkUAAAAAIMfOvKJODxXAhw-qG2VzGG2rppj"
     recaptchaKey: "6LcXBhkUAAAAAOXVtSYLei5DUOfYh1ZEfsIhz0yv"
 
 framework:
@@ -52,7 +51,7 @@ framework:
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
-        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        save_path:   '%kernel.project_dir%/var/sessions/%kernel.environment%'
     fragments:       ~
     http_method_override: true
     assets: ~
@@ -71,6 +70,7 @@ twig:
         gainPerLikePhrasePoints: "%gainPerLikePhrasePoints%"
         gainPercentByGame: "%gainPercentByGame%"
         costCreateGloseByGlosesOfMotAmbigu: "%costCreateGloseByGlosesOfMotAmbigu%"
+        recaptcha: "%recaptcha%"
 
 # Doctrine Configuration
 doctrine:
@@ -94,12 +94,6 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         
-doctrine_migrations:
-    dir_name: "%kernel.root_dir%/DoctrineMigrations"
-    namespace: Application\Migrations
-    table_name: migration_versions
-    name: Application Migrations
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -107,3 +101,31 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\Membre
+    service:
+        mailer: AppBundle\Service\Mailer
+    group:
+        group_class: AppBundle\Entity\Groupe
+        form:
+            type: AppBundle\Form\GroupeType
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
+    registration:
+        confirmation:
+            enabled: true
+        form:
+            type: AppBundle\Form\RegistrationType
+    profile:
+        form:
+            type: AppBundle\Form\ProfilEditType
+    change_password:
+        form:
+            type: AppBundle\Form\ChangePasswordType
+    resetting:
+        form:
+            type: AppBundle\Form\ResettingType

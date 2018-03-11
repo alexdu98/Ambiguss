@@ -40,14 +40,14 @@
 				<tr id="glose-{{ row.id }}">
 					<td>{{ row.id }}</td>
 					<td class="glose-valeur">{{ row.valeur }}</td>
-					<td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
+					<td><a href="{{ path('fos_user_profile_show' , {'id':row.auteur.id}) }}">{{ row.auteur.username }}</a></td>
 					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
 
 					{% if row.Modificateur %}
-						<td class="glose-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
+						<td class="glose-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':row.modificateur.id}) }}">{{ row.modificateur.username|default('') }}</a></td>
 
                     {% else %}
-						<td class="glose-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+						<td class="glose-modificateur"><a href="#">{{ row.modificateur.username|default('') }}</a></td>
 
                     {% endif %}
 					<td class="glose-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à H:i") }}</td>
@@ -112,7 +112,7 @@
 							clone = $(html);
 							clone.find('.panel-heading').append(data.jugements[index].categorieJugement);
 							clone.find('.panel-body').append(data.jugements[index].description);
-							var profil = Routing.generate('user_profil', {id: data.jugements[index].auteur_id});
+							var profil = Routing.generate('fos_user_profile_show', {id: data.jugements[index].auteur_id});
 							var dt = new Date(data.jugements[index].dateCreation * 1000);
 							var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
 									.getMinutes();

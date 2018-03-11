@@ -19,7 +19,7 @@ app_apropos:
     defaults: { _controller: AppBundle:Main:aPropos }
 
 administration_accueil:
-    path:     /admin
+    path:     /admin/
     defaults: { _controller: AppBundle:Admin:main }
 
 administration_statistiques:
@@ -219,3 +219,8 @@ ambiguss_phrase_keep:
         id: \d+
     options:
         expose: true
+
+user_get_pseudo:
+    path: /membre/pseudo
+    defaults:
+        _controller: AppBundle:API:getMembreByPseudo

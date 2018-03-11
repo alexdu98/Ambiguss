@@ -1,9 +1,5 @@
 services:
 
-    AppBundle\Service\Visite:
-        autowire: true
-        arguments: { $timeBetweenTwoVisites: "%timeBetweenTwoVisitesSecondes%" }
-
     AppBundle\Service\Export:
         autowire: true
         arguments: { $downloadDir: "%downloadDirectory%" }
@@ -11,3 +7,7 @@ services:
     AppBundle\Service\Recaptcha:
         autowire: true
         arguments: { $key: "%recaptchaKey%" }
+
+    security.role_hierarchy:
+        autowire: true
+        class: AppBundle\Service\RoleHierarchy

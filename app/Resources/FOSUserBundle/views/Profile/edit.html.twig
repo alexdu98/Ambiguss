@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Modification du profil{% endblock %}
+
+{% block titre %}Modification du profil{% endblock %}
+
+{% block contenu %}
+    <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+        <div class="container-fluid">
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a href="{{ path('fos_user_profile_show') }}">Profil</a></li>
+                    <li role="presentation" class="active"><a href="#">Modification</a></li>
+                    <li role="presentation"><a href="{{ path('fos_user_change_password') }}">Mot de passe</a></li>
+                </ul>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 well">
+                    {{ form_start(form , {'form-type' : 'horizontal'}) }}
+
+                    {{ form_errors(form) }}
+
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.Sexe) }}
+                    {{ form_row(form.dateNaissance) }}
+                    {{ form_row(form.Newsletter) }}
+
+                    {{ form_row(form.Valider) }}
+
+                    {{ form_rest(form) }}
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

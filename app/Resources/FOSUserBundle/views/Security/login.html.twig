@@ -1,0 +1,68 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block titre %}Formulaire de connexion{% endblock %}
+
+{% block contenu %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+            <button class="btn btn-facebook btn-block" id="login-facebook" disabled title="Cette fonctionnalité n'est pas encore implémenté">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+                Se connecter avec Facebook
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+            <button class="btn btn-twitter btn-block" id="login-twitter" disabled title="Cette fonctionnalité n'est pas encore implémenté">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+                Se connecter avec Twitter
+            </button>
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
+
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+
+                <div class="form-group">
+                    <label class="control-label required" for="username">Pseudo</label>
+                    <input type="text" id="username" class="form-control" name="_username" placeholder="Pseudo" value="{{ last_username }}"
+                           required="required"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label required" for="password">Mot de passe</label>
+                    <input type="password" id="password" class="form-control" name="_password" placeholder="Mot de passe"
+                           required="required"/>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6 col-sm-8">
+                        <div class="checkbox">
+                            <label for="remember_me"><input type="checkbox" id="remember_me" name="_remember_me" value="on"/>Rester connecté</label>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 text-right">
+                        <input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="Connexion"/>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <div class="text-right">
+                <a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié ?</a><br>
+                <a href="{{ path('fos_user_registration_register') }}">Pas encore inscrit ?</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

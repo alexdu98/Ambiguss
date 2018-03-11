@@ -1,0 +1,110 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block titre %}Profil <small>{{ user.username }} </small>{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/DataTables/datatables.css') }}">
+{% endblock %}
+
+{% block contenu %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+            <div class="container-fluid">
+                <div class="row">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="#">Profil</a></li>
+                        <li role="presentation"><a href="{{ path('fos_user_profile_edit') }}">Modification</a></li>
+                        <li role="presentation"><a href="{{ path('fos_user_change_password') }}">Mot de passe</a></li>
+                    </ul>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <p><b>Parties : </b> {{ user.parties.count }} / {{ nbPhrases }}</p>
+                        <p><b>Points :</b> {{ user.pointsClassement }}</p>
+                        <p><b>Crédits :</b> {{ user.credits }}</p>
+                        <br>
+                            Vous avez créé :
+                        <ul>
+                            <li>{{ user.phrases|length }} phrases
+                                <a href="{{ path('ambiguss_classement_personnel') }}">(Voir)</a>
+                            </li>
+                            <li>{{ user.gloses|length }} gloses</li>
+                            <li>{{ user.motsAmbigus|length }} mots ambigus</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <p><b>Date d'inscription :</b> {{ user.dateInscription|date('d/m/Y à H:i') }}</p>
+                        <p><b>Dernière connexion :</b> {{ user.lastLogin|date('d/m/Y à H:i') }}</p>
+                        <p><b>Email :</b> {{ user.email }}</p>
+                        <p>
+                            <b>Groupe{% if user.groups.count > 1 %}s{% endif %} :</b>
+                            {% for group in user.groups %}
+                                {{ group.name }}
+                                {% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        </p>
+                        <p><b>Genre :</b> {{ user.sexe is empty ? "~" : user.sexe }}</p>
+                        <p><b>Date de naissance :</b> {{ user.dateNaissance is empty ? "~" : user.dateNaissance|date('d/m/Y') }}</p>
+                        <p><b>Newsletter :</b> {% if user.newsletter %}abonné{% else %}non abonné{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <div class="well">
+                <div class="text-center"><h3>Historique</h3></div>
+                <table id="historique" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    {% for row in user.historiques|reverse %}
+                        <tr>
+                            <td>{{ loop.revindex }}</td>
+                            <td data-order="{{ row.dateAction|date("U") }}">{{ row.dateAction|date("d/m/Y H:i") }}</td>
+                            <td>{{ row.valeur }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('assets/vendor/DataTables/datatables.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#historique').DataTable({
+                stateSave: true, // Enregistre les configurations
+                stateSaveParams: function (settings, data) {
+                    data.start = 0; // On enregistre pas la page
+                    data.order = [[1, "desc"]]; // On ordonne sur la date
+                    data.search = {}; // On enregistre pas la recherche
+                },
+                stateDuration: 0, // pour une durée illimitée
+                order: [[1, 'desc']], // On ordonne sur la date
+                responsive: true,
+                language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
+            });
+        });
+    </script>
+{% endblock %}

@@ -29,11 +29,11 @@ class SearchGloseType extends AbstractType
 				'attr' => array('placeholder' => 'Id auteur'),
 				'required' => false,
 			))
-			->add('PseudoOrEmailAuteur', TextType::class, array(
+			->add('PseudoAuteur', TextType::class, array(
 				'required' => false,
 				'mapped' => false,
-				'label' => 'Pseudo ou email auteur',
-				'attr' => array('placeholder' => 'Pseudo ou email auteur'),
+				'label' => 'Pseudo auteur',
+				'attr' => array('placeholder' => 'Pseudo auteur'),
 			))
 			->add('Chercher', SubmitType::class);
 	}

@@ -18,7 +18,7 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-md-5">
-					{{ form_label(form.pseudo) }} {{ form_widget(form.pseudo) }}
+					{{ form_label(form.username) }} {{ form_widget(form.username) }}
 				</div>
 				<div class="col-md-7">
 					{{ form_label(form.email) }} {{ form_widget(form.email) }}
@@ -28,10 +28,10 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-md-5">
-					{{ form_label(form.mdp) }} {{ form_widget(form.mdp) }}
+					{{ form_label(form.password) }} {{ form_widget(form.password) }}
 				</div>
 				<div class="col-md-7">
-					{{ form_label(form.cleOubliMdp) }} {{ form_widget(form.cleOubliMdp) }}
+					{{ form_label(form.confirmationToken) }} {{ form_widget(form.confirmationToken) }}
 				</div>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 					{{ form_label(form.dateInscription) }} {{ form_widget(form.dateInscription) }}
 				</div>
 				<div class="col-md-4">
-					{{ form_label(form.dateConnexion) }} {{ form_widget(form.dateConnexion) }}
+					{{ form_label(form.lastLogin) }} {{ form_widget(form.lastLogin) }}
 				</div>
 				<div class="col-md-4">
 					{{ form_label(form.dateNaissance) }} {{ form_widget(form.dateNaissance) }}
@@ -55,7 +55,7 @@
 					{{ form_label(form.sexe) }} {{ form_widget(form.sexe) }}
 				</div>
 				<div class="col-md-4">
-					{{ form_label(form.groupe) }} {{ form_widget(form.groupe) }}
+					{{ form_label(form.groupes) }} {{ form_widget(form.groupes) }}
 				</div>
 				<div class="col-md-4">
 					{{ form_label(form.niveau) }} {{ form_widget(form.niveau) }}
@@ -65,7 +65,7 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-md-2">
-					{{ form_label(form.actif) }} {{ form_widget(form.actif) }}
+					{{ form_label(form.enabled) }} {{ form_widget(form.enabled) }}
 				</div>
 				<div class="col-md-2">
 					{{ form_label(form.newsletter) }} {{ form_widget(form.newsletter) }}
@@ -99,16 +99,6 @@
 		</div>
 		{{ form_row(form.commentaireBan) }}
 		<hr>
-		<div class="form-group">
-			<div class="row">
-				<div class="col-md-6">
-					{{ form_label(form.idFacebook) }} {{ form_widget(form.idFacebook) }}
-				</div>
-				<div class="col-md-6">
-					{{ form_label(form.idTwitter) }} {{ form_widget(form.idTwitter) }}
-				</div>
-			</div>
-		</div>
 		{{ form_rest(form) }}
 		{{ form_end(form) }}
 	</div>

@@ -60,7 +60,7 @@ class Reponse
     private $valeurGlose;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
      */
     private $auteur;
 
@@ -71,7 +71,7 @@ class Reponse
     private $poidsReponse;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Niveau")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Niveau")
      * @ORM\JoinColumn(nullable=false)
      */
     private $niveau;
@@ -231,7 +231,7 @@ class Reponse
     /**
      * Get auteur
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AppBundle\Entity\Membre
      */
 	public function getAuteur()
     {
@@ -241,11 +241,11 @@ class Reponse
     /**
      * Set auteur
      *
-     * @param \UserBundle\Entity\Membre $auteur
+     * @param \AppBundle\Entity\Membre $auteur
      *
      * @return Reponse
      */
-    public function setAuteur(\UserBundle\Entity\Membre $auteur = null)
+    public function setAuteur(\AppBundle\Entity\Membre $auteur = null)
     {
         $this->auteur = $auteur;
 
@@ -279,7 +279,7 @@ class Reponse
     /**
      * Get niveau
      *
-     * @return \UserBundle\Entity\Niveau
+     * @return \AppBundle\Entity\Niveau
      */
 	public function getNiveau()
     {
@@ -289,11 +289,11 @@ class Reponse
     /**
      * Set niveau
      *
-     * @param \UserBundle\Entity\Niveau $niveau
+     * @param \AppBundle\Entity\Niveau $niveau
      *
      * @return Reponse
      */
-    public function setNiveau(\UserBundle\Entity\Niveau $niveau)
+    public function setNiveau(\AppBundle\Entity\Niveau $niveau)
     {
         $this->niveau = $niveau;
 

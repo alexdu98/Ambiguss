@@ -26,7 +26,7 @@
 					{{ form_label(form.idAuteur) }} {{ form_widget(form.idAuteur) }}
 				</div>
 				<div class="col-md-9">
-					{{ form_label(form.PseudoOrEmailAuteur) }} {{ form_widget(form.PseudoOrEmailAuteur) }}
+					{{ form_label(form.PseudoAuteur) }} {{ form_widget(form.PseudoAuteur) }}
 				</div>
 			</div>
 		</div>
@@ -75,11 +75,11 @@
 		$(document).ready(function () {
 
 			// Autocomplete le champ
-			var input = $('#administrationbundle_glose_PseudoOrEmailAuteur');
+			var input = $('#administrationbundle_glose_PseudoAuteur');
 			input.autocomplete({
 				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 				source: function (request, response) {
-					var url = "{{ path('user_get_pseudo_email') }}";
+					var url = "{{ path('user_get_pseudo') }}";
 					$.getJSON(url + '?term=' + request.term, function (data) {
 						input.parent().append('<div id="resnul" class="text-danger" hidden>Aucun membre ne corespond à la recherche</div>');
 						if (data.length === 0) {
@@ -90,7 +90,7 @@
 						// On récupère une liste d'objet, on veut l'attribut valeur de l'objet
 						response($.map(data, function (item) {
 							tab = {
-								label: item.pseudo + " (" + item.email + ")",
+								label: item.username + " (" + item.email + ")",
 								value: item.id
 							};
 							return tab;
@@ -100,7 +100,7 @@
 				select: function (e, ui) {
 					e.preventDefault();
 					$('#administrationbundle_glose_idAuteur').val(ui.item.value);
-					$('#administrationbundle_glose_PseudoOrEmailAuteur').val(ui.item.label);
+					$('#administrationbundle_glose_PseudoAuteur').val(ui.item.label);
 				}
 			}).data("ui-autocomplete")._renderItem = function (ul, item) {
 				return $("<li>")
@@ -194,7 +194,7 @@
 										clone = $(html);
 										clone.find('.panel-heading').append(data.jugements[index].categorieJugement);
 										clone.find('.panel-body').append(data.jugements[index].description);
-										var profil = Routing.generate('user_profil', {id: data.jugements[index].auteur_id});
+										var profil = Routing.generate('fos_user_profile_show', {id: data.jugements[index].auteur_id});
 										var dt = new Date(data.jugements[index].dateCreation * 1000);
 										var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
 												.getMinutes();

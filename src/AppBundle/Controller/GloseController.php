@@ -34,7 +34,7 @@ class GloseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -109,7 +109,7 @@ class GloseController extends Controller
 					$res = array(
 						'id' => $glose->getId(),
 						'valeur' => $glose->getValeur(),
-						'modificateur' => $glose->getModificateur() != null ? $glose->getModificateur()->getPseudo() : '',
+						'modificateur' => $glose->getModificateur() != null ? $glose->getModificateur()->getUsername() : '',
 						'dateModification' => $glose->getDateModification() != null ? $glose->getDateModification()->format('d/m/Y à H:i') : '',
 						'signale' => $glose->getSignale(),
 					);
@@ -148,7 +148,7 @@ class GloseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -182,7 +182,7 @@ class GloseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -207,7 +207,7 @@ class GloseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();

@@ -10,6 +10,10 @@ namespace AppBundle\Repository;
  */
 class VisiteRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param $time Le délai minimum entre deux visites
+     * @return bool|int True si pas de visites ou que le délai est dépassé sinon le nombre de secondes avant expiration
+     */
 	public function checkVisite($time)
 	{
 		$visite = new \AppBundle\Entity\Visite();

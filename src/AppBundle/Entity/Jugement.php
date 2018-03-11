@@ -71,13 +71,13 @@ class Jugement implements \JsonSerializable
 	private $verdict;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $auteur;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
 	 */
 	private $juge;
 
@@ -189,7 +189,7 @@ class Jugement implements \JsonSerializable
     /**
      * Get juge
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AppBundle\Entity\Membre
      */
 	public function getJuge()
     {
@@ -199,11 +199,11 @@ class Jugement implements \JsonSerializable
     /**
      * Set juge
      *
-     * @param \UserBundle\Entity\Membre $juge
+     * @param \AppBundle\Entity\Membre $juge
      *
      * @return Jugement
      */
-    public function setJuge(\UserBundle\Entity\Membre $juge = null)
+    public function setJuge(\AppBundle\Entity\Membre $juge = null)
     {
         $this->juge = $juge;
 
@@ -221,7 +221,7 @@ class Jugement implements \JsonSerializable
 			'categorieJugement' => $this->getCategorieJugement()->getCategorieJugement(),
 			'description' => $this->getDescription(),
 			'dateCreation' => $this->getDateCreation()->getTimestamp(),
-			'auteur' => $this->getAuteur()->getPseudo(),
+			'auteur' => $this->getAuteur()->getUsername(),
 			'auteur_id' => $this->getAuteur()->getId(),
 		);
 	}
@@ -311,7 +311,7 @@ class Jugement implements \JsonSerializable
 	/**
 	 * Get auteur
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AppBundle\Entity\Membre
      */
 	public function getAuteur()
     {
@@ -321,11 +321,11 @@ class Jugement implements \JsonSerializable
 	/**
 	 * Set auteur
 	 *
-	 * @param \UserBundle\Entity\Membre $auteur
+	 * @param \AppBundle\Entity\Membre $auteur
 	 *
 	 * @return Jugement
 	 */
-	public function setAuteur(\UserBundle\Entity\Membre $auteur)
+	public function setAuteur(\AppBundle\Entity\Membre $auteur)
 	{
 		$this->auteur = $auteur;
 

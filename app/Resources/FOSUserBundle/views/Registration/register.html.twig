@@ -1,0 +1,98 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block titre %}Formulaire d'inscription{% endblock %}
+
+{% block contenu %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+            <button class="btn btn-facebook btn-block" id="login-facebook" disabled
+                    title="Cette fonctionnalité n'est pas encore implémenté">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+                S'inscrire avec Facebook
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+            <button class="btn btn-twitter btn-block" id="login-twitter" disabled title="Cette fonctionnalité n'est pas encore implémenté">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+                S'inscrire avec Twitter
+            </button>
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
+
+            {{ form_start(form , {'form-type' : 'horizontal', 'attr' : {'id' : 'formInscription'}}) }}
+
+            {{ form_errors(form) }}
+
+            <div class="form-group">
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username) }}
+                {{ form_errors(form.username) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.plainPassword.first) }}
+                {{ form_widget(form.plainPassword.first) }}
+                {{ form_errors(form.plainPassword.first) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.plainPassword.second) }}
+                {{ form_widget(form.plainPassword.second) }}
+                {{ form_errors(form.plainPassword.second) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+                {{ form_errors(form.email) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div id='recaptcha' class="g-recaptcha"
+                 data-sitekey="{{ recaptcha }}"
+                 data-callback="onSubmit"
+                 data-size="invisible"></div>
+
+            <input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="Valider"/>
+
+            {{ form_end(form) }}
+
+            {% block javascripts %}
+                <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+                <script>
+                    // Ne pas supprimé, callback recaptcha
+                    function onSubmit(token) {
+                        // On rempli le champ de formulaire Symfony
+                        $('#{{ form.captcha.vars.id }}').val(token);
+                        $('#formInscription').submit();
+                    }
+
+                    function validate(event) {
+                        event.preventDefault();
+                        grecaptcha.execute();
+                    }
+
+                    function onload() {
+                        var element = document.getElementById('_submit');
+                        element.onclick = validate;
+                    }
+
+                    onload();
+                </script>
+            {% endblock %}
+
+
+        </div>
+    </div>
+{% endblock %}

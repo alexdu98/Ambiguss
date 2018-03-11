@@ -13,7 +13,7 @@ use AppBundle\Form\Phrase\PhraseEditType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use UserBundle\Entity\Historique;
+use AppBundle\Entity\Historique;
 
 class PhraseController extends Controller
 {
@@ -140,7 +140,7 @@ class PhraseController extends Controller
 						$em->persist($histJoueur);
 
 						$repository1 = $this->getDoctrine()->getManager()->getRepository('AppBundle:PoidsReponse');
-						$repository2 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+						$repository2 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Niveau');
 						$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
 
 						$mapsRep = $request->request->get('phrase_add')['motsAmbigusPhrase'];
@@ -243,7 +243,7 @@ class PhraseController extends Controller
 
 			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
 
-			return $this->redirectToRoute('user_connexion');
+			return $this->redirectToRoute('fos_user_security_login');
 		}
 	}
 
@@ -348,7 +348,7 @@ class PhraseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -383,7 +383,7 @@ class PhraseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -418,7 +418,7 @@ class PhraseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();
@@ -575,7 +575,7 @@ class PhraseController extends Controller
 								$em->persist($histAuteur);
 
 								$repository1 = $this->getDoctrine()->getManager()->getRepository('AppBundle:PoidsReponse');
-								$repository2 = $this->getDoctrine()->getManager()->getRepository('UserBundle:Niveau');
+								$repository2 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Niveau');
 								$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
 
 								$mapsRep = $request->request->get('phrase_edit')['motsAmbigusPhrase'];
@@ -702,7 +702,7 @@ class PhraseController extends Controller
 			{
 				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-				return $this->redirectToRoute('user_connexion');
+				return $this->redirectToRoute('fos_user_security_login');
 			}
 		}
 		throw $this->createAccessDeniedException();

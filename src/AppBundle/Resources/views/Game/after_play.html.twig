@@ -15,7 +15,7 @@
 	        {% if app.user is null %}
 		        <p class="text-success">
 			        <b>
-				        <a href="{{ path('user_connexion') }}" class="size18">Connectez-vous</a>
+				        <a href="{{ path('fos_user_security_login') }}" class="size18">Connectez-vous</a>
 				        pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
 			        </b>
 		        </p>
@@ -27,12 +27,13 @@
 			        {% elseif alreadyPlayed %}
 				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.<br>
 			        {% else %}
-				        {% transchoice nb_point %}
-					        {0} Dommage, vous n'avez pas gagné de point cette fois. |
-					        {1} Bravo, vous avez gagné 1 point. |]1,
-				        Inf[ Félicitation, vous avez gagné <span id="fun-level" style="color: #C51B10;">0</span> points !
-				        {% endtranschoice %}
-
+						{% if nb_point <= 0 %}
+							Dommage, vous n'avez pas gagné de point cette fois.
+						{% elseif nb_point == 1 %}
+							Bravo, vous avez gagné 1 point.
+						{% else %}
+							Félicitation, vous avez gagné <span id="fun-level" style="color: #C51B10;">0</span> points !
+						{% endif %}
 				        <div>
 							<img src="{{ asset('avogif.gif') }} " alt="gif" style="max-width: 100%;">
 						</div>
@@ -44,7 +45,7 @@
 	        <br>
 	        <span class="color-green size18">La phrase était :</span><br>
 	        <span class="size24">{{ phrase|raw }}</span><br>
-	        <span class="size16">par <a href="{{ path('user_profil', {id: auteur.id}) }}">{{ auteur.pseudo }}</a></span><br>
+	        <span class="size16">par <a href="{{ path('fos_user_profile_show', {id: auteur.id}) }}">{{ auteur.username }}</a></span><br>
 	        <div class="form-group">
 		        {% if app.user %}
 			        <button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">

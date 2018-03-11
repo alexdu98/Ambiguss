@@ -46,7 +46,7 @@ class Partie
 	private $datePartie;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="parties")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $joueur;
@@ -128,7 +128,7 @@ class Partie
 	/**
 	 * Get joueur
 	 *
-	 * @return \UserBundle\Entity\Membre
+	 * @return \AppBundle\Entity\Membre
 	 */
 	public function getJoueur()
 	{
@@ -138,11 +138,11 @@ class Partie
 	/**
 	 * Set joueur
 	 *
-	 * @param \UserBundle\Entity\Membre $joueur
+	 * @param \AppBundle\Entity\Membre $joueur
 	 *
 	 * @return Partie
 	 */
-	public function setJoueur(\UserBundle\Entity\Membre $joueur)
+	public function setJoueur(\AppBundle\Entity\Membre $joueur)
 	{
 		$this->joueur = $joueur;
 

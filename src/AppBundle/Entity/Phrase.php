@@ -74,13 +74,13 @@ class Phrase implements \JsonSerializable
     private $visible;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre", inversedBy="phrases")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="phrases")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
 	 */
 	private $modificateur;
 
@@ -260,7 +260,7 @@ class Phrase implements \JsonSerializable
     /**
      * Get auteur
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AppBundle\Entity\Membre
      */
 	public function getAuteur()
     {
@@ -270,11 +270,11 @@ class Phrase implements \JsonSerializable
     /**
      * Set auteur
      *
-     * @param \UserBundle\Entity\Membre $auteur
+     * @param \AppBundle\Entity\Membre $auteur
      *
      * @return Phrase
      */
-    public function setAuteur(\UserBundle\Entity\Membre $auteur)
+    public function setAuteur(\AppBundle\Entity\Membre $auteur)
     {
         $this->auteur = $auteur;
 
@@ -284,7 +284,7 @@ class Phrase implements \JsonSerializable
     /**
      * Get modificateur
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AppBundle\Entity\Membre
      */
 	public function getModificateur()
     {
@@ -294,11 +294,11 @@ class Phrase implements \JsonSerializable
     /**
      * Set modificateur
      *
-     * @param \UserBundle\Entity\Membre $modificateur
+     * @param \AppBundle\Entity\Membre $modificateur
      *
      * @return Phrase
      */
-    public function setModificateur(\UserBundle\Entity\Membre $modificateur = null)
+    public function setModificateur(\AppBundle\Entity\Membre $modificateur = null)
     {
         $this->modificateur = $modificateur;
 
@@ -597,13 +597,13 @@ class Phrase implements \JsonSerializable
 
 	public function jsonSerialize()
 	{
-		$modificateur = !empty($this->modificateur) ? $this->modificateur->getPseudo() : '';
+		$modificateur = !empty($this->modificateur) ? $this->modificateur->getUsername() : '';
 		$dateModification = !empty($this->dateModification) ? $this->dateModification->getTimestamp() : '';
 
 		return array(
 			$this->id,
 			$this->getContenuHTML(),
-			$this->auteur->getPseudo(),
+			$this->auteur->getUsername(),
 			$this->dateCreation->getTimestamp(),
 			$modificateur,
 			$dateModification,

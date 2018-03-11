@@ -51,7 +51,7 @@ class VoteJugement
     private $vote;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
@@ -174,7 +174,7 @@ class VoteJugement
     /**
      * Get auteur
      *
-     * @return \UserBundle\Entity\Membre
+     * @return \AppBundle\Entity\Membre
      */
 	public function getAuteur()
     {
@@ -184,11 +184,11 @@ class VoteJugement
     /**
      * Set auteur
      *
-     * @param \UserBundle\Entity\Membre $auteur
+     * @param \AppBundle\Entity\Membre $auteur
      *
      * @return VoteJugement
      */
-    public function setAuteur(\UserBundle\Entity\Membre $auteur)
+    public function setAuteur(\AppBundle\Entity\Membre $auteur)
     {
         $this->auteur = $auteur;
 

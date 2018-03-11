@@ -38,7 +38,7 @@ class AimerPhrase
     private $active;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=false)
      */
     private $membre;
@@ -120,7 +120,7 @@ class AimerPhrase
 	/**
 	 * Get membre
 	 *
-	 * @return \UserBundle\Entity\Membre
+	 * @return \AppBundle\Entity\Membre
 	 */
 	public function getMembre()
 	{
@@ -130,11 +130,11 @@ class AimerPhrase
     /**
      * Set membre
      *
-     * @param \UserBundle\Entity\Membre $membre
+     * @param \AppBundle\Entity\Membre $membre
      *
      * @return AimerPhrase
      */
-    public function setMembre(\UserBundle\Entity\Membre $membre)
+    public function setMembre(\AppBundle\Entity\Membre $membre)
     {
         $this->membre = $membre;
 

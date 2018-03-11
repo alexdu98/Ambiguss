@@ -42,27 +42,28 @@ class MainController extends Controller
 				{
 					if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 					{
-						$data['pseudo'] = $this->getUser()->getPseudo();
+						$data['pseudo'] = $this->getUser()->getUsername();
 						$data['email'] = $this->getUser()->getEmail();
 					}
 
 					if(!empty($data['pseudo']) && !empty($data['email']))
 					{
-						// Envoi de l'email de contact
-						$message = \Swift_Message::newInstance()->setSubject("[Ambiguss] Contact")->setFrom(array(
-							"no-reply@ambiguss.calyxe.fr" => "Ambiguss",
-						))->setTo($this->getParameter('emailsContact'))
-							->setBody($this->renderView('emails/contact.html.twig', array(
-								'titre' => "Contact",
-								'listeDest' => $this->getParameter('emailsContact'),
-								'pseudoExpediteur' => $data['pseudo'],
-								'emailExpediteur' => $data['email'],
-								'message' => $data['message'],
-							)), 'text/html');
+                        // Envoi de l'email de contact
+                        $message = (new \Swift_Message())
+                            ->setSubject('[Ambiguss] Contact')
+                            ->setFrom($this->getParameter('emailFrom'))
+                            ->setTo($this->getParameter('emailContact'))
+                            ->setBody($this->renderView('AppBundle:Mail:contact.html.twig', array(
+                                'recipient' => $this->getDoctrine()->getRepository('AppBundle:Membre')->findOneByUsernameCanonical('alex'),
+                                'subject' => '[Ambiguss] Contact',
+                                'pseudoExpediteur' => $data['pseudo'],
+                                'emailExpediteur' => $data['email'],
+                                'message' => $data['message'],
+                            )), 'text/html');
 
 						if($this->get('mailer')->send($message))
 						{
-							$this->get('session')->getFlashBag()->add('succes', 'Formulaire de contact envoyé. Nous répondrons dès que possible.');
+							$this->get('session')->getFlashBag()->add('succes', 'Formulaire de contact envoyé. Nous vous répondrons dès que possible.');
 						}
 						else
 						{

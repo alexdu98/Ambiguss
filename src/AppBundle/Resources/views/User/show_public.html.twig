@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block titre %}Profil <small>{{ user.username }} </small>{% endblock %}
+
+{% block contenu %}
+    <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <p><b>Parties : </b> {{ user.parties.count }} / {{ nbPhrases }}</p>
+                    <p><b>Points :</b> {{ user.pointsClassement }}</p>
+                    <br>
+                        {{ user.username }} a créé :
+                    <ul>
+                        <li>{{ user.phrases|length }} phrases</li>
+                        <li>{{ user.gloses|length }} gloses</li>
+                        <li>{{ user.motsAmbigus|length }} mots ambigus</li>
+                    </ul>
+                </div>
+                <div class="col-md-6 text-right">
+                    <p><b>Date d'inscription :</b> {{ user.dateInscription|date('d/m/Y à H:i') }}</p>
+                    <p><b>Dernière connexion :</b> {{ user.lastLogin is empty ? "~" : user.lastLogin|date('d/m/Y à H:i') }}</p>
+                    <p>
+                        <b>Groupe{% if user.groups.count > 1 %}s{% endif %} :</b>
+                        {% for group in user.groups %}
+                            {{ group.name }}
+                            {% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

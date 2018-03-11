@@ -42,13 +42,13 @@
                 <tr id="phrase-{{ row.id }}">
                     <td>{{ row.id }}</td>
                     <td><a style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
-                    <td><a href="{{ path('user_profil' , {'id':row.auteur.id}) }}">{{ row.auteur.pseudo }}</a></td>
+                    <td><a href="{{ path('fos_user_profile_show' , {'id':row.auteur.id}) }}">{{ row.auteur.username }}</a></td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
                     {% if not row.modificateur %}
-                        <td class="phrase-modificateur"><a href="#">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="phrase-modificateur"><a href="#">{{ row.modificateur.username|default('') }}</a></td>
                         <td class="phrase-dateModification" data-order=""></td>
                     {% else %}
-                        <td class="phrase-modificateur"><a href="{{ path('user_profil' , {'id':row.modificateur.id}) }}">{{ row.modificateur.pseudo|default('') }}</a></td>
+                        <td class="phrase-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':row.modificateur.id}) }}">{{ row.modificateur.username|default('') }}</a></td>
                         <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
 						H:i") }}</td>
                     {%  endif %}

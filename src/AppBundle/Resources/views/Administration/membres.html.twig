@@ -12,7 +12,7 @@
 					{{ form_label(form.Id) }} {{ form_widget(form.Id) }}
 				</div>
 				<div class="col-md-9">
-					{{ form_label(form.PseudoOrEmail) }} {{ form_widget(form.PseudoOrEmail) }}
+					{{ form_label(form.Pseudo) }} {{ form_widget(form.Pseudo) }}
 				</div>
 			</div>
 		</div>
@@ -35,11 +35,11 @@
 			});
 
 			// Autocomplete le champ
-			var input = $('#administrationbundle_membre_PseudoOrEmail');
+			var input = $('#administrationbundle_membre_Pseudo');
 			input.autocomplete({
 				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 				source: function (request, response) {
-					var url = "{{ path('user_get_pseudo_email') }}";
+					var url = "{{ path('user_get_pseudo') }}";
 					$.getJSON(url + '?term=' + request.term, function (data) {
 						input.parent().append('<div id="resnul" class="text-danger" hidden>Aucun membre ne corespond à la recherche</div>');
 						if (data.length === 0) {
@@ -50,7 +50,7 @@
 						// On récupère une liste d'objet, on veut l'attribut valeur de l'objet
 						response($.map(data, function (item) {
 							tab = {
-								label: item.pseudo + " (" + item.email + ")",
+								label: item.username + " (" + item.email + ")",
 								value: item.id
 							};
 							return tab;
@@ -60,7 +60,7 @@
 				select: function (e, ui) {
 					e.preventDefault();
 					$('#administrationbundle_membre_Id').val(ui.item.value);
-					$('#administrationbundle_membre_PseudoOrEmail').val(ui.item.label);
+					$('#administrationbundle_membre_Pseudo').val(ui.item.label);
 					action.attr('action', url + ui.item.value);
 				}
 			}).data("ui-autocomplete")._renderItem = function (ul, item) {

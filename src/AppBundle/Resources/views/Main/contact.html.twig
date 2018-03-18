@@ -46,7 +46,7 @@
 						{% endif %}
 
 						{{ form_row(form.message) }}
-						<div id='recaptcha' class="g-recaptcha" data-sitekey="6LcXBhkUAAAAAIMfOvKJODxXAhw-qG2VzGG2rppj" data-callback="onSubmit" data-size="invisible"></div>
+						<div id='recaptcha' class="g-recaptcha" data-sitekey="{{ recaptcha }}" data-callback="onSubmit" data-size="invisible"></div>
 						{{ form_widget(form.envoyer) }}
 
 						{{ form_rest(form) }}

@@ -39,7 +39,7 @@ class Historique
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="historiques")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $membre;
 

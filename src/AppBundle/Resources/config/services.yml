@@ -6,8 +6,16 @@ services:
 
     AppBundle\Service\Recaptcha:
         autowire: true
-        arguments: { $key: "%recaptchaKey%" }
+        arguments: { $secret: "%recaptcha_secret%" }
 
     security.role_hierarchy:
         autowire: true
         class: AppBundle\Service\RoleHierarchy
+
+    AppBundle\Service\FOSUserProvider:
+        autowire: true
+        arguments:
+            $properties:
+                facebook: facebook
+                twitter: twitter
+                google: google

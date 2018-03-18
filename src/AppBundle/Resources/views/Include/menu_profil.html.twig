@@ -1,0 +1,13 @@
+{% set page = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+{% set profil_route = path('fos_user_profile_show') %}
+{% set edit_route = path('fos_user_profile_edit') %}
+{% set password_route = path('fos_user_change_password') %}
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="{% if page == profil_route %}active{% endif %}"><a href="{{ path('fos_user_profile_show') }}">Profil</a></li>
+        <li role="presentation" class="{% if page == edit_route %}active{% endif %}"><a href="{{ path('fos_user_profile_edit') }}">Modification</a></li>
+        {% if not app.user.isServiceCreation %}
+            <li role="presentation" class="{% if page == password_route %}active{% endif %}"><a href="{{ path('fos_user_change_password') }}">Mot de passe</a></li>
+        {% endif %}
+    </ul>
+</div>

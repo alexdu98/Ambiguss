@@ -19,12 +19,14 @@ fos_user_profile_show:
     methods: [GET]
     defaults:
         id: null
+    requirements:
+        id: \d+
     options:
         expose: true
 
 fos_user_profile_edit:
     path: /profil/edit
-    controller: fos_user.profile.controller:editAction
+    controller: AppBundle:User:edit
     methods: [GET, POST]
 
 fos_user_change_password:

@@ -50,6 +50,20 @@ class ProfilEditType extends AbstractType
                     'class' => 'btn btn-primary',
                 ),
             ));
+
+        if($builder->getData()->isRenamable()) {
+            $builder
+                ->add('username', null, array(
+                    'required' => false,
+                    'label' => 'Pseudo',
+                    'attr' => array(
+                        'placeholder' => 'Pseudo',
+                        'data-toggle' => 'tooltip',
+                        'data-placement' => 'top',
+                        'title' => 'Ne peut être modifié qu\'une seule fois'
+                    )
+                ));
+        }
     }
 
     public function getParent()

@@ -11,6 +11,17 @@
 				<h4>Parle-t-on du fruit, de l'homme ou d'autre chose ?</h4>				<br>
 				<h4>À vous de choisir en mettant le sens qui vous semble le plus approprié ;)</h4>				<br>
 				<h2><a href="{{ path('ambiguss_game') }}">Jouer</a></h2>
+
+				{% for label, messages in app.flashes(['info']) %}
+                    {% for message in messages %}
+						<div class="alert alert-{{ label }} alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+                            {{ message|raw }}
+						</div>
+                    {% endfor %}
+				{% endfor %}
 			</div>
 		</div>
 	</div>

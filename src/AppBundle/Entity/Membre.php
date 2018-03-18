@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -96,12 +97,14 @@ class Membre extends User
      * @Assert\NotNull()
      */
     private $banni;
+
     /**
      * @var string
      *
      * @ORM\Column(name="commentaire_ban", type="string", length=128, nullable=true)
      */
     private $commentaireBan;
+
     /**
      * @var \DateTime
      *
@@ -138,18 +141,43 @@ class Membre extends User
 	private $historiques;
 
     /**
-     * @ORM\OneToMany(targetEntity="Partie", mappedBy="joueur")
+     * @ORM\OneToMany(targetEntity="Partie", mappedBy="joueur", cascade={"persist"})
      */
     private $parties;
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Groupe", cascade={"persist"})
      * @ORM\JoinTable(name="membre_groupe",
-     *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="groupe_id", referencedColumnName="id")}
      * )
      */
     protected $groups;
+
+    /**
+     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true, unique=true)
+     */
+    private $facebookId;
+
+    /**
+     * @ORM\Column(name="twitter_id", type="string", length=255, nullable=true, unique=true)
+     */
+    private $twitterId;
+
+    /**
+     * @ORM\Column(name="google_id", type="string", length=255, nullable=true, unique=true)
+     */
+    private $googleId;
+
+    /**
+     * @ORM\Column(name="renamable", type="boolean")
+     */
+    private $renamable;
+
+    /**
+     * @ORM\Column(name="service_creation", type="boolean")
+     */
+    private $serviceCreation;
 
 
 	/**
@@ -163,6 +191,8 @@ class Membre extends User
 		$this->credits = 0;
 		$this->newsletter = true;
         $this->banni = false;
+        $this->renamable = false;
+        $this->serviceCreation = false;
 		$this->phrases = new ArrayCollection();
 		$this->gloses = new ArrayCollection();
 		$this->motsAmbigus = new ArrayCollection();
@@ -577,27 +607,27 @@ class Membre extends User
 	}
 
     /**
-     * Add party
+     * Add partie
      *
-     * @param \AppBundle\Entity\Partie $party
+     * @param \AppBundle\Entity\Partie $partie
      *
      * @return Membre
      */
-    public function addParty(\AppBundle\Entity\Partie $party)
+    public function addPartie(\AppBundle\Entity\Partie $partie)
     {
-        $this->parties[] = $party;
+        $this->parties[] = $partie;
 
         return $this;
     }
 
     /**
-     * Remove party
+     * Remove partie
      *
-     * @param \AppBundle\Entity\Partie $party
+     * @param \AppBundle\Entity\Partie $partie
      */
-    public function removeParty(\AppBundle\Entity\Partie $party)
+    public function removePartie(\AppBundle\Entity\Partie $partie)
     {
-        $this->parties->removeElement($party);
+        $this->parties->removeElement($partie);
     }
 
     /**
@@ -608,6 +638,118 @@ class Membre extends User
     public function getParties()
     {
         return $this->parties;
+    }
+
+    /**
+     * @param string $facebookId
+     * @return User
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    /**
+     * @param string $twitterId
+     * @return User
+     */
+    public function setTwitterId($twitterId)
+    {
+        $this->twitterId = $twitterId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitterId()
+    {
+        return $this->twitterId;
+    }
+
+    /**
+     * @param string $googleId
+     * @return User
+     */
+    public function setGoogleId($googleId)
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+
+    public function isAccountNonLocked(){
+        // Si non bannis, ou bannis mais pas à vie et que la date de fin soit passée
+        if(!$this->getBanni() || ($this->getDateDeban() != null && $this->getDateDeban() <= new \DateTime()))
+            return true;
+        return false;
+    }
+
+    /**
+     * Set renamable
+     *
+     * @param boolean $renamable
+     *
+     * @return Membre
+     */
+    public function setRenamable($renamable)
+    {
+        $this->renamable = $renamable;
+
+        return $this;
+    }
+
+    /**
+     * Get renamable
+     *
+     * @return boolean
+     */
+    public function isRenamable()
+    {
+        return $this->renamable;
+    }
+
+    /**
+     * Set serviceCreation
+     *
+     * @param boolean $serviceCreation
+     *
+     * @return Membre
+     */
+    public function setServiceCreation($serviceCreation)
+    {
+        $this->serviceCreation = $serviceCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceCreation
+     *
+     * @return boolean
+     */
+    public function isServiceCreation()
+    {
+        return $this->serviceCreation;
     }
 
 }

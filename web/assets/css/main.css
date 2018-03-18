@@ -273,7 +273,7 @@ button.infobulle img{
 
 /*
     #####################################################################
-    ######################### FACEBOOK & TWITTER ########################
+    #################### FACEBOOK & TWITTER & GOOGLE ####################
     #####################################################################
 */
 .btn-facebook{
@@ -286,7 +286,6 @@ button.infobulle img{
 	background: #FFF;
 	color: #3b5998;
 }
-
 .btn-twitter{
 	padding: 5px 20px;
 	background: #1b95e0;
@@ -296,6 +295,16 @@ button.infobulle img{
 .btn-twitter:hover{
 	background: #FFF;
 	color: #1b95e0;
+}
+.btn-google{
+	padding: 5px 20px;
+	background: #d91e00;
+	color: #FFF;
+	border: 2px solid #d91e00;
+}
+.btn-google:hover{
+	background: #FFF;
+	color: #d91e00;
 }
 .fb_iframe_widget{
 	vertical-align: text-bottom !important;

@@ -1,0 +1,10 @@
+FOS\UserBundle\Model\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [usernameCanonical]
+            errorPath: username
+            message: Ce pseudo est déjà utilisé
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [emailCanonical]
+            errorPath: email
+            message: Cet email est déjà utilisé

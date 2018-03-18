@@ -4,13 +4,13 @@ namespace AppBundle\Service;
 
 class Recaptcha{
 
-    private $key;
+    private $secret;
 	public $succes;
 	public $erreurs = array();
 
-    public function __construct($key)
+    public function __construct($secret)
     {
-        $this->key = $key;
+        $this->secret = $secret;
     }
 
 	/**
@@ -20,7 +20,7 @@ class Recaptcha{
 	 */
 	public function check($captcha){
 		if(!empty($captcha)){
-			$res = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $this->key . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
+			$res = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $this->secret . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
 			$res = json_decode($res);
 			$this->succes = $res->success;
 			if(!$this->succes)

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Historique;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
@@ -48,6 +49,7 @@ class RegistrationListener implements EventSubscriberInterface
         $repository = $this->em->getRepository('AppBundle:Niveau');
         $grp = $repository->findOneByTitre('Facile');
         $user->setNiveau($grp);
+        $user->addGroup($this->em->getRepository(Groupe::class)->findOneBy(['name' => 'Membre']));
     }
 
     public function completed(FilterUserResponseEvent $event){

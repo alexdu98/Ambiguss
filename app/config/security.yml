@@ -30,6 +30,16 @@ security:
       logout:
         path: fos_user_security_logout
         target: fos_user_security_login
+      oauth:
+        resource_owners:
+          facebook: "/login/check-facebook"
+          twitter: "/login/check-twitter"
+          google: "/login/check-google"
+        login_path: /connexion
+        failure_path: /connexion
+        use_forward: false
+        oauth_user_provider:
+          service: AppBundle\Service\FOSUserProvider
 
   access_control:
     - { path: ^/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }

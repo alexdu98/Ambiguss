@@ -164,7 +164,7 @@ class VoteJugement
      *
      * @return VoteJugement
      */
-    public function setVote(\TypeVote $vote)
+    public function setVote(TypeVote $vote)
     {
         $this->vote = $vote;
 

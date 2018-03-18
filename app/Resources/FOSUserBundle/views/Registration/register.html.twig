@@ -8,20 +8,28 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
-            <button class="btn btn-facebook btn-block" id="login-facebook" disabled
-                    title="Cette fonctionnalité n'est pas encore implémenté">
+            <a class="btn btn-facebook btn-block" id="login-facebook" href="{{ path('hwi_oauth_service_redirect', {"service": "facebook"}) }}">
                 <i class="fa fa-facebook" aria-hidden="true"></i>
                 S'inscrire avec Facebook
-            </button>
+            </a>
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
-            <button class="btn btn-twitter btn-block" id="login-twitter" disabled title="Cette fonctionnalité n'est pas encore implémenté">
+            <a class="btn btn-twitter btn-block" id="login-twitter" href="{{ path('hwi_oauth_service_redirect', {"service": "twitter"}) }}">
                 <i class="fa fa-twitter" aria-hidden="true"></i>
                 S'inscrire avec Twitter
-            </button>
+            </a>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4">
+            <a class="btn btn-google btn-block" id="login-google" href="{{ path('hwi_oauth_service_redirect', {"service": "google"}) }}">
+                <i class="fa fa-google" aria-hidden="true"></i>
+                S'inscrire avec Google
+            </a>
         </div>
     </div>
     <br>
@@ -33,29 +41,9 @@
 
             {{ form_errors(form) }}
 
-            <div class="form-group">
-                {{ form_label(form.username) }}
-                {{ form_widget(form.username) }}
-                {{ form_errors(form.username) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.plainPassword.first) }}
-                {{ form_widget(form.plainPassword.first) }}
-                {{ form_errors(form.plainPassword.first) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.plainPassword.second) }}
-                {{ form_widget(form.plainPassword.second) }}
-                {{ form_errors(form.plainPassword.second) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.email) }}
-                {{ form_widget(form.email) }}
-                {{ form_errors(form.email) }}
-            </div>
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.plainPassword) }}
 
             {{ form_rest(form) }}
 
@@ -64,7 +52,7 @@
                  data-callback="onSubmit"
                  data-size="invisible"></div>
 
-            <input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="Valider"/>
+            <input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="Valider">
 
             {{ form_end(form) }}
 

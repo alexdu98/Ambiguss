@@ -3,25 +3,34 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\Historique;
+use AppBundle\Entity\Membre;
+use AppBundle\Exception\UsernameAlreadyUsedException;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Util\Canonicalizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProfileListener implements EventSubscriberInterface
 {
 
     private $em;
+    private $router;
+    private $oldUsername;
     private $oldEmail;
     private $oldSexe;
     private $oldDateNaissance;
     private $oldNewsletter;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $router)
     {
         $this->em = $entityManager;
+        $this->router = $router;
     }
 
     public static function getSubscribedEvents()
@@ -33,6 +42,7 @@ class ProfileListener implements EventSubscriberInterface
     }
 
     public function initialize(GetResponseUserEvent $event){
+        $this->oldUsername = $event->getUser()->getUsername();
         $this->oldEmail = $event->getUser()->getEmail();
         $this->oldSexe = $event->getUser()->getSexe();
         $this->oldDateNaissance = $event->getUser()->getDateNaissance();
@@ -43,6 +53,10 @@ class ProfileListener implements EventSubscriberInterface
         $newUser = $event->getUser();
 
         $infos = array();
+        if($this->oldUsername != $newUser->getUsername()){
+            $infos[] = "pseudo : {$this->oldUsername} => {$newUser->getUsername()}";
+            $newUser->setRenamable(false);
+        }
         if($this->oldEmail != $newUser->getEmail()){
             $infos[] = "email : {$this->oldEmail} => {$newUser->getEmail()}";
         }
@@ -63,6 +77,7 @@ class ProfileListener implements EventSubscriberInterface
         $histJoueur->setValeur("Modification des informations (IP : {$_SERVER['REMOTE_ADDR']} / " . implode(', ', $infos) . ").");
 
         $this->em->persist($histJoueur);
+        $this->em->persist($newUser);
         $this->em->flush();
     }
 }

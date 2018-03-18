@@ -39,7 +39,7 @@ class RegistrationType extends AbstractType
                         'placeholder' => 'Confirmation du mot de passe'
                     )
                 ),
-                'invalid_message' => 'fos_user.password.mismatch',
+                'invalid_message' => 'Les mots de passe ne correspondent pas',
             ))
             ->add('email', EmailType::class, array(
                 'label' => 'Email',
@@ -49,8 +49,8 @@ class RegistrationType extends AbstractType
                 'translation_domain' => 'FOSUserBundle'
             ))
             ->add('captcha', HiddenType::class, array(
-            'mapped' => false
-        ));
+                'mapped' => false
+            ));
     }
 
     public function getParent()

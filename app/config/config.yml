@@ -29,9 +29,6 @@ parameters:
     timeBetweenTwoVisitesSecondes: 86400 # 1 jour
     # Download directory
     downloadDirectory: "%kernel.project_dir%/web/download/"
-    # Recaptcha key
-    recaptcha: "6LcXBhkUAAAAAIMfOvKJODxXAhw-qG2VzGG2rppj"
-    recaptchaKey: "6LcXBhkUAAAAAOXVtSYLei5DUOfYh1ZEfsIhz0yv"
 
 framework:
     #esi:             ~
@@ -120,12 +117,54 @@ fos_user:
             enabled: true
         form:
             type: AppBundle\Form\RegistrationType
+            validation_groups: ~
     profile:
         form:
             type: AppBundle\Form\ProfilEditType
+            validation_groups: ~
     change_password:
         form:
             type: AppBundle\Form\ChangePasswordType
+            validation_groups: ~
     resetting:
         form:
             type: AppBundle\Form\ResettingType
+            validation_groups: ~
+
+hwi_oauth:
+    connect:
+        confirmation: true
+        account_connector: fos_user.registration.form.factory
+    firewall_names: ["main"]
+    resource_owners:
+        facebook:
+            type: facebook
+            client_id: "%facebook_id%"
+            client_secret: "%facebook_secret%"
+            options:
+                display: popup
+                csrf: true
+            scope: "email"
+        twitter:
+            type: twitter
+            client_id: "%twitter_id%"
+            client_secret: "%twitter_secret%"
+            options:
+                display: popup
+                csrf: true
+                include_email: true
+            scope: "email"
+        google:
+            type: google
+            client_id: "%google_id%"
+            client_secret: "%google_secret%"
+            options:
+                display: popup
+                csrf: true
+            scope: "email"
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook: facebookId
+            twitter: twitterId
+            google: googleId

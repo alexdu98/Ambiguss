@@ -7,22 +7,6 @@
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="bulle">
-				<div id="googleMap" style="width:90%;height:400px;margin: 0 auto;"></div>
-				<br>
-				<h4 class="text-center">Adresse</h4>
-				<address class="text-center">
-					Mathieu Lafourcade<br>
-					LIRMM<br>
-					161 rue Ada<br>
-					34095 Montpellier cedex 5<br>
-				</address>
-				<h4 class="text-center">Téléphone</h4>
-				<p class="text-center">
-					Tél: 04 67 41 85 71<br>
-					Fax: 04 67 41 85 00
-				</p>
-				<hr>
-				<h3 id="formulaireContact" class="text-center">Formulaire de contact</h3>
 				<div class="row">
 					<div class="col-md-10 col-md-offset-1 well text-left">
 						{% for flashMessage in app.session.flashbag.get('succes') %}
@@ -59,23 +43,6 @@
 {% endblock %}
 
 {% block js %}
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUWe7-YqqNblh58wp_ciY0u_B8evxqa9g"></script>
-	<script>
-		function initialize() {
-			var mapProp = {
-				center:new google.maps.LatLng(43.6370111, 3.8413767),
-				zoom:15,
-				mapTypeId:google.maps.MapTypeId.ROADMAP
-			};
-			var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-			var marker = new google.maps.Marker({
-				position: new google.maps.LatLng(43.6370111, 3.8413767),
-				map: map
-			});
-		}
-		google.maps.event.addDomListener(window, 'load', initialize);
-	</script>
-
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	<script>
 		// Ne pas supprimé, callback recaptcha

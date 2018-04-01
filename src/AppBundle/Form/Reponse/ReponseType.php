@@ -24,14 +24,6 @@ class ReponseType extends AbstractType
 	        	'class' => 'AppBundle\Entity\Membre',
 	            'choice_label' => 'username'
 	        ))
-	        ->add('poidsReponse', EntityType::class, array(
-		        'class' => 'AppBundle\Entity\PoidsReponse',
-		        'choice_label' => 'poidsReponse'
-	        ))
-	        ->add('niveau', EntityType::class, array(
-		        'class' => 'AppBundle\Entity\Niveau',
-		        'choice_label' => 'titre'
-	        ))
 	        ->add('glose', EntityType::class, array(
 		        'class' => 'AppBundle\Entity\Glose',
 		        'choice_label' => 'valeur'

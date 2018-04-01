@@ -4,7 +4,7 @@ namespace AppBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class Export
+class ExportService
 {
 
 	private $em;

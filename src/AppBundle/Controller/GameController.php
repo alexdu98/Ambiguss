@@ -33,8 +33,6 @@ class GameController extends Controller
 			$data = $form->getData();
 
 			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbiguPhrase');
-			$repository2 = $this->getDoctrine()->getManager()->getRepository('AppBundle:PoidsReponse');
-			$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Niveau');
 
 			$em = $this->getDoctrine()->getManager();
 			$valid = true;
@@ -54,8 +52,6 @@ class GameController extends Controller
 				{
 					$rep->setAuteur($this->getUser());
 				}
-				$rep->setPoidsReponse($repository2->findOneBy(array('poidsReponse' => 1)));
-				$rep->setNiveau($repository3->findOneBy(array('titre' => 'Facile')));
 
 				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 				{
@@ -124,25 +120,11 @@ class GameController extends Controller
 						$this->getUser()->updatePoints($gainJoueur);
 						$this->getUser()->updateCredits($gainJoueur);
 
-						// On vérifie le niveau du joueur
-						$niveauSuivant = $this->getUser()->getNiveau()->getNiveauParent();
-						if($niveauSuivant != null && $this->getUser()->getPointsClassement() >= $niveauSuivant->getPointsClassementMin())
-						{
-							$this->getUser()->setNiveau($this->getUser()->getNiveau()->getNiveauParent());
-						}
-
 						// On ajoute les points et crédits au createur de la phrase
 						$gainCreateur = ceil(($gainJoueur * $this->getParameter('gainPercentByGame')) / 100);
 						$auteur = $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur();
 						$auteur->updatePoints($gainCreateur);
 						$auteur->updateCredits($gainCreateur);
-
-						// On vérifie le niveau du createur
-						$niveauSuivant = $auteur->getNiveau()->getNiveauParent();
-						if($niveauSuivant != null && $auteur->getPointsClassement() >= $niveauSuivant->getPointsClassementMin())
-						{
-							$auteur->setNiveau($auteur->getNiveau()->getNiveauParent());
-						}
 
 						// On enregistre la partie
 						if(empty($partie))
@@ -281,7 +263,7 @@ class GameController extends Controller
 		$liked = null;
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
-			$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:AimerPhrase');
+			$rep = $this->getDoctrine()->getManager()->getRepository('Aime');
 			$liked = $rep->findOneBy(array(
 				'membre' => $this->getUser(),
 				'phrase' => $phraseOBJ,

@@ -26,7 +26,7 @@ class TypeObjet
      *
      * @ORM\Column(name="type_objet", type="string", length=16, unique=true)
      */
-    private $typeObjet;
+    private $nom;
 
 
     /**
@@ -40,27 +40,32 @@ class TypeObjet
     }
 
     /**
-     * Set typeObjet
+     * Set nom
      *
-     * @param string $typeObjet
+     * @param string $nom
      *
      * @return TypeObjet
      */
-    public function setTypeObjet($typeObjet)
+    public function setNom($nom)
     {
-        $this->typeObjet = $typeObjet;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get typeObjet
+     * Get nom
      *
      * @return string
      */
-    public function getTypeObjet()
+    public function getNom()
     {
-        return $this->typeObjet;
+        return $this->nom;
+    }
+
+    public function __toString()
+    {
+        return $this->nom;
     }
 }
 

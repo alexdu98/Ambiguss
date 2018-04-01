@@ -5,15 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * VoteJugement
+ * Vote
  *
- * @ORM\Table(name="vote_jugement", indexes={
- *     @ORM\Index(name="IDX_VOTEJUGEMENT_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_VOTEJUGEMENT_DATEMODIFICATION", columns={"date_modification"})
+ * @ORM\Table(name="vote", indexes={
+ *     @ORM\Index(name="IDX_VOTE_DATECREATION", columns={"date_creation"}),
+ *     @ORM\Index(name="IDX_VOTE_DATEMODIFICATION", columns={"date_modification"})
  * })
- * @ORM\Entity(repositoryClass="AppBundle\Repository\VoteJugementRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\VoteRepository")
  */
-class VoteJugement
+class Vote
 {
     /**
      * @var int
@@ -90,7 +90,7 @@ class VoteJugement
      *
      * @param \DateTime $dateCreation
      *
-     * @return VoteJugement
+     * @return Vote
      */
     public function setDateCreation($dateCreation)
     {
@@ -114,7 +114,7 @@ class VoteJugement
      *
      * @param \DateTime $dateModification
      *
-     * @return VoteJugement
+     * @return Vote
      */
     public function setDateModification($dateModification)
     {
@@ -138,7 +138,7 @@ class VoteJugement
      *
      * @param Jugement $jugement
      *
-     * @return VoteJugement
+     * @return Vote
      */
     public function setJugement(Jugement $jugement)
     {
@@ -162,7 +162,7 @@ class VoteJugement
      *
      * @param TypeVote $vote
      *
-     * @return VoteJugement
+     * @return Vote
      */
     public function setVote(TypeVote $vote)
     {
@@ -186,7 +186,7 @@ class VoteJugement
      *
      * @param \AppBundle\Entity\Membre $auteur
      *
-     * @return VoteJugement
+     * @return Vote
      */
     public function setAuteur(\AppBundle\Entity\Membre $auteur)
     {

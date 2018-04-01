@@ -1,0 +1,499 @@
+easy_admin:
+    site_name: "%site_name%"
+    design:
+        brand_color: '#A0D233'
+        menu:
+            - label: 'Accueil Ambiguss'
+              route: 'app_accueil'
+            - label: 'Statistiques'
+              icon: 'line-chart'
+              route: 'administration_statistiques'
+            - label: 'Modération'
+              icon: 'shield'
+              route: 'ambiguss_moderation_phrase'
+            - label: 'Sécurité'
+              icon: 'users'
+              children: ['Membre', 'Groupe', 'Role', 'Historique']
+            - label: 'Jeu'
+              icon: 'gamepad'
+              children: ['Phrase', 'Glose', 'MotAmbigu', 'Partie', 'Reponse', 'JAime']
+            - label: 'Jugement'
+              icon: 'gavel'
+              children: ['Jugement', 'CategorieJugement', 'TypeObjet', 'TypeVote', 'Vote']
+            - label: 'Application'
+              icon: 'at'
+              children: ['Visite', 'Newsletter']
+    list:
+        title: '%%entity_label%%'
+        actions:
+            - { name: 'show', icon: 'search' }
+            - { name: 'new', icon: 'plus', label: 'Créer' }
+            - { name: 'edit', icon: 'pencil' }
+            - { name: 'delete', icon: 'times' }
+    show:
+        title: '%%entity_name%% #%%entity_id%%'
+    formats:
+        date:     'd/m/Y'
+        time:     'H:i'
+        datetime: 'd/m/Y H:i:s'
+        number:  '%d'
+
+    entities:
+        # Sécurité
+        Membre:
+            class: AppBundle\Entity\Membre
+            label: 'Membres'
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'username', label: 'Pseudo' }
+                    - { property: 'email', label: 'Email', type: 'email' }
+                    - { property: 'pointsClassement', label: 'Points' }
+                    - { property: 'credits', label: 'Crédits' }
+                    - { property: 'newsletter', label: 'Newsletter' }
+                    - { property: 'enabled', label: 'Activé' }
+                    - { property: 'banni', label: 'Banni', type: 'boolean' }
+                    - { property: 'renamable', label: 'Renomable' }
+                    - { property: 'roles', label: 'Rôles' }
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>pseudo</b>,
+                        <b>email</b>,
+                        <b>points</b>,
+                        <b>crédits</b>,
+                        <b>groupes</b>,
+                        <b>sexe</b>,
+                        <b>ID de services</b>
+                    </span>
+                fields: ['id', 'usernameCanonical', 'emailCanonical', 'pointsClassement', 'credits', 'groups.name', 'sexe', 'facebookId', 'twitterId', 'googleId']
+            form:
+                fields:
+                    - { type: 'tab' , label: 'Compte', icon: 'user' }
+                    - { type: 'group', label: 'Membre', icon: 'id-card', css_class: 'col-sm-6' }
+                    - { property: 'username', label: 'Pseudo' }
+                    - { property: 'email', label: 'Email', type: 'email' }
+                    - { property: 'sexe', label: 'Sexe', type: 'choice', type_options: { choices: { 'Homme': 'Homme', 'Femme': 'Femme' } } }
+                    - { property: 'dateNaissance', label: 'Date de naissance', type: 'birthday' }
+                    - { type: 'group', label: 'Dates', icon: 'calendar-alt', css_class: 'col-sm-6' }
+                    - { property: 'dateInscription', label: 'Date d''inscription' }
+                    - { property: 'lastLogin', label: 'Dernière connexion' }
+                    - { type: 'group', label: 'Jeu', icon: 'gamepad', css_class: 'new-row col-sm-6' }
+                    - { property: 'pointsClassement', label: 'Points' }
+                    - { property: 'credits', label: 'Crédits' }
+                    - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
+                    - { property: 'newsletter', label: 'Newsletter' }
+                    - { property: 'enabled', label: 'Activé' }
+                    - { property: 'renamable', label: 'Renomable' }
+
+                    - { type: 'tab' , label: 'Sécurité', icon: 'key' }
+                    - { type: 'group', label: 'Mot de passe', icon: 'key' }
+                    - { property: 'plainPassword', label: 'Nouveau mot de passe', type: 'text', type_options: { required: false } }
+                    - { property: 'passwordRequestedAt', label: 'Date de demande de réinitialisation de mot de passe' }
+                    - { type: 'group', label: 'Clé', icon: 'key' }
+                    - { property: 'confirmationToken', label: 'Clé de confirmation', help: 'Utilisé pour la confirmation d''inscription et la réinitialisation de mot de passe' }
+                    - { type: 'group', label: 'Rôles', icon: 'user' }
+                    - { property: 'roles', label: 'Rôles' }
+                    - { type: 'group', label: 'Groupes', icon: 'users' }
+                    - { property: 'groups', label: 'Groupes' }
+                    - { type: 'group', label: 'Bannissement', icon: 'ban' }
+                    - { property: 'banni', label: 'Banni' }
+                    - { property: 'commentaireBan', label: 'Commentaire', help: 'Obligatoire si banni' }
+                    - { property: 'dateDeban', label: 'Date de débanissement', help: 'Pas de date = banni à vie' }
+
+                    - { type: 'tab' , label: 'Services', icon: 'users' }
+                    - { type: 'group', label: 'Identifiants de service', icon: 'id-card', css_class: 'col-sm-9' }
+                    - { property: 'facebookId', label: 'ID Facebook' }
+                    - { property: 'twitterId', label: 'ID Twitter' }
+                    - { property: 'googleId', label: 'ID Google' }
+                    - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
+                    - { property: 'serviceCreation', label: 'Créé via un service' }
+            edit:
+                title: 'Édition du membre #%%entity_id%%'
+            new:
+                title: 'Création d''un membre'
+        Groupe:
+            class: AppBundle\Entity\Groupe
+            label: 'Groupes'
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'name', label: 'Nom' }
+                    - { property: 'roles', label: 'Rôles' }
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>nom</b>
+                    </span>
+                fields: ['id', 'name']
+            form:
+                fields:
+                    - { type: 'group', label: 'Groupe', icon: 'id-card' }
+                    - { property: 'name', label: 'Nom' }
+                    - { property: 'roles', label: 'Rôles' }
+            edit:
+                title: 'Édition du groupe #%%entity_id%%'
+            new:
+                title: 'Création d''un groupe'
+        Role:
+            class: AppBundle\Entity\Role
+            label: 'Rôles'
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'name', label: 'Nom' }
+                    - { property: 'parent', label: 'Parent' }
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>nom</b>,
+                        <b>parent</b>
+                    </span>
+                fields: ['id', 'name', 'parent.name']
+            form:
+                fields:
+                    - { type: 'group', label: 'Rôle', icon: 'id-card' }
+                    - { property: 'name', label: 'Nom' }
+                    - { property: 'parent', label: 'Parent' }
+            edit:
+                title: 'Édition du rôle #%%entity_id%%'
+            new:
+                title: 'Création d''un rôle'
+        Historique:
+            class: AppBundle\Entity\Historique
+            label: 'Historiques'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>valeur</b>,
+                        <b>membre</b>
+                    </span>
+                fields: ['id', 'valeur', 'membre.usernameCanonical']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'valeur', label: 'Valeur' }
+                    - { property: 'dateAction', label: 'Date' }
+                    - { property: 'membre', label: 'Membre' }
+
+
+        # Jeu
+        Phrase:
+            class: AppBundle\Entity\Phrase
+            label: 'Phrases'
+            disabled_actions: ['new']
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>contenu pur</b>,
+                        <b>gain créateur</b>,
+                        <b>auteur</b>,
+                        <b>modificateur</b>
+                    </span>
+                fields: ['id', 'contenuPur', 'gainCreateur', 'auteur.usernameCanonical', 'modificateur.usernameCanonical']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'contenuPur', label: 'Contenu pur' }
+                    - { property: 'gainCreateur', label: 'Gain pour l''auteur' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'jAime', label: 'J''aime' }
+                    - { property: 'parties', label: 'Parties' }
+                    - { property: 'visible', label: 'Visible' }
+                    - { property: 'signale', label: 'Signalée' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Phrase', icon: 'id-card' }
+                    - { property: 'contenu', label: 'Contenu' }
+                    - { property: 'contenuPur', label: 'Contenu pur' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'gainCreateur', label: 'Gain créateur' }
+                    - { property: 'dateCreation', label: 'Date de création' }
+                    - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'dateModification', label: 'Date de modification' }
+                    - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
+                    - { property: 'signale', label: 'Signalé' }
+                    - { property: 'visible', label: 'Visible' }
+                    - { type: 'group', label: 'Liaisons', icon: 'star' }
+                    - { property: 'jAime', label: 'J''aime' }
+                    - { property: 'parties', label: 'Parties' }
+            edit:
+                title: 'Édition de la phrase #%%entity_id%%'
+                fields:
+                    - { property: 'contenu', label: 'Contenu', type_options: { disabled: true }, help: 'Modifiable par la modération.' }
+                    - { property: 'contenuPur', label: 'Contenu pur', type_options: { disabled: true }, help: 'Modifiable par la modération.' }
+        Glose:
+            class: AppBundle\Entity\Glose
+            label: 'Gloses'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>valeur</b>,
+                        <b>auteur</b>,
+                        <b>modificateur</b>
+                    </span>
+                fields: ['id', 'valeur', 'auteur.usernameCanonical', 'modificateur.usernameCanonical']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'valeur', label: 'Valeur' }
+                    - { property: 'signale', label: 'Signalé' }
+                    - { property: 'visible', label: 'Visible' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'motsAmbigus', label: 'Mots ambigus' }
+                    - { property: 'dateCreation', label: 'Date de création' }
+                    - { property: 'dateModification', label: 'Date de modification' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Glose', icon: 'question', css_class: 'col-sm-9' }
+                    - { property: 'valeur', label: 'Valeur' }
+                    - { property: 'dateCreation', label: 'Date de création' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'dateModification', label: 'Date de modification' }
+                    - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
+                    - { property: 'signale', label: 'Signalé' }
+                    - { property: 'visible', label: 'Visible' }
+                    - { type: 'group', label: 'Mots ambigus', icon: 'star' }
+                    - { property: 'motsAmbigus', label: 'Mots ambigus' }
+            edit:
+                title: 'Édition de la glose #%%entity_id%%'
+                fields:
+                    - { property: 'valeur', label: 'Valeur', type_options: { disabled: true }, help: 'Modifiable par la modération.' }
+        MotAmbigu:
+            class: AppBundle\Entity\MotAmbigu
+            label: 'Mots ambigus'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>valeur</b>,
+                        <b>auteur</b>,
+                        <b>modificateur</b>
+                    </span>
+                fields: ['id', 'valeur', 'auteur.usernameCanonical', 'modificateur.usernameCanonical']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'valeur', label: 'Valeur' }
+                    - { property: 'signale', label: 'Signalé' }
+                    - { property: 'visible', label: 'Visible' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'gloses', label: 'Gloses' }
+                    - { property: 'dateCreation', label: 'Date de création' }
+                    - { property: 'dateModification', label: 'Date de modification' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Mots ambigus', icon: 'question', css_class: 'col-sm-9' }
+                    - { property: 'valeur', label: 'Valeur' }
+                    - { property: 'dateCreation', label: 'Date de création' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'dateModification', label: 'Date de modification' }
+                    - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
+                    - { property: 'signale', label: 'Signalé' }
+                    - { property: 'visible', label: 'Visible' }
+                    - { type: 'group', label: 'Gloses', icon: 'star' }
+                    - { property: 'gloses', label: 'Gloses' }
+            edit:
+                title: 'Édition du mot ambigu #%%entity_id%%'
+                fields:
+                    - { property: 'valeur', label: 'Valeur', type_options: { disabled: true }, help: 'Modifiable par la modération.' }
+        Partie:
+            class: AppBundle\Entity\Partie
+            label: 'Parties'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>phrase</b>,
+                        <b>joueur</b>,
+                        <b>gain</b>
+                    </span>
+                fields: ['id', 'phrase.contenuPur', 'joueur.usernameCanonical', 'gainJoueur']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'phrase', label: 'Phrase' }
+                    - { property: 'joueur', label: 'Joueur' }
+                    - { property: 'gainJoueur', label: 'Gain' }
+                    - { property: 'joue', label: 'Jouée' }
+                    - { property: 'datePartie', label: 'Date' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Partie', icon: 'gamepad', css_class: 'col-sm-9' }
+                    - { property: 'phrase', label: 'Phrase' }
+                    - { property: 'joueur', label: 'Joueur' }
+                    - { property: 'gainJoueur', label: 'Gain' }
+                    - { property: 'datePartie', label: 'Date' }
+                    - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
+                    - { property: 'joue', label: 'Jouée' }
+            edit:
+                title: 'Édition de la partie #%%entity_id%%'
+        Reponse:
+            class: AppBundle\Entity\Reponse
+            label: 'Réponses'
+            disabled_actions: ['edit', 'new']
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>auteur</b>,
+                        <b>phrase</b>,
+                        <b>glose</b>,
+                        <b>IP</b>
+                    </span>
+                fields: ['id', 'auteur.usernameCanonical', 'phrase.contenuPur', 'glose.valeur', 'ip']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'ip', label: 'IP' }
+                    - { property: 'motAmbiguPhrase', label: 'Mot ambigu phrase' }
+                    - { property: 'valeurGlose', label: 'Glose' }
+                    - { property: 'dateReponse', label: 'Date' }
+        JAime:
+            class: AppBundle\Entity\JAime
+            label: 'J''aime'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>phrase</b>,
+                        <b>membre</b>
+                    </span>
+                fields: ['id', 'phrase.contenuPur', 'membre.usernameCanonical']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'phrase', label: 'Phrase' }
+                    - { property: 'membre', label: 'Membre' }
+                    - { property: 'dateCreation', label: 'Date' }
+                    - { property: 'active', label: 'Activé' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Information', icon: 'question' }
+                    - { property: 'membre', label: 'Membre' }
+                    - { property: 'dateCreation', label: 'Date' }
+                    - { property: 'active', label: 'Activé' }
+                    - { property: 'phrase', label: 'Phrase' }
+            edit:
+                title: 'Édition du j''aime #%%entity_id%%'
+
+
+        # Jugement
+        Jugement:
+            class: AppBundle\Entity\Jugement
+            label: 'Jugements'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>catégorie</b>,
+                        <b>type d'objet</b>,
+                        <b>ID de l'objet</b>,
+                        <b>verdict</b>,
+                        <b>auteur</b>,
+                        <b>juge</b>
+                    </span>
+                fields: ['id', 'categorieJugement.nom', 'typeObjet.nom', 'idObjet', 'verdict.nom', 'auteur.usernameCanonical', 'juge.usernameCanonical']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'description', label: 'Description' }
+                    - { property: 'categorieJugement', label: 'Catégorie' }
+                    - { property: 'typeObjet', label: 'Type de l''objet' }
+                    - { property: 'idObjet', label: 'ID de l''objet' }
+                    - { property: 'verdict', label: 'Verdict' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'juge', label: 'Juge' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Jugement', icon: 'gavel', css_class: 'col-sm-6' }
+                    - { property: 'categorieJugement', label: 'Catégorie' }
+                    - { property: 'typeObjet', label: 'Type d''objet' }
+                    - { property: 'idObjet', label: 'ID de l''objet' }
+                    - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'juge', label: 'Juge' }
+                    - { property: 'verdict', label: 'Verdict' }
+                    - { type: 'group', label: 'Dates', icon: 'calendar-alt', css_class: 'col-sm-6' }
+                    - { property: 'dateCreation', label: 'Date de création' }
+                    - { property: 'dateDeliberation', label: 'Date de délibération' }
+                    - { type: 'group', label: 'Description', icon: 'info' }
+                    - { property: 'description', label: 'Description' }
+            edit:
+                title: 'Édition du jugement #%%entity_id%%'
+        CategorieJugement:
+            class: AppBundle\Entity\CategorieJugement
+            label: 'Catégories de jugements'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>nom</b>
+                    </span>
+                fields: ['id', 'nom']
+            edit:
+                title: 'Édition de la catégorie de jugement #%%entity_id%%'
+        TypeObjet:
+            class: AppBundle\Entity\TypeObjet
+            label: 'Types d''objets'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>nom</b>
+                    </span>
+                fields: ['id', 'nom']
+            edit:
+                title: 'Édition du type d''objet #%%entity_id%%'
+        TypeVote:
+            class: AppBundle\Entity\TypeVote
+            label: 'Types de votes'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>nom</b>
+                    </span>
+                fields: ['id', 'nom']
+            edit:
+                title: 'Édition du type de vote #%%entity_id%%'
+        Vote:
+            class: AppBundle\Entity\Vote
+            label: 'Votes'
+            edit:
+                title: 'Édition du vote #%%entity_id%%'
+
+
+        # Divers
+        Visite:
+            class: AppBundle\Entity\Visite
+            label: 'Visites'
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'ip', label: 'IP' }
+                    - { property: 'userAgent', label: 'User agent' }
+                    - { property: 'dateVisite', label: 'Date' }
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>IP</b>,
+                        <b>user agent</b>
+                    </span>
+                fields: ['id', 'ip', 'userAgent']
+        Newsletter:
+            class: AppBundle\Entity\Newsletter
+            label: 'Newsletters'
+            disabled_actions: ['edit', 'delete']

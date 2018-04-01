@@ -1,6 +1,6 @@
 services:
 
-    AppBundle\Service\Export:
+    AppBundle\Service\ExportService:
         autowire: true
         arguments: { $downloadDir: "%downloadDirectory%" }
 

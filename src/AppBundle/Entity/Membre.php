@@ -5,8 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -55,8 +53,6 @@ class Membre extends User
      * @var \DateTime
      *
      * @ORM\Column(name="date_naissance", type="datetime", nullable=true)
-     *
-     * @Assert\DateTime()
      */
     private $dateNaissance;
 
@@ -78,11 +74,6 @@ class Membre extends User
      * @var bool
      *
      * @ORM\Column(name="newsletter", type="boolean")
-     *
-     * @Assert\Type(
-     *      type="bool"
-     * )
-     * @Assert\NotNull()
      */
     private $newsletter;
 
@@ -90,11 +81,6 @@ class Membre extends User
      * @var bool
      *
      * @ORM\Column(name="banni", type="boolean")
-     *
-     * @Assert\Type(
-     *      type="bool"
-     * )
-     * @Assert\NotNull()
      */
     private $banni;
 
@@ -109,16 +95,8 @@ class Membre extends User
      * @var \DateTime
      *
      * @ORM\Column(name="date_deban", type="datetime", nullable=true)
-     *
-     * @Assert\DateTime()
      */
     private $dateDeban;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Niveau")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $niveau;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Phrase", mappedBy="auteur")
@@ -417,30 +395,6 @@ class Membre extends User
     public function setBanni($banni)
     {
         $this->banni = $banni;
-        return $this;
-    }
-
-	/**
-	 * Get niveau
-	 *
-	 * @return Niveau
-	 */
-	public function getNiveau()
-    {
-	    return $this->niveau;
-    }
-
-    /**
-     * Set niveau
-     *
-     * @param Niveau $niveau
-     *
-     * @return Membre
-     */
-    public function setNiveau(Niveau $niveau)
-    {
-        $this->niveau = $niveau;
-
         return $this;
     }
 

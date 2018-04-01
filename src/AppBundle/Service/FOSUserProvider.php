@@ -84,11 +84,6 @@ class FOSUserProvider extends BaseFOSUBProvider
                 // On met à jour les infos
                 $this->updateServiceInfos($user, $service, $response);
 
-                // Affecte un niveau au nouveau membre
-                $repository = $this->em->getRepository('AppBundle:Niveau');
-                $grp = $repository->findOneByTitre('Facile');
-                $user->setNiveau($grp);
-
                 $this->em->persist($user);
                 $this->em->flush();
 

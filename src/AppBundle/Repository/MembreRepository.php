@@ -20,7 +20,7 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 	public function getClassementGeneral($limit){
 		return $this->createQueryBuilder('m')->select('m.id, m.username, m.dateInscription, m.pointsClassement')
 			->leftJoin("m.phrases", "p")->addSelect('count(distinct p.id) as nbPhrases')
-			->leftJoin("p.likesPhrase", "lp", 'with', 'lp.active = 1')->addSelect('count(distinct lp.id) as nbLikes')
+			->leftJoin("p.jAime", "lp", 'with', 'lp.active = 1')->addSelect('count(distinct lp.id) as nbLikes')
 			->where("m.pointsClassement > 0")
 			->groupBy('m.id')
 			->orderBy('m.pointsClassement', 'DESC')
@@ -87,6 +87,13 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
 			                       ->select('count(m) newsletter')
 			                       ->where('m.newsletter = 1')
 			                       ->getQuery()->getSingleResult()['newsletter'];
+
+        $array['service'] = $this->createQueryBuilder('m')
+            ->select('count(m) service')
+            ->where('m.facebookId is not null')
+            ->orWhere('m.twitterId is not null')
+            ->orWhere('m.googleId is not null')
+            ->getQuery()->getSingleResult()['service'];
 
 		$array['homme'] = $this->createQueryBuilder('m')
 			                  ->select('count(m) homme')

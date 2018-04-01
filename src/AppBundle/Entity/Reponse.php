@@ -61,20 +61,9 @@ class Reponse
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="PoidsReponse")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $poidsReponse;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Niveau")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $niveau;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Glose")
@@ -87,6 +76,12 @@ class Reponse
 	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
 	 */
 	private $motAmbiguPhrase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Phrase")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $phrase;
 
 
     /**
@@ -253,54 +248,6 @@ class Reponse
     }
 
     /**
-     * Get poidsReponse
-     *
-     * @return PoidsReponse
-     */
-	public function getPoidsReponse()
-    {
-	    return $this->poidsReponse;
-    }
-
-    /**
-     * Set poidsReponse
-     *
-     * @param PoidsReponse $poidsReponse
-     *
-     * @return Reponse
-     */
-    public function setPoidsReponse(PoidsReponse $poidsReponse)
-    {
-        $this->poidsReponse = $poidsReponse;
-
-        return $this;
-    }
-
-    /**
-     * Get niveau
-     *
-     * @return \AppBundle\Entity\Niveau
-     */
-	public function getNiveau()
-    {
-	    return $this->niveau;
-    }
-
-    /**
-     * Set niveau
-     *
-     * @param \AppBundle\Entity\Niveau $niveau
-     *
-     * @return Reponse
-     */
-    public function setNiveau(\AppBundle\Entity\Niveau $niveau)
-    {
-        $this->niveau = $niveau;
-
-        return $this;
-    }
-
-    /**
      * Get glose
      *
      * @return Glose
@@ -346,5 +293,36 @@ class Reponse
         $this->motAmbiguPhrase = $motAmbiguPhrase;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->motAmbiguPhrase . ': ' . $this->glose;
+    }
+
+
+
+    /**
+     * Set phrase
+     *
+     * @param \AppBundle\Entity\Phrase $phrase
+     *
+     * @return Reponse
+     */
+    public function setPhrase(\AppBundle\Entity\Phrase $phrase)
+    {
+        $this->phrase = $phrase;
+
+        return $this;
+    }
+
+    /**
+     * Get phrase
+     *
+     * @return \AppBundle\Entity\Phrase
+     */
+    public function getPhrase()
+    {
+        return $this->phrase;
     }
 }

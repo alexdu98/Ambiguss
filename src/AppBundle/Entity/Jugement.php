@@ -218,7 +218,7 @@ class Jugement implements \JsonSerializable
 	{
 		return array(
 			'id' => $this->getId(),
-			'categorieJugement' => $this->getCategorieJugement()->getCategorieJugement(),
+			'categorieJugement' => $this->getCategorieJugement()->getNom(),
 			'description' => $this->getDescription(),
 			'dateCreation' => $this->getDateCreation()->getTimestamp(),
 			'auteur' => $this->getAuteur()->getUsername(),

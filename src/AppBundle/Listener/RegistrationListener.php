@@ -45,10 +45,6 @@ class RegistrationListener implements EventSubscriberInterface
     public function success(FormEvent $event){
         $user = $event->getForm()->getData();
 
-        // Affecte un niveau au nouveau membre
-        $repository = $this->em->getRepository('AppBundle:Niveau');
-        $grp = $repository->findOneByTitre('Facile');
-        $user->setNiveau($grp);
         $user->addGroup($this->em->getRepository(Groupe::class)->findOneBy(['name' => 'Membre']));
     }
 

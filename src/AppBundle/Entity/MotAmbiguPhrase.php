@@ -168,4 +168,11 @@ class MotAmbiguPhrase
     {
         return $this->reponses;
     }
+
+    public function __toString()
+    {
+        return (string) $this->phrase . ' (' . $this->motAmbigu . ': #' . $this->ordre . ')';
+    }
+
+
 }

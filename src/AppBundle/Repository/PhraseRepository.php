@@ -12,10 +12,10 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getClassementPhrases($limit){
 	    return $this->createQueryBuilder('p')->select("p.id, p.contenu, p.dateCreation, p.gainCreateur")->distinct()
-		    ->addSelect('(SELECT COUNT(lp2.id) FROM AppBundle\Entity\AimerPhrase lp2 WHERE lp2.phrase = p.id AND lp2.active = 1) as nbLikes')
-		    ->leftJoin("p.likesPhrase", "lp", 'WITH', 'lp.id = p.id')
+		    ->addSelect('(SELECT COUNT(lp2.id) FROM AppBundle\Entity\JAime lp2 WHERE lp2.phrase = p.id AND lp2.active = 1) as nbJAime')
+		    ->leftJoin("p.jAime", "lp", 'WITH', 'lp.id = p.id')
             ->groupBy('p.id')
-            ->orderBy('nbLikes', 'DESC')
+            ->orderBy('nbJAime', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()->getResult();
     }
@@ -23,8 +23,8 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 	public function getClassementPhrasesUser($user)
 	{
 		return $this->createQueryBuilder('p')->select('p.id, p.contenu, p.dateCreation, p.gainCreateur')->distinct()
-			->addSelect('(SELECT COUNT(lp2.id) FROM AppBundle\Entity\AimerPhrase lp2 WHERE lp2.phrase = p.id AND lp2.active = 1) as nbLikes')
-			->leftJoin("p.likesPhrase", "lp", 'WITH', 'lp.id = p.id')
+			->addSelect('(SELECT COUNT(lp2.id) FROM AppBundle\Entity\JAime lp2 WHERE lp2.phrase = p.id AND lp2.active = 1) as nbJAime')
+			->leftJoin("p.jAime", "lp", 'WITH', 'lp.id = p.id')
 			->where('p.auteur = :user')->setParameter('user', $user)
 			->groupBy('p.id')
 			->orderBy('p.gainCreateur', 'DESC')

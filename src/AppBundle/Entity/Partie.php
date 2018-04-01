@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="partie", indexes={
  *     @ORM\Index(name="IDX_PARTIE_DATEPARTIE", columns={"date_partie"}),
+ *     @ORM\Index(name="IDX_PARTIE_GAINJOUEUR", columns={"gain_joueur"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PartieRepository")
  */
@@ -62,7 +63,7 @@ class Partie
 	 */
 	public function __construct()
 	{
-		$this->joue = 1;
+		$this->joue = true;
 		$this->gainJoueur = 0;
 		$this->datePartie = new \DateTime();
 	}
@@ -196,4 +197,9 @@ class Partie
 
 		return $this;
 	}
+
+    public function __toString()
+    {
+        return (string) $this->joueur;
+    }
 }

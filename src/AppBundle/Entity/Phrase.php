@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="phrase", indexes={
  *     @ORM\Index(name="IDX_PHRASE_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_PHRASE_DATEMODIFICATION", columns={"date_modification"})
+ *     @ORM\Index(name="IDX_PHRASE_DATEMODIFICATION", columns={"date_modification"}),
+ *     @ORM\Index(name="IDX_PHRASE_GAINCREATEUR", columns={"gain_createur"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PhraseRepository")
  */
@@ -90,16 +91,14 @@ class Phrase implements \JsonSerializable
 	private $motsAmbigusPhrase;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\AimerPhrase", mappedBy="phrase", cascade={"persist"})
+	 * @ORM\OneToMany(targetEntity="JAime", mappedBy="phrase", cascade={"persist"})
 	 */
-	private $likesPhrase;
+	private $jAime;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Partie", mappedBy="phrase")
 	 */
 	private $parties;
-
-
 
 
     /**
@@ -108,8 +107,8 @@ class Phrase implements \JsonSerializable
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-        $this->signale = 0;
-        $this->visible = 1;
+        $this->signale = false;
+        $this->visible = true;
 	    $this->gainCreateur = 0;
 	    $this->motsAmbigusPhrase = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -392,36 +391,36 @@ class Phrase implements \JsonSerializable
     }
 
     /**
-     * Add likesPhrase
+     * Add jAime
      *
-     * @param AimerPhrase $likesPhrase
+     * @param JAime $jAime
      *
      * @return Phrase
      */
-    public function addLikesPhrase(AimerPhrase $likesPhrase)
+    public function addJAime(JAime $jAime)
     {
-        $this->likesPhrase[] = $likesPhrase;
+        $this->jAime[] = $jAime;
 
         return $this;
     }
 
     /**
-     * Remove likesPhrase
+     * Remove jAime
      *
-     * @param AimerPhrase $likesPhrase
+     * @param JAime $jAime
      */
-    public function removeLikesPhrase(AimerPhrase $likesPhrase)
+    public function removeJAime(JAime $jAime)
     {
-        $this->likesPhrase->removeElement($likesPhrase);
+        $this->jAime->removeElement($jAime);
     }
 
     /**
-     * Get likesPhrase
+     * Get jAime
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getLikesPhrase(){
-	    return $this->likesPhrase;
+    public function getJAime(){
+	    return $this->jAime;
     }
 
 	/**
@@ -560,7 +559,7 @@ class Phrase implements \JsonSerializable
 	/**
 	 * Add party
 	 *
-	 * @paramPartie $party
+	 * @param Partie $party
 	 *
 	 * @return Phrase
 	 */
@@ -622,5 +621,10 @@ class Phrase implements \JsonSerializable
 		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b id="ma$1" class="ma color-red" title="Ce mot est ambigu (id : $1)">$2</b>',
 			$this->getContenu());
 	}
+
+    public function __toString()
+    {
+        return $this->contenuPur;
+    }
 
 }

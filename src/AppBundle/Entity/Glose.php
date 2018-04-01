@@ -82,8 +82,8 @@ class Glose implements \JsonSerializable
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-	    $this->signale = 0;
-	    $this->visible = 1;
+	    $this->signale = false;
+	    $this->visible = true;
 	    $this->motsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -331,4 +331,9 @@ class Glose implements \JsonSerializable
 			$this->visible,
 		);
 	}
+
+    public function __toString()
+    {
+        return $this->valeur;
+    }
 }

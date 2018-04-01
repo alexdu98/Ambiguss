@@ -26,7 +26,7 @@ class TypeVote
      *
      * @ORM\Column(name="type_vote", type="string", length=16, unique=true)
      */
-    private $typeVote;
+    private $nom;
 
 
     /**
@@ -40,27 +40,32 @@ class TypeVote
     }
 
     /**
-     * Set typeVote
+     * Set nom
      *
-     * @param string $typeVote
+     * @param string $nom
      *
      * @return TypeVote
      */
-    public function setTypeVote($typeVote)
+    public function setNom($nom)
     {
-        $this->typeVote = $typeVote;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get typeVote
+     * Get nom
      *
      * @return string
      */
-    public function getTypeVote()
+    public function getNom()
     {
-        return $this->typeVote;
+        return $this->nom;
+    }
+
+    public function __toString()
+    {
+        return $this->nom;
     }
 }
 

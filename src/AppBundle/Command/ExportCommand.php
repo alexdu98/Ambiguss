@@ -13,7 +13,7 @@ class ExportCommand extends ContainerAwareCommand {
 	public function execute(InputInterface $input, OutputInterface $output)
 	{
 		$io = new SymfonyStyle($input, $output);
-		$ser = $this->getContainer()->get('AppBundle\Service\Export');
+		$ser = $this->getContainer()->get('AppBundle\Service\ExportService');
 		$type = $input->getOption('type');
 		$succes = false;
 

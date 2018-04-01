@@ -83,8 +83,8 @@ class MotAmbigu
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-	    $this->signale = 0;
-	    $this->visible = 1;
+	    $this->signale = false;
+	    $this->visible = true;
 	    $this->gloses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -322,4 +322,9 @@ class MotAmbigu
 
 		return $this;
 	}
+
+    public function __toString()
+    {
+        return $this->valeur;
+    }
 }

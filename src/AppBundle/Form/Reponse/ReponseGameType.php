@@ -21,8 +21,6 @@ class ReponseGameType extends AbstractType
 	        ->remove('valeurMotAmbigu')
 	        ->remove('valeurGlose')
 	        ->remove('auteur')
-	        ->remove('poidsReponse')
-	        ->remove('niveau')
 	        ->add('glose', EntityType::class, array(
 		        'class' => 'AppBundle\Entity\Glose',
 		        'choice_label' => 'valeur',

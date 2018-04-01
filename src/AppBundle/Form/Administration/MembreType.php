@@ -64,10 +64,6 @@ class MembreType extends AbstractType
                 'class' => 'AppBundle:Groupe',
                 'choice_label' => 'name',
             ))
-            ->add('niveau', EntityType::class, array(
-                'class' => 'AppBundle:Niveau',
-                'choice_label' => 'titre',
-            ))
             ->add('Modifier', SubmitType::class, array(
                 'label' => 'Modifier',
                 'attr' => array(

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\AimerPhrase;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Partie;
@@ -139,8 +138,6 @@ class PhraseController extends Controller
 						$histJoueur->setMembre($this->getUser());
 						$em->persist($histJoueur);
 
-						$repository1 = $this->getDoctrine()->getManager()->getRepository('AppBundle:PoidsReponse');
-						$repository2 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Niveau');
 						$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
 
 						$mapsRep = $request->request->get('phrase_add')['motsAmbigusPhrase'];
@@ -160,9 +157,6 @@ class PhraseController extends Controller
 							$glose = $repository3->find($idGlose);
 							$rep->setValeurGlose($glose->getValeur());
 							$rep->setAuteur($this->getUser());
-							//$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
-							$rep->setPoidsReponse($repository1->findOneBy(array('label' => 'juste')));
-							$rep->setNiveau($repository2->findOneByTitre('Facile'));
 							$rep->setGlose($glose);
 							$rep->setMotAmbiguPhrase($map);
 
@@ -251,8 +245,8 @@ class PhraseController extends Controller
 	function likeAction(Request $request, \AppBundle\Entity\Phrase $phrase)
 	{
 
-		$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:AimerPhrase');
-		$aimerPhrase = $rep->findOneBy(array(
+		$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:JAime');
+		$jaime = $rep->findOneBy(array(
 			'phrase' => $phrase,
 			'membre' => $this->getUser(),
 		));
@@ -260,12 +254,12 @@ class PhraseController extends Controller
 		$em = $this->getDoctrine()->getManager();
 
 		$action = null;
-		if(!$aimerPhrase)
+		if(!$jaime)
 		{
-			$aimerPhrase = new AimerPhrase();
-			$aimerPhrase->setPhrase($phrase)->setMembre($this->getUser());
+            $jaime = new Aime();
+            $jaime->setPhrase($phrase)->setMembre($this->getUser());
 			// ajoute X points au créateur
-			$aimerPhrase->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
+            $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
 			$action = 'like';
 
 			// On enregistre dans l'historique du joueur
@@ -284,19 +278,19 @@ class PhraseController extends Controller
 		}
 		else
 		{
-			if($aimerPhrase->getActive() === false)
+			if($jaime->getActive() === false)
 			{
-				$aimerPhrase->setActive(true);
+                $jaime->setActive(true);
 				$action = 'relike';
 			}
 			else
 			{
-				$aimerPhrase->setActive(false);
+                $jaime->setActive(false);
 				$action = 'unlike';
 			}
 		}
 
-		$em->persist($aimerPhrase);
+		$em->persist($jaime);
 		$em->flush();
 
 		return $this->json(array(
@@ -574,8 +568,6 @@ class PhraseController extends Controller
 								$histAuteur->setMembre($phrase->getAuteur());
 								$em->persist($histAuteur);
 
-								$repository1 = $this->getDoctrine()->getManager()->getRepository('AppBundle:PoidsReponse');
-								$repository2 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Niveau');
 								$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
 
 								$mapsRep = $request->request->get('phrase_edit')['motsAmbigusPhrase'];
@@ -593,10 +585,7 @@ class PhraseController extends Controller
 									}
 									$glose = $repository3->find($idGlose);
 
-									//$poidsReponse = $mapsRep[ $keyForMotsAmbigusPhrase ]['poidsReponse'];
-
 									$rep->setValeurGlose($glose->getValeur());
-									$rep->setPoidsReponse($repository1->findOneBy(array('label' => 'juste')));
 
 									$newRep[ $map->getId() ] = $rep;
 
@@ -606,7 +595,6 @@ class PhraseController extends Controller
 										$rep->setContenuPhrase($phrase->getContenu());
 										$rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
 										$rep->setAuteur($this->getUser());
-										$rep->setNiveau($repository2->findOneByTitre('Facile'));
 										$rep->setGlose($glose);
 										$rep->setMotAmbiguPhrase($map);
 

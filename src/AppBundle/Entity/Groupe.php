@@ -31,4 +31,9 @@ class Groupe extends Group
     {
         return $this->id;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

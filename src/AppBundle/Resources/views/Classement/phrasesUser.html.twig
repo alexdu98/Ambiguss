@@ -15,7 +15,7 @@
 			<tr>
 				<th>#</th>
 				<th>Phrase</th>
-				<th>Nombre de likes</th>
+				<th>Nombre de j'aime</th>
 				<th>Gains</th>
 				<th>Date de création</th>
 			</tr>
@@ -24,7 +24,7 @@
 			<tr>
 				<th>#</th>
 				<th>Phrase</th>
-				<th>Nombre de likes</th>
+				<th>Nombre de j'aime</th>
 				<th>Gains</th>
 				<th>Date de création</th>
 			</tr>
@@ -44,7 +44,7 @@
 							{% endif %}
 						</div>
 					</td>
-					<td>{{ row.nbLikes }}</td>
+					<td>{{ row.nbJAime }}</td>
 					<td>{{ row.gainCreateur }}</td>
 					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
 				</tr>

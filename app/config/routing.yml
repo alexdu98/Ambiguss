@@ -28,3 +28,8 @@ twitter_login:
 
 google_login:
     path: /login/check-google
+
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/AdminController.php"
+    type:     annotation
+    prefix:   /admin

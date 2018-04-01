@@ -5,14 +5,14 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AimerPhrase
+ * JAime
  *
- * @ORM\Table(name="aimer_phrase", indexes={
- *     @ORM\Index(name="IDX_AIMERPHRASE_DATECREATION", columns={"date_creation"})
+ * @ORM\Table(name="j_aime", indexes={
+ *     @ORM\Index(name="IDX_JAIME_DATECREATION", columns={"date_creation"})
  * })
- * @ORM\Entity(repositoryClass="AppBundle\Repository\AimerPhraseRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\JAimeRepository")
  */
-class AimerPhrase
+class JAime
 {
     /**
      * @var int
@@ -44,7 +44,7 @@ class AimerPhrase
     private $membre;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="likesPhrase")
+	 * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="jAime")
 	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
 	 */
 	private $phrase;
@@ -84,7 +84,7 @@ class AimerPhrase
      *
      * @param \DateTime $dateCreation
      *
-     * @return AimerPhrase
+     * @return JAime
      */
     public function setDateCreation($dateCreation)
     {
@@ -108,7 +108,7 @@ class AimerPhrase
 	 *
 	 * @param boolean $active
 	 *
-	 * @return AimerPhrase
+	 * @return JAime
 	 */
 	public function setActive($active)
 	{
@@ -132,7 +132,7 @@ class AimerPhrase
      *
      * @param \AppBundle\Entity\Membre $membre
      *
-     * @return AimerPhrase
+     * @return JAime
      */
     public function setMembre(\AppBundle\Entity\Membre $membre)
     {
@@ -156,7 +156,7 @@ class AimerPhrase
      *
      * @param Phrase $phrase
      *
-     * @return AimerPhrase
+     * @return JAime
      */
     public function setPhrase(Phrase $phrase)
     {
@@ -164,4 +164,11 @@ class AimerPhrase
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return (string) $this->membre;
+    }
+
+
 }

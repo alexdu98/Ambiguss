@@ -1,0 +1,20 @@
+.green{
+    color: #A0D233;
+}
+.count{
+    font-size: 34px;
+    font-weight: bold;
+    color: #8B4513;
+}
+hr {
+    border-top: 1px solid #A0D233;
+}
+.panel-green {
+    border-color: #A0D233;
+}
+.panel-green>.panel-heading {
+    color: #fff;
+    background-color: #A0D233;
+    border-color: #A0D233;
+    font-size: 20px;
+}

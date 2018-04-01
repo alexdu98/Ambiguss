@@ -18,31 +18,9 @@ app_apropos:
     path:     /a-propos
     defaults: { _controller: AppBundle:Main:aPropos }
 
-administration_accueil:
-    path:     /admin/
-    defaults: { _controller: AppBundle:Admin:main }
-
 administration_statistiques:
     path:     /admin/statistiques
     defaults: { _controller: AppBundle:Admin:statistiques }
-
-administration_membres:
-    path:     /admin/membres
-    defaults: { _controller: AppBundle:Admin:membres }
-
-administration_membre_edit:
-    path:     /admin/membre/edit/{id}
-    defaults: { _controller: AppBundle:Admin:editMembre }
-    requirements:
-        id: \d+|$
-
-administration_phrases:
-    path:     /admin/phrases
-    defaults: { _controller: AppBundle:Admin:phrases }
-
-administration_gloses:
-    path:     /admin/gloses
-    defaults: { _controller: AppBundle:Admin:gloses }
 
 jugement_add:
     path: /jugement/add

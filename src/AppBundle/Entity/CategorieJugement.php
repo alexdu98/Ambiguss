@@ -24,9 +24,9 @@ class CategorieJugement
     /**
      * @var string
      *
-     * @ORM\Column(name="categorie_jugement", type="string", length=32, unique=true)
+     * @ORM\Column(name="nom", type="string", length=32, unique=true)
      */
-    private $categorieJugement;
+    private $nom;
 
 
     /**
@@ -40,27 +40,33 @@ class CategorieJugement
     }
 
     /**
-     * Set categorieJugement
+     * Set nom
      *
-     * @param string $categorieJugement
+     * @param string $nom
      *
      * @return CategorieJugement
      */
-    public function setCategorieJugement($categorieJugement)
+    public function setNom($nom)
     {
-        $this->categorieJugement = $categorieJugement;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get categorieJugement
+     * Get nom
      *
      * @return string
      */
-    public function getCategorieJugement()
+    public function getNom()
     {
-        return $this->categorieJugement;
+        return $this->nom;
     }
+
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
 }
 

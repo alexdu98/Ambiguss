@@ -20,7 +20,7 @@
 					<th>Inscription</th>
 					<th>Points</th>
 					<th>Nombre de phrases</th>
-					<th>Nombre de likes</th>
+					<th>Nombre de j'aime</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -31,7 +31,7 @@
 					<th>Inscription</th>
 					<th>Points</th>
 					<th>Nombre de phrases</th>
-					<th>Nombre de likes</th>
+					<th>Nombre de j'aime</th>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -57,7 +57,7 @@
 						<td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y") }}</td>
 						<td>{{ row.pointsClassement }}</td>
 						<td>{{ row.nbPhrases }}</td>
-						<td>{{ row.nbLikes }}</td>
+						<td>{{ row.nbJAime }}</td>
 					</tr>
 				{% endfor %}
 			</tbody>

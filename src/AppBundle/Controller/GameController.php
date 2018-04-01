@@ -263,7 +263,7 @@ class GameController extends Controller
 		$liked = null;
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
-			$rep = $this->getDoctrine()->getManager()->getRepository('Aime');
+			$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:JAime');
 			$liked = $rep->findOneBy(array(
 				'membre' => $this->getUser(),
 				'phrase' => $phraseOBJ,

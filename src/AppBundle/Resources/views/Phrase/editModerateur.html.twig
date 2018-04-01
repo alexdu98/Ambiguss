@@ -51,7 +51,8 @@
 			<div class="form-group">
 				<div id="jugements" hidden>
 					{% for jugement in jugements %}
-						{{ include('@App/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'categorieJugement'), id: jugement.id, description: jugement.description, lien_profil: path('fos_user_profile_show', {id: jugement.auteur.id}), username: jugement.auteur.username, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
+						{{ include('@App/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'nom'), id: jugement.id, description:
+							jugement.description, lien_profil: path('fos_user_profile_show', {id: jugement.auteur.id}), username: jugement.auteur.username, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
 					{% else %}
 						<span class="text-danger">Aucun jugement en cours</span>
 					{% endfor %}

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\JAime;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Partie;
@@ -159,6 +160,7 @@ class PhraseController extends Controller
 							$rep->setAuteur($this->getUser());
 							$rep->setGlose($glose);
 							$rep->setMotAmbiguPhrase($map);
+							$rep->setPhrase($phrase);
 
 							$map->addReponse($rep);
 
@@ -256,7 +258,7 @@ class PhraseController extends Controller
 		$action = null;
 		if(!$jaime)
 		{
-            $jaime = new Aime();
+            $jaime = new JAime();
             $jaime->setPhrase($phrase)->setMembre($this->getUser());
 			// ajoute X points au créateur
             $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
@@ -597,6 +599,7 @@ class PhraseController extends Controller
 										$rep->setAuteur($this->getUser());
 										$rep->setGlose($glose);
 										$rep->setMotAmbiguPhrase($map);
+                                        $rep->setPhrase($phrase);
 
 										$map->addReponse($rep);
 
@@ -660,7 +663,7 @@ class PhraseController extends Controller
 					$repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
 					$repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
 
-					$typeObj = $repoTO->findOneBy(array('typeObjet' => 'Phrase'));
+					$typeObj = $repoTO->findOneBy(array('nom' => 'Phrase'));
 					$jugements = $repoJ->findBy(array(
 						'typeObjet' => $typeObj,
 						'verdict' => null,

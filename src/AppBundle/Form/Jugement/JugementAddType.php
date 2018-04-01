@@ -29,7 +29,7 @@ class JugementAddType extends AbstractType
 			))
 			->add('categorieJugement', EntityType::class, array(
 				'class' => 'AppBundle\Entity\CategorieJugement',
-				'choice_label' => 'CategorieJugement',
+				'choice_label' => 'nom',
 				'label' => 'Catégorie',
 				'required' => true,
 				'attr' => array('placeholder' => 'Détaillez le motif du signalement'),
@@ -37,7 +37,7 @@ class JugementAddType extends AbstractType
 			// Cas: signaler les objets (gloses,mot ambigu et phrase) dans une seule modal
 			->add('typeObjet', EntityType::class, array(
 				'class' => 'AppBundle\Entity\TypeObjet',
-				'choice_label' => 'typeobjet',
+				'choice_label' => 'nom',
 				'label' => 'Type de l\'objet',
 				'required' => true,
 			))

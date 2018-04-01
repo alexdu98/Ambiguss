@@ -34,7 +34,8 @@ class EasyAdminListener implements EventSubscriberInterface
     public function __construct(HistoriqueService $historiqueService, TokenStorageInterface $tokenStorage)
     {
         $this->historiqueService = $historiqueService;
-        $this->user = $tokenStorage->getToken()->getUser();
+        if($tokenStorage->getToken())
+            $this->user = $tokenStorage->getToken()->getUser();
     }
 
     public static function getSubscribedEvents()

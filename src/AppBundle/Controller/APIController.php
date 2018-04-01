@@ -2,7 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Glose;
 use AppBundle\Entity\Jugement;
+use AppBundle\Entity\MotAmbigu;
+use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Form\Jugement\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +41,7 @@ class APIController extends Controller
 				$histJoueur->setMembre($this->getUser());
 
 				$obj = null;
-				if($jugement->getTypeObjet()->getTypeObjet() == 'Phrase')
+				if($jugement->getTypeObjet()->getNom() == 'Phrase')
 				{
 					$repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
 					$phrase = $repoP->find($jugement->getIdObjet());
@@ -48,7 +51,7 @@ class APIController extends Controller
 				}
 				else
 				{
-					if($jugement->getTypeObjet()->getTypeObjet() == 'Glose')
+					if($jugement->getTypeObjet()->getNom() == 'Glose')
 					{
 						$repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
 						$glose = $repoP->find($jugement->getIdObjet());
@@ -102,7 +105,7 @@ class APIController extends Controller
 					$repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
 					$repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
 
-					$typeObj = $repoTO->findOneBy(array('typeObjet' => 'Glose'));
+					$typeObj = $repoTO->findOneBy(array('nom' => 'Glose'));
 					$jugements = $repoJ->findBy(array(
 						'typeObjet' => $typeObj,
 						'verdict' => null,
@@ -144,12 +147,12 @@ class APIController extends Controller
 						$jugement = $repoJ->find($data['id']);
 						$jugement->setDateDeliberation(new \DateTime());
 						$jugement->setJuge($this->getUser());
-						$jugement->setVerdict($repoTV->findOneBy(array('typeVote' => $data['verdict'])));
+						$jugement->setVerdict($repoTV->findOneBy(array('nom' => $data['verdict'])));
 
 						// On enregistre dans l'historique du joueur
 						$histJoueur = new Historique();
 						$histJoueur->setMembre($jugement->getAuteur());
-						$histJoueur->setValeur("Jugement n°" . $jugement->getId() . ", verdict : " . $jugement->getVerdict()->getTypeVote() . ".");
+						$histJoueur->setValeur("Jugement n°" . $jugement->getId() . ", verdict : " . $jugement->getVerdict()->getNom() . ".");
 
 						$em = $this->getDoctrine()->getManager();
 						$em->persist($jugement);
@@ -203,7 +206,7 @@ class APIController extends Controller
     {
         if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
         {
-            $glose = new \AppBundle\Entity\Glose();
+            $glose = new Glose();
             $form = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
                 'action' => $this->generateUrl('ambiguss_glose_add'),
             ));

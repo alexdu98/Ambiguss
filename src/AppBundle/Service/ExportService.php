@@ -53,8 +53,8 @@ class ExportService
 		}
 
 		fwrite($file, (json_encode(array(
-			'infos' => 'Données collectées depuis le jeu Ambiguss. Site web réalisé en 2017 dans le cadre d\'un TER de première année de master informatique à l\'université de Montpellier. Groupe : Isna, Melissa, Nicolas, Alexandre. Tuteur : Mathieu Lafourcade.',
-			'date' => date('d/m/Y H\hi'),
+			'infos' => 'Données collectées depuis le jeu Ambiguss. Site web réalisé en 2017 dans le cadre d\'un TER de première année de master informatique à l\'université de Montpellier. Groupe : Isna Ouazi, Melissa Mekaoui, Nicolas Delalande, Alexandre Culty. Tuteur : Mathieu Lafourcade.',
+			'date' => date('d/m/Y H:i'),
 			'data' => $finalarray,
 		), JSON_UNESCAPED_UNICODE)));
 

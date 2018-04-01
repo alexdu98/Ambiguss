@@ -5,11 +5,11 @@
         <title>Ambiguss | {% block title %}{% endblock %}</title>
 
 	    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
-        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
-	    <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-ui/jquery-ui.css') }}">
-	    <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
-	    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/vendor/animate.css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+	    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.css') }}">
+	    <link rel="stylesheet" href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}">
+	    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+		<link rel="stylesheet" href="{{ asset('vendor/animate.css/animate.css') }}">
         {% block css %}{% endblock %}
 
 	    {% block meta %}{% endblock %}
@@ -30,7 +30,7 @@
 							    <span class="icon-bar"></span>
 						    </button>
 						    <a class="navbar-brand" href="{{ path('app_accueil') }}">
-							    <img id="logo" alt="Ambiguss logo" src="{{ asset('assets/images/logo.png') }}">
+							    <img id="logo" alt="Ambiguss logo" src="{{ asset('images/logo.png') }}">
 							    <span class="color-green">Amb</span>iguss
 						    </a>
 					    </div>
@@ -144,18 +144,18 @@
 	    </div>
 
 	    <script>
-		    var urlImageLoading = '{{ asset('assets/images/loading.gif') }}';
+		    var urlImageLoading = '{{ asset('images/loading.gif') }}';
 	    </script>
-	    <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-	    <script src="{{ asset('assets/vendor/jquery/dist/jquery.form.min.js') }}"></script>
-	    <script src="{{ asset('assets/vendor/jquery/dist/jquery.cookie.js') }}"></script>
-	    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.js') }}"></script>
-	    <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-		<script src="{{ asset('assets/vendor/Lettering.js/jquery.lettering.js') }}"></script>
-		<script src="{{ asset('assets/vendor/textillate/jquery.textillate.js') }}"></script>
+	    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
+	    <script src="{{ asset('vendor/jquery/dist/jquery.form.min.js') }}"></script>
+	    <script src="{{ asset('vendor/jquery/dist/jquery.cookie.js') }}"></script>
+	    <script src="{{ asset('vendor/jquery-ui/jquery-ui.js') }}"></script>
+	    <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+		<script src="{{ asset('vendor/Lettering.js/jquery.lettering.js') }}"></script>
+		<script src="{{ asset('vendor/textillate/jquery.textillate.js') }}"></script>
 	    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 	    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-	    <script src="{{ asset('assets/js/main.js') }}"></script>
+	    <script src="{{ asset('js/main.js') }}"></script>
         {% block js %}{% endblock %}
     </body>
 </html>

@@ -3,7 +3,7 @@
 {% block title %}Mots Ambigus{% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('assets/vendor/DataTables/datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
 {% endblock %}
 
 {% block titre %}Modération des mots ambigus{% endblock %}
@@ -78,7 +78,7 @@
 
 
 {% block js %}
-    <script src="{{ asset('assets/vendor/DataTables/datatables.js') }}"></script>
+    <script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('#mambigusTable').DataTable({
@@ -94,7 +94,7 @@
                 ],
                 order: [[0, 'asc']], // On ordonne sur l'id
                 responsive: true,
-                language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
+                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
             });
 
 

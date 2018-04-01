@@ -8,7 +8,7 @@
 	<meta property="og:title" content="Ambiguss, le jeu de désambiguïsation lexicale."/>
 	<meta property="og:description" content="'{{ phrasePur }}'. Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
 	joueurs."/>
-	<meta property="og:image" content="{{ absolute_url(asset('assets/images/avocat256.png')) }}"/>
+	<meta property="og:image" content="{{ absolute_url(asset('images/avocat256.png')) }}"/>
 
 	<link rel="canonical" href="{{ url('ambiguss_game', {id: phrase_id}) }}">
 {% endblock %}
@@ -78,7 +78,7 @@
 		</div>
 	</div>
 	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpGameModal">
-		<img src="{{ asset('assets/images/infobulle.png') }}">
+		<img src="{{ asset('images/infobulle.png') }}">
 	</button>
 {% endblock %}
 {% block js %}

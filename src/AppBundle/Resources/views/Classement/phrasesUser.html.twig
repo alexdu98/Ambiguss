@@ -3,7 +3,7 @@
 {% block title %}Classement{% endblock %}
 
 {% block css %}
-	<link rel="stylesheet" href="{{ asset('assets/vendor/DataTables/datatables.css') }}">
+	<link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
 {% endblock %}
 
 {% block titre %}Mes phrases{% endblock %}
@@ -55,7 +55,7 @@
 {% endblock %}
 
 {% block js %}
-	<script src="{{ asset('assets/vendor/DataTables/datatables.js') }}"></script>
+	<script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
 	<script>
 		$(document).ready(function () {
 			$('#classement').DataTable({
@@ -68,7 +68,7 @@
 				stateDuration: 0, // pour une durée illimitée
 				order: [[3, 'desc']],
 				responsive: true,
-				language: {url: '{{ asset('assets/vendor/DataTables/datatables.french.lang') }}'}
+				language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
 			});
 		});
 	</script>

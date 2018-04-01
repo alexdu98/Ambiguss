@@ -1,5 +1,5 @@
 <p align="center"><a href="https://ambiguss.calyxe.fr" target="_blank">
-    <img src="https://ambiguss.calyxe.fr/assets/images/logo.png">
+    <img src="https://ambiguss.calyxe.fr/images/logo.png">
 </a></p>
 
 [Ambiguss][1] est un site web réalisé dans le cadre d'un TER (Travail d'Étude et de Recherche) de première 

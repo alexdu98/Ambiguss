@@ -1,20 +1,20 @@
 {
   "paths": {
     "customizerJs": [
-      "../assets/js/vendor/autoprefixer.js",
-      "../assets/js/vendor/less.min.js",
-      "../assets/js/vendor/jszip.min.js",
-      "../assets/js/vendor/uglify.min.js",
-      "../assets/js/vendor/Blob.js",
-      "../assets/js/vendor/FileSaver.js",
-      "../assets/js/raw-files.min.js",
-      "../assets/js/src/customizer.js"
+      "../js/vendor/autoprefixer.js",
+      "../js/vendor/less.min.js",
+      "../js/vendor/jszip.min.js",
+      "../js/vendor/uglify.min.js",
+      "../js/vendor/Blob.js",
+      "../js/vendor/FileSaver.js",
+      "../js/raw-files.min.js",
+      "../js/src/customizer.js"
     ],
     "docsJs": [
-      "../assets/js/vendor/holder.min.js",
-      "../assets/js/vendor/ZeroClipboard.min.js",
-      "../assets/js/vendor/anchor.min.js",
-      "../assets/js/src/application.js"
+      "../js/vendor/holder.min.js",
+      "../js/vendor/ZeroClipboard.min.js",
+      "../js/vendor/anchor.min.js",
+      "../js/src/application.js"
     ]
   },
   "config": {

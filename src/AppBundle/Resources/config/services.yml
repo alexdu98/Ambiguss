@@ -4,13 +4,13 @@ services:
         autowire: true
         arguments: { $downloadDir: "%downloadDirectory%" }
 
-    AppBundle\Service\Recaptcha:
+    AppBundle\Service\RecaptchaService:
         autowire: true
         arguments: { $secret: "%recaptcha_secret%" }
 
     security.role_hierarchy:
         autowire: true
-        class: AppBundle\Service\RoleHierarchy
+        class: AppBundle\Service\RoleHierarchyService
 
     AppBundle\Service\FOSUserProvider:
         autowire: true

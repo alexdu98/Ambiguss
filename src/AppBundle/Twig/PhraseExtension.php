@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Service;
+namespace AppBundle\Twig;
 
-class Phrase extends \Twig_Extension
+class PhraseExtension extends \Twig_Extension
 {
 
 	public function getStaticHTML($phrase)

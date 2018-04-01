@@ -106,7 +106,7 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\Membre
     service:
-        mailer: AppBundle\Service\Mailer
+        mailer: AppBundle\Service\MailerService
     group:
         group_class: AppBundle\Entity\Groupe
         form:

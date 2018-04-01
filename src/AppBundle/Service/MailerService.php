@@ -6,7 +6,7 @@ use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class Mailer implements MailerInterface
+class MailerService implements MailerInterface
 {
     private $mailer;
     private $templating;

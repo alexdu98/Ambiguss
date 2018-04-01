@@ -1,10 +1,10 @@
 <?php
 
-namespace AppBundle\Service;
+namespace AppBundle\Twig;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class Jugement extends \Twig_Extension
+class JugementExtension extends \Twig_Extension
 {
 
 	private $em;
@@ -23,10 +23,6 @@ class Jugement extends \Twig_Extension
 	{
 		return $this->em->getRepository('AppBundle:Glose')->countSignale();
 	}
-
-	/**
-	 * IMPLEMENTS Twig_Extension
-	 */
 
 	public function getFunctions()
 	{

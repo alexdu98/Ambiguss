@@ -2,7 +2,7 @@
 
 namespace AppBundle\Service;
 
-class Recaptcha{
+class RecaptchaService{
 
     private $secret;
 	public $succes;
@@ -16,11 +16,22 @@ class Recaptcha{
 	/**
 	 * Vérifie si un captcha est valide
 	 * @param $captcha
-	 * @return Recaptcha
+	 * @return RecaptchaService
 	 */
 	public function check($captcha){
 		if(!empty($captcha)){
-			$res = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $this->secret . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
+            $url = "https://www.google.com/recaptcha/api/siteverify";
+            $url .= "?secret=" . $this->secret . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR'];
+
+            $arrContextOptions = array(
+                "ssl" => array(
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                ),
+            );
+
+
+			$res = file_get_contents($url, false, stream_context_create($arrContextOptions));
 			$res = json_decode($res);
 			$this->succes = $res->success;
 			if(!$this->succes)

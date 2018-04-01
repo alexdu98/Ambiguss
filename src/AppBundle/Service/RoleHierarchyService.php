@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-class RoleHierarchy implements RoleHierarchyInterface
+class RoleHierarchyService implements RoleHierarchyInterface
 {
     private $em;
     protected $map;

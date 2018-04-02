@@ -2,12 +2,20 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Entity\Phrase;
+
 class PhraseExtension extends \Twig_Extension
 {
 
+    /**
+     * Retourne le contenu de la phrase en mode HTML
+     *
+     * @param $phrase
+     * @return null|string|string[]
+     */
 	public function getStaticHTML($phrase)
 	{
-		$phraseO = new \AppBundle\Entity\Phrase();
+		$phraseO = new Phrase();
 		$phraseO->setContenu($phrase);
 
 		return $phraseO->getContenuHTML();

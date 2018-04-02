@@ -14,11 +14,21 @@ class JugementExtension extends \Twig_Extension
 		$this->em = $em;
 	}
 
+    /**
+     * Retourne le nombre de phrases signalées
+     *
+     * @return mixed
+     */
 	public function nbPhrasesSignale()
 	{
 		return $this->em->getRepository('AppBundle:Phrase')->countSignale();
 	}
 
+    /**
+     * Retourne le nombre de gloses signalées
+     *
+     * @return mixed
+     */
 	public function nbGlosesSignale()
 	{
 		return $this->em->getRepository('AppBundle:Glose')->countSignale();

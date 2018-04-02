@@ -17,7 +17,15 @@ class ExportService
         $this->infos = $infos;
     }
 
-    public function addGlosePhrase(&$gloses, &$nbRepMA, $ligne)
+    /**
+     * Ajoute la glose de la ligne dans le tableau des gloses et
+     * additionne le nombre de réponses pout le mot ambigu
+     *
+     * @param $gloses
+     * @param $nbRepMA
+     * @param $ligne
+     */
+    private function addGlosePhrase(&$gloses, &$nbRepMA, $ligne)
     {
         array_push($gloses, array(
             'valeur' => $ligne['vg'],
@@ -26,7 +34,16 @@ class ExportService
         $nbRepMA += $ligne['nbRep'];
     }
 
-    public function addMotAmbiguPhrase(&$motsAmbigus, &$gloses, &$nbRepMA, $ligne)
+    /**
+     * Ajoute le mot ambigu de la ligne dans le tableau des mots ambigus avec son ordre,
+     * son nombre de réponse et ses gloses
+     *
+     * @param $motsAmbigus
+     * @param $gloses
+     * @param $nbRepMA
+     * @param $ligne
+     */
+    private function addMotAmbiguPhrase(&$motsAmbigus, &$gloses, &$nbRepMA, $ligne)
     {
         array_push($motsAmbigus, array(
             'motAmbigu' => $ligne['vma'],
@@ -36,7 +53,17 @@ class ExportService
         ));
     }
 
-    public function addPhrase(&$phrases, &$motsAmbigus, &$gloses, &$nbRepMA, $ligne)
+    /**
+     * Ajoute la phrase de la ligne dans le tableau des phrases avec ses mots ambigus,
+     * remet à zéro les tableaux des mots ambigus et des gloses et remet à zéro le nombre de réponse du mot ambigu
+     *
+     * @param $phrases
+     * @param $motsAmbigus
+     * @param $gloses
+     * @param $nbRepMA
+     * @param $ligne
+     */
+    private function addPhrase(&$phrases, &$motsAmbigus, &$gloses, &$nbRepMA, $ligne)
     {
         $this->addMotAmbiguPhrase($motsAmbigus, $gloses, $nbRepMA, $ligne);
         array_push($phrases, array(
@@ -48,6 +75,14 @@ class ExportService
         $nbRepMA = 0;
     }
 
+
+    /**
+     * Exporte les phrases et leurs réponses
+     *
+     * Retourne le nombre de phrases
+     *
+     * @return int
+     */
     public function phrases()
     {
         $repoP = $this->em->getRepository('AppBundle:Phrase');
@@ -108,7 +143,14 @@ class ExportService
         return count($phrases);
     }
 
-    public function addMotAmbigu(&$motsAmbigus, &$gloses, $ligne)
+    /**
+     * Ajoute le mot ambigu de la ligne dans le tableau des mots ambigu avec ses gloses
+     *
+     * @param $motsAmbigus
+     * @param $gloses
+     * @param $ligne
+     */
+    private function addMotAmbigu(&$motsAmbigus, &$gloses, $ligne)
     {
         array_push($motsAmbigus, array(
             'motAmbigu' => $ligne['motAmbigu'],
@@ -117,6 +159,13 @@ class ExportService
         $gloses = array();
     }
 
+    /**
+     * Exporte les mots ambigus et leurs gloses
+     *
+     * Retourne le nombre de mots ambigus
+     *
+     * @return int
+     */
     public function motsAmbigus()
     {
         $repoMA = $this->em->getRepository('AppBundle:MotAmbigu');

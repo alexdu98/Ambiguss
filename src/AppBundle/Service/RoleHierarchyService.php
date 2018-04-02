@@ -17,6 +17,13 @@ class RoleHierarchyService implements RoleHierarchyInterface
         $this->buildRoleMap();
     }
 
+    /**
+     * Trouve tous les rôles accessible via les rôles donnés
+     * et les retourne
+     *
+     * @param array $roles
+     * @return array|\Symfony\Component\Security\Core\Role\RoleInterface[]
+     */
     public function getReachableRoles(array $roles)
     {
         $reachable = array();
@@ -33,7 +40,11 @@ class RoleHierarchyService implements RoleHierarchyInterface
         return $reachable;
     }
 
-
+    /**
+     * Construit le tableau de hiérarchie des rôles et le retourne
+     *
+     * @return array
+     */
     protected function buildRoleMap()
     {
         $this->map = array();

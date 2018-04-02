@@ -33,13 +33,24 @@ class FOSUserProvider extends BaseFOSUBProvider
         $this->session = $session;
     }
 
-    // ?
+    /**
+     * ?
+     *
+     * @param UserInterface $user
+     * @param UserResponseInterface $response
+     */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
         die('CONNECT');
     }
 
-    // A chaque connexion
+    /**
+     * Exécuté à chaque connexion
+     *
+     * @param UserResponseInterface $response
+     * @return Membre|\FOS\UserBundle\Model\UserInterface|null|object|UserInterface
+     * @throws \ReflectionException
+     */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         // Service utilisé (facebook, twitter, google, etc)
@@ -114,6 +125,13 @@ class FOSUserProvider extends BaseFOSUBProvider
         return $user;
     }
 
+    /**
+     * Renseigne le pseudo, ajoute le groupe membre et active le drapeau de création via service
+     *
+     * @param Membre $user
+     * @param $service
+     * @param $response
+     */
     private function fillUser(Membre $user, $service, $response){
         switch ($service){
             case 'facebook' :
@@ -129,7 +147,15 @@ class FOSUserProvider extends BaseFOSUBProvider
         $user->setServiceCreation(true);
         $user->addGroup($this->em->getRepository(Groupe::class)->findOneBy(['name' => 'Membre']));
     }
-    
+
+    /**
+     * Met à jour l'identifiant et le mail du membre fourni par le service et active le membre
+     *
+     * @param Membre $user
+     * @param $service
+     * @param $response
+     * @throws \ReflectionException
+     */
     private function updateServiceInfos(Membre $user, $service, $response) {
         $method = 'set' . ucfirst($this->services[$service]['property']);
         $reflectionMethod = new ReflectionMethod('AppBundle\Entity\Membre', $method);
@@ -139,6 +165,14 @@ class FOSUserProvider extends BaseFOSUBProvider
         $user->setEnabled(true);
     }
 
+    /**
+     * Indique si le nom d'utilisateur n'est pas déjà utilisé
+     *
+     * false si non utilisé, true si utilisé
+     *
+     * @param Membre $user
+     * @return bool
+     */
     public function isUsernameNonUsed(Membre $user){
         $userUsername = $this->em->getRepository(Membre::class)->findOneBy(array(
             'usernameCanonical' => (new Canonicalizer())->canonicalize($user->getUsername())

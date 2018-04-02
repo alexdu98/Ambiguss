@@ -19,6 +19,12 @@ class MailerService implements MailerInterface
         $this->from = $container->getParameter('emailFrom');
     }
 
+    /**
+     * Envoie le mail de confirmation d'inscription au membre
+     *
+     * @param UserInterface $user
+     * @throws \Twig\Error\Error
+     */
     public function sendConfirmationEmailMessage(UserInterface $user)
     {
         $subject = 'Inscription';
@@ -30,6 +36,12 @@ class MailerService implements MailerInterface
         $this->sendEmailMessage($subject, $user, $body);
     }
 
+    /**
+     * Envoie le mail de réinitialisation de mot de passe au membre
+     *
+     * @param UserInterface $user
+     * @throws \Twig\Error\Error
+     */
     public function sendResettingEmailMessage(UserInterface $user)
     {
         $subject = 'Réinitialisation de mot de passe';
@@ -41,6 +53,14 @@ class MailerService implements MailerInterface
         $this->sendEmailMessage($subject, $user, $body);
     }
 
+
+    /**
+     * Envoie un mail à un membre
+     *
+     * @param $subject
+     * @param UserInterface $recipient
+     * @param $body
+     */
     protected function sendEmailMessage($subject, UserInterface $recipient, $body)
     {
         $message = (new \Swift_Message())

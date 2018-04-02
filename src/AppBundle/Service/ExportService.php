@@ -6,96 +6,160 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ExportService
 {
+    private $em;
+    private $downloadDir;
+    private $infos;
 
-	private $em;
-	private $rep;
+    public function __construct(EntityManagerInterface $em, $downloadDir, $infos)
+    {
+        $this->em = $em;
+        $this->downloadDir = $downloadDir;
+        $this->infos = $infos;
+    }
 
-	public function __construct(EntityManagerInterface $em, $downloadDir)
-	{
-		$this->em = $em;
-		$this->rep = $downloadDir;
-	}
+    public function addGlosePhrase(&$gloses, &$nbRepMA, $ligne)
+    {
+        array_push($gloses, array(
+            'valeur' => $ligne['vg'],
+            'nbRep' => $ligne['nbRep']
+        ));
+        $nbRepMA += $ligne['nbRep'];
+    }
 
-	public function phrases()
-	{
-		$repoR = $this->em->getRepository('AppBundle:Reponse');
-		$repoP = $this->em->getRepository('AppBundle:Phrase');
+    public function addMotAmbiguPhrase(&$motsAmbigus, &$gloses, &$nbRepMA, $ligne)
+    {
+        array_push($motsAmbigus, array(
+            'motAmbigu' => $ligne['vma'],
+            'ordre' => $ligne['ordre'],
+            'nbRep' => $nbRepMA,
+            'gloses' => $gloses
+        ));
+    }
 
-		$phrases = $repoP->findAll();
+    public function addPhrase(&$phrases, &$motsAmbigus, &$gloses, &$nbRepMA, $ligne)
+    {
+        $this->addMotAmbiguPhrase($motsAmbigus, $gloses, $nbRepMA, $ligne);
+        array_push($phrases, array(
+            'phrase' => $ligne['phrase'],
+            'motsAmbigus' => $motsAmbigus
+        ));
+        $motsAmbigus = array();
+        $gloses = array();
+        $nbRepMA = 0;
+    }
 
-		$file = fopen($this->rep . 'export_phrases.json', 'wb+');
+    public function phrases()
+    {
+        $repoP = $this->em->getRepository('AppBundle:Phrase');
+        $res = $repoP->export();
 
-		$Marray = array();
-		$finalarray = array();
+        $gloses = array();
+        $nbRepMA = 0;
+        $motsAmbigus = array();
+        $phrases = array();
 
-		foreach($phrases as $phrase)
-		{
-			foreach($phrase->getMotsAmbigusPhrase() as $MA)
-			{
-				$glose = $repoR->findGlosesForExport($MA);
+        $prevIdp = !empty($res[0]) ? $res[0]['idp'] : null;
+        $prevOrdre = !empty($res[0]) ? $res[0]['ordre'] : null;
 
-				$MAarray = array(
-					'motAmbigu' => $MA->getMotAmbigu()->getValeur(),
-					'ordre' => $MA->getOrdre(),
-					'nbRep' => $MA->getReponses()->count(),
-					'gloses' => $glose,
-				);
+        $i = 0;
+        $len = count($res);
+        foreach ($res as $r) {
+            // Même mot ambigu dans la même phrase mais glose différente
+            // => On ajoute la glose
+            if ($r['idp'] == $prevIdp && $r['ordre'] == $prevOrdre) {
+                $this->addGlosePhrase($gloses, $nbRepMA, $r);
+            }
+            // Même phrase mais mot ambigu différent
+            // => On ajoute le mot ambigu précédent
+            elseif ($r['idp'] == $prevIdp) {
+                $this->addMotAmbiguPhrase($motsAmbigus, $gloses, $nbRepMA, $res[$i - 1]);
 
-				array_push($Marray, $MAarray);
-			}
-			$Parray = array(
-				'phrase' => $phrase->getContenu(),
-				'reponse' => $Marray,
-			);
+                $gloses = array();
+                $nbRepMA = 0;
 
-			$Marray = array();
-			array_push($finalarray, $Parray);
-		}
+                $this->addGlosePhrase($gloses, $nbRepMA, $r);
+            }
+            // Pas la même phrase
+            // => On ajoute la phrase précédente et la nouvelle glose
+            elseif ($r['idp'] != $prevIdp) {
+                $this->addPhrase($phrases, $motsAmbigus, $gloses, $nbRepMA, $res[$i - 1]);
+                $this->addGlosePhrase($gloses, $nbRepMA, $r);
+            }
 
-		fwrite($file, (json_encode(array(
-			'infos' => 'Données collectées depuis le jeu Ambiguss. Site web réalisé en 2017 dans le cadre d\'un TER de première année de master informatique à l\'université de Montpellier. Groupe : Isna Ouazi, Melissa Mekaoui, Nicolas Delalande, Alexandre Culty. Tuteur : Mathieu Lafourcade.',
-			'date' => date('d/m/Y H:i'),
-			'data' => $finalarray,
-		), JSON_UNESCAPED_UNICODE)));
+            // Si c'est le dernier résultat
+            // => On ajoute la phrase
+            if ($i == $len - 1) {
+                $this->addPhrase($phrases, $motsAmbigus, $gloses, $nbRepMA, $r);
+            }
 
-		return count($phrases);
-	}
+            $prevIdp = $r['idp'];
+            $prevOrdre = $r['ordre'];
 
-	public function motsAmbigus()
-	{
-		$repoAM = $this->em->getRepository('AppBundle:MotAmbigu');
+            $i++;
+        }
 
-		$MAs = $repoAM->findAll();
+        $file = fopen($this->downloadDir . 'export_phrases.json', 'wb+');
+        fwrite($file, (json_encode(array(
+            'infos' => $this->infos,
+            'date' => date('d/m/Y H:i'),
+            'donnees' => $phrases,
+        ), JSON_UNESCAPED_UNICODE)));
 
-		$file = fopen($this->rep . 'export_motsAmbigus.json', 'wb+');
+        return count($phrases);
+    }
 
-		$MAGarray = array();
-		$finalarray = array();
+    public function addMotAmbigu(&$motsAmbigus, &$gloses, $ligne)
+    {
+        array_push($motsAmbigus, array(
+            'motAmbigu' => $ligne['motAmbigu'],
+            'gloses' => $gloses
+        ));
+        $gloses = array();
+    }
 
-		foreach($MAs as $MA)
-		{
-			$mag = $MA->getGloses();
+    public function motsAmbigus()
+    {
+        $repoMA = $this->em->getRepository('AppBundle:MotAmbigu');
+        $res = $repoMA->export();
 
-			foreach($mag as $glose)
-			{
-				array_push($MAGarray, $glose->getValeur());
-			}
+        $gloses = array();
+        $motsAmbigus = array();
 
-			$Marray = array(
-				'motAmbigu' => $MA->getValeur(),
-				'gloses' => $MAGarray,
-			);
+        $prevIdMA = !empty($res[0]) ? $res[0]['idma'] : null;
 
-			array_push($finalarray, $Marray);
-			$MAGarray = array();
-		}
+        $i = 0;
+        $len = count($res);
+        foreach ($res as $r) {
+            // Même mot ambigu mais glose différente
+            // => On ajoute la glose
+            if ($r['idma'] == $prevIdMA) {
+                $gloses[] = $r['glose'];
+            }
+            // Pas le même mot ambigu
+            // => On ajoute le mot ambigu précédent et la nouvelle glose
+            else {
+                $this->addMotAmbigu($motsAmbigus, $gloses, $res[$i - 1]);
+                $gloses[] = $r['glose'];
+            }
 
-		fwrite($file, (json_encode(array(
-			'infos' => 'Données collectées depuis le jeu Ambiguss. Site web réalisé en 2017 dans le cadre d\'un TER de première année de master informatique à l\'université de Montpellier. Groupe : Isna, Melissa, Nicolas, Alexandre. Tuteur : Mathieu Lafourcade.',
-			'date' => date('d/m/Y H\hi'),
-			'data' => $finalarray,
-		), JSON_UNESCAPED_UNICODE)));
+            // Si c'est le dernier résultat
+            // => On ajoute le mot ambigu
+            if ($i == $len - 1) {
+                $this->addMotAmbigu($motsAmbigus, $gloses, $r);
+            }
 
-		return count($MAs);
-	}
+            $prevIdMA = $r['idma'];
+
+            $i++;
+        }
+
+        $file = fopen($this->downloadDir . 'export_motsAmbigus.json', 'wb+');
+        fwrite($file, (json_encode(array(
+            'infos' => $this->infos,
+            'date' => date('d/m/Y H\hi'),
+            'donnees' => $motsAmbigus,
+        ), JSON_UNESCAPED_UNICODE)));
+
+        return count($motsAmbigus);
+    }
 }

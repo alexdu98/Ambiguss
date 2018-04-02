@@ -38,6 +38,18 @@ class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getResult();
     }
 
+    public function export()
+    {
+        $query = $this->createQueryBuilder('ma')
+            ->select('ma.id idma, ma.valeur motAmbigu, g.valeur glose')
+            ->innerJoin('ma.gloses', 'g')
+            ->where('ma.visible = 1')
+            ->orderBy('ma.id, g.id', 'ASC')
+            ->getQuery();
+
+        return $query->getArrayResult();
+    }
+
 	public function getStat()
 	{
 		$array = array();

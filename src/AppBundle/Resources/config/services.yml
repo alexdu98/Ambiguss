@@ -2,7 +2,7 @@ services:
 
     AppBundle\Service\ExportService:
         autowire: true
-        arguments: { $downloadDir: "%downloadDirectory%" }
+        arguments: { $infos: "%infosExport%", $downloadDir: "%downloadDirectory%" }
 
     AppBundle\Service\RecaptchaService:
         autowire: true

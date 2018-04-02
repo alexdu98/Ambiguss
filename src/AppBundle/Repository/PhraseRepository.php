@@ -94,6 +94,22 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			       ->getQuery()->getSingleResult()['signale'];
 	}
 
+	public function export()
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('p.id idp, p.contenu phrase, map.ordre, ma.valeur vma, g.valeur vg, count(p) nbRep')
+            ->innerJoin('p.motsAmbigusPhrase', 'map')
+            ->innerJoin('map.motAmbigu', 'ma')
+            ->innerJoin('map.reponses', 'r')
+            ->innerJoin('r.glose', 'g')
+            ->where('p.visible = 1')
+            ->groupBy('p.contenu, map.ordre, ma.valeur, g.valeur')
+            ->orderBy('p.id, map.ordre, ma.id', 'ASC')
+            ->getQuery();
+
+        return $query->getArrayResult();
+    }
+
 	public function getStat()
 	{
 		$array = array();

@@ -197,8 +197,3 @@ ambiguss_phrase_keep:
         id: \d+
     options:
         expose: true
-
-user_get_pseudo:
-    path: /membre/pseudo
-    defaults:
-        _controller: AppBundle:API:getMembreByPseudo

@@ -13,8 +13,8 @@ class ClassementController extends Controller
 		{
 			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
 			$classement = $repository->getClassementGeneral($this->getParameter('maxResultForClassementGeneral'));
-			$position = $repository->getPositionClassement($this->getUser())['position'] + 1;
-			$nbMembreTotal = $repository->count()['total'];
+			$position = $repository->getPositionClassement($this->getUser());
+			$nbMembreTotal = $repository->countEnabled();
 
 			return $this->render('AppBundle:Classement:points.html.twig', array(
 				'classement' => $classement,

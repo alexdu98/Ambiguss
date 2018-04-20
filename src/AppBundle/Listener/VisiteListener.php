@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\Visite;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,12 +31,25 @@ class VisiteListener implements EventSubscriberInterface
 	    // Si il n'y a pas de cookie de visite
         if (empty($_COOKIE['visite']))
         {
-            // La durée de vie du cookie est celle par défaut
-            $time = $this->timeBetweenTwoVisites;
-            // Si il y avait déjà eu une visite, on récupère le nombre de secondes avant expiration
-            if(($next = $this->em->getRepository('AppBundle:Visite')->checkVisite($time)) !== true){
-                $time = $next;
+            // False si pas de visite dans la dernière période, la visite sinon
+            $lastVisitPerdiod = $this->em->getRepository('AppBundle:Visite')->findLastVisitPeriod($this->timeBetweenTwoVisites);
+
+            // S'il y avait déjà eu une visite, on récupère le nombre de secondes avant expiration
+            if($lastVisitPerdiod){
+                // La durée de vie du cookie est le reste de la durée de la période de la visite
+                $time = $lastVisitPerdiod->getDateVisite()->getTimestamp() - (new \DateTime())->getTimeStamp();
+                $time = $time + $this->timeBetweenTwoVisites;
             }
+            // Sinon on enregistre la nouvelle visite
+            else{
+                $this->em->persist(new Visite());
+                $this->em->flush();
+
+                // La durée de vie du cookie est la durée d'une période
+                $time = $this->timeBetweenTwoVisites;
+            }
+
+            // Enregistrement du cookie
             setcookie('visite', 'visited', time() + $time);
         }
 	}

@@ -73,7 +73,7 @@ class GameController extends Controller
 					$total = 0;
 					foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g)
 					{
-						$compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g->getId());
+						$compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g);
 						$isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
 						$ar2 = array(
 							'nbVotes' => $compteur['nbVotes'],
@@ -236,7 +236,7 @@ class GameController extends Controller
 				if(empty($phrases))
 				{
 					$allPhrasesPlayed = true;
-					$phrases = $repmap->findAllIdPhrases($this->getParameter('dureeAvantJouabiliteSecondes'));
+					$phrases = $repository->findRandom($this->getParameter('dureeAvantJouabiliteSecondes'));
 				}
 
 				$phrase_id = $phrases[ array_rand($phrases) ]['id'];

@@ -215,12 +215,12 @@ class APIController extends Controller
 
             if($form->isSubmitted() && $form->isValid())
             {
-                $data = $form->getData();
+                $glose = $form->getData();
 
-                $data->setAuteur($this->getUser());
+                $glose->setAuteur($this->getUser());
 
                 // Normalise la glose
-                $data->normalize();
+                $glose->normalize();
 
                 $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
                 $repoMA = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbigu');
@@ -232,16 +232,27 @@ class APIController extends Controller
                 $cout = -($nbGloses * $this->getParameter('costCreateGloseByGlosesOfMotAmbigu'));
                 $this->getUser()->updateCredits($cout);
 
-                $glose = $repository->findOneOrCreate($data);
+                $em = $this->getDoctrine()->getManager();
+
+                $glose = $repository->findOneBy(array('valeur' => $glose->getValeur()));
+                if($glose == null){
+                    $em->persist($glose);
+                    $em->flush();
+                }
 
                 $motAmbigu = new MotAmbigu();
                 $motAmbigu->setValeur($request->request->get('glose_add')['motAmbigu']);
                 $motAmbigu->setAuteur($this->getUser());
-                $motAmbigu = $repoMA->findOneOrCreate($motAmbigu);
+
+                $tmp = $repoMA->findOneBy(array('valeur' => $motAmbigu->getValeur()));
+                if($tmp == null){
+                    $em->persist($motAmbigu);
+                    $em->flush();
+                }
+                else
+                    $motAmbigu = $tmp;
 
                 $motAmbigu->addGlose($glose);
-
-                $em = $this->getDoctrine()->getManager();
 
                 $em->persist($motAmbigu);
                 $em->persist($this->getUser());
@@ -302,10 +313,4 @@ class APIController extends Controller
         return $this->json($gloses);
     }
 
-    public function getMembreByPseudoAction(Request $request)
-    {
-        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
-        $membres = $repository->getByPseudo($request->get('term'));
-        return $this->json($membres);
-    }
 }

@@ -102,7 +102,14 @@ class PhraseController extends Controller
 						$mot_ambigu_OBJ->setAuteur($this->getUser());
 						// Normalise le mot ambigu
 						$mot_ambigu_OBJ->normalize();
-						$mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu_OBJ);
+                        $em = $this->getDoctrine()->getManager();
+                        $tmp = $repository->findOneBy(array('valeur' => $mot_ambigu_OBJ->getValeur()));
+                        if($tmp == null){
+                            $em->persist($mot_ambigu_OBJ);
+                            $em->flush();
+                        }
+                        else
+                            $mot_ambigu_OBJ = $tmp;
 
 						$map = new MotAmbiguPhrase();
 						$map->setOrdre($key + 1);
@@ -528,7 +535,13 @@ class PhraseController extends Controller
 								$mot_ambigu_OBJ->setAuteur($this->getUser());
 								// Normalise le mot ambigu
 								$mot_ambigu_OBJ->normalize();
-								$mot_ambigu_OBJ = $repository->findOneOrCreate($mot_ambigu_OBJ);
+                                $tmp = $repository->findOneBy(array('valeur' => $mot_ambigu_OBJ->getValeur()));
+                                if($tmp == null){
+                                    $em->persist($mot_ambigu_OBJ);
+                                    $em->flush();
+                                }
+                                else
+                                    $mot_ambigu_OBJ = $tmp;
 
 								// Pour chaque ancien MA
 								foreach($mapsOri as $key2 => $map)

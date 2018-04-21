@@ -5,7 +5,6 @@ namespace AppBundle\Listener;
 use AppBundle\Entity\Historique;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -26,7 +25,13 @@ class ChangePasswordListener implements EventSubscriberInterface
         ];
     }
 
-    public function process(FilterUserResponseEvent $event){
+    /**
+     * Enregistre la modification du mot de passse dans l'historique du membre
+     *
+     * @param FilterUserResponseEvent $event
+     */
+    public function process(FilterUserResponseEvent $event)
+    {
         $user = $event->getUser();
 
         $histJoueur = new Historique();
@@ -36,4 +41,5 @@ class ChangePasswordListener implements EventSubscriberInterface
         $this->em->persist($histJoueur);
         $this->em->flush();
     }
+
 }

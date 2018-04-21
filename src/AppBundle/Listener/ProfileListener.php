@@ -3,17 +3,11 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\Historique;
-use AppBundle\Entity\Membre;
-use AppBundle\Exception\UsernameAlreadyUsedException;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Util\Canonicalizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProfileListener implements EventSubscriberInterface
@@ -41,6 +35,11 @@ class ProfileListener implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Enregistre les précédentes valeurs du profil du membre
+     *
+     * @param GetResponseUserEvent $event
+     */
     public function initialize(GetResponseUserEvent $event){
         $this->oldUsername = $event->getUser()->getUsername();
         $this->oldEmail = $event->getUser()->getEmail();
@@ -49,6 +48,11 @@ class ProfileListener implements EventSubscriberInterface
         $this->oldNewsletter = $event->getUser()->getNewsletter();
     }
 
+    /**
+     * Enregistre les modifications du profil du membre dans son historique
+     *
+     * @param FilterUserResponseEvent $event
+     */
     public function process(FilterUserResponseEvent $event){
         $newUser = $event->getUser();
 
@@ -80,4 +84,5 @@ class ProfileListener implements EventSubscriberInterface
         $this->em->persist($newUser);
         $this->em->flush();
     }
+
 }

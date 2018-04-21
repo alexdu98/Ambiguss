@@ -14,11 +14,11 @@ class VisiteListener implements EventSubscriberInterface
     private $em;
     private $timeBetweenTwoVisites;
 
-	public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
-	{
-	    $this->em = $entityManager;
+    public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
+    {
+        $this->em = $entityManager;
         $this->timeBetweenTwoVisites = $container->getParameter('timeBetweenTwoVisitesSecondes');
-	}
+    }
 
     public static function getSubscribedEvents()
     {
@@ -27,21 +27,25 @@ class VisiteListener implements EventSubscriberInterface
         ];
     }
 
-	public function process(){
-	    // Si il n'y a pas de cookie de visite
-        if (empty($_COOKIE['visite']))
-        {
+    /**
+     * Vérifie si le visiteur à déjà été comptabilisé et le fait si ce n'est pas le cas
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function process()
+    {
+        // Si il n'y a pas de cookie de visite
+        if (empty($_COOKIE['visite'])) {
             // False si pas de visite dans la dernière période, la visite sinon
             $lastVisitPerdiod = $this->em->getRepository('AppBundle:Visite')->findLastVisitPeriod($this->timeBetweenTwoVisites);
 
             // S'il y avait déjà eu une visite, on récupère le nombre de secondes avant expiration
-            if($lastVisitPerdiod){
+            if ($lastVisitPerdiod) {
                 // La durée de vie du cookie est le reste de la durée de la période de la visite
                 $time = $lastVisitPerdiod->getDateVisite()->getTimestamp() - (new \DateTime())->getTimeStamp();
                 $time = $time + $this->timeBetweenTwoVisites;
-            }
-            // Sinon on enregistre la nouvelle visite
-            else{
+            } // Sinon on enregistre la nouvelle visite
+            else {
                 $this->em->persist(new Visite());
                 $this->em->flush();
 
@@ -52,6 +56,6 @@ class VisiteListener implements EventSubscriberInterface
             // Enregistrement du cookie
             setcookie('visite', 'visited', time() + $time);
         }
-	}
+    }
 
 }

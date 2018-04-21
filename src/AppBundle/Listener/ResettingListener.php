@@ -8,10 +8,10 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class ResettingListener implements EventSubscriberInterface
 {
+
     private $em;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -27,7 +27,13 @@ class ResettingListener implements EventSubscriberInterface
         ];
     }
 
-    public function resettingDemand(GetResponseUserEvent $event){
+    /**
+     * Enregistre la demande de réinitialisation du mot de passe dans l'historique du membre
+     *
+     * @param GetResponseUserEvent $event
+     */
+    public function resettingDemand(GetResponseUserEvent $event)
+    {
         $user = $event->getUser();
 
         $histJoueur = new Historique();
@@ -38,7 +44,13 @@ class ResettingListener implements EventSubscriberInterface
         $this->em->flush();
     }
 
-    public function resettingProcess(FilterUserResponseEvent $event){
+    /**
+     * Enregistre la réinitialisation du mot de passe dans l'historique du membre
+     *
+     * @param FilterUserResponseEvent $event
+     */
+    public function resettingProcess(FilterUserResponseEvent $event)
+    {
         $user = $event->getUser();
 
         $histJoueur = new Historique();
@@ -48,4 +60,5 @@ class ResettingListener implements EventSubscriberInterface
         $this->em->persist($histJoueur);
         $this->em->flush();
     }
+
 }

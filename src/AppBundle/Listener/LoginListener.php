@@ -10,6 +10,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 
 class LoginListener implements EventSubscriberInterface
 {
+
     private $em;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -20,11 +21,17 @@ class LoginListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-           SecurityEvents::INTERACTIVE_LOGIN => 'process'
+            SecurityEvents::INTERACTIVE_LOGIN => 'process'
         ];
     }
 
-    public function process(InteractiveLoginEvent $event){
+    /**
+     * Enregistre la connexion dans l'historique du membre
+     *
+     * @param InteractiveLoginEvent $event
+     */
+    public function process(InteractiveLoginEvent $event)
+    {
         $user = $event->getAuthenticationToken()->getUser();
 
         $histJoueur = new Historique();
@@ -34,4 +41,5 @@ class LoginListener implements EventSubscriberInterface
         $this->em->persist($histJoueur);
         $this->em->flush();
     }
+
 }

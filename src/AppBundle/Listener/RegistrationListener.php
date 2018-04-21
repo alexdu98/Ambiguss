@@ -7,14 +7,12 @@ use AppBundle\Entity\Historique;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
-use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Http\SecurityEvents;
 
 class RegistrationListener implements EventSubscriberInterface
 {
+
     private $em;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -31,7 +29,13 @@ class RegistrationListener implements EventSubscriberInterface
         ];
     }
 
-    public function confirmed(FilterUserResponseEvent $event){
+    /**
+     * Enregistre la confirmation d'inscription dans l'historique du membre
+     *
+     * @param FilterUserResponseEvent $event
+     */
+    public function confirmed(FilterUserResponseEvent $event)
+    {
         $user = $event->getUser();
 
         $histJoueur = new Historique();
@@ -42,13 +46,25 @@ class RegistrationListener implements EventSubscriberInterface
         $this->em->flush();
     }
 
-    public function success(FormEvent $event){
+    /**
+     * Ajoute le nouveau membre au groupe des membres
+     *
+     * @param FormEvent $event
+     */
+    public function success(FormEvent $event)
+    {
         $user = $event->getForm()->getData();
 
         $user->addGroup($this->em->getRepository(Groupe::class)->findOneBy(['name' => 'Membre']));
     }
 
-    public function completed(FilterUserResponseEvent $event){
+    /**
+     * Enregistre l'inscription via le site dans l'historique du membre
+     *
+     * @param FilterUserResponseEvent $event
+     */
+    public function completed(FilterUserResponseEvent $event)
+    {
         $user = $event->getUser();
 
         $histJoueur = new Historique();
@@ -58,4 +74,5 @@ class RegistrationListener implements EventSubscriberInterface
         $this->em->persist($histJoueur);
         $this->em->flush();
     }
+
 }

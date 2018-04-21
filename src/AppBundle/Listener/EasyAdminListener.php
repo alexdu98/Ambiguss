@@ -34,7 +34,7 @@ class EasyAdminListener implements EventSubscriberInterface
     public function __construct(HistoriqueService $historiqueService, TokenStorageInterface $tokenStorage)
     {
         $this->historiqueService = $historiqueService;
-        if($tokenStorage->getToken())
+        if ($tokenStorage->getToken())
             $this->user = $tokenStorage->getToken()->getUser();
     }
 
@@ -47,26 +47,57 @@ class EasyAdminListener implements EventSubscriberInterface
         ];
     }
 
-    public function update(GenericEvent $entity){
+    /**
+     * Enregistre la modification de l'objet dans l'historique de l'administrateur
+     *
+     * @param GenericEvent $entity
+     * @throws \ReflectionException
+     */
+    public function update(GenericEvent $entity)
+    {
         $this->historiqueService->save($this->user, $this->getMessage('Modification', $entity));
     }
 
-    public function persist(GenericEvent $entity){
+    /**
+     * Enregistre la création de l'objet dans l'historique de l'administrateur
+     *
+     * @param GenericEvent $entity
+     * @throws \ReflectionException
+     */
+    public function persist(GenericEvent $entity)
+    {
         $this->historiqueService->save($this->user, $this->getMessage('Création', $entity));
     }
 
-    public function remove(GenericEvent $entity){
+
+    /**
+     * Enregistre la suppression de l'objet dans l'historique de l'administrateur
+     *
+     * @param GenericEvent $entity
+     * @throws \ReflectionException
+     */
+    public function remove(GenericEvent $entity)
+    {
         $this->historiqueService->save($this->user, $this->getMessage('Suppression', $entity));
     }
 
-    private function getMessage($type, GenericEvent $entity){
+    /**
+     * Retourne le message à enregistrer dans l'historique de l'administrateur
+     *
+     * @param string $type
+     * @param GenericEvent $entity
+     * @return string
+     * @throws \ReflectionException
+     */
+    private function getMessage(string $type, GenericEvent $entity)
+    {
         $classe = $entity->getSubject();
 
         $articleEntite = null;
         // getShortName() : AppBundle\Entity\MotAmbigu => MotAmbigu
         // MotAmbigu => mot ambigu
         $entityName = trim(mb_strtolower(implode(' ', preg_split('/(?=[A-Z])/', (new \ReflectionClass($classe))->getShortName()))));
-        switch($classe){
+        switch ($classe) {
             case $classe instanceof Membre:
             case $classe instanceof Groupe:
             case $classe instanceof Role:
@@ -75,7 +106,7 @@ class EasyAdminListener implements EventSubscriberInterface
             case $classe instanceof TypeObjet:
             case $classe instanceof TypeVote:
             case $classe instanceof Vote:
-            $articleEntite = "du {$entityName}";
+                $articleEntite = "du {$entityName}";
                 break;
 
             case $classe instanceof Historique:
@@ -98,7 +129,7 @@ class EasyAdminListener implements EventSubscriberInterface
         }
 
         // L'entité n'a plus d'id après le DELETE
-        if($type == 'Suppression')
+        if ($type == 'Suppression')
             $id = $entity->getArgument('request')->query->get('id');
         else
             $id = $classe->getId();
@@ -107,4 +138,5 @@ class EasyAdminListener implements EventSubscriberInterface
 
         return $message;
     }
+
 }

@@ -102,7 +102,7 @@
 				});
 
 				// Récupère les jugements en cours
-				$.post('{{ path('jugement_glose') }}', {id: button.data('id')}, function (data) {
+				$.post('{{ path('api_jugements_glose_show') }}', {id: button.data('id')}, function (data) {
 					if (data.succes) {
 						divJugement = $('#jugements');
 						if (data.jugements.length === 0)
@@ -127,7 +127,7 @@
 								// On affiche l'image laoding en attendant la réponse
 								$(this).after('<img src="' + urlImageLoading + '" id="loading">');
 
-								$.post('{{ path('jugement_edit') }}', {
+								$.post('{{ path('api_jugement_edit') }}', {
 									id: data.jugements[index].id, verdict: $(this).data('verdict'), token: '{{ csrf_token
 									('jugement_vote') }}'
 								}, function
@@ -158,7 +158,7 @@
 				$('#glose_edit_valeur').val(button.data('valeur'));
 				var form = $('form[name="glose_edit"]');
 				var action = form.attr('action');
-				form.attr('action', action + '/' + button.data('id'));
+				form.attr('action', action.replace('0', button.data('id')));
 				form.ajaxForm({
 					beforeSubmit: function (arr, form, opt) {
 						// On affiche l'image laoding en attendant la réponse
@@ -209,7 +209,7 @@
 			function deleteGloseModal(event) {
 				var button = $(this);
 				setModalTitle('Supprimer la glose "' + button.data('valeur') + '"');
-				var url = Routing.generate('ambiguss_glose_link', {id: button.data('id')});
+				var url = Routing.generate('modo_glose_count_reponses', {id: button.data('id')});
 				setModalBody('Êtes-vous certain de vouloir supprimer cette glose ?<br><br>');
 				$.getJSON(url, function (data) {
 					setModalBody(
@@ -220,7 +220,7 @@
 					$('#gloseDelete').click(function () {
 						// On affiche l'image laoding en attendant la réponse
 						$(this).after('<img src="' + urlImageLoading + '" id="loading">');
-						var url = Routing.generate('ambiguss_glose_delete', {id: button.data('id')});
+						var url = Routing.generate('modo_glose_delete', {id: button.data('id')});
 						$.getJSON(url, function (data) {
 							if (data.succes) {
 								// On trouve la ligne et on l'a supprime

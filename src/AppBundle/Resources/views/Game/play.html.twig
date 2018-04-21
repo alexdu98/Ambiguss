@@ -3,14 +3,14 @@
 {% block title %}Jeu{% endblock %}
 {% block titre %}<h1 class="tlt" data-in-effect="rollIn">Jouons </h1>{% endblock %}
 {% block meta %}
-	<meta property="og:url" content="{{ url('ambiguss_game', {id: phrase_id}) }}"/>
+	<meta property="og:url" content="{{ url('game_show', {id: phrase_id}) }}"/>
 	<meta property="og:type" content="website"/>
 	<meta property="og:title" content="Ambiguss, le jeu de désambiguïsation lexicale."/>
 	<meta property="og:description" content="'{{ phrasePur }}'. Choisissez le sens qui vous semble le plus approprié et comparez-vous aux autres
 	joueurs."/>
 	<meta property="og:image" content="{{ absolute_url(asset('images/avocat256.png')) }}"/>
 
-	<link rel="canonical" href="{{ url('ambiguss_game', {id: phrase_id}) }}">
+	<link rel="canonical" href="{{ url('game_show', {id: phrase_id}) }}">
 {% endblock %}
 
 {% block contenu %}
@@ -45,8 +45,8 @@
 						J'aime cette phrase
 					</button>
 				{% endif %}
-				<div class="fb-share-button" data-href="{{ url('ambiguss_game', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true">
-					<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('ambiguss_game', {id: phrase_id})|url_encode }};src=sdkpreparse">Partager</a>
+				<div class="fb-share-button" data-href="{{ url('game_show', {id: phrase_id}) }}" data-layout="button" data-size="small" data-mobile-iframe="true">
+					<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('game_show', {id: phrase_id})|url_encode }};src=sdkpreparse">Partager</a>
 				</div>
 				<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text='{{ phrasePur }}'. Ambigu non %3F&hashtags=Ambiguss">Partager</a>
 				{% if app.user %}
@@ -70,7 +70,7 @@
 			<br>
 			<div class="form-group">
 				{{ form_widget(form.valider) }}
-				<a href="{{ path('ambiguss_game') }}" class="btn btn-default">Passer cette
+				<a href="{{ path('game_show') }}" class="btn btn-default">Passer cette
 					phrase</a>
 			</div>
 			{{ form_rest(form) }}
@@ -173,7 +173,7 @@
 
 			$("#phraseLike").click(function () {
 				var boutonLike = $(this);
-				$.getJSON('{{ path('ambiguss_phrase_like', {'id':phrase_id}) }}', function (data) {
+				$.getJSON('{{ path('phrase_like', {'id':phrase_id}) }}', function (data) {
 					if (data.status === 'succes') {
 						if (data.action === 'like' || data.action === 'relike') {
 							boutonLike.removeClass('btn-default').addClass('btn-primary');
@@ -221,7 +221,7 @@
 
 
 				// On envoit le formulaire par ajax
-				$('form[name="jugement_add"]').ajaxForm({
+				$('form[name="api_jugement_new"]').ajaxForm({
 					beforeSubmit: function (arr, form, opt) {
 						// On affiche l'image laoding en attendant la réponse
 						$(form).after('<img src="' + urlImageLoading + '" id="loading">');

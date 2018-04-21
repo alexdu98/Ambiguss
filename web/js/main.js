@@ -43,7 +43,7 @@ function getGloses(select, motAmbigu) {
 	select.html('<option selected disabled value>Choisissez une glose (...)</option>');
 	// Empêche la sélection pendant le chargement
 	select.attr('disabled', 'disabled').addClass('loading');
-	var url = Routing.generate('ambiguss_glose_get_by_motambigu');
+	var url = Routing.generate('api_gloses_mot_ambigu_show');
 	$.post(url, {motAmbigu: motAmbigu}, function (data) {
 		var indication = "";
 		if (data.length > 1)
@@ -88,7 +88,7 @@ function addGloseModal(event) {
 		minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 		appendTo: '#modal', // Pour que l'affichage ce fasse (car dans une modale)
 		source: function (request, response) {
-			var url = Routing.generate('ambiguss_glose_get_autocomplete');
+			var url = Routing.generate('api_autocomplete_glose');
 			$.getJSON(url + '?term=' + request.term, function (data) {
 				input.parent().append('<div id="resnul" class="text-danger" hidden>Aucune glose déjà existante à vous proposer</div>');
 				if (data.length === 0) {

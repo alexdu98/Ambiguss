@@ -14,13 +14,13 @@ use AppBundle\Entity\Historique;
 class APIController extends Controller
 {
 
-	public function addJugementAction(Request $request)
+	public function newJugementAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
 			$jug = new Jugement();
 			$form = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
-				'action' => $this->generateUrl('jugement_add'),
+				'action' => $this->generateUrl('api_jugement_new'),
 			));
 
 			$form->handleRequest($request);
@@ -92,7 +92,7 @@ class APIController extends Controller
 		throw $this->createNotFoundException();
 	}
 
-	public function gloseAction(Request $request)
+	public function showGloseJugementsAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
 		{
@@ -129,7 +129,7 @@ class APIController extends Controller
 		throw $this->createAccessDeniedException();
 	}
 
-	public function editAction(Request $request)
+	public function editJugementAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
 		{
@@ -202,13 +202,13 @@ class APIController extends Controller
         return $this->json($motsAmbigus);
     }
 
-    public function addGloseAction(Request $request)
+    public function newGloseAction(Request $request)
     {
         if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
         {
             $glose = new Glose();
             $form = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-                'action' => $this->generateUrl('ambiguss_glose_add'),
+                'action' => $this->generateUrl('api_glose_new'),
             ));
 
             $form->handleRequest($request);
@@ -305,7 +305,7 @@ class APIController extends Controller
         throw $this->createNotFoundException();
     }
 
-    public function getGlosesByMotAmbiguAction(Request $request)
+    public function showGlosesMotAmbiguAction(Request $request)
     {
         $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
         $gloses = $repository->findGlosesValueByMotAmbiguValue($request->request->get('motAmbigu'));

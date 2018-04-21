@@ -1,199 +1,157 @@
-app_accueil:
-    path:     /
-    defaults: { _controller: AppBundle:Main:accueil }
+accueil_show:
+    path: /
+    controller: AppBundle:Main:accueil
 
-app_mentions:
-    path:     /mentions
-    defaults: { _controller: AppBundle:Main:mentions }
+mentions_show:
+    path: /mentions
+    controller: AppBundle:Main:mentions
 
-app_conditions:
-    path:     /conditions
-    defaults: { _controller: AppBundle:Main:conditions }
+conditions_show:
+    path: /conditions
+    controller: AppBundle:Main:conditions
 
-app_contact:
-    path:     /contact
-    defaults: { _controller: AppBundle:Main:contact }
+contact_show:
+    path: /contact
+    controller: AppBundle:Main:contact
 
-app_apropos:
-    path:     /a-propos
-    defaults: { _controller: AppBundle:Main:aPropos }
-
-administration_statistiques:
-    path:     /admin/statistiques
-    defaults: { _controller: AppBundle:Admin:statistiques }
-
-jugement_add:
-    path: /jugement/add
-    defaults:
-        _controller: AppBundle:API:addJugement
-
-jugement_edit:
-    path: /jugement/edit
-    defaults:
-        _controller: AppBundle:API:edit
-
-jugement_glose:
-    path: /ambiguss/jugement/glose
-    defaults:
-        _controller: AppBundle:API:Glose
-
-ambiguss_phrase_add:
-    path: /ambiguss/phrase/add
-    defaults: {_controller: AppBundle:Phrase:add }
-
-ambiguss_phrase_edit:
-    path: /ambiguss/phrase/edit/{id}
-    defaults:
-        _controller: AppBundle:Phrase:edit
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-ambiguss_phrase_delete:
-    path: /ambiguss/phrase/delete/{id}
-    defaults:
-        _controller: AppBundle:Phrase:delete
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-ambiguss_game_result:
-    path: /ambiguss/jeu/resultat
-    defaults:
-        _controller: AppBundle:Game:resultat
-
-ambiguss_game:
-    path: /ambiguss/jeu/{id}
-    defaults:
-        {_controller: AppBundle:Game:main,id: null}
-
-ambiguss_glose_get_autocomplete:
-    path: /ambiguss/glose/get/autocomplete
-    defaults:
-        _controller: AppBundle:API:autocompleteGlose
-    options:
-        expose: true
-
-ambiguss_motambigu_get_autocomplete:
-    path: /ambiguss/motambigu/get/autocomplete
-    defaults:
-        _controller: AppBundle:API:autocompleteMotAmbigu
-    options:
-        expose: true
-
-ambiguss_glose_add:
-    path: /ambiguss/glose/add
-    defaults:
-        _controller: AppBundle:API:addGlose
-
-ambiguss_glose_edit:
-    path: /ambiguss/glose/edit/{id}
-    defaults:
-        _controller: AppBundle:Glose:editGlose
-        id: null
-
-ambiguss_glose_delete:
-    path: /ambiguss/glose/delete/{id}
-    defaults:
-        _controller: AppBundle:Glose:deleteGlose
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-ambiguss_glose_link:
-    path: /ambiguss/glose/link/{id}
-    defaults:
-        _controller: AppBundle:Glose:linkGlose
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-ambiguss_glose_get_by_motambigu:
-    path: /ambiguss/glose/getByMotAmbigu
-    defaults:
-        _controller: AppBundle:API:getGlosesByMotAmbigu
-    options:
-        expose: true
-
-ambiguss_classement_general:
-    path: /ambiguss/classement/general
-    defaults:
-        _controller: AppBundle:Classement:classementGeneral
-
-ambiguss_classement_personnel:
-    path: /ambiguss/classement/personnel
-    defaults:
-        _controller: AppBundle:Classement:classementPersonnel
-
-ambiguss_classement_phrases:
-    path: /ambiguss/classement/phrases
-    defaults:
-        _controller: AppBundle:Classement:classementPhrases
-
-ambiguss_phrase_like:
-    path: /ambiguss/phrase/like/{id}
-    defaults:
-        _controller: AppBundle:Phrase:like
-    requirements:
-        id: \d+
-
-ambiguss_phrase_signal:
-    path: /ambiguss/phrase/signal/{id}
-    defaults:
-        _controller: AppBundle:Phrase:signal
-    requirements:
-        id: \d+
+apropos_show:
+    path: /a-propos
+    controller: AppBundle:Main:aPropos
 
 ambiguss_export:
-    path: /ambiguss/export
-    defaults:
-        _controller: AppBundle:Export:main
+    path: /export
+    controller: AppBundle:Main:export
 
-ambiguss_gloses:
-    path: /ambiguss/gloses
-    defaults:
-        _controller: AppBundle:Glose:main
+api_jugement_new:
+    path: /api/jugement/new
+    controller: AppBundle:API:newJugement
 
-ambiguss_moderation_phrase:
-    path: /ambiguss/moderation/phrases
-    defaults:
-        _controller: AppBundle:Phrase:moderation
+api_jugement_edit:
+    path: /api/jugement/edit
+    controller: AppBundle:API:editJugement
 
-ambiguss_moderation_ma:
-    path: /ambiguss/moderation/mots_ambigus
-    defaults:
-        _controller: AppBundle:MotAmbigu:moderation_ma
+api_jugements_glose_show:
+    path: /api/jugement/glose
+    controller: AppBundle:API:showGloseJugements
 
-ambiguss_moderation_mag:
-    path: /ambiguss/moderation/mag
-    defaults:
-        _controller: AppBundle:MAG:get
-
-ambiguss_mag_delete:
-    path: /ambiguss/moderation/mag/delete
-    defaults:
-        _controller: AppBundle:MAG:delete
+api_autocomplete_glose:
+    path: /api/autocomplete/glose
+    controller: AppBundle:API:autocompleteGlose
     options:
         expose: true
 
-ambiguss_motambigu_keep:
-    path: /ambiguss/motambigu/keep/{id}
+api_autocomplete_mot_ambigu:
+    path: /api/autocomplete/motambigu
+    controller: AppBundle:API:autocompleteMotAmbigu
+    options:
+        expose: true
+
+api_glose_new:
+    path: /api/glose/new
+    controller: AppBundle:API:newGlose
+
+api_gloses_mot_ambigu_show:
+    path: /api/motambigu/gloses
+    controller: AppBundle:API:showGlosesMotAmbigu
+    options:
+        expose: true
+
+game_result_show:
+    path: /jeu/resultat
+    controller: AppBundle:Game:resultat
+
+game_show:
+    path: /jeu/{id}
+    controller: AppBundle:Game:show
     defaults:
-        _controller: AppBundle:MotAmbigu:keep
+        id: null
+
+phrase_new:
+    path: /phrase/new
+    controller: AppBundle:Phrase:new
+
+phrase_edit:
+    path: /phrase/{id}/edit
+    controller: AppBundle:Phrase:edit
     requirements:
         id: \d+
     options:
         expose: true
 
-ambiguss_phrase_keep:
-    path: /ambiguss/phrase/keep/{id}
-    defaults:
-        _controller: AppBundle:Phrase:keep
+phrase_like:
+    path: /phrase/{id}/like
+    controller: AppBundle:Phrase:like
+    requirements:
+        id: \d+
+
+classement_general_show:
+    path: /classement/general
+    controller: AppBundle:Classement:general
+
+classement_personnel_show:
+    path: /classement/personnel
+    controller: AppBundle:Classement:personnel
+
+classement_phrases_personnelles_show:
+    path: /classement/phrases-personelles
+    controller: AppBundle:Classement:phrasesPersonnelles
+
+modo_phrases_show:
+    path: /moderation/phrases
+    controller: AppBundle:Modo:showPhrases
+
+modo_phrase_delete:
+    path: /moderation/phrase/{id}/delete
+    controller: AppBundle:Modo:delete
     requirements:
         id: \d+
     options:
         expose: true
+
+modo_phrase_unsignale:
+    path: /moderation/phrase/{id}/unsignale
+    controller: AppBundle:Modo:unsignale
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_gloses_show:
+    path: /moderation/gloses
+    controller: AppBundle:Modo:showGloses
+
+modo_glose_edit:
+    path: /moderation/glose/{id}/edit
+    controller: AppBundle:Modo:editGlose
+    requirements:
+        id: \d+
+
+modo_glose_count_reponses:
+    path: /moderation/glose/{id}/reponses/count
+    controller: AppBundle:Modo:countReponses
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_glose_delete:
+    path: /moderation/glose/{id}/delete
+    controller: AppBundle:Modo:deleteGlose
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_mots_ambigus_gloses_show:
+    path: /moderation/mots-ambigus-gloses
+    controller: AppBundle:Modo:showMotsAmbigusGloses
+
+modo_mots_ambigus_gloses_delete:
+    path: /moderation/mots-ambigus-gloses/delete
+    controller: AppBundle:Modo:deleteMotsAmbigusGloses
+    options:
+        expose: true
+
+admin_stats:
+    path: /admin/statistiques
+    controller: AppBundle:Admin:statistiques

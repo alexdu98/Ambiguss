@@ -4,13 +4,13 @@ easy_admin:
         brand_color: '#A0D233'
         menu:
             - label: 'Accueil Ambiguss'
-              route: 'app_accueil'
+              route: 'accueil_show'
             - label: 'Statistiques'
               icon: 'line-chart'
-              route: 'administration_statistiques'
+              route: 'admin_stats'
             - label: 'Modération'
               icon: 'shield'
-              route: 'ambiguss_moderation_phrase'
+              route: 'modo_phrases_show'
             - label: 'Sécurité'
               icon: 'users'
               children: ['Membre', 'Groupe', 'Role', 'Historique']

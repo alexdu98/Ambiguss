@@ -93,8 +93,3 @@ fos_user_group_edit:
     path: /group/{groupName}/edit
     controller: fos_user.group.controller:editAction
     methods: [GET, POST]
-
-fos_user_group_list:
-    path: /group/list
-    controller: fos_user.group.controller:listAction
-    methods: [GET]

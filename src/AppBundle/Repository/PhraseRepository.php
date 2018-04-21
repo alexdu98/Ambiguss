@@ -45,12 +45,12 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array
      */
-    public function getSignale()
+    public function getSignalees()
     {
-        return $this->createQueryBuilder('g')
-            ->innerJoin('g.auteur', 'a', 'WITH', 'g.auteur = a.id')->addSelect('a')
-            ->leftJoin('g.modificateur', 'm', 'WITH', 'g.modificateur = m.id')->addSelect('m')
-            ->where('g.signale = 1')
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.auteur', 'a', 'WITH', 'p.auteur = a.id')->addSelect('a')
+            ->leftJoin('p.modificateur', 'm', 'WITH', 'p.modificateur = m.id')->addSelect('m')
+            ->where('p.signale = 1')
             ->getQuery()->getResult();
     }
 

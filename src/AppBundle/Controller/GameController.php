@@ -15,7 +15,7 @@ use AppBundle\Entity\Historique;
 class GameController extends Controller
 {
 
-	public function mainAction(Request $request, \AppBundle\Entity\Phrase $id = null)
+	public function showAction(Request $request, \AppBundle\Entity\Phrase $id = null)
 	{
 		$game = new Game();
 		$form = $this->get('form.factory')->create(GameType::class, $game);
@@ -182,7 +182,7 @@ class GameController extends Controller
 				$this->get('session')->getFlashBag()->add('isAuteur', $isAuteur);
 				$this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
 
-				return $this->redirectToRoute('ambiguss_game_result');
+				return $this->redirectToRoute('game_result_show');
 			}
 			else
 			{
@@ -276,13 +276,13 @@ class GameController extends Controller
 
 		$glose = new \AppBundle\Entity\Glose();
 		$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-			'action' => $this->generateUrl('ambiguss_glose_add'),
+			'action' => $this->generateUrl('api_glose_new'),
 		));
 
 		// jugement (cas signalement)
 		$jug = new Jugement();
 		$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
-			'action' => $this->generateUrl('jugement_add'),
+			'action' => $this->generateUrl('api_jugement_new'),
 		));
 
 		// Ordonne les mots ambigus sur leur ordre
@@ -322,7 +322,7 @@ class GameController extends Controller
 			// jugement (cas signalement)
 			$jug = new Jugement();
 			$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
-				'action' => $this->generateUrl('jugement_add'),
+				'action' => $this->generateUrl('api_jugement_new'),
 			));
 
 			$repP = $this->getDoctrine()->getRepository('AppBundle:MotAmbiguPhrase');

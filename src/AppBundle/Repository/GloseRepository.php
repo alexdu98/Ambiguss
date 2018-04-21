@@ -35,7 +35,7 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array
      */
-	public function getSignale()
+	public function getSignalees()
 	{
 		return $this->createQueryBuilder('g')
 			->innerJoin('g.auteur', 'a', 'WITH', 'g.auteur = a.id')->addSelect('a')

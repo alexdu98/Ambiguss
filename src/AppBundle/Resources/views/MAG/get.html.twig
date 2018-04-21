@@ -42,7 +42,7 @@
 			inputG.autocomplete({
 				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 				source: function (request, response) {
-					var url = Routing.generate('ambiguss_glose_get_autocomplete');
+					var url = Routing.generate('api_autocomplete_glose');
 					$.getJSON(url + '?term=' + request.term, function (data) {
 						inputG.parent().append('<div id="resnul" class="text-danger" hidden>Aucune glose ne correspond à la recherche</div>');
 						if (data.length === 0) {
@@ -63,7 +63,7 @@
 			inputMA.autocomplete({
 				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 				source: function (request, response) {
-					var url = Routing.generate('ambiguss_motambigu_get_autocomplete');
+					var url = Routing.generate('api_autocomplete_mot_ambigu');
 					$.getJSON(url + '?term=' + request.term, function (data) {
 						inputMA.parent().append('<div id="resnul" class="text-danger" hidden>Aucun mot ambigu ne correspond à la recherche</div>');
 						if (data.length === 0) {
@@ -126,7 +126,7 @@
 							// On affiche l'image laoding en attendant la réponse
 							$(this).after('<img src="' + urlImageLoading + '" id="loading">');
 
-							var url = Routing.generate('ambiguss_mag_delete');
+							var url = Routing.generate('modo_mots_ambigus_gloses_delete');
 							$.post(url, {motAmbigu: ma_id, glose: g_id, token: '{{ csrf_token('delete_mag') }}'}, function (data) {
 								liaison = $('#o' + g_id + '' + ma_id);
 								if (data.succes) {

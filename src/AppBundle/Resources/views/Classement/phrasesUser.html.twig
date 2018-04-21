@@ -36,11 +36,11 @@
 					<td>
 						<div class="row">
 							<div class="col-md-10">
-								<a title="Jouer cette phrase" style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a>
+								<a title="Jouer cette phrase" style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a>
 							</div>
 							{% if row.dateCreation|date("U") > "now"|date("U") - dureeAvantJouabiliteSecondes %}
 								<div class="col-md-2 text-right">
-									<a href="{{ path('ambiguss_phrase_edit', {id : row.id}) }}" class="btn btn-warning btn-xs">Modifier</a></div>
+									<a href="{{ path('phrase_edit', {id : row.id}) }}" class="btn btn-warning btn-xs">Modifier</a></div>
 							{% endif %}
 						</div>
 					</td>

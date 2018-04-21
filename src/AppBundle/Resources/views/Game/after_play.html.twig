@@ -70,7 +70,7 @@
 	        </ul>
 	        <br>
 
-            <a href="{{ path('ambiguss_game') }}" class="btn btn-primary">Rejouer</a>
+            <a href="{{ path('game_show') }}" class="btn btn-primary">Rejouer</a>
 	        <div id="glosesBlock" hidden>
 		        {% for ma in pma %}
 			        <select class="gloses">
@@ -144,7 +144,7 @@
 
 
 				// On envoit le formulaire par ajax
-				$('form[name="jugement_add"]').ajaxForm({
+				$('form[name="api_jugement_new"]').ajaxForm({
 					beforeSubmit: function (arr, form, opt) {
 						// On affiche l'image laoding en attendant la réponse
 						$(form).after('<img src="' + urlImageLoading + '" id="loading">');

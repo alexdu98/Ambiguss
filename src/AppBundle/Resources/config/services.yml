@@ -2,20 +2,20 @@ services:
 
     AppBundle\Service\ExportService:
         autowire: true
-        arguments: { $infos: "%infosExport%", $downloadDir: "%downloadDirectory%" }
+        arguments: { $infos: '%infosExport%', $downloadDir: '%downloadDirectory%' }
 
     AppBundle\Service\RecaptchaService:
         autowire: true
-        arguments: { $secret: "%recaptcha_secret%" }
+        arguments: { $secret: '%recaptcha_secret%' }
 
     security.role_hierarchy:
         autowire: true
-        class: AppBundle\Service\RoleHierarchyService
+        class: 'AppBundle\Service\RoleHierarchyService'
 
     AppBundle\Service\FOSUserProvider:
         autowire: true
         arguments:
             $properties:
-                facebook: facebook
-                twitter: twitter
-                google: google
+                facebook: 'facebook'
+                twitter: 'twitter'
+                google: 'google'

@@ -71,7 +71,7 @@ class MainController extends Controller
 						}
 
 						// rediriger vers la page de contact (pour vider le formulaire)
-						return $this->redirectToRoute('app_contact', ['_fragment' => 'formulaireContact']);
+						return $this->redirectToRoute('contact_show', ['_fragment' => 'formulaireContact']);
 					}
 					else
 					{
@@ -99,9 +99,14 @@ class MainController extends Controller
 		));
 	}
 
-	public
-	function aProposAction()
+	public function aProposAction()
 	{
 		return $this->render('AppBundle:Main:a_propos.html.twig');
 	}
+
+    public function exportAction ()
+    {
+        return $this->render('AppBundle:Main:export.html.twig');
+    }
+
 }

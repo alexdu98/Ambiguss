@@ -18,7 +18,7 @@ use AppBundle\Entity\Historique;
 class PhraseController extends Controller
 {
 
-	public function addAction(Request $request)
+	public function newAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
@@ -219,7 +219,7 @@ class PhraseController extends Controller
 
 			$glose = new \AppBundle\Entity\Glose();
 			$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-				'action' => $this->generateUrl('ambiguss_glose_add'),
+				'action' => $this->generateUrl('api_glose_new'),
 			));
 
 			if($edit)
@@ -250,8 +250,7 @@ class PhraseController extends Controller
 		}
 	}
 
-	public
-	function likeAction(Request $request, \AppBundle\Entity\Phrase $phrase)
+	public function likeAction(Request $request, \AppBundle\Entity\Phrase $phrase)
 	{
 
 		$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:JAime');
@@ -308,125 +307,6 @@ class PhraseController extends Controller
 		));
 	}
 
-	public
-	function SignalAction(Request $request, \AppBundle\Entity\Phrase $phrase)
-	{
-		if($phrase->getSignale() == 0)
-		{
-			$phrase->setSignale(1);
-			$action = 'signal';
-		}
-		else
-		{
-			$phrase->setSignale(0);
-			$action = 'cancel';
-		}
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($phrase);
-		$em->flush();
-
-		return $this->json(array(
-			'status' => 'succes',
-			'action' => $action,
-		));
-
-	}
-
-	public function moderationAction()
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				$repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-				$phrases = $repo->getSignale(array(
-					'signale' => true,
-				));
-
-				return $this->render('AppBundle:Phrase:getAll.html.twig', array(
-					'phrases' => $phrases,
-				));
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
-
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
-
-	public function keepAction(\AppBundle\Entity\Phrase $phrase)
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				try
-				{
-					$phrase->setSignale(0);
-					$em = $this->getDoctrine()->getEntityManager();
-					$em->persist($phrase);
-					$em->flush();
-
-					return $this->json(array(
-						'succes' => true,
-					));
-				}
-				catch(\Exception $e)
-				{
-					return $this->json(array(
-						'succes' => false,
-						'message' => $e,
-					));
-				}
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
-
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
-
-	public function deleteAction(\AppBundle\Entity\Phrase $phrase)
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				try
-				{
-					$phrase->setVisible(0);
-					$em = $this->getDoctrine()->getEntityManager();
-					$em->persist($phrase);
-					$em->flush();
-
-					return $this->json(array(
-						'succes' => true,
-					));
-				}
-				catch(\Exception $e)
-				{
-					return $this->json(array(
-						'succes' => false,
-						'message' => $e,
-					));
-				}
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
-
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
-
 	public function editAction(Request $request, \AppBundle\Entity\Phrase $phrase)
 	{
 		$dateMax = $phrase->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
@@ -439,14 +319,14 @@ class PhraseController extends Controller
 				if($dateActu < $dateMax && !$this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
 				{
 					$phr = new \AppBundle\Entity\Phrase();
-					$form = $this->get('form.factory')->create(PhraseAddType::class, $phr, array('action' => $this->generateUrl('ambiguss_phrase_add')));
+					$form = $this->get('form.factory')->create(PhraseAddType::class, $phr, array('action' => $this->generateUrl('phrase_new')));
 
 					$form->handleRequest($request);
 					$newPhrase = null;
 
 					$glose = new \AppBundle\Entity\Glose();
 					$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-						'action' => $this->generateUrl('ambiguss_glose_add'),
+						'action' => $this->generateUrl('api_glose_new'),
 					));
 
 					return $this->render('AppBundle:Phrase:edit.html.twig', array(
@@ -685,7 +565,7 @@ class PhraseController extends Controller
 
 					$glose = new \AppBundle\Entity\Glose();
 					$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-						'action' => $this->generateUrl('ambiguss_glose_add'),
+						'action' => $this->generateUrl('api_glose_new'),
 					));
 
 					return $this->render('AppBundle:Phrase:editModerateur.html.twig', array(

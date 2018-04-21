@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ClassementController extends Controller
 {
 
-	public function classementGeneralAction()
+	public function generalAction()
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
@@ -31,7 +31,7 @@ class ClassementController extends Controller
 		}
 	}
 
-	public function classementPersonnelAction()
+	public function personnelAction()
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
@@ -52,7 +52,7 @@ class ClassementController extends Controller
 		}
 	}
 
-	public function classementPhrasesAction()
+	public function phrasesPersonnellesAction()
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{

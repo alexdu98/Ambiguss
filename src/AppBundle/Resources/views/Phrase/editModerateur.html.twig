@@ -285,7 +285,7 @@
 				var bouton = $(this);
 				// On affiche l'image laoding en attendant la réponse
 				$(this).after('<img src="' + urlImageLoading + '" id="loading">');
-				$.post('{{ path('jugement_edit') }}', {
+				$.post('{{ path('api_jugement_edit') }}', {
 					id: $(this).data('id'), verdict: $(this).data('verdict'), token: '{{ csrf_token
 					('jugement_vote') }}'
 				}, function

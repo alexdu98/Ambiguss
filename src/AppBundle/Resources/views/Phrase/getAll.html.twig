@@ -41,7 +41,7 @@
             {% for row in phrases %}
                 <tr id="phrase-{{ row.id }}">
                     <td>{{ row.id }}</td>
-                    <td><a style="color:black" href="{{ path('ambiguss_game' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
+                    <td><a style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
                     <td><a href="{{ path('fos_user_profile_show' , {'id':row.auteur.id}) }}">{{ row.auteur.username }}</a></td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
                     {% if not row.modificateur %}
@@ -56,7 +56,7 @@
                     <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td class="phrase-visible">{% if row.visible %}Oui{% else %}Non{% endif %}</td>
                     <td>
-	                    <a class="btn btn-warning btn-sm" href="{{ path('ambiguss_phrase_edit', {id: row.id}) }}">Modifier</a>
+	                    <a class="btn btn-warning btn-sm" href="{{ path('phrase_edit', {id: row.id}) }}">Modifier</a>
                         <button class="btn btn-danger btn-sm deletePhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
                             Supprimer
                         </button>
@@ -105,7 +105,7 @@
                 $('#phraseDelete').click(function (data) {
                     // On affiche l'image laoding en attendant la réponse
                     $(this).after('<img src="' + urlImageLoading + '" id="loading">');
-                    var url = Routing.generate('ambiguss_phrase_delete', {'id' : button.data('id')});
+                    var url = Routing.generate('modo_phrase_delete', {'id' : button.data('id')});
 
                     $.getJSON(url, function (data) {
                         if (data.succes) {
@@ -143,7 +143,7 @@
             $('#phraseKeep').click(function (data) {
                 // On affiche l'image laoding en attendant la réponse
                 $(this).after('<img src="' + urlImageLoading + '" id="loading">');
-                var url = Routing.generate('ambiguss_phrase_keep', {'id' : button.data('id')});
+                var url = Routing.generate('modo_phrase_unsignale', {'id' : button.data('id')});
 
                 $.getJSON(url, function (data) {
                     if (data.succes) {
@@ -183,7 +183,7 @@
                 // On affiche l'image laoding en attendant la réponse
                 $(this).after('<img src="' + urlImageLoading + '" id="loading">');
                 var id= button.data('id');
-                var url ="{{ path('ambiguss_phrase_edit', {'id': '0'}) }}";
+                var url ="{{ path('phrase_edit', {'id': '0'}) }}";
                 url=url.replace('0',parseInt(id));
                 location.href = url;
 

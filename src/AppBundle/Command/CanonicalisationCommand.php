@@ -15,6 +15,7 @@ class CanonicalisationCommand extends ContainerAwareCommand {
 		$ms = $em->getRepository('AppBundle:Membre')->findAll();
 		$c = new Canonicalizer();
 
+		// Enregistre l'email et le pseudo sous forme canonique pour chaque membre
 		foreach($ms as $m){
 		    $m->setUsernameCanonical($c->canonicalize($m->getUsername()));
 		    $m->setEmailCanonical($c->canonicalize($m->getEmail()));

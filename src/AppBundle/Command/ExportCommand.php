@@ -19,11 +19,13 @@ class ExportCommand extends ContainerAwareCommand {
 
 		$io->title('Exporting data (' . $type . ') [' . date('d/m/Y H\hi') . ']');
 
+		// Exporte les phrases
 		if($type == 'phrases' || $type == 'all')
 		{
 			$succes = true;
 			$io->section('Export des phrases');
 
+			// Calcul la durée que prend l'export
 			$start = microtime(true);
 			$nb = $ser->phrases();
 			$nbSec = microtime(true) - $start;
@@ -31,11 +33,13 @@ class ExportCommand extends ContainerAwareCommand {
 			$io->text($nb . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');
 		}
 
+		// Exporte les mots ambigus
 		if($type == 'motsAmbigus' || $type == 'all')
 		{
 			$succes = true;
 			$io->section('Export des mots ambigus');
 
+            // Calcul la durée que prend l'export
 			$start = microtime(true);
 			$nb = $ser->motsAmbigus();
 			$nbSec = microtime(true) - $start;

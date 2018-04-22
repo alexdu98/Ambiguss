@@ -116,7 +116,7 @@ fos_user:
     group:
         group_class: AppBundle\Entity\Groupe
         form:
-            type: AppBundle\Form\GroupeType
+            type: AppBundle\Form\FOSUser\GroupeType
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
@@ -124,19 +124,19 @@ fos_user:
         confirmation:
             enabled: true
         form:
-            type: AppBundle\Form\RegistrationType
+            type: AppBundle\Form\FOSUser\RegistrationType
             validation_groups: ~
     profile:
         form:
-            type: AppBundle\Form\ProfilEditType
+            type: AppBundle\Form\FOSUser\ProfilEditType
             validation_groups: ~
     change_password:
         form:
-            type: AppBundle\Form\ChangePasswordType
+            type: AppBundle\Form\FOSUser\ChangePasswordType
             validation_groups: ~
     resetting:
         form:
-            type: AppBundle\Form\ResettingType
+            type: AppBundle\Form\FOSUser\ResettingType
             validation_groups: ~
 
 hwi_oauth:

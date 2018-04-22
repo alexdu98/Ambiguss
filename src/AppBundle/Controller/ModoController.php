@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Glose;
-use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseEditType;
 use AppBundle\Form\MAG\MAGType;

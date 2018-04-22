@@ -3,14 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Membre;
-use AppBundle\Form\ProfilEditType;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use AppBundle\Form\FOSUser\ProfilEditType;
 use FOS\UserBundle\Model\UserManagerInterface;
-use FOS\UserBundle\Util\Canonicalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;

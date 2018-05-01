@@ -349,3 +349,20 @@ button.infobulle img{
 	color: #8B4513 !important;
 	color: var(--color-brown) !important;
 }
+
+/*
+    #####################################################################
+    ############################## COOKIES ##############################
+    #####################################################################
+*/
+#cookieInfo{
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(33, 33, 33, 0.9);
+	position: fixed;
+	color: white;
+	padding: 15px 0;
+	font-size: 1.1em;
+	z-index: 1000;
+}

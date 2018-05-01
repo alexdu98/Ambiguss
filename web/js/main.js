@@ -179,6 +179,14 @@ $(document).ready(function () {
 	// Active les tooltips bootstrap
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
+
+    // Si clic sur le bouton "J'accepte" du bandeau d'information des cookies
+    $('#cookieAccept').on('click', function(){
+    	// On créé un cookie pour ne plus réafficher le beandeau
+    	$.cookie('cookieInfo', true, { expires: 365, path: '/' });
+    	// On supprime le bandeau
+    	$('#cookieInfo').remove();
+	});
 
 });

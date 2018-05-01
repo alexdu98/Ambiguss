@@ -144,6 +144,18 @@
 		    </div>
 	    </div>
 
+		{% if not app.request.cookies.get('cookieInfo') %}
+			<div id="cookieInfo">
+				<div class="container-fluid">
+					<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+						En poursuivant votre navigation sur Ambiguss, vous acceptez l'utilisation des cookies.
+						<a href="{{ path('mentions_show') }}">En savoir plus</a>
+						<a id="cookieAccept" class="btn btn-default"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> J'accepte</a>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
 	    <script>
 		    var urlImageLoading = '{{ asset('images/loading.gif') }}';
 	    </script>

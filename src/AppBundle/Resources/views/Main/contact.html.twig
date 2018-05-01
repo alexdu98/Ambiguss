@@ -9,12 +9,13 @@
 			<div class="bulle">
 				<div class="row">
 					<div class="col-md-10 col-md-offset-1 well text-left">
-						{% for flashMessage in app.session.flashbag.get('succes') %}
-							<div class="alert alert-success">{{ flashMessage }}</div>
-						{% endfor %}
-						{% for flashMessage in app.session.flashbag.get('erreur') %}
-							<div class="alert alert-danger">{{ flashMessage }}</div>
-						{% endfor %}
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+								<div class="alert alert-{{ label }}">
+                                    {{ message }}
+								</div>
+                            {% endfor %}
+                        {% endfor %}
 
 						{{ form_start(form, {'attr': {'id': 'formContact'}}) }}
 

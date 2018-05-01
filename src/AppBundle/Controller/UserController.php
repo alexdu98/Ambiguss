@@ -28,8 +28,9 @@ class UserController extends Controller
         $this->userManager = $userManager;
     }
 
-    public function showAction(Request $request, Membre $user = null)
+    public function showAction(Membre $user = null)
     {
+        // Il faut être connecté pour consulter des profils
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('fos_user_security_login');
         }
@@ -39,6 +40,7 @@ class UserController extends Controller
 
         $repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Partie');
 
+        // Consultation de son propre profil
         if($user == null)
         {
             $nbParties = $repoP->countAllGamesByMembre($this->getUser());
@@ -48,6 +50,7 @@ class UserController extends Controller
                 'nbPhrases' => $nbPhrases['nbPhrases'],
             ));
         }
+        // Consultation du profil public d'un membre
         else{
             $nbParties = $repoP->countAllGamesByMembre($user);
 
@@ -61,6 +64,7 @@ class UserController extends Controller
 
     public function editAction(Request $request)
     {
+        // Il faut être connecté pour modifier son profil
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -81,6 +85,7 @@ class UserController extends Controller
             $event = new FormEvent($form, $request);
             $this->eventDispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
 
+            // On met à jour le membre
             $this->userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {

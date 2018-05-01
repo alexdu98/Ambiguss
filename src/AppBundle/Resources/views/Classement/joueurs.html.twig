@@ -10,7 +10,9 @@
 
 {% block contenu %}
 	<div class="well">
-		<h4 class="classementMe">Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement.</h4>
+		{% if app.user %}
+			<h4 class="classementMe">Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement.</h4>
+		{% endif %}
 		<table id="classement" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
 			<thead>
 				<tr>
@@ -36,18 +38,18 @@
 			</tfoot>
 			<tbody>
 				{% for row in classement %}
-					<tr {% if row.id == app.user.id %}class="classementTableMe"{% endif %}>
+					<tr {% if app.user and row.id == app.user.id %}class="classementTableMe"{% endif %}>
 						<td>{{ loop.index }}</td>
 						<td><a href="{{ path('fos_user_profile_show' , {'id':row.id}) }}">{{ row.username }}</a></td>
 						<td>
 							{% if loop.index == 1 %}
 								Ambigator
 							{% elseif loop.index >= 2 and loop.index < 5 %}
-								Grand Maître
+								Bâtonnier
 							{% elseif loop.index >= 5 and loop.index < 10 %}
-								Maître
+								Grand Maître
 							{% elseif loop.index >= 10 and loop.index < 20 %}
-								Cavalier
+								Maître
 							{% elseif loop.index >= 20 and row.pointsClassement >= 3000 %}
 								Challenger
 							{% else %}

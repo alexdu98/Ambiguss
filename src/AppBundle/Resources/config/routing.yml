@@ -84,17 +84,17 @@ phrase_like:
     requirements:
         id: \d+
 
-classement_general_show:
-    path: /classement/general
-    controller: AppBundle:Classement:general
+classement_joueurs_show:
+    path: /classement/joueurs
+    controller: AppBundle:Classement:joueurs
+
+classement_phrases_show:
+    path: /classement/phrases
+    controller: AppBundle:Classement:phrases
 
 classement_personnel_show:
     path: /classement/personnel
     controller: AppBundle:Classement:personnel
-
-classement_phrases_personnelles_show:
-    path: /classement/phrases-personelles
-    controller: AppBundle:Classement:phrasesPersonnelles
 
 modo_phrases_show:
     path: /moderation/phrases

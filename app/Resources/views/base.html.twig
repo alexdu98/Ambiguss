@@ -47,10 +47,11 @@
 									    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classements
 										    <span class="caret"></span></a>
 									    <ul class="dropdown-menu">
-										    <li><a href="{{ path('classement_general_show') }}">Joueurs</a></li>
-										    <li><a href="{{ path('classement_phrases_personnelles_show') }}">Phrases</a></li>
-										    <li><a href="{{ path('classement_personnel_show',{'id': app.user.id|default(0)}) }}">Mes
-												    Phrases</a></li>
+										    <li><a href="{{ path('classement_joueurs_show') }}">Joueurs</a></li>
+											{% if app.user %}
+												<li><a href="{{ path('classement_phrases_show') }}">Phrases</a></li>
+												<li><a href="{{ path('classement_personnel_show') }}">Mes Phrases</a></li>
+											{% endif %}
 									    </ul>
 								    </li>
 								    {% if is_granted('ROLE_MODERATEUR') %}

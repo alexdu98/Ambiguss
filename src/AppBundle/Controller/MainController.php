@@ -34,63 +34,48 @@ class MainController extends Controller
 		{
 			$data = $form->getData();
 
-			$recaptcha = $this->get('AppBundle\Service\RecaptchaService');
-			$recap = $recaptcha->check($request->request->get('g-recaptcha-response'));
-			if($recap->succes)
-			{
-				if(!empty($data['message']))
-				{
-					if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-					{
-						$data['pseudo'] = $this->getUser()->getUsername();
-						$data['email'] = $this->getUser()->getEmail();
-					}
+			// Vérifie le captcha
+			$recaptchaService = $this->get('AppBundle\Service\RecaptchaService');
+			$recaptcha = $recaptchaService->check($request->request->get('g-recaptcha-response'));
 
-					if(!empty($data['pseudo']) && !empty($data['email']))
-					{
-                        // Envoi de l'email de contact
-                        $message = (new \Swift_Message())
-                            ->setSubject('[Ambiguss] Contact')
-                            ->setFrom($this->getParameter('emailFrom'))
-                            ->setTo($this->getParameter('emailContact'))
-                            ->setBody($this->renderView('AppBundle:Mail:contact.html.twig', array(
-                                'recipient' => $this->getDoctrine()->getRepository('AppBundle:Membre')->findOneByUsernameCanonical('alex'),
-                                'subject' => '[Ambiguss] Contact',
-                                'pseudoExpediteur' => $data['pseudo'],
-                                'emailExpediteur' => $data['email'],
-                                'message' => $data['message'],
-                            )), 'text/html');
+			// S'il y a eu une erreur avec le captcha
+			if(!$recaptcha['success']){
+                $message = implode('<br>', $recaptcha['error-codes']);
+                $this->get('session')->getFlashBag()->add('danger', $message);
+            }
+            else {
 
-						if($this->get('mailer')->send($message))
-						{
-							$this->get('session')->getFlashBag()->add('succes', 'Formulaire de contact envoyé. Nous vous répondrons dès que possible.');
-						}
-						else
-						{
-							$this->get('session')->getFlashBag()->add('erreur', "L'envoi de l'email a échoué.");
-						}
+			    // Si c'est un membre, on récupère son pseudo et son email
+                if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+                {
+                    $data['pseudo'] = $this->getUser()->getUsername();
+                    $data['email'] = $this->getUser()->getEmail();
+                }
 
-						// rediriger vers la page de contact (pour vider le formulaire)
-						return $this->redirectToRoute('contact_show', ['_fragment' => 'formulaireContact']);
-					}
-					else
-					{
-						$this->get('session')->getFlashBag()->add('erreur', "Le pseudo et l'email ne doivent pas être vide.");
-					}
-				}
-				else
-				{
-					$this->get('session')->getFlashBag()->add('erreur', "Le message ne peut pas être vide.");
-				}
-			}
-			else
-			{
-				$erreurStr = "";
-				foreach($recap->erreurs as $erreur)
-				{
-					$erreurStr .= $erreur;
-				}
-				$this->get('session')->getFlashBag()->add('erreur', $erreurStr);
+                // On vérifie les champs obligatoires
+			    if(empty($data['message']) || empty($data['pseudo']) || empty($data['email'])){
+                    $this->get('session')->getFlashBag()->add('danger', "Tous les champs ne sont pas renseignés.");
+                }
+
+                // On envoie le mail de contact
+                $mailerService = $this->get('AppBundle\Service\MailerService');
+                $nbMail = $mailerService->sendContactEmailMessage(
+                    $this->getParameter('emailContact'),
+                    array(
+                        'pseudoExpediteur' => $data['pseudo'],
+                        'emailExpediteur' => $data['email'],
+                        'message' => $data['message'],
+                    )
+                );
+
+                // Vérification de l'envoie de l'email
+                if($nbMail === 0)
+                    $this->get('session')->getFlashBag()->add('danger', "L'envoi de l'email a échoué.");
+                else
+                    $this->get('session')->getFlashBag()->add('success', 'Formulaire de contact envoyé. Nous vous répondrons dès que possible.');
+
+                // rediriger vers la page de contact (pour vider le formulaire)
+                return $this->redirectToRoute('contact_show', ['_fragment' => 'formulaireContact']);
 			}
 		}
 

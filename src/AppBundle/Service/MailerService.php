@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MailerService implements MailerInterface
 {
+
     private $mailer;
     private $templating;
     private $from;
@@ -23,6 +24,7 @@ class MailerService implements MailerInterface
      * Envoie le mail de confirmation d'inscription au membre
      *
      * @param UserInterface $user
+     * @return int
      * @throws \Twig\Error\Error
      */
     public function sendConfirmationEmailMessage(UserInterface $user)
@@ -33,13 +35,14 @@ class MailerService implements MailerInterface
             'subject' => $subject,
         ));
 
-        $this->sendEmailMessage($subject, $user, $body);
+        return $this->sendEmailMessage($subject, $this->from, $user->getEmail(), $body);
     }
 
     /**
      * Envoie le mail de réinitialisation de mot de passe au membre
      *
      * @param UserInterface $user
+     * @return int
      * @throws \Twig\Error\Error
      */
     public function sendResettingEmailMessage(UserInterface $user)
@@ -50,25 +53,49 @@ class MailerService implements MailerInterface
             'subject' => $subject,
         ));
 
-        $this->sendEmailMessage($subject, $user, $body);
+        return $this->sendEmailMessage($subject, $this->from, $user->getEmail(), $body);
     }
 
+    /**
+     * Envoie le mail de contact
+     *
+     * @param string $recipient
+     * @param array $params
+     * @return int
+     * @throws \Twig\Error\Error
+     */
+    public function sendContactEmailMessage(string $recipient, array $params)
+    {
+        $subject = 'Contact';
+        $body = $this->templating->render('AppBundle:Mail:contact.html.twig', array_merge(
+            array(
+                'recipient' => $recipient,
+                'subject' => $subject,
+            ),
+            $params
+        ));
+
+        return $this->sendEmailMessage($subject, $this->from, $recipient, $body);
+    }
 
     /**
-     * Envoie un mail à un membre
+     * Envoie un mail
      *
-     * @param $subject
-     * @param UserInterface $recipient
-     * @param $body
+     * @param string $subject
+     * @param string $from
+     * @param string $recipient
+     * @param string $body
+     * @return int Le nombre de destinataire. 0 si erreur
      */
-    protected function sendEmailMessage($subject, UserInterface $recipient, $body)
+    protected function sendEmailMessage(string $subject, string $from, string $recipient, string $body)
     {
         $message = (new \Swift_Message())
             ->setSubject('[Ambiguss] ' . $subject)
-            ->setFrom($this->from)
-            ->setTo($recipient->getEmail())
+            ->setFrom($from)
+            ->setTo($recipient)
             ->setBody($body, 'text/html');
 
-        $this->mailer->send($message);
+        return $this->mailer->send($message);
     }
+
 }

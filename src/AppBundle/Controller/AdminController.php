@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends BaseAdminController
 {
+
     public function createNewMembreEntity()
     {
         return $this->get('fos_user.user_manager')->createUser();
@@ -28,6 +29,7 @@ class AdminController extends BaseAdminController
         $em = $this->getDoctrine();
         $stat = array();
 
+        // Récupération de toutes les statistiques du site
         $stat['visites'] = $em->getRepository('AppBundle:Visite')->getStat();
         $stat['membres'] = $em->getRepository('AppBundle:Membre')->getStat();
         $stat['phrases'] = $em->getRepository('AppBundle:Phrase')->getStat();
@@ -41,4 +43,5 @@ class AdminController extends BaseAdminController
             'stat' => $stat,
         ));
     }
+
 }

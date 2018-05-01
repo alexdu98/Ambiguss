@@ -7,69 +7,49 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ClassementController extends Controller
 {
 
-	public function generalAction()
+	public function joueursAction()
 	{
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-		{
-			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
-			$classement = $repository->getClassementGeneral($this->getParameter('maxResultForClassementGeneral'));
-			$position = $repository->getPositionClassement($this->getUser());
-			$nbMembreTotal = $repository->countEnabled();
+        $repoMembre = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
+        $classement = $repoMembre->getClassementGeneral($this->getParameter('maxResultForClassementGeneral'));
+        $nbMembreTotal = $repoMembre->countEnabled();
 
-			return $this->render('AppBundle:Classement:points.html.twig', array(
-				'classement' => $classement,
-				'position' => $position,
-				'nbMembreTotal' => $nbMembreTotal,
-			));
-		}
-		else
-		{
+        // Si c'est un membre, on calcul sa position dans le classement
+        $position = $this->getUser() ? $repoMembre->getPositionClassement($this->getUser()) : null;
 
-			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
-
-			return $this->redirectToRoute('fos_user_security_login');
-		}
+        return $this->render('AppBundle:Classement:joueurs.html.twig', array(
+            'classement' => $classement,
+            'position' => $position,
+            'nbMembreTotal' => $nbMembreTotal,
+        ));
 	}
 
-	public function personnelAction()
+	public function phrasesAction()
 	{
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-		{
-			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-			$classement = $repository->getClassementPhrasesUser($this->getUser());
+		if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('fos_user_security_login');
+        }
 
-			return $this->render('AppBundle:Classement:phrasesUser.html.twig', array(
-				'classement' => $classement,
-				'dureeAvantJouabiliteSecondes' => $this->getParameter('dureeAvantJouabiliteSecondes'),
-			));
-		}
-		else
-		{
+        $repoPhrase = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
+        $classement = $repoPhrase->getClassementPhrases($this->getParameter('maxResultForClassementPhrases'));
 
-			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
-
-			return $this->redirectToRoute('fos_user_security_login');
-		}
+        return $this->render('AppBundle:Classement:phrases.html.twig', array(
+            'classement' => $classement,
+        ));
 	}
 
-	public function phrasesPersonnellesAction()
-	{
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-		{
-			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-			$classement = $repository->getClassementPhrases($this->getParameter('maxResultForClassementPhrases'));
+    public function personnelAction()
+    {
+        if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('fos_user_security_login');
+        }
 
-			return $this->render('AppBundle:Classement:phrases.html.twig', array(
-				'classement' => $classement,
-			));
-		}
-		else
-		{
+        $repoPhrase = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
+        $classement = $repoPhrase->getClassementPhrasesUser($this->getUser());
 
-			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
-
-			return $this->redirectToRoute('fos_user_security_login');
-		}
-	}
+        return $this->render('AppBundle:Classement:phrasesUser.html.twig', array(
+            'classement' => $classement,
+            'dureeAvantJouabiliteSecondes' => $this->getParameter('dureeAvantJouabiliteSecondes'),
+        ));
+    }
 
 }

@@ -226,7 +226,7 @@ class Reponse
     /**
      * Get auteur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getAuteur()
     {
@@ -236,11 +236,11 @@ class Reponse
     /**
      * Set auteur
      *
-     * @param \AppBundle\Entity\Membre $auteur
+     * @param Membre $auteur
      *
      * @return Reponse
      */
-    public function setAuteur(\AppBundle\Entity\Membre $auteur = null)
+    public function setAuteur(Membre $auteur = null)
     {
         $this->auteur = $auteur;
 
@@ -305,11 +305,11 @@ class Reponse
     /**
      * Set phrase
      *
-     * @param \AppBundle\Entity\Phrase $phrase
+     * @param Phrase $phrase
      *
      * @return Reponse
      */
-    public function setPhrase(\AppBundle\Entity\Phrase $phrase)
+    public function setPhrase(Phrase $phrase)
     {
         $this->phrase = $phrase;
 
@@ -319,7 +319,7 @@ class Reponse
     /**
      * Get phrase
      *
-     * @return \AppBundle\Entity\Phrase
+     * @return Phrase
      */
     public function getPhrase()
     {

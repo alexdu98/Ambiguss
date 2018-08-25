@@ -67,5 +67,5 @@ class TypeObjet
     {
         return $this->nom;
     }
-}
 
+}

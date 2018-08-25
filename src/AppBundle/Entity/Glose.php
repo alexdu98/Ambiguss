@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -84,7 +85,7 @@ class Glose implements \JsonSerializable
         $this->dateCreation = new \DateTime();
 	    $this->signale = false;
 	    $this->visible = true;
-	    $this->motsAmbigus = new \Doctrine\Common\Collections\ArrayCollection();
+	    $this->motsAmbigus = new ArrayCollection();
     }
 
     /**
@@ -196,7 +197,7 @@ class Glose implements \JsonSerializable
     /**
      * Get auteur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getAuteur()
     {
@@ -206,11 +207,11 @@ class Glose implements \JsonSerializable
     /**
      * Set auteur
      *
-     * @param \AppBundle\Entity\Membre $auteur
+     * @param Membre $auteur
      *
      * @return Glose
      */
-    public function setAuteur(\AppBundle\Entity\Membre $auteur)
+    public function setAuteur(Membre $auteur)
     {
         $this->auteur = $auteur;
 
@@ -220,7 +221,7 @@ class Glose implements \JsonSerializable
     /**
      * Get modificateur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getModificateur()
     {
@@ -230,11 +231,11 @@ class Glose implements \JsonSerializable
     /**
      * Set modificateur
      *
-     * @param \AppBundle\Entity\Membre $modificateur
+     * @param Membre $modificateur
      *
      * @return Glose
      */
-    public function setModificateur(\AppBundle\Entity\Membre $modificateur = null)
+    public function setModificateur(Membre $modificateur = null)
     {
         $this->modificateur = $modificateur;
 
@@ -314,7 +315,6 @@ class Glose implements \JsonSerializable
 	/**
 	 * IMPLEMENTS JsonSerializable
 	 */
-
 	public function jsonSerialize()
 	{
 		$modificateur = !empty($this->modificateur) ? $this->modificateur->getUsername() : '';

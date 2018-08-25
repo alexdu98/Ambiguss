@@ -189,7 +189,7 @@ class Jugement implements \JsonSerializable
     /**
      * Get juge
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getJuge()
     {
@@ -199,11 +199,11 @@ class Jugement implements \JsonSerializable
     /**
      * Set juge
      *
-     * @param \AppBundle\Entity\Membre $juge
+     * @param Membre $juge
      *
      * @return Jugement
      */
-    public function setJuge(\AppBundle\Entity\Membre $juge = null)
+    public function setJuge(Membre $juge = null)
     {
         $this->juge = $juge;
 
@@ -311,7 +311,7 @@ class Jugement implements \JsonSerializable
 	/**
 	 * Get auteur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getAuteur()
     {
@@ -321,14 +321,15 @@ class Jugement implements \JsonSerializable
 	/**
 	 * Set auteur
 	 *
-	 * @param \AppBundle\Entity\Membre $auteur
+	 * @param Membre $auteur
 	 *
 	 * @return Jugement
 	 */
-	public function setAuteur(\AppBundle\Entity\Membre $auteur)
+	public function setAuteur(Membre $auteur)
 	{
 		$this->auteur = $auteur;
 
 		return $this;
     }
+
 }

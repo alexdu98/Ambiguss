@@ -174,7 +174,7 @@ class Vote
     /**
      * Get auteur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getAuteur()
     {
@@ -184,14 +184,15 @@ class Vote
     /**
      * Set auteur
      *
-     * @param \AppBundle\Entity\Membre $auteur
+     * @param Membre $auteur
      *
      * @return Vote
      */
-    public function setAuteur(\AppBundle\Entity\Membre $auteur)
+    public function setAuteur(Membre $auteur)
     {
         $this->auteur = $auteur;
 
         return $this;
     }
+
 }

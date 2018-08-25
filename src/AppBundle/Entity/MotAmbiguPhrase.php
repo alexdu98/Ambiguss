@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,7 +51,7 @@ class MotAmbiguPhrase
 	 */
 	public function __construct()
 	{
-		$this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->reponses = new ArrayCollection();
 	}
 
     /**
@@ -173,6 +174,5 @@ class MotAmbiguPhrase
     {
         return (string) $this->phrase . ' (' . $this->motAmbigu . ': #' . $this->ordre . ')';
     }
-
 
 }

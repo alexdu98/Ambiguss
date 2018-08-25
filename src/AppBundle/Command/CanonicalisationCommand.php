@@ -35,5 +35,4 @@ class CanonicalisationCommand extends ContainerAwareCommand {
 	    $this->setHelp("Set field username_canonical and email_canonical for all members");
     }
 
-
 }

@@ -67,5 +67,5 @@ class TypeVote
     {
         return $this->nom;
     }
-}
 
+}

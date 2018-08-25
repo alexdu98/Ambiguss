@@ -563,11 +563,11 @@ class Membre extends User
     /**
      * Add partie
      *
-     * @param \AppBundle\Entity\Partie $partie
+     * @param Partie $partie
      *
      * @return Membre
      */
-    public function addPartie(\AppBundle\Entity\Partie $partie)
+    public function addPartie(Partie $partie)
     {
         $this->parties[] = $partie;
 
@@ -577,9 +577,9 @@ class Membre extends User
     /**
      * Remove partie
      *
-     * @param \AppBundle\Entity\Partie $partie
+     * @param Partie $partie
      */
-    public function removePartie(\AppBundle\Entity\Partie $partie)
+    public function removePartie(Partie $partie)
     {
         $this->parties->removeElement($partie);
     }

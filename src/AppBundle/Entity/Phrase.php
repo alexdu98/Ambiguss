@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -110,7 +111,7 @@ class Phrase implements \JsonSerializable
         $this->signale = false;
         $this->visible = true;
 	    $this->gainCreateur = 0;
-	    $this->motsAmbigusPhrase = new \Doctrine\Common\Collections\ArrayCollection();
+	    $this->motsAmbigusPhrase = new ArrayCollection();
     }
 
     /**
@@ -259,7 +260,7 @@ class Phrase implements \JsonSerializable
     /**
      * Get auteur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getAuteur()
     {
@@ -269,11 +270,11 @@ class Phrase implements \JsonSerializable
     /**
      * Set auteur
      *
-     * @param \AppBundle\Entity\Membre $auteur
+     * @param Membre $auteur
      *
      * @return Phrase
      */
-    public function setAuteur(\AppBundle\Entity\Membre $auteur)
+    public function setAuteur(Membre $auteur)
     {
         $this->auteur = $auteur;
 
@@ -283,7 +284,7 @@ class Phrase implements \JsonSerializable
     /**
      * Get modificateur
      *
-     * @return \AppBundle\Entity\Membre
+     * @return Membre
      */
 	public function getModificateur()
     {
@@ -293,11 +294,11 @@ class Phrase implements \JsonSerializable
     /**
      * Set modificateur
      *
-     * @param \AppBundle\Entity\Membre $modificateur
+     * @param Membre $modificateur
      *
      * @return Phrase
      */
-    public function setModificateur(\AppBundle\Entity\Membre $modificateur = null)
+    public function setModificateur(Membre $modificateur = null)
     {
         $this->modificateur = $modificateur;
 
@@ -333,7 +334,7 @@ class Phrase implements \JsonSerializable
 	 */
 	public function removeMotsAmbigusPhrase()
 	{
-		$this->motsAmbigusPhrase = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->motsAmbigusPhrase = new ArrayCollection();
 	}
 
     /**

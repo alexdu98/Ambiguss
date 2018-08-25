@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -85,7 +86,7 @@ class MotAmbigu
         $this->dateCreation = new \DateTime();
 	    $this->signale = false;
 	    $this->visible = true;
-	    $this->gloses = new \Doctrine\Common\Collections\ArrayCollection();
+	    $this->gloses = new ArrayCollection();
     }
 
     /**
@@ -245,7 +246,7 @@ class MotAmbigu
 	/**
 	 * Get auteur
 	 *
-	 * @return \AppBundle\Entity\Membre
+	 * @return Membre
 	 */
 	public function getAuteur()
 	{
@@ -255,11 +256,11 @@ class MotAmbigu
 	/**
 	 * Set auteur
 	 *
-	 * @param \AppBundle\Entity\Membre $auteur
+	 * @param Membre $auteur
 	 *
 	 * @return MotAmbigu
 	 */
-	public function setAuteur(\AppBundle\Entity\Membre $auteur)
+	public function setAuteur(Membre $auteur)
 	{
 		$this->auteur = $auteur;
 
@@ -269,7 +270,7 @@ class MotAmbigu
 	/**
 	 * Get modificateur
 	 *
-	 * @return \AppBundle\Entity\Membre
+	 * @return Membre
 	 */
 	public function getModificateur()
 	{
@@ -279,11 +280,11 @@ class MotAmbigu
 	/**
 	 * Set modificateur
 	 *
-	 * @param \AppBundle\Entity\Membre $modificateur
+	 * @param Membre $modificateur
 	 *
 	 * @return MotAmbigu
 	 */
-	public function setModificateur(\AppBundle\Entity\Membre $modificateur = null)
+	public function setModificateur(Membre $modificateur = null)
 	{
 		$this->modificateur = $modificateur;
 
@@ -327,4 +328,5 @@ class MotAmbigu
     {
         return $this->valeur;
     }
+
 }

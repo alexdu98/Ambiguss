@@ -197,4 +197,5 @@ class Newsletter
     {
         return $this->auteur;
     }
+
 }

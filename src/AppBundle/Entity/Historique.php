@@ -140,5 +140,4 @@ class Historique
         return $this->valeur;
     }
 
-
 }

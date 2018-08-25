@@ -129,7 +129,7 @@ class Partie
 	/**
 	 * Get joueur
 	 *
-	 * @return \AppBundle\Entity\Membre
+	 * @return Membre
 	 */
 	public function getJoueur()
 	{
@@ -139,11 +139,11 @@ class Partie
 	/**
 	 * Set joueur
 	 *
-	 * @param \AppBundle\Entity\Membre $joueur
+	 * @param Membre $joueur
 	 *
 	 * @return Partie
 	 */
-	public function setJoueur(\AppBundle\Entity\Membre $joueur)
+	public function setJoueur(Membre $joueur)
 	{
 		$this->joueur = $joueur;
 
@@ -202,4 +202,5 @@ class Partie
     {
         return (string) $this->joueur;
     }
+
 }

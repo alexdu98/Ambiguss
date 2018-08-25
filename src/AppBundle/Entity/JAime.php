@@ -120,7 +120,7 @@ class JAime
 	/**
 	 * Get membre
 	 *
-	 * @return \AppBundle\Entity\Membre
+	 * @return Membre
 	 */
 	public function getMembre()
 	{
@@ -130,11 +130,11 @@ class JAime
     /**
      * Set membre
      *
-     * @param \AppBundle\Entity\Membre $membre
+     * @param Membre $membre
      *
      * @return JAime
      */
-    public function setMembre(\AppBundle\Entity\Membre $membre)
+    public function setMembre(Membre $membre)
     {
         $this->membre = $membre;
 
@@ -169,6 +169,5 @@ class JAime
     {
         return (string) $this->membre;
     }
-
 
 }

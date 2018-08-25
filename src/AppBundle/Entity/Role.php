@@ -72,11 +72,11 @@ class Role
     /**
      * Set parent
      *
-     * @param \AppBundle\Entity\Role $parent
+     * @param Role $parent
      *
      * @return Role
      */
-    public function setParent(\AppBundle\Entity\Role $parent = null)
+    public function setParent(Role $parent = null)
     {
         $this->parent = $parent;
 
@@ -86,7 +86,7 @@ class Role
     /**
      * Get parent
      *
-     * @return \AppBundle\Entity\Role
+     * @return Role
      */
     public function getParent()
     {

@@ -25,7 +25,7 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
      * @return array
      */
 	public function findByValeurAutoComplete(string $valeur){
-		return $this->createQueryBuilder('g')->select('g.valeur')
+		return $this->createQueryBuilder('g')->select('g.id, g.valeur')
 			->where('g.valeur LIKE :valeur')->setParameter('valeur', $valeur . '%')
 			->getQuery()->getResult();
 	}

@@ -2,10 +2,13 @@
 
 namespace AppBundle\Form\Reponse;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReponseGameType extends AbstractType
 {
@@ -14,36 +17,45 @@ class ReponseGameType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-	        ->remove('ip')
-	        ->remove('dateReponse')
-	        ->remove('contenuPhrase')
-	        ->remove('valeurMotAmbigu')
-	        ->remove('valeurGlose')
-	        ->remove('auteur')
-	        ->add('glose', EntityType::class, array(
-		        'class' => 'AppBundle\Entity\Glose',
-		        'choice_label' => 'valeur',
-		        'label' => '__glose__',
-		        'attr' => array(
-			        'class' => 'gloses',
-			        'required' => 'required',
-		        ),
-	        ))
-	        ->remove('motAmbiguPhrase')
-            ->add('idMotAmbiguPhrase', HiddenType::class, array(
-            	'attr' => array('class' => 'idMotAmbiguPhrase'),
-	            'mapped' => false
-            ))
-	        ->add('motAmbigu', HiddenType::class, array(
-		        'attr' => array('disabled' => true),
-		        'mapped' => false,
-		        'data' => '__motAmbigu__',
-	        ));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            $valeurMA = $data->getMotAmbiguPhrase()->getMotAmbigu()->getValeur();
+
+            $form->add('glose', EntityType::class, array(
+                'class' => 'AppBundle\Entity\Glose',
+                'choice_label' => 'valeur',
+                'label' => '__glose__',
+                'attr' => array(
+                    'class' => 'gloses',
+                    'required' => 'required'
+                ),
+                'query_builder' => function (EntityRepository $er) use ($valeurMA) {
+                    return $er->createQueryBuilder('g')
+                        ->innerJoin("g.motsAmbigus", "ma", "WITH", "ma.valeur = :valeurMA")
+                        ->setParameter('valeurMA', $valeurMA);
+                }
+            ));
+        });
     }
-    
-    public function getParent(){
-	    return ReponseType::class;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\Reponse'
+        ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'AppBundle_reponse';
     }
 
 }

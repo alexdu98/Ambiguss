@@ -4,322 +4,325 @@
 {% block titre %}Édition d'une phrase{% endblock %}
 
 {% block contenu %}
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
-			{% if newPhrase is not null %}
-				{{ include('@App/Phrase/displayPhrase.html.twig', {'add': false, 'modo': true, 'phraseDisplay' : newPhrase}) }}
-			{% endif %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
+            {% if newPhrase is not null %}
+                {{ include('@App/Phrase/displayPhrase.html.twig', {'add': false, 'modo': true, 'phraseDisplay' : newPhrase}) }}
+            {% endif %}
 
-			{% for flashMessage in app.session.flashbag.get('succes') %}
-				<div class="alert alert-success">{{ flashMessage }}</div>
-			{% endfor %}
-			{% for flashMessage in app.session.flashbag.get('erreur') %}
-				<div class="alert alert-danger">{{ flashMessage }}</div>
-			{% endfor %}
+            {% for flashMessage in app.session.flashbag.get('succes') %}
+                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('erreur') %}
+                <div class="alert alert-danger">{{ flashMessage }}</div>
+            {% endfor %}
 
-			{{ form_start(form , {'form-type' : 'horizontal'}) }}
+            {{ form_start(form , {'form-type' : 'horizontal'}) }}
 
-			{{ form_errors(form) }}
-			<div class="form-group">
-				Phrase originale :
-				<div class="size16" style="background: white; color: black; padding: 5px;">{{ phraseOri.contenuHTML|raw }}</div>
-			</div>
-			<div class="form-group">
-				<div id="rendu" class="size16" style="background: white; color: black; padding: 5px;" hidden></div>
-			</div>
-			{% if newPhrase %}
-				{{ form_row(form.contenu) }}
-			{% else %}
-				{{ form_row(form.contenu, {value: phraseOri.contenuAmb|default('')}) }}
-			{% endif %}
-			<div class="form-group">
-				<button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
-			</div>
-			<div class="form-group">
-				<div id="phrase_edit_motsAmbigusPhrase" data-prototype="
+            {{ form_errors(form) }}
+            <div class="form-group">
+                Phrase originale :
+                <div class="size16" style="background: white; color: black; padding: 5px;">{{ phraseOri.contenuHTML|raw }}</div>
+            </div>
+            <div class="form-group">
+                <div id="rendu" class="size16" style="background: white; color: black; padding: 5px;" hidden></div>
+            </div>
+            {% if newPhrase %}
+                {{ form_row(form.contenu) }}
+            {% else %}
+                {{ form_row(form.contenu, {value: phraseOri.contenuAmb|default('')}) }}
+            {% endif %}
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
+            </div>
+            <div class="form-group">
+                <div id="phrase_edit_motsAmbigusPhrase" data-prototype="
 					{{ include('AppBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}
 				"></div>
-			</div>
-			{% do form.motsAmbigusPhrase.setRendered %}
+            </div>
+            {% do form.motsAmbigusPhrase.setRendered %}
 
-			{{ form_row(form.signale) }}
-			{{ form_row(form.visible) }}
+            {{ form_row(form.signale) }}
+            {{ form_row(form.visible) }}
 
-			<div class="form-group text-center">
-				<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
-			</div>
-			<div class="form-group">
-				<div id="jugements" hidden>
-					{% for jugement in jugements %}
-						{{ include('@App/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'nom'), id: jugement.id, description:
-							jugement.description, lien_profil: path('fos_user_profile_show', {id: jugement.auteur.id}), username: jugement.auteur.username, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
-					{% else %}
-						<span class="text-danger">Aucun jugement en cours</span>
-					{% endfor %}
-				</div>
-			</div>
-			{{ form_row(form.modifier) }}
+            <div class="form-group text-center">
+                <a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
+            </div>
+            <div class="form-group">
+                <div id="jugements" hidden>
+                    {% for jugement in jugements %}
+                        {{ include('@App/Jugement/jugement.html.twig', {categorie: attribute(jugement.categorieJugement, 'nom'), id: jugement.id, description:
+                            jugement.description, lien_profil: path('fos_user_profile_show', {id: jugement.auteur.id}), username: jugement.auteur.username, date: jugement.dateCreation|date('d/m/Y h:i') }) }}
+                    {% else %}
+                        <span class="text-danger">Aucun jugement en cours</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {{ form_row(form.modifier) }}
 
-			{{ form_rest(form) }}
+            {{ form_rest(form) }}
 
-			{{ form_end(form) }}
-		</div>
-	</div>
-	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpEditPhraseModal">
-		<img src="{{ asset('images/infobulle.png') }}">
-	</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpEditPhraseModal">
+        <img src="{{ asset('images/infobulle.png') }}">
+    </button>
 {% endblock %}
 
 {% block js %}
-	<script src="{{ asset('vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
-	<script>
-		$(document).ready(function () {
-			var startBaliseAmbigu = '<amb>';
-			var endBaliseAmbigu = '</amb>';
-			var endBaliseAmbiguEscape = '</amb>';
+    <script src="{{ asset('vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            var startBaliseAmbigu = '<amb>';
+            var endBaliseAmbigu = '</amb>';
+            var endBaliseAmbiguEscape = '</amb>';
 
-			// Regex pour avoir les contenus des balises <amb>
-			// Exemple : L'<amb>avocat</amb> mange des <amb>avocats</amb>.
-			// Donne : $1 = avocat, puis $1 = avocats
-			var reg = new RegExp(startBaliseAmbigu + '(.*?)' + endBaliseAmbiguEscape, 'g');
-			// Regex pour avoir les contenus des balises <amb> et leurs id
-			// Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
-			// Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
-			var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbigu, 'g');
+            // Regex pour avoir les contenus des balises <amb>
+            // Exemple : L'<amb>avocat</amb> mange des <amb>avocats</amb>.
+            // Donne : $1 = avocat, puis $1 = avocats
+            var reg = new RegExp(startBaliseAmbigu + '(.*?)' + endBaliseAmbiguEscape, 'g');
+            // Regex pour avoir les contenus des balises <amb> et leurs id
+            // Exemple : L'<amb id="1">avocat</amb> mange des <amb id="2">avocats</amb>.
+            // Donne : $1 = 1 et $2 = avocat, puis $1 = 2 et $2 = avocats
+            var reg2 = new RegExp('<amb id="([0-9]+)">(.*?)' + endBaliseAmbigu, 'g');
 
-			// Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
-			var $container = $('div#phrase_edit_motsAmbigusPhrase');
+            // Div où Symfony a mis le formulaire (voir cours sur les formulaires imbriqués)
+            var $container = $('div#phrase_edit_motsAmbigusPhrase');
 
-			// textarea où l'on écrit la phrase
-			var textarea = $("textarea#{{ form.contenu.vars.id }}");
+            // textarea où l'on écrit la phrase
+            var textarea = $("textarea#{{ form.contenu.vars.id }}");
 
-			// On commence par enlevé les balises (au cas ou il y avait eu une erreur)
-			textarea.val(textarea.val().replace(reg2, "$2"));
+            // On commence par enlevé les balises (au cas ou il y avait eu une erreur)
+            textarea.val(textarea.val().replace(reg2, "$2"));
 
-			// Pour numéroter le mot ambigu
-			var index = 0;
+            // Pour numéroter le mot ambigu
+            var index = 0;
 
-			var motsAmbigus = {};
+            var motsAmbigus = {};
 
-			// Au chargement (au cas ou edit, pas grave si add)
-			updatePhrase();
-			updateRendu();
+            // Au chargement (au cas ou edit, pas grave si add)
+            updatePhrase();
+            updateRendu();
 
-			// A chaque modification du textarea via le clavier
-			textarea.bind('input', function () {
-				updatePhrase();
-				updateRendu();
-			});
+            // A chaque modification du textarea via le clavier
+            textarea.bind('input', function () {
+                updatePhrase();
+                updateRendu();
+            });
 
-			// Au clic sur le bouton ajout d'un mot ambigu
-			$("#addAmb").click(function () {
-				// S'il y a bien un mot séléctionné
-				if ((sel = textarea.getSelection()).text.trim() !== '') {
-					// Rajoute une espace après la balise ambigu si espace sélectionné
-					spaceOrNot = "";
-					if (textarea.val().charAt((sel.end) - 1) === " ")
-						spaceOrNot = " ";
-					// On met à jour la valeur du textarea en entourant le mot séléctionné
-					textarea.val(
-						textarea.val().slice(0, sel.start)
-						+ startBaliseAmbigu
-						+ sel.text.trim()
-						+ endBaliseAmbigu
-						+ spaceOrNot
-						+ textarea.val().slice(sel.end)
-					);
-					updatePhrase();
-					updateRendu();
-				}
-			});
+            // Au clic sur le bouton ajout d'un mot ambigu
+            $("#addAmb").click(function () {
+                // S'il y a bien un mot séléctionné
+                if ((sel = textarea.getSelection()).text.trim() !== '') {
+                    // Rajoute une espace après la balise ambigu si espace sélectionné
+                    spaceOrNot = "";
+                    if (textarea.val().charAt((sel.end) - 1) === " ")
+                        spaceOrNot = " ";
+                    // On met à jour la valeur du textarea en entourant le mot séléctionné
+                    textarea.val(
+                        textarea.val().slice(0, sel.start)
+                        + startBaliseAmbigu
+                        + sel.text.trim()
+                        + endBaliseAmbigu
+                        + spaceOrNot
+                        + textarea.val().slice(sel.end)
+                    );
+                    updatePhrase();
+                    updateRendu();
+                }
+            });
 
-			// On met à jour le textarea
-			function updatePhrase() {
-				var phrase = textarea.val();
-				// Compte le nombre d'occurence de balise <amb>
-				var replaced = phrase.search(reg) >= 0;
-				// Si au moins 1
-				if (replaced) {
-					// On ajout dans la balise <amb> l'id du mot ambigu
-					var temp = phrase.replace(reg, function ($0, $1) {
-						index++;
-						addReponse($container, $1);
-						return '<amb id="' + index + '">' + $1 + endBaliseAmbigu;
-					});
-					textarea.val(temp);
-				}
-				updateMotAmbiguInReponse();
-			}
+            // On met à jour le textarea
+            function updatePhrase() {
+                var phrase = textarea.val();
+                // Compte le nombre d'occurence de balise <amb>
+                var replaced = phrase.search(reg) >= 0;
+                // Si au moins 1
+                if (replaced) {
+                    // On ajout dans la balise <amb> l'id du mot ambigu
+                    var temp = phrase.replace(reg, function ($0, $1) {
+                        index++;
+                        addReponse($container, $1);
+                        return '<amb id="' + index + '">' + $1 + endBaliseAmbigu;
+                    });
+                    textarea.val(temp);
+                }
+                updateMotAmbiguInReponse();
+            }
 
-			// Met à jours la valeur des mots ambigus dans le formulaire des réponses
-			function updateMotAmbiguInReponse() {
-				var phrase = textarea.val();
-				res = phrase.replace(reg2, function ($0, $1, $2) {
-					if (motsAmbigus[$1] != $2) {
-						$('#phrase_edit_motsAmbigusPhrase_' + $1 + '_valeur').val($2).css('color', 'red');
-					}
-				});
-			}
+            // Met à jours la valeur des mots ambigus dans le formulaire des réponses
+            function updateMotAmbiguInReponse() {
+                var phrase = textarea.val();
+                res = phrase.replace(reg2, function ($0, $1, $2) {
+                    if (motsAmbigus[$1] != $2) {
+                        $('#phrase_edit_motsAmbigusPhrase_' + $1 + '_valeur').val($2).css('color', 'red');
+                    }
+                });
+            }
 
-			textarea.focusout(function () {
-				var phrase = textarea.val();
-				res = phrase.replace(reg2, function ($0, $1, $2) {
-					if (motsAmbigus[$1] != $2) {
-						$('#phrase_edit_motsAmbigusPhrase_' + $1 + '_valeur').trigger('focusout');
-						motsAmbigus[$1] = $2;
-					}
-				});
-			});
+            textarea.focusout(function () {
+                var phrase = textarea.val();
+                res = phrase.replace(reg2, function ($0, $1, $2) {
+                    if (motsAmbigus[$1] != $2) {
+                        $('#phrase_edit_motsAmbigusPhrase_' + $1 + '_valeur').trigger('focusout');
+                        motsAmbigus[$1] = $2;
+                    }
+                });
+            });
 
-			// On met à jour l'affichage propre de la phrase
-			function updateRendu() {
-				var phrase = textarea.val();
-				var rendu = $("#rendu");
-				var res = phrase;
+            // On met à jour l'affichage propre de la phrase
+            function updateRendu() {
+                var phrase = textarea.val();
+                var rendu = $("#rendu");
+                var res = phrase;
 
-				// Compte le nombre d'occurence de balise <amb id="">
-				var replaced = phrase.search(reg2) >= 0;
-				// Si au moins 1
-				if (replaced) {
-					html = '<b num="__num__" class="color-red" title="Ce mot est ambigu (id : __num__)' +
-						'">__amb__</b>';
-					// On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
-					res = phrase.replace(reg2, function ($0, $1, $2) {
-						return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
-					});
-				}
-				rendu.empty().append(res);
+                // Compte le nombre d'occurence de balise <amb id="">
+                var replaced = phrase.search(reg2) >= 0;
+                // Si au moins 1
+                if (replaced) {
+                    html = '<b num="__num__" class="color-red" title="Ce mot est ambigu (id : __num__)' +
+                        '">__amb__</b>';
+                    // On remplace la balise <amb id=""> par le html en remettant l'id du mot ambigu
+                    res = phrase.replace(reg2, function ($0, $1, $2) {
+                        return html.replace(/__num__/g, $1).replace(/__amb__/g, $2);
+                    });
+                }
+                rendu.empty().append(res);
 
-				// Si le rendu est vide, on cache la div
-				if (rendu.html().length > 0)
-					rendu.show();
-				else
-					rendu.hide();
-			}
+                // Si le rendu est vide, on cache la div
+                if (rendu.html().length > 0)
+                    rendu.show();
+                else
+                    rendu.hide();
+            }
 
-			// Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
-			function addReponse($container, motAmbigu) {
-				motsAmbigus[index] = motAmbigu;
-				// On ajoute le nom unique et l'id
-				var template = $container.attr('data-prototype')
-					.replace(/__name__label__/g, '')
-					.replace(/__name__/g, index)
-					.replace(/__id__/g, index)
-					.replace(/__MA__/g, motAmbigu);
-				var $prototype = $(template);
-				// Trouve la balise qui à la class amb
-				var amb = $prototype.find('.amb');
-				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
-				amb.val(motAmbigu);
-				$prototype.attr('id', 'amb' + index);
-				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
-				addDeleteLink($prototype);
-				$prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
-				$prototype.find('.amb').bind('input', function () {
-					$(this).css('color', 'red');
-				});
-				getGloses($prototype.find('select.gloses'), motAmbigu);
-				$container.append($prototype);
-			}
+            // Ajoute le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
+            function addReponse($container, motAmbigu) {
+                motsAmbigus[index] = motAmbigu;
+                // On ajoute le nom unique et l'id
+                var template = $container.attr('data-prototype')
+                    .replace(/__name__label__/g, '')
+                    .replace(/__name__/g, index)
+                    .replace(/__id__/g, index)
+                    .replace(/__MA__/g, motAmbigu);
+                var $prototype = $(template);
+                // Trouve la balise qui à la class amb
+                var amb = $prototype.find('.amb');
+                // Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
+                amb.val(motAmbigu);
+                $prototype.attr('id', 'amb' + index);
+                addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
+                addDeleteLink($prototype);
+                $prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
+                $prototype.find('.amb').bind('input', function () {
+                    $(this).css('color', 'red');
+                });
+                getGloses($prototype.find('select.gloses'), motAmbigu);
+                $container.append($prototype);
+            }
 
-			function updateMotAmbiguInPhrase(event) {
-				$(event.target).css('color', '');
-				motsAmbigus[event.data.id] = $(event.target).val();
-				var phrase = textarea.val();
-				// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
-				var reg3 = new RegExp('<amb id="' + event.data.id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
-				// Met à jour le mot ambigu dans la phrase
-				textarea.val(phrase.replace(reg3, '<amb id="' + event.data.id + '">' + $(event.target).val() + endBaliseAmbiguEscape));
-				updateRendu();
-				getGloses($(event.target).closest('.colAmb').next().find('select.gloses'), $(event.target).val());
-			}
+            function updateMotAmbiguInPhrase(event) {
+                $(event.target).css('color', '');
+                motsAmbigus[event.data.id] = $(event.target).val();
+                var phrase = textarea.val();
+                // Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
+                var reg3 = new RegExp('<amb id="' + event.data.id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+                // Met à jour le mot ambigu dans la phrase
+                textarea.val(phrase.replace(reg3, '<amb id="' + event.data.id + '">' + $(event.target).val() + endBaliseAmbiguEscape));
+                updateRendu();
+                getGloses($(event.target).closest('.colAmb').next().find('select.gloses'), $(event.target).val());
+            }
 
-			function addGloseButtonIsClicked(event) {
-				setModalTitle('Ajouter une glose à "' + event.data.motAmbigu + '"');
-				{% if app.user is empty %}
-				messageNeedConnectionModal();
-				{% else %}
-				nbGloses = $(event.target).closest('.row').find('select.gloses option').length - 1;
-				console.log($(event.target).closest('.row'));
-				console.log($(event.target).closest('.row').find('select.gloses option'));
-				console.log(nbGloses);
-				cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
-				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédits.</div><br>');
-				if ($('#credits').html() > cost) {
-					setModalBody('{{ include('AppBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
-					addGloseModal(event);
-				}
-				{% endif %}
-			}
+            function addGloseButtonIsClicked(event) {
+                setModalTitle('Ajouter une glose à "' + event.data.motAmbigu + '"');
+                {% if app.user is empty %}
+                messageNeedConnectionModal();
+                {% else %}
+                nbGloses = $(event.target).closest('.row').find('select.gloses option').length - 1;
+                console.log($(event.target).closest('.row'));
+                console.log($(event.target).closest('.row').find('select.gloses option'));
+                console.log(nbGloses);
+                cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
+                setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédits.</div><br>');
+                if ($('#credits').html() > cost) {
+                    setModalBody('{{ include('AppBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
+                    addGloseModal(event);
+                }
+                {% endif %}
+            }
 
-			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
-			function addDeleteLink($prototype) {
-				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot ambigu</a>');
-				$prototype.find('.deleteLink').append($deleteLink);
+            // Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
+            function addDeleteLink($prototype) {
+                var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot ambigu</a>');
+                $prototype.find('.deleteLink').append($deleteLink);
 
-				// Au clic sur le bouton de suppression
-				$deleteLink.click(function (e) {
-					var phrase = textarea.val();
-					// On récupère l'id qui est dans l'attribut id (id="amb1"), en supprimant le amb
-					var id = $prototype.attr('id').replace(/amb/, '');
-					delete motsAmbigus[id];
-					// Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
-					var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
-					// Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu
-					textarea.val(phrase.replace(reg3, '$1'));
-					updateRendu();
-					$prototype.remove();
-					e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                // Au clic sur le bouton de suppression
+                $deleteLink.click(function (e) {
+                    var phrase = textarea.val();
+                    // On récupère l'id qui est dans l'attribut id (id="amb1"), en supprimant le amb
+                    var id = $prototype.attr('id').replace(/amb/, '');
+                    delete motsAmbigus[id];
+                    // Regex pour trouver la bonne balise <amb id="">, et en récupérer le contenu
+                    var reg3 = new RegExp('<amb id="' + id + '">(.*?)' + endBaliseAmbiguEscape, 'g');
+                    // Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu
+                    textarea.val(phrase.replace(reg3, '$1'));
+                    updateRendu();
+                    $prototype.remove();
+                    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 
-					return false;
-				});
-			}
+                    return false;
+                });
+            }
 
-			$("#toggleJugements").click(function () {
-				$("#jugements").toggle("slow");
-			});
+            $("#toggleJugements").click(function () {
+                $("#jugements").toggle("slow");
+            });
 
-			// Ajout de l'eventlistener valide
-			$('.signalement').click(function (event) {
-				event.preventDefault();
-				var bouton = $(this);
-				// On affiche l'image laoding en attendant la réponse
-				$(this).after('<img src="' + urlImageLoading + '" id="loading">');
-				$.post('{{ path('api_jugement_edit') }}', {
-					id: $(this).data('id'), verdict: $(this).data('verdict'), token: '{{ csrf_token
-					('jugement_vote') }}'
-				}, function
-					(data) {
-					if (data.succes) {
-						bouton.closest('.panel').remove();
-					}
-					else {
-						bouton.closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
-					}
-				})
-					.fail(function () {
-						$(this).after('<span class="text-danger">Erreur</span>');
-					})
-					.always(function () {
-						$('#loading').remove();
-					});
-			});
+            // Ajout de l'eventlistener valide
+            $('.signalement').click(function (event) {
+                event.preventDefault();
+                var bouton = $(this);
+                // On affiche l'image laoding en attendant la réponse
+                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+                $.post(Routing.generate('modo_jugement_edit', {id: $(this).data('id')}),
+                    {
+                        verdict: $(this).data('verdict'),
+                        token: '{{ csrf_token('jugement_vote') }}'
+                    }
+                    , function
+                        (data) {
+                        if (data.succes) {
+                            bouton.closest('.panel').remove();
+                        }
+                        else {
+                            bouton.closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
+                        }
+                    })
+                    .fail(function () {
+                        $(this).after('<span class="text-danger">Erreur</span>');
+                    })
+                    .always(function () {
+                        $('#loading').remove();
+                    });
+            });
 
-			// Au click sur le bouton, exécute la fonction
-			$('#helpEditPhraseModal').click(helpEditPhraseModal);
-			function helpEditPhraseModal(event) {
-				// Place le cookie pendant 30 jours
-				$.cookie('helpEditModoPhraseV1', 'true', {expires: 30});
-				setModalSize('modal-lg');
-				setModalTitle('Informations sur l\'édition de phrase');
-				setModalBody('{{ include('@App/InfosModal/editPhraseModo.html.twig')|e('js') }}');
-			}
+            // Au click sur le bouton, exécute la fonction
+            $('#helpEditPhraseModal').click(helpEditPhraseModal);
 
-			// Affiche automatiquement la modal si le visiteur n'a pas le cookie comme quoi il a déjà vu les infos
-			{% if not app.request.cookies.has('helpEditModoPhraseV1') %}
-			$('#helpEditPhraseModal').trigger('click');
-			{% endif %}
+            function helpEditPhraseModal(event) {
+                // Place le cookie pendant 30 jours
+                $.cookie('helpEditModoPhraseV1', 'true', {expires: 30});
+                setModalSize('modal-lg');
+                setModalTitle('Informations sur l\'édition de phrase');
+                setModalBody('{{ include('@App/InfosModal/editPhraseModo.html.twig')|e('js') }}');
+            }
 
-		});
-	</script>
+            // Affiche automatiquement la modal si le visiteur n'a pas le cookie comme quoi il a déjà vu les infos
+            {% if not app.request.cookies.has('helpEditModoPhraseV1') %}
+            $('#helpEditPhraseModal').trigger('click');
+            {% endif %}
+
+        });
+    </script>
 {% endblock %}

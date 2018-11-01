@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MotAmbiguPhrase
  *
- * @ORM\Table(name="mot_ambigu_phrase")
+ * @ORM\Table(
+ *     name="mot_ambigu_phrase",
+ *     uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="UNQ_MAP_PHRASE_ORDRE", columns={"phrase_id", "ordre"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MotAmbiguPhraseRepository")
  */
 class MotAmbiguPhrase

@@ -1,3 +1,6 @@
+##################################################
+###################### MAIN ######################
+##################################################
 accueil_show:
     path: /
     controller: AppBundle:Main:accueil
@@ -18,6 +21,9 @@ apropos_show:
     path: /a-propos
     controller: AppBundle:Main:aPropos
 
+##################################################
+#################### AMBIGUSS ####################
+##################################################
 ambiguss_export:
     path: /export
     controller: AppBundle:Main:export
@@ -25,14 +31,6 @@ ambiguss_export:
 api_jugement_new:
     path: /api/jugement/new
     controller: AppBundle:API:newJugement
-
-api_jugement_edit:
-    path: /api/jugement/edit
-    controller: AppBundle:API:editJugement
-
-api_jugements_glose_show:
-    path: /api/jugement/glose
-    controller: AppBundle:API:showGloseJugements
 
 api_autocomplete_glose:
     path: /api/autocomplete/glose
@@ -56,15 +54,25 @@ api_gloses_mot_ambigu_show:
     options:
         expose: true
 
-game_result_show:
-    path: /jeu/resultat
-    controller: AppBundle:Game:resultat
+api_mots_ambigus_glose_show:
+    path: /api/glose/motambigu
+    controller: AppBundle:API:showMotsAmbigusGlose
+    options:
+        expose: true
 
 game_show:
     path: /jeu/{id}
     controller: AppBundle:Game:show
     defaults:
         id: null
+    methods: [GET]
+
+game_play:
+    path: /jeu/{id}
+    controller: AppBundle:Game:play
+    defaults:
+        id: \d+
+    methods: [POST]
 
 phrase_new:
     path: /phrase/new
@@ -84,6 +92,9 @@ phrase_like:
     requirements:
         id: \d+
 
+##################################################
+################### CLASSEMENT ###################
+##################################################
 classement_joueurs_show:
     path: /classement/joueurs
     controller: AppBundle:Classement:joueurs
@@ -96,13 +107,16 @@ classement_personnel_show:
     path: /classement/personnel
     controller: AppBundle:Classement:personnel
 
+##################################################
+###################### MODO ######################
+##################################################
 modo_phrases_show:
     path: /moderation/phrases
     controller: AppBundle:Modo:showPhrases
 
 modo_phrase_delete:
     path: /moderation/phrase/{id}/delete
-    controller: AppBundle:Modo:delete
+    controller: AppBundle:Modo:deletePhrase
     requirements:
         id: \d+
     options:
@@ -110,7 +124,7 @@ modo_phrase_delete:
 
 modo_phrase_unsignale:
     path: /moderation/phrase/{id}/unsignale
-    controller: AppBundle:Modo:unsignale
+    controller: AppBundle:Modo:unsignalePhrase
     requirements:
         id: \d+
     options:
@@ -152,6 +166,25 @@ modo_mots_ambigus_gloses_delete:
     options:
         expose: true
 
+modo_jugement_edit:
+    path: /moderation/jugement/edit/{id}
+    controller: AppBundle:Modo:editJugement
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_jugements_glose_show:
+    path: /moderation/jugement/glose/{id}
+    controller: AppBundle:Modo:showGloseJugements
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+##################################################
+##################### ADMIN ######################
+##################################################
 admin_stats:
     path: /admin/statistiques
     controller: AppBundle:Admin:statistiques

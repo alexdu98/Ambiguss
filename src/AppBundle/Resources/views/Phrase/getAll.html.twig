@@ -48,15 +48,16 @@
                         <td class="phrase-modificateur"><a href="#">{{ row.modificateur.username|default('') }}</a></td>
                         <td class="phrase-dateModification" data-order=""></td>
                     {% else %}
-                        <td class="phrase-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':row.modificateur.id}) }}">{{ row.modificateur.username|default('') }}</a></td>
+                        <td class="phrase-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':row.modificateur.id}) }}">{{ row.modificateur.username|default('') }}</a>
+                        </td>
                         <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
 						H:i") }}</td>
-                    {%  endif %}
+                    {% endif %}
 
                     <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td class="phrase-visible">{% if row.visible %}Oui{% else %}Non{% endif %}</td>
                     <td>
-	                    <a class="btn btn-warning btn-sm" href="{{ path('phrase_edit', {id: row.id}) }}">Modifier</a>
+                        <a class="btn btn-warning btn-sm" href="{{ path('phrase_edit', {id: row.id}) }}">Modifier</a>
                         <button class="btn btn-danger btn-sm deletePhraseButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.contenu }}">
                             Supprimer
                         </button>
@@ -70,32 +71,33 @@
 {% endblock %}
 
 {% block js %}
-<script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
-<script>
-    $(document).ready(function () {
-        $('#phrasesTable').DataTable({
-            stateSave: true, // Enregistre les configurations
-            stateSaveParams: function (settings, data) {
-                data.start = 0; // On enregistre pas la page
-                data.order = [[0, "desc"]]; // On ordonne sur l'id
-                data.search = {}; // On enregistre pas la recherche
-            },
-            stateDuration: 0, // pour une durée illimitée
-            columnDefs: [
-                {targets: 7, orderable: false}
-            ],
-            order: [[0, 'asc']], // On ordonne sur l'id
-            responsive: true,
-            language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
-        });
+    <script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#phrasesTable').DataTable({
+                stateSave: true, // Enregistre les configurations
+                stateSaveParams: function (settings, data) {
+                    data.start = 0; // On enregistre pas la page
+                    data.order = [[0, "desc"]]; // On ordonne sur l'id
+                    data.search = {}; // On enregistre pas la recherche
+                },
+                stateDuration: 0, // pour une durée illimitée
+                columnDefs: [
+                    {targets: 7, orderable: false}
+                ],
+                order: [[0, 'asc']], // On ordonne sur l'id
+                responsive: true,
+                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+            });
 
-	    // Au click sur le bouton, exécute la fonction
-        $('.deletePhraseButton').click(deletePhraseModal);
-        function deletePhraseModal(event) {
-            var button = $(this);
-            setModalTitle('Supprimer la phrase "' + button.data('valeur') + '"');
+            // Au click sur le bouton, exécute la fonction
+            $('.deletePhraseButton').click(deletePhraseModal);
 
-            setModalBody('Êtes-vous certain de vouloir supprimer cette phrase ?<br><br>');
+            function deletePhraseModal(event) {
+                var button = $(this);
+                setModalTitle('Supprimer la phrase "' + button.data('valeur') + '"');
+
+                setModalBody('Êtes-vous certain de vouloir supprimer cette phrase ?<br><br>');
 
                 setModalBody(
                     '<span class="text-danger">La phrase ne sera plus visible aux joueurs .</span><br><br>'
@@ -103,11 +105,52 @@
                 );
 
                 $('#phraseDelete').click(function (data) {
+                    boutonDelete = $(this);
+                    // On affiche l'image laoding en attendant la réponse
+                    boutonDelete.after('<img src="' + urlImageLoading + '" id="loading">');
+                    var url = Routing.generate('modo_phrase_delete', {'id': button.data('id')});
+
+                    $.post(url, {token: "{{ csrf_token('delete_phrase') }}"})
+                        .done(function (data) {
+                            if (isValidJSON(data) && data.succes) {
+                                // On trouve la ligne et on l'a supprime
+                                $('#phrasesTable').DataTable().row(button.parents('tr')).remove().draw();
+                                // On cache la modale
+                                $('#modal').modal('hide');
+                            }
+                            else {
+                                boutonDelete.parent().after('<div class="text-danger">Erreur</div>');
+                            }
+                        })
+                        .fail(function (test, status, xhr) {
+                            boutonDelete.parent().after('<div class="text-danger">' + status + ' (' + xhr + ')</div>');
+                        })
+                        .always(function () {
+                            $('#loading').remove();
+                        });
+                });
+            }
+
+            // Au click sur le bouton, exécute la fonction
+            $('.keepPhraseButton').click(keepPhraseModal);
+
+            function keepPhraseModal(event) {
+                var button = $(this);
+                setModalTitle('Concerver la phrase "' + button.data('valeur') + '"');
+
+                setModalBody('Êtes-vous certain de vouloir conserver cette phrase ?<br><br>');
+
+                setModalBody(
+                    '<span class="text-danger">La phrase restera telle quelle et ne sera plus signalée.</span><br><br>'
+                    + '<div class="text-right"><button id="phraseKeep" class="btn btn-primary">Conserver</button></div>'
+                );
+
+                $('#phraseKeep').click(function (data) {
                     // On affiche l'image laoding en attendant la réponse
                     $(this).after('<img src="' + urlImageLoading + '" id="loading">');
-                    var url = Routing.generate('modo_phrase_delete', {'id' : button.data('id')});
+                    var url = Routing.generate('modo_phrase_unsignale', {'id': button.data('id')});
 
-                    $.getJSON(url, function (data) {
+                    $.post(url, {token: "{{ csrf_token('unsignale_phrase') }}"}, function (data) {
                         if (data.succes) {
                             // On trouve la ligne et on l'a supprime
                             $('#phrasesTable').DataTable().row(button.parents('tr')).remove().draw();
@@ -125,75 +168,35 @@
                             $('#loading').remove();
                         });
                 });
-        }
+            }
 
-        // Au click sur le bouton, exécute la fonction
-        $('.keepPhraseButton').click(keepPhraseModal);
-        function keepPhraseModal(event) {
-            var button = $(this);
-            setModalTitle('Concerver la phrase "' + button.data('valeur') + '"');
+            // Au click sur le bouton, exécute la fonction
+            $('.editPhraseButton').click(editPhraseModal);
 
-            setModalBody('Êtes-vous certain de vouloir conserver cette phrase ?<br><br>');
+            function editPhraseModal(event) {
+                var button = $(this);
 
-            setModalBody(
-                '<span class="text-danger">La phrase restera telle quelle et ne sera plus signalée.</span><br><br>'
-                + '<div class="text-right"><button id="phraseKeep" class="btn btn-primary">Conserver</button></div>'
-            );
+                setModalTitle('Modifier la phrase "' + button.data('valeur') + '"');
 
-            $('#phraseKeep').click(function (data) {
-                // On affiche l'image laoding en attendant la réponse
-                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
-                var url = Routing.generate('modo_phrase_unsignale', {'id' : button.data('id')});
+                setModalBody('Êtes-vous certain de vouloir modifier cette phrase ?<br><br>');
 
-                $.getJSON(url, function (data) {
-                    if (data.succes) {
-                        // On trouve la ligne et on l'a supprime
-                        $('#phrasesTable').DataTable().row(button.parents('tr')).remove().draw();
-                        // On cache la modale
-                        $('#modal').modal('hide');
-                    }
-                    else {
-                        $(this).after('<span class="text-danger">Erreur</span>');
-                    }
-                })
-                    .fail(function () {
-                        $(this).after('<span class="text-danger">Erreur</span>');
-                    })
-                    .always(function () {
-                        $('#loading').remove();
-                    });
-            });
-        }
+                setModalBody(
+                    '<span class="text-danger">La phrase sera définitivement modifiée</span><br><br>'
+                    + '<div class="text-right"><button id="phraseEdit" class="btn btn-warning">Modifier</button></div>'
+                );
 
-        // Au click sur le bouton, exécute la fonction
-        $('.editPhraseButton').click(editPhraseModal);
-        function editPhraseModal(event) {
-            var button = $(this);
-
-            setModalTitle('Modifier la phrase "' + button.data('valeur') + '"');
-
-            setModalBody('Êtes-vous certain de vouloir modifier cette phrase ?<br><br>');
-
-            setModalBody(
-                '<span class="text-danger">La phrase sera définitivement modifiée</span><br><br>'
-                + '<div class="text-right"><button id="phraseEdit" class="btn btn-warning">Modifier</button></div>'
-            );
-
-            $('#phraseEdit').click(function (data) {
-                // On affiche l'image laoding en attendant la réponse
-                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
-                var id= button.data('id');
-                var url ="{{ path('phrase_edit', {'id': '0'}) }}";
-                url=url.replace('0',parseInt(id));
-                location.href = url;
+                $('#phraseEdit').click(function (data) {
+                    // On affiche l'image laoding en attendant la réponse
+                    $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+                    var id = button.data('id');
+                    var url = "{{ path('phrase_edit', {'id': '0'}) }}";
+                    url = url.replace('0', parseInt(id));
+                    location.href = url;
 
 
+                });
 
-
-
-            });
-
-        }
-    });
-</script>
+            }
+        });
+    </script>
 {% endblock %}

@@ -46,4 +46,5 @@ security:
     - { path: ^/deconnexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/reinitialisation, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/moderation/, role: ROLE_MODERATEUR }
     - { path: ^/admin/, role: ROLE_ADMINISTRATEUR }

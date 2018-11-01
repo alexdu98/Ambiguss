@@ -7,11 +7,20 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Security\Core\Security;
 
 class GloseEditType extends AbstractType
 {
+    private $security;
 
-	/**
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    /**
 	 * {@inheritdoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
@@ -42,7 +51,17 @@ class GloseEditType extends AbstractType
 				'label' => 'Modifier',
 				'attr' => array('class' => 'btn btn-warning'),
 			));
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'));
 	}
+
+    public function onPostSetData(FormEvent $event)
+    {
+        $glose = $event->getData();
+
+        $glose->setModificateur($this->security->getUser());
+        $glose->setDateModification(new \DateTime());
+    }
 
 	public function getParent()
 	{

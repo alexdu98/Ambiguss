@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Game;
+use AppBundle\Entity\Glose;
 use AppBundle\Entity\Partie;
+use AppBundle\Entity\Phrase;
 use AppBundle\Form\Game\GameType;
 use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Entity\Jugement;
@@ -15,332 +17,154 @@ use AppBundle\Entity\Historique;
 class GameController extends Controller
 {
 
-	public function showAction(Request $request, \AppBundle\Entity\Phrase $id = null)
-	{
-		$game = new Game();
-		$form = $this->get('form.factory')->create(GameType::class, $game);
+    public function playAction(Request $request, Phrase $phrase)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $gameService = $this->get('AppBundle\Service\GameService');
 
-		$phraseOBJ = null;
-		$motsAmbigus = null;
-		$phraseHTMLEscape = null;
-		$allPhrasesPlayed = null;
-		$signal = null;
-		$isAuteur = null;
+        // Récupération de la partie jouée
+        $game = $gameService->getGame($phrase);
+        $form = $this->createForm(GameType::class, $game);
 
-		$form->handleRequest($request);
-		if($form->isSubmitted() && $form->isValid())
-		{
-			$data = $form->getData();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid() && $gameService->isValid($form->getData())) {
+            $data = $form->getData();
 
-			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbiguPhrase');
+            // Traitement de chaque réponse
+            $stats = array();
+            $nbPoints = 0;
+            foreach ($data->reponses as $rep) {
+                $rep->setValeurGlose($rep->getGlose()->getValeur());
 
-			$em = $this->getDoctrine()->getManager();
-			$valid = true;
-			foreach($data->reponses as $key => $rep)
-			{
-				if(!$rep->getGlose())
-				{
-					$valid = false;
-					break;
-				}
-				$rep->setMotAmbiguPhrase($repository->find($request->request->get('AppBundle_game')
-				                                           ['reponses'][ $key ]['idMotAmbiguPhrase']));
-				$rep->setContenuPhrase($rep->getMotAmbiguPhrase()->getPhrase()->getContenu());
-				$rep->setValeurMotAmbigu($rep->getMotAmbiguPhrase()->getMotAmbigu()->getValeur());
-				$rep->setValeurGlose($rep->getGlose()->getValeur());
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-				{
-					$rep->setAuteur($this->getUser());
-				}
+                // Si l'utilisateur est connecté on enregisgtre la réponse
+                if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                    $rep->setAuteur($this->getUser());
+                    $em->persist($rep);
+                }
 
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-				{
-					$em->persist($rep);
-				}
-			}
+                // Récupère les votes et les points gagnés pour chaque MAP
+                $result = $gameService->calculateResult($rep);
+                $stats[$rep->getMotAmbiguPhrase()->getOrdre()] = $result['resMAP'];
+                $nbPoints += $result['nbPoints'];
+            }
 
-			// Si tous les mots ambigus ont une glose associée
-			if($valid)
-			{
-				$hash = array();
-				$map = array();
-				$nb_points = 0;
-				$repo4 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Reponse');
-				foreach($data->reponses as $rep)
-				{
-					$map[] = $rep->getMotAmbiguPhrase()->getId();
-					$gloses = array();
-					$total = 0;
-					foreach($rep->getMotAmbiguPhrase()->getMotAmbigu()->getGloses() as $g)
-					{
-						$compteur = $repo4->findByIdPMAetGloses($rep->getMotAmbiguPhrase(), $g);
-						$isSelected = $g->getValeur() == $rep->getValeurGlose() ? true : false;
-						$ar2 = array(
-							'nbVotes' => $compteur['nbVotes'],
-							'isSelected' => $isSelected,
-						);
-						$gloses[ $g->getValeur() ] = $ar2;
-						$total = $total + $gloses[ $g->getValeur() ]['nbVotes'];
-					}
-					// Trie le tableau des gloses dans l'ordre décroissant du nombre de réponses
-					uasort($gloses, function($a, $b)
-					{
-						if($a['nbVotes'] == $b['nbVotes'])
-						{
-							return 0;
-						}
+            $alreadyPlayed = false;
+            if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                $partieRepo = $em->getRepository('AppBundle:Partie');
+                $partie = $partieRepo->findOneBy(array(
+                    'phrase' => $phrase,
+                    'joueur' => $this->getUser()
+                ));
 
-						return ($a['nbVotes'] > $b['nbVotes']) ? -1 : 1;
-					});
-					$resMA = array(
-						'valeurMA' => $rep->getValeurMotAmbigu(),
-						'gloses' => $gloses,
-					);
-					if($total > 0)
-					{
-						$nb_points = $nb_points + (($gloses[ $rep->getValeurGlose() ]['nbVotes'] / $total) * 100);
-					}
-					$hash[ $rep->getMotAmbiguPhrase()->getOrdre() ] = $resMA;
-				}
+                // Si le joueur n'avait pas déjà joué la phrase
+                if (empty($partie) || $partie->getJoue() == false) {
+                    // On lui ajoute les points et crédits
+                    $gainJoueur = ceil($nbPoints);
+                    $this->getUser()->updatePoints($gainJoueur);
+                    $this->getUser()->updateCredits($gainJoueur);
 
-				$alreadyPlayed = false;
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-				{
-					$repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Partie');
-					$partie = $repoP->findOneBy(array(
-						'phrase' => $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase(),
-						'joueur' => $this->getUser(),
-					));
+                    // On ajoute les points et crédits au créateur de la phrase
+                    $gainCreateur = ceil(($gainJoueur * $this->getParameter('gainPercentByGame')) / 100);
+                    $phrase->getAuteur()->updatePoints($gainCreateur);
+                    $phrase->getAuteur()->updateCredits($gainCreateur);
 
-					// Si le joueur n'avait pas déjà joué la phrase
-					if(empty($partie) || ($partie->getJoue() == 0 && $partie->getPhrase()->getAuteur() != $this->getUser()))
-					{
-						// On lui ajoute les points et crédits au joueur
-						$gainJoueur = ceil($nb_points);
-						$this->getUser()->updatePoints($gainJoueur);
-						$this->getUser()->updateCredits($gainJoueur);
+                    // On enregistre la partie
+                    if (empty($partie)) {
+                        $partie = new Partie();
+                        $partie->setPhrase($phrase);
+                        $partie->setJoueur($this->getUser());
+                    }
+                    $partie->setJoue(true);
+                    $partie->setGainJoueur($gainJoueur);
 
-						// On ajoute les points et crédits au createur de la phrase
-						$gainCreateur = ceil(($gainJoueur * $this->getParameter('gainPercentByGame')) / 100);
-						$auteur = $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur();
-						$auteur->updatePoints($gainCreateur);
-						$auteur->updateCredits($gainCreateur);
+                    // On donne des points au créateur de la phrase
+                    $phrase->updateGainCreateur($gainCreateur);
 
-						// On enregistre la partie
-						if(empty($partie))
-						{
-							$partie = new Partie();
-							$partie->setPhrase($data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase());
-							$partie->setJoueur($this->getUser());
-						}
+                    // On enregistre dans l'historique du joueur
+                    $histJoueur = new Historique();
+                    $histJoueur->setValeur("Vous avez joué la phrase n°" . $phrase->getId() . " (+" . $gainJoueur . " crédits/points).");
+                    $histJoueur->setMembre($this->getUser());
 
-						$partie->setJoue(true);
-						$partie->setGainJoueur($gainJoueur);
-						$partie->getPhrase()->updateGainCreateur($gainCreateur);
+                    // On enregistre dans l'historique du createur de la phrase
+                    $histAuteur = new Historique();
+                    $histAuteur->setValeur("Un joueur a joué votre phrase n°" . $phrase->getId() . " (+" . $gainCreateur . " crédits/points).");
+                    $histAuteur->setMembre($phrase->getAuteur());
 
-						// On enregistre dans l'historique du joueur
-						$histJoueur = new Historique();
-						$histJoueur->setValeur("Vous avez joué la phrase n°" . $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId()
-						                       . " (+" . ceil($nb_points) . " crédits/points).");
-						$histJoueur->setMembre($this->getUser());
+                    $em->persist($partie);
+                    $em->persist($histJoueur);
+                    $em->persist($histAuteur);
+                    $em->persist($this->getUser());
+                    $em->persist($phrase->getAuteur());
 
-						// On enregistre dans l'historique du createur de la phrase
-						$histAuteur = new Historique();
-						$histAuteur->setValeur("Un joueur a joué votre phrase n°" . $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId() . " (+" . $gainCreateur . " crédits/points).");
-						$histAuteur->setMembre($auteur);
+                    try {
+                        $em->flush();
+                    } catch (\Exception $e) {
+                        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'enregistrement de la partie. " . $e->getMessage());
+                    }
+                }
+                else {
+                    $alreadyPlayed = true;
+                }
+            }
 
-						$em->persist($partie);
-						$em->persist($histJoueur);
-						$em->persist($histAuteur);
-						$em->persist($this->getUser());
-						$em->persist($auteur);
+            // Formulaire de création de jugement
+            $addJugementForm = $this->createForm(JugementAddType::class, new Jugement(), array(
+                'action' => $this->generateUrl('api_jugement_new'),
+            ));
 
-						try
-						{
-							$em->flush();
-						}
-						catch(\Exception $e)
-						{
-							$this->get('session')->getFlashBag()->add('erreur', "Erreur insertion");
-						}
-					}
-					else if($partie->getPhrase()->getAuteur() == $this->getUser())
-					{
-						$isAuteur = true;
-					}
-					else
-					{
-						$alreadyPlayed = true;
-					}
-				}
+            return $this->render('AppBundle:Game:after_play.html.twig', array(
+                'phrase' => $phrase,
+                'stats' => $stats,
+                'alreadyPlayed' => $alreadyPlayed,
+                'nbPoints' => ceil($nbPoints),
+                'addJugementForm' => $addJugementForm->createView(),
+            ));
+        }
 
-				$this->get('session')->getFlashBag()->add('phrase_id', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getId());
-				$this->get('session')->getFlashBag()->add('phrase', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getContenuHTML());
-				$this->get('session')->getFlashBag()->add('auteur', $data->reponses->get(1)->getMotAmbiguPhrase()->getPhrase()->getAuteur());
-				$this->get('session')->getFlashBag()->add('stats', $hash);
-				$this->get('session')->getFlashBag()->add('alreadyPlayed', $alreadyPlayed);
-				$this->get('session')->getFlashBag()->add('isAuteur', $isAuteur);
-				$this->get('session')->getFlashBag()->add('nb_points', ceil($nb_points));
+        $this->get('session')->getFlashBag()->add('erreur', "Formulaire invalide");
+        return $this->redirectToRoute('game_show');
+    }
 
-				return $this->redirectToRoute('game_result_show');
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "Tous les mots ambigus doivent avoir une glose");
-			}
-		}
-		else
-		{
-			$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-			$repmap = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbiguPhrase');
-			$phraseOBJ = null;
+    public function showAction(Phrase $phrase = null)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $gameService = $this->get('AppBundle\Service\GameService');
 
-			if($id != null)
-			{
-				$phraseOBJ = $id;
-				$repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Partie');
+        // Récupération de la phrase à jouer et création du formulaire de jeu
+        $game = $gameService->getGame($phrase);
+        $form = $this->createForm(GameType::class, $game, array(
+            'action' => $this->generateUrl('game_play', array('id' => $game->phrase->getId()))
+        ));
 
-				$date = new \DateTime();
-				$dateMin = $date->setTimestamp($date->getTimestamp() - $this->getParameter('dureeAvantJouabiliteSecondes'));
+        // Si le joueur est connecté, tente de récupérer le jaime
+        $liked = null;
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $jaimeRepo = $em->getRepository('AppBundle:JAime');
+            $liked = $jaimeRepo->findOneBy(array(
+                'membre' => $this->getUser(),
+                'phrase' => $phrase,
+                'active' => true
+            ));
+        }
 
-				if($phraseOBJ->getVisible() && $phraseOBJ->getDateCreation() < $dateMin)
-				{
-					$joue = $repoP->findOneBy(array(
-						'joueur' => $this->getUser(),
-						'phrase' => $phraseOBJ,
-						'joue' => true,
-					));
-					if($joue)
-					{
-						$allPhrasesPlayed = true;
-					}
-				}
-				else
-				{
-					$phraseOBJ = null;
-				}
+        // Formulaire de création de glose
+        $addGloseForm = $this->createForm(GloseAddType::class, new Glose(), array(
+            'action' => $this->generateUrl('api_glose_new'),
+        ));
 
-			}
+        // Formulaire de création de jugement
+        $addJugementForm = $this->createForm(JugementAddType::class, new Jugement(), array(
+            'action' => $this->generateUrl('api_jugement_new'),
+        ));
 
-			if($phraseOBJ == null)
-			{
-				$phrases = null;
+        return $this->render('AppBundle:Game:play.html.twig', array(
+            'form' => $form->createView(),
+            'phrase' => $game->phrase,
+            'alreadyPlayed' => $game->alreadyPlayed,
+            'liked' => $liked,
+            'addGloseForm' => $addGloseForm->createView(),
+            'addJugementForm' => $addJugementForm->createView(),
+        ));
+    }
 
-				if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-				{
-					$phrases = $repository->findIdPhrasesNotPlayedByMembre($this->getUser(), $this->getParameter('dureeAvantJouabiliteSecondes'));
-				}
-
-				// Si toutes les phrases ont été joués
-				$allPhrasesPlayed = false;
-				if(empty($phrases))
-				{
-					$allPhrasesPlayed = true;
-					$phrases = $repository->findRandom($this->getParameter('dureeAvantJouabiliteSecondes'));
-				}
-
-				$phrase_id = $phrases[ array_rand($phrases) ]['id'];
-				$phraseOBJ = $repository->find($phrase_id);
-			}
-
-			// recup champ signal
-			$signal = $phraseOBJ->getSignale();
-
-			$phraseHTMLEscape = preg_replace('#"#', '\"', $phraseOBJ->getContenuHTML());
-
-			$motsAmbigus = array();
-			foreach($phraseOBJ->getMotsAmbigusPhrase() as $key => $map)
-			{
-				$motsAmbigus[] = array(
-					$map->getMotAmbigu()->getValeur(),
-					$map->getId(),
-					$map->getOrdre(),
-				);
-			}
-		}
-
-		// récupère le like d'un membre
-		$liked = null;
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-		{
-			$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:JAime');
-			$liked = $rep->findOneBy(array(
-				'membre' => $this->getUser(),
-				'phrase' => $phraseOBJ,
-			));
-			if($liked)
-			{
-				$liked = $liked->getActive();
-			}
-		}
-
-		$glose = new \AppBundle\Entity\Glose();
-		$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-			'action' => $this->generateUrl('api_glose_new'),
-		));
-
-		// jugement (cas signalement)
-		$jug = new Jugement();
-		$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
-			'action' => $this->generateUrl('api_jugement_new'),
-		));
-
-		// Ordonne les mots ambigus sur leur ordre
-		uasort($motsAmbigus, function($a, $b)
-		{
-			return ($a[2] < $b[2]) ? -1 : 1;
-		});
-		$motsAmbigus = array_values($motsAmbigus);
-
-		return $this->render('AppBundle:Game:play.html.twig', array(
-			'form' => $form->createView(),
-			'phrase_id' => $phraseOBJ->getId(),
-			'motsAmbigus' => json_encode($motsAmbigus),
-			'phraseHTMLEscape' => $phraseHTMLEscape,
-			'phrasePur' => preg_replace('#"#', '\"', $phraseOBJ->getContenuPur()),
-			'liked' => $liked,
-			'alreadyPlayed' => $allPhrasesPlayed,
-			'signal' => $signal,
-			'auteur' => $phraseOBJ->getAuteur(),
-			'addGloseForm' => $addGloseForm->createView(),
-			'addJugementForm' => $addJugementForm->createView(),
-		));
-	}
-
-	public function resultatAction(Request $request)
-	{
-		$phrase_id = $this->get('session')->getFlashBag()->get('phrase_id');
-		$phrase = $this->get('session')->getFlashBag()->get('phrase');
-		$auteur = $this->get('session')->getFlashBag()->get('auteur');
-		$isAuteur = $this->get('session')->getFlashBag()->get('isAuteur');
-		$stats = $this->get('session')->getFlashBag()->get('stats');
-		$alreadyPlayed = $this->get('session')->getFlashBag()->get('alreadyPlayed');
-		$nb_points = $this->get('session')->getFlashBag()->get('nb_points');
-
-		if(!empty($phrase_id) && !empty($phrase) && !empty($auteur) && !empty($isAuteur) && !empty($stats) && !empty($alreadyPlayed) && !empty($nb_points))
-		{
-			// jugement (cas signalement)
-			$jug = new Jugement();
-			$addJugementForm = $this->get('form.factory')->create(JugementAddType::class, $jug, array(
-				'action' => $this->generateUrl('api_jugement_new'),
-			));
-
-			$repP = $this->getDoctrine()->getRepository('AppBundle:MotAmbiguPhrase');
-			$pma = $repP->findBy(array('phrase' => $phrase_id[0]));
-
-			return $this->render('AppBundle:Game:after_play.html.twig', array(
-				'phrase' => $phrase[0],
-				'auteur' => $auteur[0],
-				'isAuteur' => $isAuteur[0],
-				'stats' => $stats[0],
-				'alreadyPlayed' => $alreadyPlayed[0],
-				'nb_point' => $nb_points[0],
-				'phraseHTMLEscape' => preg_replace('#"#', '\"', $phrase[0]),
-				'addJugementForm' => $addJugementForm->createView(),
-				'phrase_id' => $phrase_id[0],
-				'pma' => $pma,
-			));
-		}
-		throw $this->createNotFoundException();
-	}
 }

@@ -3,464 +3,273 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Glose;
+use AppBundle\Entity\Historique;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseEditType;
-use AppBundle\Form\MAG\MAGType;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class ModoController extends Controller
 {
 
-	public function showGlosesAction()
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				$repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
-				$gloses = $repo->getSignalees();
+    public function showGlosesAction()
+    {
+        $repoG = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
+        $gloses = $repoG->getSignalees();
 
-				$glose = new Glose();
-				$editGloseForm = $this->get('form.factory')->create(GloseEditType::class, $glose, array(
-					'action' => $this->generateUrl('modo_glose_edit', array('id' => 0)),
-				));
+        $glose = new Glose();
+        $editGloseForm = $this->get('form.factory')->create(GloseEditType::class, $glose, array(
+            'action' => $this->generateUrl('modo_glose_edit', array('id' => 0)),
+        ));
 
-				return $this->render('AppBundle:Glose:getAll.html.twig', array(
-					'gloses' => $gloses,
-					'editGloseForm' => $editGloseForm->createView(),
-				));
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+        return $this->render('AppBundle:Glose:getAll.html.twig', array(
+            'gloses' => $gloses,
+            'editGloseForm' => $editGloseForm->createView(),
+        ));
+    }
 
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
+    public function editGloseAction(Request $request, Glose $glose)
+    {
+        $form = $this->createForm(GloseEditType::class, $glose);
 
-	public function editGloseAction(Request $request, Glose $glose)
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				$form = $request->request->get('glose_edit');
-				if(!empty($glose) && !empty($form['valeur']) && isset($form['signale']))
-				{
-					$glose->setValeur($form['valeur']);
-					$glose->setSignale($form['signale']);
-					$glose->setModificateur($this->getUser());
-					$glose->setDateModification(new \DateTime());
+        $form->handleRequest($request);
 
-					$repoG = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
-					$repoR = $this->getDoctrine()->getManager()->getRepository('AppBundle:Reponse');
+        if ($form->isSubmitted() && $form->isValid()) {
 
-					// Récupère la glose avec la valeur que l'on veut insert
-					$gloseM = $repoG->findOneBy(array(
-						'valeur' => $glose->getValeur(),
-					));
+            $em = $this->getDoctrine()->getManager();
 
-					$em = $this->getDoctrine()->getManager();
+            $repoG = $em->getRepository('AppBundle:Glose');
+            $repoR = $em->getRepository('AppBundle:Reponse');
 
-					// Si la nouvelle valeur de la glose existe déjà et que ce n'est pas la même glose
-					if(!empty($gloseM) && $gloseM->getId() != $glose->getId())
-					{
-						// Récupère les réponses avec la glose en cours de modification
-						$reponses = $repoR->findBy(array(
-							'glose' => $glose,
-						));
+            // Récupère la glose avec la valeur que l'on veut insert
+            $gloseM = $repoG->findOneBy(array(
+                'valeur' => $glose->getValeur(),
+            ));
 
-						// Modifie les réponses avec la glose en cours de modification par celle qui existe déjà
-						foreach($reponses as $reponse)
-						{
-							$reponse->setGlose($gloseM);
-							$em->persist($reponse);
-						}
+            // Si la nouvelle valeur de la glose existe déjà et que ce n'est pas la même glose
+            if ($gloseM && $gloseM->getId() != $glose->getId()) {
+                // Récupère les réponses de la glose en cours de modification
+                $reponses = $repoR->findBy(array(
+                    'glose' => $glose->getId(),
+                ));
 
-						// Ajoute les liaisons motAmbigu-Glose de la glose que l'on modifie à celle qui existe déjà
-						$maSave = array();
-						$i = 0;// Enregistre les objets pour le persist
-						foreach($glose->getMotsAmbigus() as $motAmbigu)
-						{
-							// Si la glose qui existe déjà, n'est pas liée au mot ambigu
-							if(!$gloseM->getMotsAmbigus()->contains($motAmbigu))
-							{
-								$maSave[ $i ] = $motAmbigu;
-								$motAmbigu->addGlose($gloseM);
-								$em->persist($maSave[ $i ]);
-							}
-						}
+                // Modifie les réponses de la glose en cours de modification par celle qui existe déjà
+                foreach ($reponses as $reponse) {
+                    $reponse->setGlose($gloseM);
+                    $em->persist($reponse);
+                }
 
-						// Supprime la glose
-						$em->remove($glose);
-					}
-					else
-					{
-						$em->persist($glose);
-					}
+                // Ajoute les liaisons motAmbigu-Glose de la glose que l'on modifie à celle qui existe déjà
+                foreach ($glose->getMotsAmbigus() as $motAmbigu) {
+                    // Si la glose qui existe déjà n'est pas déjà liée au mot ambigu
+                    if (!$gloseM->getMotsAmbigus()->contains($motAmbigu)) {
+                        $motAmbigu->addGlose($gloseM);
+                        $em->persist($motAmbigu);
+                    }
+                }
 
-					if(!empty($gloseM))
-					{
-						$glose = $gloseM;
-					}
+                // Supprime la glose
+                $em->remove($glose);
+            }
+            // Si la nouvelle valeur de la glose n'existe pas, on enregistre les modifications
+            else {
+                $em->persist($glose);
+            }
 
-					$res = array(
-						'id' => $glose->getId(),
-						'valeur' => $glose->getValeur(),
-						'modificateur' => $glose->getModificateur() != null ? $glose->getModificateur()->getUsername() : '',
-						'dateModification' => $glose->getDateModification() != null ? $glose->getDateModification()->format('d/m/Y à H:i') : '',
-						'signale' => $glose->getSignale(),
-					);
+            $em->flush();
 
-					try
-					{
-						$em->flush();
+            if (!empty($gloseM)) {
+                $glose = $gloseM;
+            }
 
-						return $this->json(array(
-							'succes' => true,
-							'glose' => $res,
-						));
-					}
-					catch(\Exception $e)
-					{
-						// Si la liaison motAmbigu-glose est déjà faite
-						if($e instanceof UniqueConstraintViolationException)
-						{
-							return $this->json(array(
-								'succes' => true,
-								'glose' => $res,
-							));
-						}
-						else
-						{
-							return $this->json(array(
-								'succes' => false,
-								'message' => $e->getMessage(),
-							));
-						}
-					}
-				}
-				throw $this->createNotFoundException('Les paramètres sont invalides.');
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+            $res = array(
+                'id' => $glose->getId(),
+                'valeur' => $glose->getValeur(),
+                'modificateur' => $glose->getModificateur() != null ? $glose->getModificateur()->getUsername() : '',
+                'dateModification' => $glose->getDateModification() != null ? $glose->getDateModification()->format('d/m/Y à H:i') : '',
+                'signale' => $glose->getSignale(),
+            );
 
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
+            return $this->json(array(
+                'succes' => true,
+                'glose' => $res,
+            ));
 
-	public function deleteGloseAction(Glose $glose)
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				try
-				{
-					$em = $this->getDoctrine()->getManager();
-					$em->remove($glose);
-					$em->flush();
+        }
 
-					return $this->json(array(
-						'succes' => true,
-					));
-				}
-				catch(\Exception $e)
-				{
-					return $this->json(array(
-						'succes' => false,
-						'message' => $e,
-					));
-				}
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+        throw $this->createNotFoundException();
+    }
 
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
+    public function deleteGloseAction(Request $request, Glose $glose)
+    {
+        $data = $request->request->all();
 
-	public function countReponsesAction(Glose $glose)
-	{
-		if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-		{
-			if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-			{
-				$repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Reponse');
-				$reponses = $repo->findBy(array(
-					'glose' => $glose,
-				));
+        if ($this->isCsrfTokenValid('delete_glose', $data['token'])) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($glose);
+            $em->flush();
 
-				return $this->json(array(
-					'reponses' => count($reponses),
-				));
-			}
-			else
-			{
-				$this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+            return $this->json(array(
+                'succes' => true,
+            ));
+        }
 
-				return $this->redirectToRoute('fos_user_security_login');
-			}
-		}
-		throw $this->createAccessDeniedException();
-	}
+        throw new InvalidCsrfTokenException();
+    }
+
+    public function countReponsesAction(Glose $glose)
+    {
+        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Reponse');
+        $reponses = $repo->findBy(array(
+            'glose' => $glose,
+        ));
+
+        return $this->json(array(
+            'reponses' => count($reponses),
+        ));
+    }
 
     public function showPhrasesAction()
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-                $phrases = $repo->getSignalees();
+        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
+        $phrases = $repo->getSignalees();
 
-                return $this->render('AppBundle:Phrase:getAll.html.twig', array(
-                    'phrases' => $phrases,
-                ));
-            }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
-
-                return $this->redirectToRoute('fos_user_security_login');
-            }
-        }
-        throw $this->createAccessDeniedException();
+        return $this->render('AppBundle:Phrase:getAll.html.twig', array(
+            'phrases' => $phrases,
+        ));
     }
 
-    public function showMotsAmbigusGlosesAction(Request $request)
+    public function showMotsAmbigusGlosesAction()
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                $form = $this->get('form.factory')->create(MAGType::class);
-
-                $form->handleRequest($request);
-
-                if($form->isSubmitted() && $form->isValid())
-                {
-                    $data = $form->getData();
-
-                    $succes = false;
-                    $res = null;
-                    $owner = null;
-                    if($form->get('rechercherMA')->isClicked())
-                    {
-                        $repMA = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbigu');
-                        $ma = $repMA->findOneBy(array('valeur' => $data['motAmbigu']));
-                        $owner = array(
-                            'type' => 'ma',
-                            'id' => $ma->getId(),
-                        );
-                        if($ma)
-                        {
-                            $succes = true;
-                            foreach($ma->getGloses() as $glose)
-                            {
-                                $res[] = array(
-                                    'id' => $glose->getId(),
-                                    'valeur' => $glose->getValeur(),
-                                );
-                            }
-                        }
-                        else
-                        {
-                            $res = 'Mot ambigu inconnu';
-                        }
-                    }
-                    else
-                    {
-                        if($form->get('rechercherG')->isClicked())
-                        {
-                            $repG = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
-                            $g = $repG->findOneBy(array('valeur' => $data['glose']));
-                            $owner = array(
-                                'type' => 'g',
-                                'id' => $g->getId(),
-                            );
-                            if($g)
-                            {
-                                $succes = true;
-                                foreach($g->getMotsAmbigus() as $motsAmbigus)
-                                {
-                                    $res[] = array(
-                                        'id' => $motsAmbigus->getId(),
-                                        'valeur' => $motsAmbigus->getValeur(),
-                                    );
-                                }
-                            }
-                            else
-                            {
-                                $res = 'Glose inconnue';
-                            }
-                        }
-                        else
-                        {
-                            $res = 'Recherche par mot ambigu ou glose';
-                        }
-                    }
-
-                    return $this->json(array(
-                        'succes' => $succes,
-                        'owner' => $owner,
-                        'data' => $res,
-                    ));
-                }
-
-                return $this->render('AppBundle:MAG:get.html.twig', array(
-                    'form' => $form->createView(),
-                ));
-            }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
-
-                return $this->redirectToRoute('fos_user_security_login');
-            }
-        }
-        throw $this->createAccessDeniedException();
+        return $this->render('AppBundle:MAG:get.html.twig');
     }
 
     public function deleteMotsAmbigusGlosesAction(Request $request)
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                $succes = false;
-                $message = null;
+        $data = $request->request->all();
 
-                $data = $request->request->all();
-                if(!empty($data['token']) && !empty($data['motAmbigu']) && !empty($data['glose']))
-                {
-                    if($this->isCsrfTokenValid('delete_mag', $data['token']))
-                    {
-                        $repMA = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbigu');
-                        $repG = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
+        if ($this->isCsrfTokenValid('delete_mag', $data['token'])) {
+            $succes = false;
+            $message = null;
 
-                        $ma = $repMA->find($data['motAmbigu']);
-                        $g = $repG->find($data['glose']);
+            if (!empty($data['motAmbigu']) && !empty($data['glose'])) {
+                $em = $this->getDoctrine()->getManager();
 
-                        $ma->removeGlose($g);
+                $repMA = $em->getRepository('AppBundle:MotAmbigu');
+                $repG = $em->getRepository('AppBundle:Glose');
 
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($ma);
+                $ma = $repMA->find($data['motAmbigu']);
+                $g = $repG->find($data['glose']);
 
-                        try
-                        {
-                            $em->flush();
+                $ma->removeGlose($g);
 
-                            $succes = true;
-                        }
-                        catch(\Exception $e)
-                        {
-                            $message = 'Erreur BD';
-                        }
-                    }
-                    else
-                    {
-                        $message = "Erreur token";
-                    }
-                }
-                else
-                {
-                    $message = "Tous les champs ne sont pas remplis";
-                }
+                $em->persist($ma);
+                $em->flush();
 
-                return $this->json(array(
-                    'succes' => $succes,
-                    'message' => $message,
-                ));
+                $succes = true;
+            } else {
+                $message = "Tous les champs ne sont pas remplis";
             }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
 
-                return $this->redirectToRoute('fos_user_security_login');
-            }
+            return $this->json(array(
+                'succes' => $succes,
+                'message' => $message,
+            ));
         }
-        throw $this->createAccessDeniedException();
+
+        throw new InvalidCsrfTokenException();
     }
 
-    public function unsignaleAction(Phrase $phrase)
+    public function unsignalePhraseAction(Request $request, Phrase $phrase)
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                try
-                {
-                    $phrase->setSignale(0);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($phrase);
-                    $em->flush();
+        $data = $request->request->all();
 
-                    return $this->json(array(
-                        'succes' => true,
-                    ));
-                }
-                catch(\Exception $e)
-                {
-                    return $this->json(array(
-                        'succes' => false,
-                        'message' => $e,
-                    ));
-                }
-            }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+        if ($this->isCsrfTokenValid('unsignale_phrase', $data['token'])) {
+            $phrase->setSignale(false);
 
-                return $this->redirectToRoute('fos_user_security_login');
-            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($phrase);
+            $em->flush();
+
+            return $this->json(array(
+                'succes' => true,
+            ));
         }
-        throw $this->createAccessDeniedException();
+
+        throw new InvalidCsrfTokenException();
     }
 
-    public function deleteAction(Phrase $phrase)
+    public function deletePhraseAction(Request $request, Phrase $phrase)
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-        {
-            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-                try
-                {
-                    $phrase->setVisible(0);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($phrase);
-                    $em->flush();
+        $data = $request->request->all();
 
-                    return $this->json(array(
-                        'succes' => true,
-                    ));
-                }
-                catch(\Exception $e)
-                {
-                    return $this->json(array(
-                        'succes' => false,
-                        'message' => $e,
-                    ));
-                }
-            }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('erreur', "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.");
+        if ($this->isCsrfTokenValid('delete_phrase', $data['token'])) {
+            $phrase->setVisible(false);
 
-                return $this->redirectToRoute('fos_user_security_login');
-            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($phrase);
+            $em->flush();
+
+            return $this->json(array(
+                'succes' => true,
+            ));
         }
-        throw $this->createAccessDeniedException();
+
+        throw new InvalidCsrfTokenException();
+    }
+
+    public function showGloseJugementsAction($id)
+    {
+        $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
+        $repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
+
+        $typeObj = $repoTO->findOneBy(array('nom' => 'Glose'));
+        $jugements = $repoJ->findBy(array(
+            'typeObjet' => $typeObj,
+            'verdict' => null,
+            'idObjet' => $id,
+        ));
+
+        return $this->json(array(
+            'succes' => true,
+            'jugements' => $jugements,
+        ));
+    }
+
+    public function editJugementAction(Request $request, $id)
+    {
+        $data = $request->request->all();
+
+        if($this->isCsrfTokenValid('jugement_vote', $data['token']))
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            $repoJ = $em->getRepository('AppBundle:Jugement');
+            $repoTV = $em->getRepository('AppBundle:TypeVote');
+
+            // On met à jour le jugement
+            $jugement = $repoJ->find($id);
+            $jugement->setDateDeliberation(new \DateTime());
+            $jugement->setJuge($this->getUser());
+            $jugement->setVerdict($repoTV->findOneBy(array('nom' => $data['verdict'])));
+
+            // On enregistre dans l'historique du joueur
+            $histJoueur = new Historique();
+            $histJoueur->setMembre($jugement->getAuteur());
+            $histJoueur->setValeur("Jugement n°" . $jugement->getId() . ", verdict : " . $jugement->getVerdict()->getNom() . ".");
+
+            $em->persist($jugement);
+            $em->persist($histJoueur);
+
+            $em->flush();
+
+            return $this->json(array(
+                'succes' => true,
+            ));
+        }
+
+        throw new InvalidCsrfTokenException();
     }
 
 }

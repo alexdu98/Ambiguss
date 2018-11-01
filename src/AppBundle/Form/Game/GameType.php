@@ -2,12 +2,13 @@
 
 namespace AppBundle\Form\Game;
 
+use AppBundle\Form\Phrase\PhraseGameType;
+use AppBundle\Form\Reponse\ReponseGameType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Form\Reponse\ReponseGameType;
 
 class GameType extends AbstractType
 {
@@ -19,17 +20,16 @@ class GameType extends AbstractType
         $builder
             ->add('reponses', CollectionType::class, array(
             	'entry_type' => ReponseGameType::class,
-	            'allow_add' => true,
-	            'allow_delete' => true,
+	            'allow_add' => false,
+	            'allow_delete' => false,
 	            'label' => false,
-                'required' => true,
             ))
 	        ->add('valider', SubmitType::class, array(
 		        'label' => 'Valider',
 		        'attr' => array('class' => 'btn btn-primary')
 	        ));
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -47,6 +47,5 @@ class GameType extends AbstractType
     {
         return 'AppBundle_game';
     }
-
 
 }

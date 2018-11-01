@@ -22,14 +22,14 @@
 	        {% endif %}
 	        <span class="size24">
 		        {% if app.user %}
-			        {% if isAuteur %}
+			        {% if phrase.auteur == app.user %}
 				        Vous êtes l'auteur de cette phrase, vous ne gagnez donc pas de points.<br>
 			        {% elseif alreadyPlayed %}
 				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.<br>
 			        {% else %}
-						{% if nb_point <= 0 %}
+						{% if nbPoints <= 0 %}
 							Dommage, vous n'avez pas gagné de point cette fois.
-						{% elseif nb_point == 1 %}
+						{% elseif nbPoints == 1 %}
 							Bravo, vous avez gagné 1 point.
 						{% else %}
 							Félicitation, vous avez gagné <span id="fun-level" style="color: #C51B10;">0</span> points !
@@ -44,8 +44,8 @@
 	        </span>
 	        <br>
 	        <span class="color-green size18">La phrase était :</span><br>
-	        <span class="size24">{{ phrase|raw }}</span><br>
-	        <span class="size16">par <a href="{{ path('fos_user_profile_show', {id: auteur.id}) }}">{{ auteur.username }}</a></span><br>
+	        <span class="size24">{{ phrase.contenuHTML|raw }}</span><br>
+	        <span class="size16">par <a href="{{ path('fos_user_profile_show', {id: phrase.auteur.id}) }}">{{ phrase.auteur.username }}</a></span><br>
 	        <div class="form-group">
 		        {% if app.user %}
 			        <button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
@@ -72,7 +72,7 @@
 
             <a href="{{ path('game_show') }}" class="btn btn-primary">Rejouer</a>
 	        <div id="glosesBlock" hidden>
-		        {% for ma in pma %}
+		        {% for ma in phrase.motsAmbigusPhrase %}
 			        <select class="gloses">
 				        {% for g in ma.motAmbigu.gloses %}
 					        <option value="{{ g.id }}">{{ g.valeur }}</option>
@@ -111,7 +111,7 @@
 			$("#phraseSignal").click(function () {
 				var boutonSignal = $(this);
 				setModalSize('modal-lg');
-				setModalTitle("Signaler un élément de la phrase \"{{ phraseHTMLEscape|raw }}\"");
+				setModalTitle("Signaler un élément de la phrase \"{{ phrase.contenuHTML|replace({'"':'\\"'})|raw }}\"");
 				setModalBody('{{ include('AppBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
 				$("#modal").modal("show");
 
@@ -133,7 +133,7 @@
 					else if (typeObjet === 'Phrase') {
 						$('#signalementIdObjet').hide();
 						$('#jugement_add_signaler').prop('disabled', false);
-						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase_id }}">{{ phrase_id }}</option>');
+						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.id }}</option>');
 					}
 					else {
 						$('#signalementIdObjet').show();
@@ -181,7 +181,7 @@
     <script>
         $('#fun-level').animateNumber(
             {
-                number: {{ nb_point }},
+                number: {{ nbPoints }},
                 'font-size': '30px',
                 easing: 'easeInQuad'
             },

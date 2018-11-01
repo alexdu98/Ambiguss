@@ -6,6 +6,19 @@ class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**
+     * Retourne les mots ambigus de la glose
+     *
+     * @param string $valeurG
+     * @return array
+     */
+    public function findMotsAmbigusByValueGloseValue(string $valeurG){
+        return $this->createQueryBuilder('ma')->select('ma.id, ma.valeur')
+            ->innerJoin("ma.gloses", "g", "WITH", "g.valeur = :valeurG")->setParameter('valeurG', $valeurG)
+            ->orderBy("ma.valeur")
+            ->getQuery()->getResult();
+    }
+
+    /**
      * Retourne les valeurs possibles de mots ambigus (autocomplete)
      *
      * @param string $valeur
@@ -13,7 +26,7 @@ class MotAmbiguRepository extends \Doctrine\ORM\EntityRepository
      */
 	public function findByValeurAutoComplete(string $valeur)
 	{
-		return $this->createQueryBuilder('ma')->select('ma.valeur')
+		return $this->createQueryBuilder('ma')->select('ma.id, ma.valeur')
 			->where('ma.valeur LIKE :valeur')->setParameter('valeur', $valeur . '%')
 			->getQuery()->getResult();
 	}

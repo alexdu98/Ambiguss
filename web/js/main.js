@@ -1,4 +1,21 @@
 /**
+ * Valide du JSON
+ * @param json
+ */
+function isValidJSON(json) {
+	if (typeof json !== 'object') {
+        try {
+            JSON.parse(json);
+        }
+        catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Change la taille de la modale
  * @param size modal-lg | modal-sm
  */
@@ -46,13 +63,13 @@ function getGloses(select, motAmbigu) {
 	var url = Routing.generate('api_gloses_mot_ambigu_show');
 	$.post(url, {motAmbigu: motAmbigu}, function (data) {
 		var indication = "";
-		if (data.length > 1)
-			indication = data.length + ' existantes';
+		if (data.links.length > 1)
+			indication = data.links.length + ' existantes';
 		else
-			indication = data.length + ' existante';
+			indication = data.links.length + ' existante';
 		select.html('<option selected disabled value>Choisissez une glose (' + indication + ')</option>');
-		$.each(data, function (index) {
-			select.append('<option value="' + data[index].id + '">' + data[index].valeur + '</option>');
+		$.each(data.links, function (index) {
+			select.append('<option value="' + data.links[index].id + '">' + data.links[index].valeur + '</option>');
 		});
 		select.removeAttr('disabled').removeClass('loading');
 	}, "json");

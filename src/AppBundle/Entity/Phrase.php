@@ -8,11 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Phrase
  *
- * @ORM\Table(name="phrase", indexes={
- *     @ORM\Index(name="IDX_PHRASE_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_PHRASE_DATEMODIFICATION", columns={"date_modification"}),
- *     @ORM\Index(name="IDX_PHRASE_GAINCREATEUR", columns={"gain_createur"})
- * })
+ * @ORM\Table(
+ *     name="phrase",
+ *     indexes={
+ *          @ORM\Index(name="IDX_PHRASE_DATECREATION", columns={"date_creation"}),
+ *          @ORM\Index(name="IDX_PHRASE_DATEMODIFICATION", columns={"date_modification"}),
+ *          @ORM\Index(name="IDX_PHRASE_GAINCREATEUR", columns={"gain_createur"})
+ *      }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PhraseRepository")
  */
 class Phrase implements \JsonSerializable
@@ -88,6 +91,7 @@ class Phrase implements \JsonSerializable
 
 	/**
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\MotAmbiguPhrase", mappedBy="phrase", cascade={"persist"})
+     * @ORM\OrderBy({"ordre" = "ASC"})
 	 */
 	private $motsAmbigusPhrase;
 
@@ -626,6 +630,14 @@ class Phrase implements \JsonSerializable
     public function __toString()
     {
         return $this->contenuPur;
+    }
+
+    public function isJouable($dureeAvantJouabilite)
+    {
+        $date = new \DateTime();
+        $dateMin = $date->setTimestamp($date->getTimestamp() - $dureeAvantJouabilite);
+
+        return $this->getVisible() && $this->getDateCreation() < $dateMin;
     }
 
 }

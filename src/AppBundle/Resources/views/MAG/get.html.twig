@@ -5,29 +5,26 @@
 
 {% block contenu %}
 	<div class="well">
-		{{ form_start(form) }}
-
-		{{ form_errors(form) }}
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
-					{{ form_label(form.motAmbigu) }}
-					{{ form_widget(form.motAmbigu) }}
+					<label for="ma">Mot ambigu</label>
+					<input type="text" class="form-control" id="ma">
 					<input type="hidden" id="ma_id" value="">
+					<div id="ma-empty" class="text-danger" hidden>Aucun mot ambigu ne correspond à la recherche</div>
 				</div>
-				{{ form_widget(form.rechercherMA) }}
+				<input type="submit" class="btn btn-primary btn-search" id="searchMA" value="Chercher">
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					{{ form_label(form.glose) }}
-					{{ form_widget(form.glose) }}
+					<label for="g">Glose</label>
+					<input type="text" class="form-control" id="g">
 					<input type="hidden" id="g_id" value="">
+					<div id="g-empty" class="text-danger" hidden>Aucune glose ne correspond à la recherche</div>
 				</div>
-				{{ form_widget(form.rechercherG) }}
+				<input type="submit" class="btn btn-primary btn-search" id="searchG" value="Chercher">
 			</div>
 		</div>
-		{{ form_rest(form) }}
-		{{ form_end(form) }}
 		<br>
 		<div id="res"></div>
 	</div>
@@ -38,17 +35,16 @@
 		$(document).ready(function () {
 
 			// Autocomplete la glose
-			var inputG = $('#AppBundle_MAG_glose');
+			var inputG = $('#g');
 			inputG.autocomplete({
 				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 				source: function (request, response) {
 					var url = Routing.generate('api_autocomplete_glose');
 					$.getJSON(url + '?term=' + request.term, function (data) {
-						inputG.parent().append('<div id="resnul" class="text-danger" hidden>Aucune glose ne correspond à la recherche</div>');
 						if (data.length === 0) {
-							inputG.parent().find('#resnul').show();
+							$('#g-empty').show();
 						} else {
-							inputG.parent().find('#resnul').hide();
+                            $('#g-empty').hide();
 						}
 						// On récupère une liste d'objet, on veut l'attribut valeur de l'objet
 						response($.map(data, function (item) {
@@ -59,17 +55,16 @@
 			});
 
 			// Autocomplete le mot ambigu
-			var inputMA = $('#AppBundle_MAG_motAmbigu');
+			var inputMA = $('#ma');
 			inputMA.autocomplete({
 				minLength: 2, // Dès qu'il y a 2 caractères on autocomplete
 				source: function (request, response) {
 					var url = Routing.generate('api_autocomplete_mot_ambigu');
 					$.getJSON(url + '?term=' + request.term, function (data) {
-						inputMA.parent().append('<div id="resnul" class="text-danger" hidden>Aucun mot ambigu ne correspond à la recherche</div>');
 						if (data.length === 0) {
-							inputMA.parent().find('#resnul').show();
+                            $('#ma-empty').show();
 						} else {
-							inputMA.parent().find('#resnul').hide();
+                            $('#ma-empty').hide();
 						}
 						// On récupère une liste d'objet, on veut l'attribut valeur de l'objet
 						response($.map(data, function (item) {
@@ -79,80 +74,97 @@
 				}
 			});
 
-			// Envoi le formulaire via ajax
-			$('form[name="AppBundle_MAG"]').ajaxForm({
-				beforeSubmit: function (arr, form, opt) {
-					// On affiche l'image laoding en attendant la réponse
-					$('#res').append('<img src="' + urlImageLoading + '" id="loading">');
-				},
-				// Quand la réponse Ajax sera reçu, on appelle ce callback
-				success: function (data, status, xhr, form) {
-					// On supprime l'image loading
-					if (data.succes) {
-						var inputs = '';
-						var other = null;
+			// Cherche les liaisons entre un mot ambigu et une glose
+            $('.btn-search').click(function () {
+                // On affiche l'image laoding en attendant la réponse
+                $('#res').append('<img src="' + urlImageLoading + '" id="loading">');
 
-						if (data.owner.type === 'ma') {
-							other = 'du mot ambigu "' + $('#AppBundle_MAG_motAmbigu').val() + '"';
-							$('#ma_id').val(data.owner.id);
+                var type = $(this).attr('id');
 
-							for (obj in data.data) {
-								inputs += '<div id="o' + data.data[obj].id + '' + data.owner.id + '"><label>' + data.data[obj].valeur + '</label> <button class="deleteLink btn ' +
-									'btn-danger ' +
-									'btn-sm" data-g="' + data.data[obj].id + '" data-ma="' + data.owner.id + '"' + '>Supprimer la ' +
-									'liaison</button></div><br>';
-							}
-						}
-						else {
-							other = 'de la glose "' + $('#AppBundle_MAG_glose').val() + '"';
-							$('#g_id').val(data.owner.id);
-
-							for (obj in data.data) {
-								inputs += '<div id="o' + data.owner.id + '' + data.data[obj].id + '"><label>' + data.data[obj].valeur + '</label> <button class="deleteLink btn btn-danger ' +
-									'btn-sm" data-g="' + data.owner.id + '" data-ma="' + data.data[obj].id + '"' + '>Supprimer la ' +
-									'liaison</button></div><br>';
-							}
-						}
-
-
-						$('#res').empty().append('<hr><h4 class=text-center>Liaisons ' + other + '</h4>' + inputs);
-
-						$('.deleteLink').click(function (event) {
-							event.preventDefault();
-
-							g_id = $(this).data('g');
-							ma_id = $(this).data('ma');
-
-							// On affiche l'image laoding en attendant la réponse
-							$(this).after('<img src="' + urlImageLoading + '" id="loading">');
-
-							var url = Routing.generate('modo_mots_ambigus_gloses_delete');
-							$.post(url, {motAmbigu: ma_id, glose: g_id, token: '{{ csrf_token('delete_mag') }}'}, function (data) {
-								liaison = $('#o' + g_id + '' + ma_id);
-								if (data.succes) {
-									liaison.find('.deleteLink').remove();
-									liaison.append('<span class="text-success">Liaison supprimée</span>');
-								}
-								else {
-									liaison.append('<span class="text-danger">' + data.message + '</span>');
-								}
-							}, "json")
-								.fail(function () {
-									$(this).after('<span class="text-danger">Erreur</span>');
-								})
-								.always(function () {
-									$('#loading').remove();
-								});
-						});
-					} else {
-						$('#res').empty().append('<span class="text-danger">Erreur</span>');
-					}
-				},
-				error: function () {
-					$('#res').empty().append('<span class="text-danger">Erreur</span>');
+                if (type === 'searchG') {
+                    var url = Routing.generate('api_mots_ambigus_glose_show');
+                    var dataSend = {glose: $('#g').val()};
 				}
-			});
+				else if (type === 'searchMA') {
+                    var url = Routing.generate('api_gloses_mot_ambigu_show');
+                    var dataSend = {motAmbigu: $('#ma').val()};
+				}
 
+                $.post(url, dataSend)
+                    .done(function (data) {
+                        if (isValidJSON(data)) {
+                            var inputs = '';
+                            var other = '';
+
+                            if (data.links.length === 0) {
+								inputs += 'Aucune liaison';
+                            }
+
+                            if (type === 'searchMA') {
+                                other = 'du mot ambigu "' + $('#ma').val() + '"';
+                                $('#ma_id').val(data.ownerId);
+
+                                for (obj in data.links) {
+                                    inputs += '<div id="o' + data.links[obj].id + '' + data.ownerId + '"><label>' + data.links[obj].valeur + '</label> <button class="deleteLink ' +
+										'btn ' +
+                                        'btn-danger ' +
+                                        'btn-sm" data-g="' + data.links[obj].id + '" data-ma="' + data.ownerId + '"' + '>Supprimer la ' +
+                                        'liaison</button></div><br>';
+                                }
+                            }
+                            else {
+                                other = 'de la glose "' + $('#g').val() + '"';
+                                $('#g_id').val(data.ownerId);
+
+                                for (obj in data.links) {
+                                    inputs += '<div id="o' + data.ownerId + '' + data.links[obj].id + '"><label>' + data.links[obj].valeur + '</label> <button class="deleteLink ' +
+										'btn btn-danger ' +
+                                        'btn-sm" data-g="' + data.ownerId + '" data-ma="' + data.links[obj].id + '"' + '>Supprimer la ' +
+                                        'liaison</button></div><br>';
+                                }
+                            }
+
+
+                            $('#res').empty().append('<hr><h4 class=text-center>Liaisons ' + other + '</h4>' + inputs);
+
+                            $('.deleteLink').click(function () {
+                                g_id = $(this).data('g');
+                                ma_id = $(this).data('ma');
+
+                                // On affiche l'image laoding en attendant la réponse
+                                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+
+                                var url = Routing.generate('modo_mots_ambigus_gloses_delete');
+                                $.post(url, {motAmbigu: ma_id, glose: g_id, token: "{{ csrf_token('delete_mag') }}"})
+									.done(function (data) {
+										liaison = $('#o' + g_id + '' + ma_id);
+										if (data.succes) {
+											liaison.find('.deleteLink').remove();
+											liaison.append('<span class="text-success">Liaison supprimée</span>');
+										}
+										else {
+											liaison.append('<span class="text-danger">' + data.message + '</span>');
+										}
+									})
+                                    .fail(function (test, status, xhr) {
+                                        $(this).after('<span class="text-danger">' + status + ' (' + xhr + ')</span>');
+                                    })
+                                    .always(function () {
+                                        $('#loading').remove();
+                                    });
+                            });
+                        }
+                        else {
+                            $('#res').append('<div class="text-danger">Erreur</div>');
+                        }
+                    })
+                    .fail(function (test, status, xhr) {
+                        $('#res').append('<div class="text-danger">' + status + ' (' + xhr + ')</div>');
+                    })
+                    .always(function () {
+                        $('#loading').remove();
+                    });
+            });
 		});
 	</script>
 {% endblock %}

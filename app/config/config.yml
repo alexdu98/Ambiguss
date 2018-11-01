@@ -178,3 +178,10 @@ hwi_oauth:
             facebook: facebookId
             twitter: twitterId
             google: googleId
+
+doctrine_migrations:
+    dir_name: "%kernel.project_dir%/migrations"
+    namespace: AppBundle\Migrations
+    table_name: migrations
+    name: Application Migrations
+    organize_migrations: "BY_YEAR_AND_MONTH"

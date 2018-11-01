@@ -75,6 +75,8 @@
 {% block js %}
 	<script src="{{ asset('vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
 	<script>
+        var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
+        var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
 		$(document).ready(function()
 		{
 			var startBaliseAmbigu = '<amb>';
@@ -215,7 +217,6 @@
 				// Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
 				amb.val(motAmbigu);
 				$prototype.attr('id', 'amb' + index);
-				addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
 				addDeleteLink($prototype);
 				$prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
 				$prototype.find('.amb').bind('input', function () {
@@ -235,24 +236,6 @@
 				textarea.val(phrase.replace(reg3, '<amb id="' + event.data.id + '">'+ $(event.target).val() + endBaliseAmbiguEscape));
 				updateRendu();
 				getGloses($(event.target).closest('.colAmb').next().find('select.gloses'), $(event.target).val());
-			}
-
-			function addGloseButtonIsClicked(event){
-				setModalTitle('Ajouter une glose à "' + event.data.motAmbigu + '"');
-				{% if app.user is empty %}
-					messageNeedConnectionModal();
-				{% else %}
-				nbGloses = $(event.target).closest('.row').find('select.gloses option').length - 1;
-				if (nbGloses >= 2)
-					cost = '{{ costCreateGloseByGlosesOfMotAmbigu }}' * nbGloses;
-				else
-					cost = 0;
-				setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="{{ costCreateGloseByGlosesOfMotAmbigu }}" class="costNewGlose">' + cost + '</b> crédit(s).</div><br>');
-				if ($('#credits').html() > cost) {
-					setModalBody('{{ include('AppBundle:Glose:add.html.twig', {'form': addGloseForm})|e('js') }}');
-					addGloseModal(event);
-				}
-				{% endif %}
 			}
 
 			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
@@ -294,4 +277,5 @@
 
 		});
 	</script>
+	<script src="{{ asset('js/glose/addGlose.js') }}"></script>
 {% endblock %}

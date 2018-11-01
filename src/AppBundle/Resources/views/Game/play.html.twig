@@ -15,7 +15,7 @@
 
 {% block contenu %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2 bulle">
             {% if app.user is null %}
                 <p class="text-success">
                     <b>
@@ -66,14 +66,14 @@
                 {% for reponse in form.reponses %}
                     <div class="form-group row reponseGroupe" id="rep{{ reponse.vars.data.motAmbiguPhrase.ordre }}">
                         <div id="{{ reponse.vars.id }}">
-                            <div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-2 text-right text-left-xs">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-sm-offset-1 col-md-offset-1 text-right text-left-xs">
                                 <label class="control-label required" for="{{ reponse.glose.vars.id }}">
-                                    <span class="color-red size16" title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
+                                    <span class="motAmbigu color-red size16" title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
                                         {{ reponse.vars.data.motAmbiguPhrase.motAmbigu.valeur }}
                                     </span>
                                 </label>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
                                 <select id="{{ reponse.glose.vars.id }}" name="{{ reponse.glose.vars.full_name }}"
                                 {% for key,value in reponse.glose.vars.attr %}
                                     {{ key }}="{{ value }}{% if key == 'class' %} form-control{% endif %}"
@@ -85,8 +85,11 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-xs-12 col-sm-3 col-md-2 addGloseButton">
-                            </div>
+                            {% if app.user %}
+                                <div class="col-xs-12 col-sm-3 col-md-3 addGloseButton">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal" id="addGloseModal">Ajouter une glose</button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}
@@ -137,7 +140,10 @@
             }(document, "script", "twitter-wjs"));
         </script>
         <script>
+            var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
+            var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
             $(document).ready(function () {
+
                 $("#phraseLike").click(function () {
                     var boutonLike = $(this);
                     $.getJSON('{{ path('phrase_like', {'id': phrase.id}) }}', function (data) {
@@ -257,4 +263,5 @@
             });
             $('.tlt').textillate({in: {effect: 'rollIn'}});
         </script>
+        <script src="{{ asset('js/glose/addGlose.js') }}"></script>
     {% endblock %}

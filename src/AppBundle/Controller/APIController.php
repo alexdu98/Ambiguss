@@ -155,15 +155,22 @@ class APIController extends Controller
 
                 $em->flush();
 
-                $res = array(
+
+                $motAmbiguInfos = array(
+                    'id' => $motAmbigu->getId(),
+                    'valeur' => $motAmbigu->getValeur(),
+                );
+                $gloseInfos = array(
                     'id' => $glose->getId(),
                     'valeur' => $glose->getValeur(),
                 );
 
                 return $this->json(array(
                     'succes' => true,
-                    'glose' => $res,
-                    'liaisonExiste' => $isLinked
+                    'motAmbigu' => $motAmbiguInfos,
+                    'glose' => $gloseInfos,
+                    'liaisonExiste' => $isLinked,
+                    'credits' => $this->getUser()->getCredits()
                 ));
             }
         }

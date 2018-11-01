@@ -74,16 +74,30 @@ class APIController extends Controller
 
     public function autocompleteGloseAction(Request $request)
     {
-        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
-        $gloses = $repository->findByValeurAutoComplete($request->get('term'));
+        $specChar = array('%', '_');
+        $term = str_replace($specChar, '', $request->get('term'));
+
+        $gloses = null;
+        if (mb_strlen($term) > 1) {
+            $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
+            $gloses = $repository->findByValeurAutoComplete($term);
+
+
+        }
 
         return $this->json($gloses);
     }
 
     public function autocompleteMotAmbiguAction(Request $request)
     {
-        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbigu');
-        $motsAmbigus = $repository->findByValeurAutoComplete($request->get('term'));
+        $specChar = array('%', '_');
+        $term = str_replace($specChar, '', $request->get('term'));
+
+        $motsAmbigus = null;
+        if (mb_strlen($term) > 1) {
+            $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbigu');
+            $motsAmbigus = $repository->findByValeurAutoComplete($term);
+        }
 
         return $this->json($motsAmbigus);
     }

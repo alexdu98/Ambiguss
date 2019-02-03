@@ -2,14 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\JAime;
+use AppBundle\Entity\Glose;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Partie;
+use AppBundle\Entity\Phrase;
 use AppBundle\Entity\Reponse;
 use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Form\Phrase\PhraseAddType;
 use AppBundle\Form\Phrase\PhraseEditType;
+use AppBundle\Service\PhraseService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,297 +19,54 @@ use AppBundle\Entity\Historique;
 
 class PhraseController extends Controller
 {
-
 	public function newAction(Request $request)
 	{
-		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-		{
-			$phrase = new \AppBundle\Entity\Phrase();
-			$form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
+		if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
+            return $this->redirectToRoute('fos_user_security_login');
+        }
 
-			$form->handleRequest($request);
+        $phrase = new Phrase();
+        $form = $this->createForm(PhraseAddType::class, $phrase);
+        $newPhrase = null;
 
-			$newPhrase = null;
-			$edit = false;
-			if($form->isSubmitted() && $form->isValid())
-			{
-				$data = $form->getData();
+        $form->handleRequest($request);
 
-				$edit = empty($_POST['phrase_id']) ? false : true;
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $phraseService = $this->get('AppBundle\Service\PhraseService');
+            $mapsRep = $request->request->get('phrase_add')['motsAmbigusPhrase'];
 
-				$phrase->setAuteur($this->getUser());
-				$phrase->removeMotsAmbigusPhrase();
+            $res = $phraseService->new($phrase, $this->getUser(), $mapsRep);
+            $succes = $res['succes'];
 
-				// Normalise la phrase
-				$phrase->normalize();
+            if($succes)
+            {
+                $newPhrase = $phrase;
 
-				// Vérifie que la phrase soit bien formée
-				$res = $phrase->isValid();
-				$succes = $res['succes'];
+                // Réinitialise le formulaire
+                $phrase = new \AppBundle\Entity\Phrase();
+                $form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
+            }
+            else
+            {
+                $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $res['message']);
+            }
+        }
 
-				$phrD = null;
-				if(!$edit && $succes)
-				{
-					if($this->getUser()->getCredits() < $this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($res['motsAmbigus']))
-					{
-						$succes = false;
-						$res['message'] = "Vous n'avez pas assez de crédits pour créer une phrase avec " . count($res['motsAmbigus']) . " mots ambigus.";
-					}
-				}
-				else
-				{
-					if($edit)
-					{
-						$repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-						$phrD = $repoP->find($_POST['phrase_id']);
+        $glose = new Glose();
+        $addGloseForm = $this->createForm(GloseAddType::class, $glose, array(
+            'action' => $this->generateUrl('api_glose_new'),
+        ));
 
-						$dateMax = $phrD->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
-						$dateActu = new \DateTime();
-						$dateActu = $dateActu->getTimestamp();
-
-						// Si jamais il modifie le champ à la main il peut changé n'importe quelle phrase
-						if($phrD->getAuteur() != $this->getUser() || !$this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR'))
-						{
-							$succes = false;
-							$res['message'] = "Vous ne pouvez pas modifier cette phrase car vous n'êtes pas son auteur.";
-						}
-
-						if($dateActu > $dateMax && $phrD->getParties()->count() > 1)
-						{
-							$succes = false;
-							$res['message'] = "Les " . $this->getParameter('dureeAvantJouabiliteSecondes') . " secondes sont passées et un joueur a joué votre phrase, vous ne pouvez donc plus la modifier. Signalez-là, un modérateur s'occupera de votre demande.";
-						}
-					}
-				}
-
-				if($succes === true)
-				{
-
-					$mots_ambigu = $res['motsAmbigus'];
-
-					/*
-					 * $mots_ambigu[0] contient un array du premier match
-					 * $mots_ambigu[1] contient un array du deuxieme match...
-					 *
-					 * $mots_ambigu[][0] contient toute la balise <amb ... </amb>
-					 * $mots_ambigu[][1] contient l'id / l'ordre du mot ambigu
-					 * $mots_ambigu[][2] contient le mot ambigu
-					 */
-					$repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:MotAmbigu');
-					foreach($mots_ambigu as $key => $mot_ambigu)
-					{
-						// Soit on le trouve dans la BD soit on l'ajoute
-						$mot_ambigu_OBJ = new MotAmbigu();
-						$mot_ambigu_OBJ->setValeur($mot_ambigu[2]);
-						$mot_ambigu_OBJ->setAuteur($this->getUser());
-						// Normalise le mot ambigu
-						$mot_ambigu_OBJ->normalize();
-                        $em = $this->getDoctrine()->getManager();
-                        $tmp = $repository->findOneBy(array('valeur' => $mot_ambigu_OBJ->getValeur()));
-                        if($tmp == null){
-                            $em->persist($mot_ambigu_OBJ);
-                            $em->flush();
-                        }
-                        else
-                            $mot_ambigu_OBJ = $tmp;
-
-						$map = new MotAmbiguPhrase();
-						$map->setOrdre($key + 1);
-						$map->setPhrase($phrase);
-						$map->setMotAmbigu($mot_ambigu_OBJ);
-
-						$phrase->addMotAmbiguPhrase($map);
-					}
-
-					if(!$edit)
-					{
-						$phrase->getAuteur()->updateCredits(-$this->getParameter('costCreatePhraseByMotAmbiguCredits') * count($mots_ambigu));
-						$phrase->getAuteur()->updatePoints($this->getParameter('gainCreatePhrasePoints'));
-					}
-
-					$em = $this->getDoctrine()->getManager();
-					$em->getConnection()->beginTransaction();
-					try
-					{
-
-						$em->persist($phrase);
-						$em->flush();
-
-						// On enregistre dans l'historique du joueur
-						$histJoueur = new Historique();
-						if(!$edit)
-						{
-							$histJoueur->setValeur("Création de la phrase n°" . $phrase->getId() . " (+ " . $this->getParameter('gainCreatePhrasePoints') . " points).");
-						}
-						else
-						{
-							$histJoueur->setValeur("Modification d'une phrase (n° " . $_POST['phrase_id'] . " => n°" . $phrase->getId() . ").");
-						}
-						$histJoueur->setMembre($this->getUser());
-						$em->persist($histJoueur);
-
-						$repository3 = $this->getDoctrine()->getManager()->getRepository('AppBundle:Glose');
-
-						$mapsRep = $request->request->get('phrase_add')['motsAmbigusPhrase'];
-
-						foreach($phrase->getMotsAmbigusPhrase() as $map)
-						{
-							$rep = new Reponse();
-							$rep->setContenuPhrase($phrase->getContenu());
-							$rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
-							// -1 car l'ordre commence à 1 et le reorder à 0
-							$keyForMotsAmbigusPhrase = $mots_ambigu[ $map->getOrdre() - 1 ][1];
-							$idGlose = $mapsRep[ $keyForMotsAmbigusPhrase ]['gloses'];
-							if(empty($idGlose))
-							{
-								throw new \Exception("Tous les mots ambigus doivent avoir une glose");
-							}
-							$glose = $repository3->find($idGlose);
-							$rep->setValeurGlose($glose->getValeur());
-							$rep->setAuteur($this->getUser());
-							$rep->setGlose($glose);
-							$rep->setMotAmbiguPhrase($map);
-							$rep->setPhrase($phrase);
-
-							$map->addReponse($rep);
-
-							if(!$map->getMotAmbigu()->getGloses()->contains($glose))
-							{
-								$map->getMotAmbigu()->addGlose($glose);
-							}
-
-							$em->persist($map);
-							$em->persist($rep);
-						}
-
-						$partie = new Partie();
-						$partie->setJoueur($this->getUser());
-						$partie->setPhrase($phrase);
-						$partie->setJoue(true);
-						$em->persist($partie);
-
-						$newPhrase = $phrase;
-
-						if($edit)
-						{
-							$em->remove($phrD);
-						}
-
-						$em->flush();
-						$em->getConnection()->commit();
-
-						// Réinitialise le formulaire
-						$phrase = new \AppBundle\Entity\Phrase();
-						$form = $this->get('form.factory')->create(PhraseAddType::class, $phrase);
-					}
-					catch(UniqueConstraintViolationException $e)
-					{
-						$em->getConnection()->rollBack();
-						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> la phrase existe déjà.");
-					}
-					catch(\Exception $e)
-					{
-						$em->getConnection()->rollBack();
-						$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $e->getMessage());
-					}
-				}
-				else
-				{
-					$this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $res['message']);
-				}
-			}
-
-			$glose = new \AppBundle\Entity\Glose();
-			$addGloseForm = $this->get('form.factory')->create(GloseAddType::class, $glose, array(
-				'action' => $this->generateUrl('api_glose_new'),
-			));
-
-			if($edit)
-			{
-				return $this->render('AppBundle:Phrase:edit.html.twig', array(
-					'form' => $form->createView(),
-					'newPhrase' => $newPhrase,
-					// en cas d'edit ne doit pas etre false
-					'phrase' => $newPhrase,
-					'addGloseForm' => $addGloseForm->createView(),
-				));
-			}
-
-			return $this->render('AppBundle:Phrase:add.html.twig', array(
-				'form' => $form->createView(),
-				'newPhrase' => $newPhrase,
-				// en cas d'edit ne doit pas etre false
-				'phrase' => false,
-				'addGloseForm' => $addGloseForm->createView(),
-			));
-		}
-		else
-		{
-
-			$this->get('session')->getFlashBag()->add('erreur', "Vous devez être connecté.");
-
-			return $this->redirectToRoute('fos_user_security_login');
-		}
+        return $this->render('AppBundle:Phrase:add.html.twig', array(
+            'form' => $form->createView(),
+            'newPhrase' => $newPhrase,
+            'addGloseForm' => $addGloseForm->createView(),
+        ));
 	}
 
-	public function likeAction(Request $request, \AppBundle\Entity\Phrase $phrase)
-	{
-
-		$rep = $this->getDoctrine()->getManager()->getRepository('AppBundle:JAime');
-		$jaime = $rep->findOneBy(array(
-			'phrase' => $phrase,
-			'membre' => $this->getUser(),
-		));
-
-		$em = $this->getDoctrine()->getManager();
-
-		$action = null;
-		if(!$jaime)
-		{
-            $jaime = new JAime();
-            $jaime->setPhrase($phrase)->setMembre($this->getUser());
-			// ajoute X points au créateur
-            $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
-			$action = 'like';
-
-			// On enregistre dans l'historique du joueur
-			$histJoueur = new Historique();
-			$histJoueur->setValeur("Aime la phrase n°" . $phrase->getId() . ".");
-			$histJoueur->setMembre($this->getUser());
-
-			// On enregistre dans l'historique du createur de la phrase
-			$histAuteur = new Historique();
-			$histAuteur->setValeur("Un joueur a aimé votre phrase n°" . $phrase->getId() . " (+" . $this->getParameter('gainPerLikePhrasePoints') .
-			                       " points).");
-			$histAuteur->setMembre($phrase->getAuteur());
-
-			$em->persist($histJoueur);
-			$em->persist($histAuteur);
-		}
-		else
-		{
-			if($jaime->getActive() === false)
-			{
-                $jaime->setActive(true);
-				$action = 'relike';
-			}
-			else
-			{
-                $jaime->setActive(false);
-				$action = 'unlike';
-			}
-		}
-
-		$em->persist($jaime);
-		$em->flush();
-
-		return $this->json(array(
-			'status' => 'succes',
-			'action' => $action,
-		));
-	}
-
-	public function editAction(Request $request, \AppBundle\Entity\Phrase $phrase)
+	public function editAction(Request $request, Phrase $phrase)
 	{
 		$dateMax = $phrase->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
 		$dateActu = new \DateTime();

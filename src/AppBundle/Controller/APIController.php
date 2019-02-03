@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Glose;
+use AppBundle\Entity\JAime;
 use AppBundle\Entity\Jugement;
 use AppBundle\Entity\MotAmbigu;
+use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Form\Jugement\JugementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -222,6 +224,63 @@ class APIController extends Controller
         );
 
         return $this->json($res);
+    }
+
+    public function likeAction(Phrase $phrase)
+    {
+        $jaimeRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:JAime');
+        $jaime = $jaimeRepo->findOneBy(array(
+            'phrase' => $phrase,
+            'membre' => $this->getUser(),
+        ));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $action = null;
+        if(!$jaime)
+        {
+            $jaime = new JAime();
+            $jaime->setPhrase($phrase)->setMembre($this->getUser());
+            // Ajoute X points au créateur
+            $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
+            $action = 'like';
+
+            // On enregistre dans l'historique du joueur
+            $histJoueur = new Historique();
+            $histJoueur->setValeur("Aime la phrase n°" . $phrase->getId() . ".");
+            $histJoueur->setMembre($this->getUser());
+
+            // On enregistre dans l'historique du créateur de la phrase
+            $histAuteur = new Historique();
+            $histAuteur->setValeur(
+                "Un joueur a aimé votre phrase n°" . $phrase->getId() . " (+" . $this->getParameter('gainPerLikePhrasePoints') . " points)."
+            );
+            $histAuteur->setMembre($phrase->getAuteur());
+
+            $em->persist($histJoueur);
+            $em->persist($histAuteur);
+        }
+        else
+        {
+            if($jaime->getActive() === false)
+            {
+                $jaime->setActive(true);
+                $action = 'relike';
+            }
+            else
+            {
+                $jaime->setActive(false);
+                $action = 'unlike';
+            }
+        }
+
+        $em->persist($jaime);
+        $em->flush();
+
+        return $this->json(array(
+            'status' => 'succes',
+            'action' => $action,
+        ));
     }
 
 }

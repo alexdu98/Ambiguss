@@ -6,9 +6,7 @@
 {% block contenu %}
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
-		    {% if phrase and newPhrase is not null %}
-			    {{ include('@App/Phrase/displayPhrase.html.twig', {'add': false, 'phraseDisplay' : phrase}) }}
-		    {% elseif newPhrase is not null %}
+		    {% if newPhrase is not null %}
 			    {{ include('@App/Phrase/displayPhrase.html.twig', {'add': true, 'phraseDisplay' : newPhrase}) }}
 		    {% endif %}
 
@@ -25,18 +23,14 @@
 			    <div class="alert alert-danger">{{ flashMessage }}</div>
 		    {% endfor %}
 
-		    {{ form_start(form , {'form-type' : 'horizontal'}) }}
+		    {{ form_start(form , {'attr': {'id': 'addPhraseForm'}, 'form-type' : 'horizontal'}) }}
 
 		    {{ form_errors(form) }}
 
 		    <div class="form-group">
 			    <div id="rendu" class="size16" style="background: white; color: black; padding: 5px;" hidden></div>
 		    </div>
-		    {% if phrase != newPhrase and phrase %}
-			    {{ form_row(form.contenu, {value: phrase.contenuAmb}) }}
-		    {% else %}
-			    {{ form_row(form.contenu) }}
-		    {% endif %}
+			{{ form_row(form.contenu) }}
 
 		    <div class="form-group">
 			    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
@@ -50,11 +44,7 @@
 		    </div>
 		    {% do form.motsAmbigusPhrase.setRendered %}
 
-		    {% if phrase %}
-			    <input type="hidden" name="phrase_id" value="{{ phrase.id }}">
-			    {{ form_row(form.modifier) }}
-			    {% do form.creer.setRendered %}
-		    {% elseif app.user.credits < costCreatePhraseByMotAmbiguCredits %}
+		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
 			    {% do form.creer.setRendered %}
 		    {% else %}
 			    {{ form_row(form.creer) }}
@@ -241,7 +231,7 @@
 			// Supprime le formulaire d'un mot ambigu (voir cours sur les formulaires imbriqués)
 			function addDeleteLink($prototype) {
 				var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer le mot ambigu</a>');
-				$prototype.find('.deleteLink').append($deleteLink);
+				$prototype.find('.gloseAction').append($deleteLink);
 
 				// Au clic sur le bouton de suppression
 				$deleteLink.click(function(e) {

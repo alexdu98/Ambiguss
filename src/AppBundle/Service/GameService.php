@@ -3,8 +3,6 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Game;
-use AppBundle\Entity\Glose;
-use AppBundle\Entity\Jugement;
 use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Phrase;
 use AppBundle\Entity\Reponse;

@@ -146,7 +146,7 @@
 
                 $("#phraseLike").click(function () {
                     var boutonLike = $(this);
-                    $.getJSON('{{ path('phrase_like', {'id': phrase.id}) }}', function (data) {
+                    $.getJSON('{{ path('api_phrase_like', {'id': phrase.id}) }}', function (data) {
                         if (data.status === 'succes') {
                             if (data.action === 'like' || data.action === 'relike') {
                                 boutonLike.removeClass('btn-default').addClass('btn-primary');

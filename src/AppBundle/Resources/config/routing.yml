@@ -60,6 +60,12 @@ api_mots_ambigus_glose_show:
     options:
         expose: true
 
+api_phrase_like:
+    path: /api/phrase/{id}/like
+    controller: AppBundle:API:like
+    requirements:
+        id: \d+
+
 game_show:
     path: /jeu/{id}
     controller: AppBundle:Game:show
@@ -85,12 +91,6 @@ phrase_edit:
         id: \d+
     options:
         expose: true
-
-phrase_like:
-    path: /phrase/{id}/like
-    controller: AppBundle:Phrase:like
-    requirements:
-        id: \d+
 
 ##################################################
 ################### CLASSEMENT ###################

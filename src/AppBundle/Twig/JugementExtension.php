@@ -3,8 +3,10 @@
 namespace AppBundle\Twig;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class JugementExtension extends \Twig_Extension
+class JugementExtension extends AbstractExtension
 {
 
 	private $em;
@@ -37,19 +39,14 @@ class JugementExtension extends \Twig_Extension
 	public function getFunctions()
 	{
 		return array(
-			new \Twig_SimpleFunction('nbPhrasesSignale', array(
+			new TwigFunction('nbPhrasesSignale', array(
 				$this,
 				'nbPhrasesSignale',
 			)),
-			new \Twig_SimpleFunction('nbGlosesSignale', array(
+			new TwigFunction('nbGlosesSignale', array(
 				$this,
 				'nbGlosesSignale',
 			)),
 		);
-	}
-
-	public function getName()
-	{
-		return 'Signale';
 	}
 }

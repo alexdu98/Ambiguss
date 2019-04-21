@@ -3,8 +3,10 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Entity\Phrase;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class PhraseExtension extends \Twig_Extension
+class PhraseExtension extends AbstractExtension
 {
 
     /**
@@ -13,26 +15,23 @@ class PhraseExtension extends \Twig_Extension
      * @param $phrase
      * @return null|string|string[]
      */
-	public function getStaticHTML($phrase)
+	public function getStaticHTML($something)
 	{
-		$phraseO = new Phrase();
-		$phraseO->setContenu($phrase);
+		if ($something instanceof Phrase)
+			return $something->getContenuHTML();
 
-		return $phraseO->getContenuHTML();
+		$phrase = new Phrase();
+		$phrase->setContenu($something);
+		return $phrase->getContenuHTML();
 	}
 
-	public function getFunctions()
+	public function getFilters()
 	{
 		return array(
-			new \Twig_SimpleFunction('getPhraseHTML', array(
+			new TwigFilter('getPhraseHTML', array(
 				$this,
 				'getStaticHTML',
 			)),
 		);
-	}
-
-	public function getName()
-	{
-		return 'getPhraseHTML';
 	}
 }

@@ -41,7 +41,7 @@
             {% for row in phrases %}
                 <tr id="phrase-{{ row.id }}">
                     <td>{{ row.id }}</td>
-                    <td><a style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a></td>
+                    <td><a style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ row | getPhraseHTML | raw }}</a></td>
                     <td><a href="{{ path('fos_user_profile_show' , {'id':row.auteur.id}) }}">{{ row.auteur.username }}</a></td>
                     <td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
                     {% if not row.modificateur %}

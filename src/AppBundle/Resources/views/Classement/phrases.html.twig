@@ -34,7 +34,7 @@
 				<tr>
 					<td>{{ loop.index }}</td>
 					<td>
-						<a title="Jouer cette phrase" style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ getPhraseHTML(row.contenu) | raw }}</a>
+						<a title="Jouer cette phrase" style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ row.contenu | getPhraseHTML | raw }}</a>
 					</td>
 					<td>{{ row.nbJAime }}</td>
 					<td>{{ row.gainCreateur }}</td>

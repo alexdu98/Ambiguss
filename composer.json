@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "ambiguss",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "TER M1",
     "autoload": {
         "psr-4": { "AppBundle\\": "src/AppBundle" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
@@ -13,26 +13,25 @@
     },
     "require": {
         "php": ">=7.2.11",
-        "symfony/symfony": "3.4.*",
-        "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-cache-bundle": "^1.2",
-        "symfony/swiftmailer-bundle": "^2.6.4",
-        "symfony/monolog-bundle": "^3.0.2",
-        "symfony/polyfill-apcu": "^1.0",
-        "sensio/distribution-bundle": "^5.0.19",
-        "sensio/framework-extra-bundle": "^5.0.0",
-        "incenteev/composer-parameter-handler": "^2.0",
+        "doctrine/doctrine-migrations-bundle": "^1.3",
+        "doctrine/orm": "^2.5",
+        "easycorp/easyadmin-bundle": "^1.17",
         "friendsofsymfony/jsrouting-bundle": "^2.0",
         "friendsofsymfony/user-bundle": "^2.1",
-        "twig/twig": "^1.0||^2.0",
         "hwi/oauth-bundle": "^0.5.3",
-        "easycorp/easyadmin-bundle": "^1.17",
-        "doctrine/doctrine-migrations-bundle": "^1.3"
+        "incenteev/composer-parameter-handler": "^2.0",
+        "sensio/distribution-bundle": "^5.0.19",
+        "sensio/framework-extra-bundle": "^5.0.0",
+        "symfony/monolog-bundle": "^3.1.2",
+        "symfony/polyfill-apcu": "^1.0",
+        "symfony/swiftmailer-bundle": "^3.0",
+        "symfony/symfony": "3.4.*",
+        "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^4.2"
     },
     "scripts": {
         "symfony-scripts": [
@@ -51,9 +50,7 @@
         ]
     },
     "config": {
-        "platform": {
-            "php": "7.2.11"
-        }
+        "sort-packages": true
     },
     "extra": {
         "symfony-app-dir": "app",
@@ -63,11 +60,8 @@
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
-            "file": "app/config/parameters.yml",
-            "keep-outdated": true
+            "file": "app/config/parameters.yml"
         },
-        "branch-alias": {
-            "dev-master": "3.4-dev"
-        }
+        "branch-alias": null
     }
 }

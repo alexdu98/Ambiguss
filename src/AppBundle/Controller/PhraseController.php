@@ -24,6 +24,7 @@ class PhraseController extends Controller
 	{
         $secu = $this->get('security.authorization_checker');
         $bag = $this->get('session')->getFlashBag();
+        $newPhrase = null;
 
 		if(!$secu->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 

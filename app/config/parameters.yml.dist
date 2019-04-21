@@ -17,3 +17,12 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    recaptcha: ~
+    recaptcha_secret: ~
+    facebook_id: ~
+    facebook_secret: ~
+    twitter_id: ~
+    twitter_secret: ~
+    google_id: ~
+    google_secret: ~

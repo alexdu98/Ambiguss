@@ -37,3 +37,23 @@ services:
         arguments: { $roleHierarchy: "@security.role_hierarchy" }
         tags:
             - { name: security.voter }
+
+    AppBundle\Service\ExportService:
+        autowire: true
+        arguments: { $infos: '%infosExport%', $downloadDir: '%downloadDirectory%' }
+
+    AppBundle\Service\RecaptchaService:
+        autowire: true
+        arguments: { $secret: '%recaptcha_secret%' }
+
+    security.role_hierarchy:
+        autowire: true
+        class: 'AppBundle\Service\RoleHierarchyService'
+
+    AppBundle\Service\FOSUserProvider:
+        autowire: true
+        arguments:
+            $properties:
+                facebook: 'facebook'
+                twitter: 'twitter'
+                google: 'google'

@@ -1,10 +1,3 @@
-app:
-    resource: "@AppBundle/Resources/config/routing.yml"
-    prefix:   /
-
-fos_user:
-    resource: "@AppBundle/Resources/config/FOSUser_routing.yml"
-
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
@@ -33,3 +26,293 @@ easy_admin_bundle:
     resource: "@EasyAdminBundle/Controller/AdminController.php"
     type:     annotation
     prefix:   /admin
+
+##################################################
+###################### MAIN ######################
+##################################################
+accueil_show:
+    path: /
+    controller: AppBundle:Main:accueil
+
+mentions_show:
+    path: /mentions
+    controller: AppBundle:Main:mentions
+
+conditions_show:
+    path: /conditions
+    controller: AppBundle:Main:conditions
+
+contact_show:
+    path: /contact
+    controller: AppBundle:Main:contact
+
+apropos_show:
+    path: /a-propos
+    controller: AppBundle:Main:aPropos
+
+##################################################
+#################### AMBIGUSS ####################
+##################################################
+ambiguss_export:
+    path: /export
+    controller: AppBundle:Main:export
+
+api_jugement_new:
+    path: /api/jugement/new
+    controller: AppBundle:API:newJugement
+
+api_autocomplete_glose:
+    path: /api/autocomplete/glose
+    controller: AppBundle:API:autocompleteGlose
+    options:
+        expose: true
+
+api_autocomplete_mot_ambigu:
+    path: /api/autocomplete/motambigu
+    controller: AppBundle:API:autocompleteMotAmbigu
+    options:
+        expose: true
+
+api_glose_new:
+    path: /api/glose/new
+    controller: AppBundle:API:newGlose
+
+api_gloses_mot_ambigu_show:
+    path: /api/motambigu/gloses
+    controller: AppBundle:API:showGlosesMotAmbigu
+    options:
+        expose: true
+
+api_mots_ambigus_glose_show:
+    path: /api/glose/motambigu
+    controller: AppBundle:API:showMotsAmbigusGlose
+    options:
+        expose: true
+
+api_phrase_like:
+    path: /api/phrase/{id}/like
+    controller: AppBundle:API:like
+    requirements:
+        id: \d+
+
+game_show:
+    path: /jeu/{id}
+    controller: AppBundle:Game:show
+    defaults:
+        id: null
+    methods: [GET]
+
+game_play:
+    path: /jeu/{id}
+    controller: AppBundle:Game:play
+    defaults:
+        id: \d+
+    methods: [POST]
+
+phrase_new:
+    path: /phrase/new
+    controller: AppBundle:Phrase:new
+
+phrase_edit:
+    path: /phrase/{id}/edit
+    controller: AppBundle:Phrase:edit
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+##################################################
+################### CLASSEMENT ###################
+##################################################
+classement_joueurs_show:
+    path: /classement/joueurs
+    controller: AppBundle:Classement:joueurs
+
+classement_phrases_show:
+    path: /classement/phrases
+    controller: AppBundle:Classement:phrases
+
+classement_personnel_show:
+    path: /classement/personnel
+    controller: AppBundle:Classement:personnel
+
+##################################################
+###################### MODO ######################
+##################################################
+modo_phrases_show:
+    path: /moderation/phrases
+    controller: AppBundle:Modo:showPhrases
+
+modo_phrase_delete:
+    path: /moderation/phrase/{id}/delete
+    controller: AppBundle:Modo:deletePhrase
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_phrase_unsignale:
+    path: /moderation/phrase/{id}/unsignale
+    controller: AppBundle:Modo:unsignalePhrase
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_gloses_show:
+    path: /moderation/gloses
+    controller: AppBundle:Modo:showGloses
+
+modo_glose_edit:
+    path: /moderation/glose/{id}/edit
+    controller: AppBundle:Modo:editGlose
+    requirements:
+        id: \d+
+
+modo_glose_count_reponses:
+    path: /moderation/glose/{id}/reponses/count
+    controller: AppBundle:Modo:countReponses
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_glose_delete:
+    path: /moderation/glose/{id}/delete
+    controller: AppBundle:Modo:deleteGlose
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_mots_ambigus_gloses_show:
+    path: /moderation/mots-ambigus-gloses
+    controller: AppBundle:Modo:showMotsAmbigusGloses
+
+modo_mots_ambigus_gloses_delete:
+    path: /moderation/mots-ambigus-gloses/delete
+    controller: AppBundle:Modo:deleteMotsAmbigusGloses
+    options:
+        expose: true
+
+modo_jugement_edit:
+    path: /moderation/jugement/edit/{id}
+    controller: AppBundle:Modo:editJugement
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_jugements_glose_show:
+    path: /moderation/jugement/glose/{id}
+    controller: AppBundle:Modo:showGloseJugements
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+##################################################
+##################### ADMIN ######################
+##################################################
+admin_stats:
+    path: /admin/statistiques
+    controller: AppBundle:Admin:statistiques
+
+##################################################
+#################### FOSUSER #####################
+##################################################
+fos_user_security_login:
+    path: /connexion
+    controller: fos_user.security.controller:loginAction
+    methods: [GET, POST]
+
+fos_user_security_check:
+    path: /login_check
+    controller: fos_user.security.controller:checkAction
+    methods: [POST]
+
+fos_user_security_logout:
+    path: /deconnexion
+    controller: fos_user.security.controller:logoutAction
+    methods: [GET, POST]
+
+fos_user_profile_show:
+    path: /profil/{id}
+    controller: AppBundle:User:show
+    methods: [GET]
+    defaults:
+        id: null
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+fos_user_profile_edit:
+    path: /profil/edit
+    controller: AppBundle:User:edit
+    methods: [GET, POST]
+
+fos_user_change_password:
+    path: /profil/edit/password
+    controller: fos_user.change_password.controller:changePasswordAction
+    methods: [GET, POST]
+
+fos_user_registration_register:
+    path: /inscription/
+    controller: fos_user.registration.controller:registerAction
+    methods: [GET, POST]
+
+fos_user_registration_check_email:
+    path: /inscription/check-email
+    controller: fos_user.registration.controller:checkEmailAction
+    methods: [GET]
+
+fos_user_registration_confirm:
+    path: /inscription/confirmation/{token}
+    controller: fos_user.registration.controller:confirmAction
+    methods: [GET]
+
+fos_user_registration_confirmed:
+    path: /inscription/confirme"
+    controller: fos_user.registration.controller:confirmedAction
+    methods: [GET]
+
+fos_user_resetting_request:
+    path: /reinitialisation/
+    controller: fos_user.resetting.controller:requestAction
+    methods: [GET]
+
+fos_user_resetting_send_email:
+    path: /reinitialisation/send-email
+    controller: fos_user.resetting.controller:sendEmailAction
+    methods: [POST]
+
+fos_user_resetting_check_email:
+    path: /reinitialisation/check-email
+    controller: fos_user.resetting.controller:checkEmailAction
+    methods: [GET]
+
+fos_user_resetting_reset:
+    path: /reinitialisation/reset/{token}
+    controller: fos_user.resetting.controller:resetAction
+    methods: [GET, POST]
+
+fos_user_group_list:
+    path: /group/list
+    controller: fos_user.group.controller:listAction
+    methods: [GET]
+
+fos_user_group_new:
+    path: /group/new
+    controller: fos_user.group.controller:newAction
+    methods: [GET, POST]
+
+fos_user_group_show:
+    path: /group/{groupName}
+    controller: fos_user.group.controller:showAction
+    methods: [GET]
+
+fos_user_group_edit:
+    path: /group/{groupName}/edit
+    controller: fos_user.group.controller:editAction
+    methods: [GET, POST]

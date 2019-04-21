@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Membre
@@ -18,6 +19,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="IDX_MEMBRE_DATENAISSANCE", columns={"date_naissance"}),
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MembreRepository")
+ * @UniqueEntity(
+ *     fields={"emailCanonical"},
+ *     errorPath="email",
+ *     message="L'email {{ value }} est déjà utilisé"
+ * )
+ * @UniqueEntity(
+ *     fields={"usernameCanonical"},
+ *     errorPath="username",
+ *     message="Le pseudo {{ value }} est déjà utilisé"
+ * )
  */
 class Membre extends User
 {

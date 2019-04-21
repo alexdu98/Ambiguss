@@ -3,7 +3,6 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: admin.yml }
-    - { resource: "@AppBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -145,7 +144,7 @@ hwi_oauth:
     connect:
         confirmation: true
         account_connector: fos_user.registration.form.factory
-    firewall_names: ["main"]
+    firewall_names: [main]
     resource_owners:
         facebook:
             type: facebook
@@ -185,3 +184,7 @@ doctrine_migrations:
     table_name: migrations
     name: Application Migrations
     organize_migrations: "BY_YEAR_AND_MONTH"
+
+sensio_framework_extra:
+    router:
+        annotations: false

@@ -23,7 +23,8 @@ class PhraseService
         $this->container = $container;
     }
 
-    public function new(Phrase $phrase, Membre $auteur, array $mapsRep) {
+    public function new(Phrase $phrase, Membre $auteur, array $mapsRep, $isEdit = false)
+    {
         $coutUnitaire = $this->container->getParameter('costCreatePhraseByMotAmbiguCredits');
         $gainCreation = $this->container->getParameter('gainCreatePhrasePoints');
 
@@ -42,7 +43,7 @@ class PhraseService
         }
 
         if($succes) {
-            $this->treatMotsAmbigus($phrase, $auteur, $motsAmbigus);
+            $this->treatMotsAmbigus($phrase, $auteur, $motsAmbigus, $isEdit);
 
             // Mise à jour du nombre de crédits et de points de l'auteur
             $auteur->updateCredits(-$coutUnitaire * count($motsAmbigus));
@@ -86,15 +87,25 @@ class PhraseService
         return $res;
     }
 
-    public function treatMotsAmbigusPhrase(Phrase $phrase, Membre $auteur, array $motsAmbigus, array $mapsRep) {
+    public function update(Phrase $phrase, Membre $auteur, array $mapsRep)
+    {
+        $phrase->setDateModification(new \DateTime());
+        $phrase->setModificateur($auteur);
+        
+        $this->normalize($phrase);
+        $res = $this->isValid($phrase);
+
+        $succes = $res['succes'];
+        $motsAmbigus = $res['motsAmbigus'];
+    }
+
+    public function treatMotsAmbigusPhrase(Phrase $phrase, Membre $auteur, array $motsAmbigus, array $mapsRep)
+    {
         $repoGlose = $this->em->getRepository('AppBundle:Glose');
 
-        foreach($phrase->getMotsAmbigusPhrase() as $map)
-        {
-            $rep = new Reponse();
-            $rep->setContenuPhrase($phrase->getContenu());
-            $rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
-
+        $newRep = array();
+        foreach($phrase->getMotsAmbigusPhrase() as $map) {
+            
             // -1 car l'ordre commence à 1 et le reorder à 0
             $keyForMotsAmbigusPhrase = $motsAmbigus[ $map->getOrdre() - 1 ][1];
             $idGlose = $mapsRep[ $keyForMotsAmbigusPhrase ]['gloses'];
@@ -102,26 +113,40 @@ class PhraseService
             {
                 throw new \Exception("Tous les mots ambigus doivent avoir une glose");
             }
-            $glose = $repoGlose->find($idGlose);
-            $rep->setValeurGlose($glose->getValeur());
-            $rep->setAuteur($auteur);
-            $rep->setGlose($glose);
-            $rep->setMotAmbiguPhrase($map);
-            $rep->setPhrase($phrase);
 
-            $map->addReponse($rep);
+            $rep = new Reponse();
+            $newRep[ $map->getId() ] = $rep;
 
-            if(!$map->getMotAmbigu()->getGloses()->contains($glose))
-            {
-                $map->getMotAmbigu()->addGlose($glose);
+            // S'il n'y a pas de réponse (nouveau MA)
+            if($map->getReponses()->count() == 0) {
+
+                $glose = $repoGlose->find($idGlose);
+
+                $rep = new Reponse();
+                $rep->setContenuPhrase($phrase->getContenu());
+                $rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
+                $rep->setValeurGlose($glose->getValeur());
+                $rep->setAuteur($auteur);
+                $rep->setGlose($glose);
+                $rep->setMotAmbiguPhrase($map);
+                $rep->setPhrase($phrase);
+
+                $map->addReponse($rep);
+
+                if(!$map->getMotAmbigu()->getGloses()->contains($glose))
+                {
+                    $map->getMotAmbigu()->addGlose($glose);
+                }
+
+                $this->em->persist($map);
+                $this->em->persist($rep);
             }
-
-            $this->em->persist($map);
-            $this->em->persist($rep);
         }
+
+        return $newRep;
     }
 
-    public function treatMotsAmbigus(Phrase $phrase, Membre $auteur, array $motsAmbigus) {
+    public function treatMotsAmbigus(Phrase $phrase, Membre $auteur, array $motsAmbigus, $isEdit = false) {
         $repoMA = $this->em->getRepository('AppBundle:MotAmbigu');
 
         /*
@@ -134,22 +159,21 @@ class PhraseService
          */
         foreach($motsAmbigus as $key => $motAmbigu)
         {
-            $mot_ambigu_OBJ = new MotAmbigu();
-            $mot_ambigu_OBJ->setValeur($motAmbigu[2]);
-            $mot_ambigu_OBJ->setAuteur($auteur);
+            $motAmbiguService = $this->get('AppBundle\Service\MotAmbiguService');
+            $motAmbiguOBJ = $motAmbiguService->findOrAdd($motAmbigu[2], $this->getUser());
 
-            // Normalise le mot ambigu
-            $mot_ambigu_OBJ->normalize();
-
-            $tmp = $repoMA->findOneBy(array('valeur' => $mot_ambigu_OBJ->getValeur()));
-
-            // Soit on le trouve dans la BD soit on l'ajoute
-            if($tmp == null){
-                $this->em->persist($mot_ambigu_OBJ);
-                $this->em->flush();
+            if($isEdit) {
+                foreach($mapsOri as $key2 => $map) {
+                    // Cas nouvel id exist dans ancienne phrase => MA update
+                    if($map->getOrdre() == $motAmbigu[1])
+                    {
+                        $motAmbiguOBJ = $motAmbiguService->findOrAdd($motAmbigu[2], $this->getUser());
+                        $phrase->getMotsAmbigusPhrase()->get($key2)->setMotAmbigu($mot_ambigu_OBJ);
+                        $phrase->getMotsAmbigusPhrase()->get($key2)->setOrdre($key + 1);
+                        continue 2;
+                    }
+                }
             }
-            else
-                $mot_ambigu_OBJ = $tmp;
 
             $map = new MotAmbiguPhrase();
             $map->setOrdre($key + 1);
@@ -157,6 +181,26 @@ class PhraseService
             $map->setMotAmbigu($mot_ambigu_OBJ);
 
             $phrase->addMotAmbiguPhrase($map);
+        }
+    }
+
+    public function reorderMAP(Phrase &$phrase)
+    {
+        $maps = $phrase->getMotsAmbigusPhrase()->getValues();
+
+        // Trie le tableau des motsAmbigusPhrase
+        uasort($maps, function($a, $b)
+        {
+            return ($a->getOrdre() < $b->getOrdre()) ? -1 : 1;
+        });
+
+        // Supprime tous les MAP
+        $phrase->removeMotsAmbigusPhrase();
+
+        // Rajoute les MAP dans l'ordre
+        foreach($maps as $key => $map)
+        {
+            $phrase->addMotAmbiguPhrase($maps[$key]);
         }
     }
 
@@ -225,6 +269,7 @@ class PhraseService
         }
 
         // Mot mal sélectionné
+        $arr = null;
         preg_match_all('#[a-zA-Z]\<amb|amb\>[a-zA-Z]#', $phrase->getContenu(), $arr, PREG_SET_ORDER);
         if(!empty($arr))
         {

@@ -212,7 +212,6 @@
                 // Ajoute la valeur du mot ambigu en supprimant les espaces avant et après le mot, et ajoute l'id
                 amb.val(motAmbigu);
                 $prototype.attr('id', 'amb' + index);
-                addAddGloseButton($prototype, motAmbigu, addGloseButtonIsClicked);
                 addDeleteLink($prototype);
                 $prototype.find('.amb').focusout({id: index}, updateMotAmbiguInPhrase);
                 $prototype.find('.amb').bind('input', function () {

@@ -5,6 +5,7 @@ namespace AppBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 class RoleHierarchyService implements RoleHierarchyInterface
 {
@@ -22,7 +23,7 @@ class RoleHierarchyService implements RoleHierarchyInterface
      * et les retourne
      *
      * @param array $roles
-     * @return array|\Symfony\Component\Security\Core\Role\RoleInterface[]
+     * @return array|RoleInterface[]
      */
     public function getReachableRoles(array $roles)
     {

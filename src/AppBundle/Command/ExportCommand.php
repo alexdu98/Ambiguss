@@ -27,7 +27,7 @@ class ExportCommand extends ContainerAwareCommand {
 
 			// Calcul la durée que prend l'export
 			$start = microtime(true);
-			$nb = $ser->phrases();
+			$nb = $ser->exportPhrases();
 			$nbSec = microtime(true) - $start;
 
 			$io->text($nb . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');
@@ -41,7 +41,7 @@ class ExportCommand extends ContainerAwareCommand {
 
             // Calcul la durée que prend l'export
 			$start = microtime(true);
-			$nb = $ser->motsAmbigus();
+			$nb = $ser->exportMotsAmbigus();
 			$nbSec = microtime(true) - $start;
 
 			$io->text($nb . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');

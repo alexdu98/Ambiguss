@@ -77,13 +77,9 @@ class ExportService
 
 
     /**
-     * Exporte les phrases et leurs réponses
-     *
-     * Retourne le nombre de phrases
-     *
-     * @return int
+     * Retourne les phrases et leurs réponses
      */
-    public function phrases()
+    private function phrases()
     {
         $repoP = $this->em->getRepository('AppBundle:Phrase');
         $res = $repoP->export();
@@ -133,14 +129,7 @@ class ExportService
             $i++;
         }
 
-        $file = fopen($this->downloadDir . 'export_phrases.json', 'wb+');
-        fwrite($file, (json_encode(array(
-            'infos' => $this->infos,
-            'date' => date('d/m/Y H:i'),
-            'donnees' => $phrases,
-        ), JSON_UNESCAPED_UNICODE)));
-
-        return count($phrases);
+        return $phrases;
     }
 
     /**
@@ -160,13 +149,9 @@ class ExportService
     }
 
     /**
-     * Exporte les mots ambigus et leurs gloses
-     *
-     * Retourne le nombre de mots ambigus
-     *
-     * @return int
+     * Retourne les mots ambigus et leurs gloses
      */
-    public function motsAmbigus()
+    private function motsAmbigus()
     {
         $repoMA = $this->em->getRepository('AppBundle:MotAmbigu');
         $res = $repoMA->export();
@@ -202,12 +187,42 @@ class ExportService
             $i++;
         }
 
-        $file = fopen($this->downloadDir . 'export_motsAmbigus.json', 'wb+');
-        fwrite($file, (json_encode(array(
+        return $motsAmbigus;
+    }
+
+    /**
+     * Enregistre les données $data dans un fichier $fileName au format JSON
+     */
+    private function save($fileName, $data)
+    {
+        $file = fopen($this->downloadDir . $fileName, 'wb+');
+
+        return fwrite($file, (json_encode(array(
             'infos' => $this->infos,
-            'date' => date('d/m/Y H\hi'),
-            'donnees' => $motsAmbigus,
+            'date' => date('d/m/Y H:i'),
+            'donnees' => $data,
         ), JSON_UNESCAPED_UNICODE)));
+    }
+
+    public function getDownloadDir()
+    {
+        return $this->downloadDir;
+    }
+
+    public function exportPhrases()
+    {
+        $phrases = $this->phrases();
+
+        $this->save('export_phrases.json', $phrases);
+
+        return count($phrases);
+    }
+
+    public function exportMotsAmbigus()
+    {
+        $motsAmbigus = $this->motsAmbigus();
+
+        $this->save('export_motsAmbigus.json', $motsAmbigus);
 
         return count($motsAmbigus);
     }

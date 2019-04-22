@@ -9,6 +9,7 @@ imports:
 parameters:
     locale: fr
     site_name: "Ambiguss"
+    version: "1.2.0"
     # Phrase
     costCreatePhraseByMotAmbiguCredits: 100
     gainCreatePhrasePoints: 25
@@ -59,7 +60,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '1.2.0'
+        version: "%version%"
         version_format: '%%s?v=%%s'
     php_errors:
         log: true
@@ -77,6 +78,7 @@ twig:
         gainPercentByGame: "%gainPercentByGame%"
         costCreateGloseByGlosesOfMotAmbigu: "%costCreateGloseByGlosesOfMotAmbigu%"
         recaptcha: "%recaptcha%"
+        version: "%version%"
 
 # Doctrine Configuration
 doctrine:

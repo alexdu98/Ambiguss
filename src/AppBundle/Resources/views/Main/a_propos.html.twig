@@ -17,7 +17,13 @@
 					<b>Tuteur</b> : Mathieu Lafourcade<br>
 					<b>Groupe</b> : IMNA<br>
 					<b>Membres</b> : Isna Ouazi, Melissa Mekaoui, Nicolas Delalande, Alexandre Culty<br>
-					<b>Github</b> : <a href="https://github.com/alexdu98/Ambiguss">Ambiguss</a>
+					<b>Github</b> : <a href="https://github.com/alexdu98/Ambiguss" target="_blank" rel="noreferrer noopener">Ambiguss</a><br>
+					<b>Version actuelle</b> : <a href="https://github.com/alexdu98/Ambiguss/releases/tag/v{{ version }}" target="_blank" rel="noreferrer noopener">{{ version }}</a>
+						 <small>({{ actualCommit.commit.committer.date|date('d/m/Y') }})</small><br>
+					<b>Dernier développement</b> :
+						<a href="{{ lastDev.html_url }}" target="_blank" rel="noreferrer noopener">{{ lastDev.commit.message|length > 30 ? lastDev.commit.message|slice(0, 30) ~ '...' : lastDev.commit
+							.message }}</a>
+						<small>({{ lastDev.commit.committer.date|date('d/m/Y') }})</small>
 				</p>
 				<p>
 					Il s'agit d'un GWAP (Game With A Purpose => Jeu avec un but). Dans notre cas pour faire de la désambiguïsation lexicale.<br>

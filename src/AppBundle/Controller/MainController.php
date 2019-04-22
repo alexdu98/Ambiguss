@@ -86,7 +86,12 @@ class MainController extends Controller
 
 	public function aProposAction()
 	{
-		return $this->render('AppBundle:Main:a_propos.html.twig');
+	    $githubService = $this->get('AppBundle\Service\GithubService');
+
+		return $this->render('AppBundle:Main:a_propos.html.twig', array(
+		    'lastDev' => $githubService->getLastDev(),
+            'actualCommit' => $githubService->getActualCommit()
+        ));
 	}
 
     public function exportAction ()

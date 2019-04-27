@@ -3,13 +3,12 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Membre;
-use AppBundle\Entity\MotAmbigu;
-use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Phrase;
-use AppBundle\Entity\Reponse;
+use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class PhraseService
@@ -43,165 +42,61 @@ class PhraseService
         }
 
         if($succes) {
-            $this->treatMotsAmbigus($phrase, $auteur, $motsAmbigus, $isEdit);
+            $motAmbiguService = $this->container->get('AppBundle\Service\MotAmbiguService');
+            $motAmbiguPhraseService = $this->container->get('AppBundle\Service\MotAmbiguPhraseService');
+
+            $motAmbiguService->treatMotsAmbigus($phrase, $auteur, $motsAmbigus, $isEdit);
 
             // Mise à jour du nombre de crédits et de points de l'auteur
             $auteur->updateCredits(-$coutUnitaire * count($motsAmbigus));
             $auteur->updatePoints($gainCreation);
 
             $this->em->getConnection()->beginTransaction();
-            try
-            {
-                $this->em->persist($phrase);
-                $this->em->flush();
 
-                // On enregistre dans l'historique de l'auteur
-                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
-                $historiqueService->save($auteur, "Création de la phrase n°" . $phrase->getId() . " (+ " . $gainCreation . " points).");
+            $this->em->persist($phrase);
+            $this->em->flush();
 
-                $this->treatMotsAmbigusPhrase($phrase, $auteur, $motsAmbigus, $mapsRep);
+            // On enregistre dans l'historique de l'auteur
+            $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+            $historiqueService->save($auteur, "Création de la phrase n°" . $phrase->getId() . " (+ " . $gainCreation . " points).");
 
-                $partie = new Partie();
-                $partie->setJoueur($auteur);
-                $partie->setPhrase($phrase);
-                $partie->setJoue(true);
-                $this->em->persist($partie);
+            $motAmbiguPhraseService->treatMotsAmbigusPhrase($phrase, $auteur, $motsAmbigus, $mapsRep);
 
-                $this->em->flush();
-                $this->em->getConnection()->commit();
-            }
-            catch(UniqueConstraintViolationException $e)
-            {
-                $this->em->getConnection()->rollBack();
-                $res['succes'] = false;
-                $res['message'] = "Erreur lors de l'insertion de la phrase -> la phrase existe déjà.";
-            }
-            catch(\Exception $e)
-            {
-                $this->em->getConnection()->rollBack();
-                $res['succes'] = false;
-                $res['message'] = "Erreur lors de l'insertion de la phrase -> " . $e->getMessage();
-            }
+            $partie = new Partie();
+            $partie->setJoueur($auteur);
+            $partie->setPhrase($phrase);
+            $partie->setJoue(true);
+            $this->em->persist($partie);
+
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+
         }
 
         return $res;
     }
 
-    public function update(Phrase $phrase, Membre $auteur, array $mapsRep)
+    public function update(Phrase $phrase, Membre $modificateur, array $motsAmbigus, array $mapsRep)
     {
-        $phrase->setDateModification(new \DateTime());
-        $phrase->setModificateur($auteur);
-        
-        $this->normalize($phrase);
-        $res = $this->isValid($phrase);
+        $motAmbiguService = $this->container->get('AppBundle\Service\MotAmbiguService');
+        $motAmbiguPhraseService = $this->container->get('AppBundle\Service\MotAmbiguPhraseService');
+        $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
 
-        $succes = $res['succes'];
-        $motsAmbigus = $res['motsAmbigus'];
-    }
+        $this->em->getConnection()->beginTransaction();
 
-    public function treatMotsAmbigusPhrase(Phrase $phrase, Membre $auteur, array $motsAmbigus, array $mapsRep)
-    {
-        $repoGlose = $this->em->getRepository('AppBundle:Glose');
+        // On enregistre dans l'historique du modificateur
+        $historiqueService->save($modificateur, "Modification d'une phrase (n° " . $phrase->getId() . ").");
+        // On enregistre dans l'historique de l'auteur
+        $historiqueService->save($phrase->getAuteur(), "Modification d'une de vos phrase (n° " . $phrase->getId() . ").");
 
-        $newRep = array();
-        foreach($phrase->getMotsAmbigusPhrase() as $map) {
-            
-            // -1 car l'ordre commence à 1 et le reorder à 0
-            $keyForMotsAmbigusPhrase = $motsAmbigus[ $map->getOrdre() - 1 ][1];
-            $idGlose = $mapsRep[ $keyForMotsAmbigusPhrase ]['gloses'];
-            if(empty($idGlose))
-            {
-                throw new \Exception("Tous les mots ambigus doivent avoir une glose");
-            }
+        $motAmbiguService->treatMotsAmbigus($phrase, $modificateur, $motsAmbigus, true);
+        $newRep = $motAmbiguPhraseService->treatMotsAmbigusPhrase($phrase, $modificateur, $motsAmbigus, $mapsRep);
 
-            $rep = new Reponse();
-            $newRep[ $map->getId() ] = $rep;
+        $this->em->persist($phrase);
+        $this->em->flush();
+        $this->em->getConnection()->commit();
 
-            // S'il n'y a pas de réponse (nouveau MA)
-            if($map->getReponses()->count() == 0) {
-
-                $glose = $repoGlose->find($idGlose);
-
-                $rep = new Reponse();
-                $rep->setContenuPhrase($phrase->getContenu());
-                $rep->setValeurMotAmbigu($map->getMotAmbigu()->getValeur());
-                $rep->setValeurGlose($glose->getValeur());
-                $rep->setAuteur($auteur);
-                $rep->setGlose($glose);
-                $rep->setMotAmbiguPhrase($map);
-                $rep->setPhrase($phrase);
-
-                $map->addReponse($rep);
-
-                if(!$map->getMotAmbigu()->getGloses()->contains($glose))
-                {
-                    $map->getMotAmbigu()->addGlose($glose);
-                }
-
-                $this->em->persist($map);
-                $this->em->persist($rep);
-            }
-        }
-
-        return $newRep;
-    }
-
-    public function treatMotsAmbigus(Phrase $phrase, Membre $auteur, array $motsAmbigus, $isEdit = false) {
-        $repoMA = $this->em->getRepository('AppBundle:MotAmbigu');
-
-        /*
-         * $mots_ambigu[0] contient un array du premier match
-         * $mots_ambigu[1] contient un array du deuxieme match...
-         *
-         * $mots_ambigu[][0] contient toute la balise <amb ... </amb>
-         * $mots_ambigu[][1] contient l'id / l'ordre du mot ambigu
-         * $mots_ambigu[][2] contient le mot ambigu
-         */
-        foreach($motsAmbigus as $key => $motAmbigu)
-        {
-            $motAmbiguService = $this->get('AppBundle\Service\MotAmbiguService');
-            $motAmbiguOBJ = $motAmbiguService->findOrAdd($motAmbigu[2], $this->getUser());
-
-            if($isEdit) {
-                foreach($mapsOri as $key2 => $map) {
-                    // Cas nouvel id exist dans ancienne phrase => MA update
-                    if($map->getOrdre() == $motAmbigu[1])
-                    {
-                        $motAmbiguOBJ = $motAmbiguService->findOrAdd($motAmbigu[2], $this->getUser());
-                        $phrase->getMotsAmbigusPhrase()->get($key2)->setMotAmbigu($mot_ambigu_OBJ);
-                        $phrase->getMotsAmbigusPhrase()->get($key2)->setOrdre($key + 1);
-                        continue 2;
-                    }
-                }
-            }
-
-            $map = new MotAmbiguPhrase();
-            $map->setOrdre($key + 1);
-            $map->setPhrase($phrase);
-            $map->setMotAmbigu($mot_ambigu_OBJ);
-
-            $phrase->addMotAmbiguPhrase($map);
-        }
-    }
-
-    public function reorderMAP(Phrase &$phrase)
-    {
-        $maps = $phrase->getMotsAmbigusPhrase()->getValues();
-
-        // Trie le tableau des motsAmbigusPhrase
-        uasort($maps, function($a, $b)
-        {
-            return ($a->getOrdre() < $b->getOrdre()) ? -1 : 1;
-        });
-
-        // Supprime tous les MAP
-        $phrase->removeMotsAmbigusPhrase();
-
-        // Rajoute les MAP dans l'ordre
-        foreach($maps as $key => $map)
-        {
-            $phrase->addMotAmbiguPhrase($maps[$key]);
-        }
+        $motAmbiguPhraseService->reorderMAP($phrase, $newRep);
     }
 
     public function normalize(Phrase $phrase)
@@ -306,4 +201,5 @@ class PhraseService
 
         return array('succes' => true, 'motsAmbigus' => $mots_ambigu);
     }
+
 }

@@ -36,6 +36,8 @@
 				{% endfor %}
 				<br>
 			{% endfor %}
+			<br>
+			<a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">Rééditer la phrase</a>
 		</div>
 	</div>
 {% endif %}

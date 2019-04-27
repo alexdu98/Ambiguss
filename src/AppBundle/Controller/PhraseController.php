@@ -141,6 +141,7 @@ class PhraseController extends Controller
             if($form->isSubmitted() && $form->isValid()) {
 
                 $phraseService = $this->get('AppBundle\Service\PhraseService');
+
                 $mapsRep = $request->request->get('phrase_edit')['motsAmbigusPhrase'];
                 $data = $form->getData();
 
@@ -157,49 +158,14 @@ class PhraseController extends Controller
                 $motsAmbigus = $res['motsAmbigus'];
 
                 if($succes) {
-  
-                    $motAmbiguService = $this->get('AppBundle\Service\MotAmbiguService');
-                    $motAmbiguService->treatForEditPhrase($phrase, $this->getUser(), $motsAmbigus);
-    
-                    $em->getConnection()->beginTransaction();
-                    try {
-                        $em->persist($phrase);
-                        $em->flush();
-    
-                        $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
-                        // On enregistre dans l'historique du modificateur
-                        $historiqueService->save($this->getUser(), "Modification d'une phrase (n° " . $phrase->getId() . ").");
-                        // On enregistre dans l'historique de l'auteur
-                        $historiqueService->save($phrase->getAuteur(), "Modification d'une de vos phrase (n° " . $phrase->getId() . ").");
-    
-                        $mapsRep = $request->request->get('phrase_edit')['motsAmbigusPhrase'];
 
-                        $newRep = $phraseService->treatMotsAmbigusPhrase($phrase, $this->getUser(), $motsAmbigus, $mapsRep, true);
-                        $em->flush();
-                        $em->getConnection()->commit();
+                    $phraseService->update($phrase, $this->getUser(), $motsAmbigus, $mapsRep);
 
-                        $phraseService->reorderMAP($phrase);
-    
-                        foreach($phrase->getMotsAmbigusPhrase() as $key => $map)
-                        {
-                            $map->getReponses()->clear();
-                            $map->addReponse($newRep[$map->getId()]);
-                        }
+                    $newPhrase = $phrase;
 
-                        $newPhrase = $phrase;
-
-                        // Réinitialise le formulaire
-                        $phrase = new Phrase();
-                        $form = $this->createForm(PhraseEditType::class, $phrase);
-                    }
-                    catch(UniqueConstraintViolationException $e) {
-                        $em->getConnection()->rollBack();
-                        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> la phrase existe déjà.");
-                    }
-                    catch(\Exception $e) {
-                        $em->getConnection()->rollBack();
-                        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'insertion de la phrase -> " . $e->getMessage());
-                    }
+                    // Réinitialise le formulaire
+                    $phrase = new Phrase();
+                    $form = $this->createForm(PhraseEditType::class, $phrase);
                 }
                 else {
                     $msg = "Erreur lors de l'insertion de la phrase -> " . $res['message'];

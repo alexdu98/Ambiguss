@@ -7,13 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MotAmbiguPhrase
- *
- * @ORM\Table(
- *     name="mot_ambigu_phrase",
- *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="UNQ_MAP_PHRASE_ORDRE", columns={"phrase_id", "ordre"})
- *     }
- * )
+ * Ne pas avoir de clé unique sur [phrase,ordre} car Doctrine fait les insert d'abord dans une transaction #editPhrase
+ * @ORM\Table(name="mot_ambigu_phrase")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MotAmbiguPhraseRepository")
  */
 class MotAmbiguPhrase

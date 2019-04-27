@@ -96,11 +96,7 @@ class GameController extends Controller
                     $em->persist($this->getUser());
                     $em->persist($phrase->getAuteur());
 
-                    try {
-                        $em->flush();
-                    } catch (\Exception $e) {
-                        $this->get('session')->getFlashBag()->add('erreur', "Erreur lors de l'enregistrement de la partie. " . $e->getMessage());
-                    }
+                    $em->flush();
                 }
                 else {
                     $alreadyPlayed = true;

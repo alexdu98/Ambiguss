@@ -78,5 +78,3 @@ RENAME TABLE vote_jugement TO vote;
 
 DELETE FROM reponse WHERE auteur_id IS NULL;
 UPDATE reponse r INNER JOIN mot_ambigu_phrase map ON map.id=r.mot_ambigu_phrase_id SET r.phrase_id = map.phrase_id;
-
-CREATE UNIQUE INDEX UNQ_MAP_PHRASE_ORDRE ON mot_ambigu_phrase (phrase_id, ordre);

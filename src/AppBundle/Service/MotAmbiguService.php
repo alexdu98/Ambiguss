@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use AppBundle\Entity\Phrase;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
+use AppBundle\Entity\MotAmbiguPhrase;
 
 class MotAmbiguService
 {
@@ -41,53 +42,43 @@ class MotAmbiguService
         return $tmp;
     }
 
-    public function treatForEditPhrase(Phrase $phrase, Membre $auteur, $motsAmbigus)
+    public function treatMotsAmbigus(Phrase $phrase, Membre $auteur, array $motsAmbigus, $isEdit = false)
     {
-        $mapsOri = array();
-        foreach($phrase->getMotsAmbigusPhrase() as $item) {
-            $mapsOri[] = clone $item;
+        if($isEdit) {
+            $motAmbiguPhraseService = $this->container->get('AppBundle\Service\MotAmbiguPhraseService');
+            $mapsOri = $motAmbiguPhraseService->removeMAP($phrase, $motsAmbigus);
         }
-
         /*
-         * $motAmbigu[0] contient toute la balise <amb ... </amb>
-         * $motAmbigu[1] contient l'id / l'ordre du mot ambigu
-         * $motAmbigu[2] contient le mot ambigu
+         * $motsAmbigus[0] contient un array du premier match
+         * $motsAmbigus[1] contient un array du deuxieme match...
+         *
+         * $motsAmbigus[][0] contient toute la balise <amb ... </amb>
+         * $motsAmbigus[][1] contient l'id / l'ordre du mot ambigu
+         * $motsAmbigus[][2] contient le mot ambigu
          */
-        foreach($phrase->getMotsAmbigusPhrase() as $key => $map) {
-            $find = false;
-            foreach($motsAmbigus as $key2 => $motAmbigu) {
-                if($map->getOrdre() == $motAmbigu[1]) {
-                    $find = true;
+        foreach($motsAmbigus as $key => $motAmbigu)
+        {
+            $motAmbiguService = $this->container->get('AppBundle\Service\MotAmbiguService');
+
+            $motAmbiguOBJ = $motAmbiguService->findOrAdd($motAmbigu[2], $auteur);
+
+            if($isEdit) {
+                foreach($mapsOri as $key2 => $map) {
+                    // Cas nouvel id exist dans ancienne phrase => MA update
+                    if($map->getOrdre() == $motAmbigu[1])
+                    {
+                        $phrase->getMotsAmbigusPhrase()->get($key2)->setMotAmbigu($motAmbiguOBJ);
+                        $phrase->getMotsAmbigusPhrase()->get($key2)->setOrdre($key + 1);
+                        continue 2;
+                    }
                 }
             }
 
-            // Cas ancien id not exist dans new phrase => MAP delete
-            if(!$find) {
-                $this->em->remove($phrase->getMotsAmbigusPhrase()->get($key));
-                $phrase->removeMotAmbiguPhrase($map);
-            }
-        }
-
-        foreach($motsAmbigus as $key => $motAmbigu) {
-            $motAmbiguOBJ = $this->findOrAdd($motAmbigu[2], $auteur);
-
-            // Pour chaque ancien MAP
-            foreach($mapsOri as $key2 => $map)
-            {
-                // Cas nouvel id exist dans ancienne phrase => MAP update
-                if($map->getOrdre() == $motAmbigu[1])
-                {
-                    $phrase->getMotsAmbigusPhrase()->get($key2)->setMotAmbigu($motAmbiguOBJ);
-                    $phrase->getMotsAmbigusPhrase()->get($key2)->setOrdre($key + 1);
-                    continue 2;
-                }
-            }
-
-            // Cas nouvel id not exist dans ancienne phrase => MAP add
             $map = new MotAmbiguPhrase();
-            $map->setPhrase($phrase);
             $map->setOrdre($key + 1);
-            $map->setMotAmbigu($motAmbigu);
+            $map->setPhrase($phrase);
+            $map->setMotAmbigu($motAmbiguOBJ);
+
             $phrase->addMotAmbiguPhrase($map);
         }
     }

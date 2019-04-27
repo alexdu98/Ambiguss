@@ -59,7 +59,7 @@
                 {% endif %}
             </div>
             <br>
-            {{ form_start(form, {'attr' : {'class' : 'form-horizontal'}}) }}
+            {{ form_start(form, {'attr': {'id': 'gameForm'}, 'form-type' : 'horizontal'}) }}
 
             {{ form_errors(form) }}
             <div class="form-group">
@@ -68,7 +68,7 @@
                         <div id="{{ reponse.vars.id }}">
                             <div class="col-xs-12 col-sm-3 col-md-3 col-sm-offset-1 col-md-offset-1 text-right text-left-xs">
                                 <label class="control-label required" for="{{ reponse.glose.vars.id }}">
-                                    <span class="motAmbigu color-red size16" title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
+                                    <span class="amb color-red size16" title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
                                         {{ reponse.vars.data.motAmbiguPhrase.motAmbigu.valeur }}
                                     </span>
                                 </label>

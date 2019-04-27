@@ -203,7 +203,7 @@ class APIController extends Controller
         $gloses = $repoG->findGlosesValueByMotAmbiguValue($request->request->get('motAmbigu'));
 
         $res = array(
-            'ownerId' => $MA->getId(),
+            'ownerId' => $MA ? $MA->getId() : null,
             'links' => $gloses
         );
 
@@ -219,7 +219,7 @@ class APIController extends Controller
         $MA = $repoMA->findMotsAmbigusByValueGloseValue($request->request->get('glose'));
 
         $res = array(
-            'ownerId' => $G->getId(),
+            'ownerId' => $G ? $G->getId() : null,
             'links' => $MA
         );
 

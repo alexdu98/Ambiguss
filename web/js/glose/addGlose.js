@@ -43,7 +43,8 @@ function addGloseModal(params) {
                 select = params.select;
                 $("select.gloses").each(function () {
                     // Ajout la glose dans tous les select avec la même valeur de mot ambigu
-                    if ($(this).closest('.reponseGroupe').find('.amb').html().trim() === params.motAmbigu) {
+                    var motAmbiguOfReponse = getMotAmbiguOfReponse($(this).closest('.reponseGroupe'));
+                    if (motAmbiguOfReponse === params.motAmbigu) {
                         // Si la glose n'était pas déjà présente dans le select, on l'ajoute
                         if (!$(this).find('option[value="' + data.glose.id + '"]').length) {
                             $(this).append('<option value="' + data.glose.id + '">' + data.glose.valeur + '</option>');
@@ -81,11 +82,19 @@ function addGloseModal(params) {
     });
 }
 
+function getMotAmbiguOfReponse(reponse) {
+    var amb = reponse.find('.amb');
+    if (amb.is('input')) {
+        return amb.val().trim();
+    }
+    return amb.html().trim();
+}
+
 $(document).ready(function () {
-    $('#addPhraseForm').on('click', '.addGloseButton', function(){
+    $('#addPhraseForm, #gameForm').on('click', '.addGloseButton', function(){
 
         var reponseGroupe = $(this).closest('.reponseGroupe');
-        var motAmbigu = reponseGroupe.find('.amb').val().trim();
+        var motAmbigu = getMotAmbiguOfReponse(reponseGroupe);
         var selectGlose = reponseGroupe.find('select.gloses');
 
         setModalTitle('Ajouter une glose au mot ambigu "' + motAmbigu + '"');

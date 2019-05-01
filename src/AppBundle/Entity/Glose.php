@@ -285,7 +285,10 @@ class Glose implements \JsonSerializable
 		$this->setValeur(preg_replace('#\s+#', ' ', $this->getValeur()));
 
 		// Minuscule
-		$this->setValeur(strtolower($this->getValeur()));
+		$this->setValeur(mb_strtolower($this->getValeur()));
+
+        // Trim
+        $this->setValeur(trim($this->getValeur()));
 	}
 
 	/**

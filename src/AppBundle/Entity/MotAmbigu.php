@@ -298,6 +298,9 @@ class MotAmbigu
 	{
 		// Supprime les espaces multiples
 		$this->setValeur(preg_replace('#\s+#', ' ', $this->getValeur()));
+
+        // Trim
+        $this->setValeur(trim($this->getValeur()));
 	}
 
 	/**

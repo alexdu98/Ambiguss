@@ -151,8 +151,8 @@ class PhraseController extends Controller
                 $phrase->setDateModification(new \DateTime());
                 $phrase->setModificateur($this->getUser());
                 
-                $phraseService->normalize($phrase);
-                $res = $phraseService->isValid($phrase);
+                $phrase->normalize();
+                $res = $phrase->isValid();
 
                 $succes = $res['succes'];
                 $motsAmbigus = $res['motsAmbigus'];

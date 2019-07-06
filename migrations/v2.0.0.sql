@@ -78,3 +78,8 @@ RENAME TABLE vote_jugement TO vote;
 
 DELETE FROM reponse WHERE auteur_id IS NULL;
 UPDATE reponse r INNER JOIN mot_ambigu_phrase map ON map.id=r.mot_ambigu_phrase_id SET r.phrase_id = map.phrase_id;
+
+ALTER TABLE membre ADD COLUMN points_classement_mensuel INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE membre ADD COLUMN points_classement_hebdomadaire INTEGER NOT NULL DEFAULT 0;
+CREATE INDEX IDX_MEMBRE_POINTSCLASSEMENTMENSUEL ON membre(points_classement_mensuel);
+CREATE INDEX IDX_MEMBRE_POINTSCLASSEMENTHEBDOMADAIRE ON membre(points_classement_hebdomadaire);

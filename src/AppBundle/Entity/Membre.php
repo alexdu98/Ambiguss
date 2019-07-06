@@ -77,6 +77,20 @@ class Membre extends User
     /**
      * @var int
      *
+     * @ORM\Column(name="points_classement_mensuel", type="integer")
+     */
+    private $pointsClassementMensuel;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="points_classement_hebdomadaire", type="integer")
+     */
+    private $pointsClassementHebdomadaire;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="credits", type="integer")
      */
     private $credits;
@@ -295,6 +309,54 @@ class Membre extends User
     }
 
     /**
+     * Get pointsClassementMensuel
+     *
+     * @return int
+     */
+    public function getPointsClassementMensuel()
+    {
+        return $this->pointsClassementMensuel;
+    }
+
+    /**
+     * Set pointsClassementMensuel
+     *
+     * @param integer $pointsClassementMensuel
+     *
+     * @return Membre
+     */
+    public function setPointsClassementMensuel($pointsClassementMensuel)
+    {
+        $this->pointsClassementMensuel = $pointsClassementMensuel;
+
+        return $this;
+    }
+
+    /**
+     * Get pointsClassementHebdomadaire
+     *
+     * @return int
+     */
+    public function getPointsClassementHebdomadaire()
+    {
+        return $this->pointsClassementHebdomadaire;
+    }
+
+    /**
+     * Set pointsClassementHebdomadaire
+     *
+     * @param integer $pointsClassementHebdomadaire
+     *
+     * @return Membre
+     */
+    public function setPointsClassementHebdomadaire($pointsClassementHebdomadaire)
+    {
+        $this->pointsClassementHebdomadaire = $pointsClassementHebdomadaire;
+
+        return $this;
+    }
+
+    /**
      * Get credits
      *
      * @return int
@@ -451,8 +513,16 @@ class Membre extends User
 	 */
     public function updatePoints($points){
     	$this->pointsClassement += $points;
+    	$this->pointsClassementMensuel += $points;
+    	$this->pointsClassementHebdomadaire += $points;
+
     	if($this->pointsClassement < 0)
 		    $this->pointsClassement = 0;
+        if($this->pointsClassementMensuel < 0)
+            $this->pointsClassementMensuel = 0;
+        if($this->pointsClassementHebdomadaire < 0)
+            $this->pointsClassementHebdomadaire = 0;
+
     	return $this;
     }
 

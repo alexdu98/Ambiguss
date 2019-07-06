@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-6 text-left">
                     <p><b>Parties : </b> {{ user.parties.count }} / {{ nbPhrases }}</p>
-                    <p><b>Points :</b> {{ user.pointsClassement }}</p>
+                    <p><b>Points :</b> {{ user.pointsClassement }} (mois : {{ user.pointsClassementMensuel }} / semaine : {{ user.pointsClassementHebdomadaire }})</p>
                     <br>
                         {{ user.username }} a créé :
                     <ul>

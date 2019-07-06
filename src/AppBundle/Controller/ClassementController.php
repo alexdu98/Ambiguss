@@ -3,23 +3,29 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClassementController extends Controller
 {
 
-	public function joueursAction()
+	public function joueursAction(Request $request)
 	{
         $repoMembre = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
-        $classement = $repoMembre->getClassementGeneral($this->getParameter('maxResultForClassementGeneral'));
+        $type = $request->query->get('type');
+        $typeClassement = in_array($type, ['mensuel', 'hebdomadaire']) ? $type : 'général';
+        $maxResult = $this->getParameter('maxResultForClassementGeneral');
+
+        $classement = $repoMembre->getClassementGeneral($typeClassement, $maxResult);
         $nbMembreTotal = $repoMembre->countEnabled();
 
         // Si c'est un membre, on calcul sa position dans le classement
-        $position = $this->getUser() ? $repoMembre->getPositionClassement($this->getUser()) : null;
+        $position = $this->getUser() ? $repoMembre->getPositionClassement($typeClassement, $this->getUser()) : null;
 
         return $this->render('AppBundle:Classement:joueurs.html.twig', array(
             'classement' => $classement,
             'position' => $position,
             'nbMembreTotal' => $nbMembreTotal,
+            'typeClassement' => $typeClassement
         ));
 	}
 

@@ -31,7 +31,6 @@ class CanonicalisationCommand extends ContainerAwareCommand {
 		catch(Exception $e) {
 			$io->error([
 				$e->getCode() . ' : ' . $e->getMessage(),
-				'Valid types : all, phrases, motsAmbigus',
 			]);
 		}
 	}

@@ -3,8 +3,9 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Membre;
+use Doctrine\ORM\EntityRepository;
 
-class MembreRepository extends \Doctrine\ORM\EntityRepository
+class MembreRepository extends EntityRepository
 {
 
     /**
@@ -13,16 +14,34 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
      * @param int $limit
      * @return array
      */
-	public function getClassementGeneral(int $limit){
-		return $this->createQueryBuilder('m')
-            ->select('m.id, m.username, m.dateInscription, m.pointsClassement')
+	public function getClassementGeneral($type, int $limit){
+		$query = $this->createQueryBuilder('m')
+            ->select('m.id, m.username, m.dateInscription')
 			->leftJoin("m.phrases", "p")->addSelect('count(distinct p.id) as nbPhrases')
 			->leftJoin("p.jAime", "lp", 'with', 'lp.active = 1')->addSelect('count(distinct lp.id) as nbJAime')
-			->where("m.pointsClassement > 0")
 			->groupBy('m.id')
-			->orderBy('m.pointsClassement', 'DESC')
-			->setMaxResults($limit)
-			->getQuery()->getResult();
+			->setMaxResults($limit);
+
+		if ($type == 'mensuel') {
+            $query
+                ->addSelect('m.pointsClassementMensuel pointsClassement')
+                ->where("m.pointsClassementMensuel > 0")
+                ->orderBy('m.pointsClassementMensuel', 'DESC');
+        }
+        elseif ($type == 'hebdomadaire') {
+            $query
+                ->addSelect('m.pointsClassementHebdomadaire pointsClassement')
+                ->where("m.pointsClassementHebdomadaire > 0")
+                ->orderBy('m.pointsClassementHebdomadaire', 'DESC');
+        }
+        else {
+            $query
+                ->addSelect('m.pointsClassement')
+                ->where("m.pointsClassement > 0")
+                ->orderBy('m.pointsClassement', 'DESC');
+        }
+
+		return $query->getQuery()->getResult();
 	}
 
     /**
@@ -32,13 +51,28 @@ class MembreRepository extends \Doctrine\ORM\EntityRepository
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-	public function getPositionClassement(Membre $membre)
+	public function getPositionClassement($type, Membre $membre)
 	{
-		return $this->createQueryBuilder('m')
-			->select('count(m) position')
-			->where("m.pointsClassement > :points")->setParameter("points", $membre->getPointsClassement())
-			->orderBy('m.pointsClassement', 'DESC')
-			->getQuery()->getOneOrNullResult()['position'] + 1;
+		$query =  $this->createQueryBuilder('m')
+			->select('count(m) position');
+
+        if ($type == 'mensuel') {
+            $query
+                ->where("m.pointsClassementMensuel > :points")->setParameter("points", $membre->getPointsClassement())
+                ->orderBy('m.pointsClassementMensuel', 'DESC');
+        }
+        elseif ($type == 'hebdomadaire') {
+            $query
+                ->where("m.pointsClassementHebdomadaire > :points")->setParameter("points", $membre->getPointsClassement())
+                ->orderBy('m.pointsClassementHebdomadaire', 'DESC');
+        }
+        else {
+            $query
+                ->where("m.pointsClassement > :points")->setParameter("points", $membre->getPointsClassement())
+			    ->orderBy('m.pointsClassement', 'DESC');
+        }
+
+			return $query->getQuery()->getOneOrNullResult()['position'] + 1;
 	}
 
     /**

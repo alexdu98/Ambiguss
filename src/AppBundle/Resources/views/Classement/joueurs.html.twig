@@ -6,12 +6,24 @@
 	<link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
 {% endblock %}
 
-{% block titre %}Classement général{% endblock %}
+{% block titre %}Classement {{ typeClassement }}{% endblock %}
+
+{% set page = path(app.request.attributes.get('_route'), app.request.query.all) %}
+{% set general = path('classement_joueurs_show') %}
+{% set mensuel = path('classement_joueurs_show', {type: 'mensuel'}) %}
+{% set hebdomadaire = path('classement_joueurs_show', {type: 'hebdomadaire'}) %}
 
 {% block contenu %}
 	<div class="well">
-		{% if app.user %}
-			<h4 class="classementMe">Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement.</h4>
+		<ul class="nav nav-tabs">
+			<li role="presentation" class="{% if page == general %}active{% endif %}"><a href="{{ path('classement_joueurs_show') }}">Général</a></li>
+			<li role="presentation" class="{% if page == mensuel %}active{% endif %}"><a href="{{ path('classement_joueurs_show', {type: 'mensuel'}) }}">Mensuel</a></li>
+			<li role="presentation" class="{% if page == hebdomadaire %}active{% endif %}"><a href="{{ path('classement_joueurs_show', {type: 'hebdomadaire'}) }}">Hebdomadaire</a></li>
+		</ul>
+		{% if app.user and classement is not empty %}
+			<h4 class="classementMe">
+				Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement {{ typeClassement }}.
+			</h4>
 		{% endif %}
 		<table id="classement" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
 			<thead>
@@ -21,8 +33,8 @@
 					<th>Titre</th>
 					<th>Inscription</th>
 					<th>Points</th>
-					<th>Nombre de phrases</th>
-					<th>Nombre de j'aime</th>
+					<th>Nombre de phrases totales</th>
+					<th>Nombre de j'aime totaux</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -32,8 +44,8 @@
 					<th>Titre</th>
 					<th>Inscription</th>
 					<th>Points</th>
-					<th>Nombre de phrases</th>
-					<th>Nombre de j'aime</th>
+					<th>Nombre de phrases totales</th>
+					<th>Nombre de j'aime totaux</th>
 				</tr>
 			</tfoot>
 			<tbody>

@@ -56,14 +56,12 @@
                 <table id="historique" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>#</th>
                         <th>Date</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>#</th>
                         <th>Date</th>
                         <th>Action</th>
                     </tr>
@@ -71,7 +69,6 @@
                     <tbody>
                     {% for row in user.historiques|reverse %}
                         <tr>
-                            <td>{{ loop.revindex }}</td>
                             <td data-order="{{ row.dateAction|date("U") }}">{{ row.dateAction|date("d/m/Y H:i") }}</td>
                             <td>{{ row.valeur }}</td>
                         </tr>
@@ -91,13 +88,17 @@
                 stateSave: true, // Enregistre les configurations
                 stateSaveParams: function (settings, data) {
                     data.start = 0; // On enregistre pas la page
-                    data.order = [[1, "desc"]]; // On ordonne sur la date
+                    data.order = [[0, "desc"]]; // On ordonne sur la date
                     data.search = {}; // On enregistre pas la recherche
                 },
                 stateDuration: 0, // pour une durée illimitée
-                order: [[1, 'desc']], // On ordonne sur la date
+                order: [[0, 'desc']], // On ordonne sur la date
                 responsive: true,
-                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'},
+                columnDefs: [{
+                    "targets": 1,
+                    "orderable": false
+                }]
             });
         });
     </script>

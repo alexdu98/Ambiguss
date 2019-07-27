@@ -182,6 +182,13 @@ class Membre extends User
      */
     private $serviceCreation;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="signale", type="boolean")
+     */
+    private $signale;
+
 
 	/**
 	 * Constructor
@@ -196,10 +203,12 @@ class Membre extends User
         $this->banni = false;
         $this->renamable = false;
         $this->serviceCreation = false;
+        $this->signale = false;
 		$this->phrases = new ArrayCollection();
 		$this->gloses = new ArrayCollection();
 		$this->motsAmbigus = new ArrayCollection();
 		$this->historiques = new ArrayCollection();
+
 	}
 
     /**
@@ -785,6 +794,30 @@ class Membre extends User
     public function isServiceCreation()
     {
         return $this->serviceCreation;
+    }
+
+    /**
+     * Get signale
+     *
+     * @return boolean
+     */
+    public function getSignale()
+    {
+        return $this->signale;
+    }
+
+    /**
+     * Set signale
+     *
+     * @param boolean $signale
+     *
+     * @return Membre
+     */
+    public function setSignale($signale)
+    {
+        $this->signale = $signale;
+
+        return $this;
     }
 
 }

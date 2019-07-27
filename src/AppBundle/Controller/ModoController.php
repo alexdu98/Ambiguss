@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\Historique;
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseEditType;
+use AppBundle\Form\Membre\MembreEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -137,6 +139,85 @@ class ModoController extends Controller
 
         return $this->render('AppBundle:Phrase:getAll.html.twig', array(
             'phrases' => $phrases,
+        ));
+    }
+
+    public function showMembresAction()
+    {
+        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
+        $membres = $repo->findBy(array(
+            'signale' => true
+        ));
+
+        $membre = new Membre();
+        $editMembreForm = $this->createForm(MembreEditType::class, $membre, array(
+            'action' => $this->generateUrl('modo_membre_edit', array('id' => 0)),
+        ));
+
+        return $this->render('AppBundle:Membre:getAll.html.twig', array(
+            'membres' => $membres,
+            'editMembreForm' => $editMembreForm->createView(),
+        ));
+    }
+
+    public function unsignaleMembreAction(Request $request, Membre $membre)
+    {
+        $data = $request->request->all();
+
+        if ($this->isCsrfTokenValid('unsignale_membre', $data['token'])) {
+            $membre->setSignale(false);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($membre);
+            $em->flush();
+
+            return $this->json(array(
+                'succes' => true,
+            ));
+        }
+
+        throw new InvalidCsrfTokenException();
+    }
+
+    public function banMembreAction(Request $request, Membre $membre)
+    {
+        $data = $request->request->all();
+
+        if ($this->isCsrfTokenValid('ban_membre', $data['token'])) {
+            $membre->setBanni(true);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($membre);
+            $em->flush();
+
+            return $this->json(array(
+                'succes' => true,
+            ));
+        }
+
+        throw new InvalidCsrfTokenException();
+    }
+
+    public function editMembreAction(Request $request, Membre $membre)
+    {
+
+    }
+
+    public function showMembreJugementsAction($id)
+    {
+        $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
+        $repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
+
+        $typeObj = $repoTO->findOneBy(array('nom' => 'Membre'));
+        $jugements = $repoJ->findBy(array(
+            'typeObjet' => $typeObj,
+            'verdict' => null,
+            'idObjet' => $id,
+        ));
+
+        return $this->json(array(
+            'succes' => true,
+            'jugements' => $jugements,
         ));
     }
 

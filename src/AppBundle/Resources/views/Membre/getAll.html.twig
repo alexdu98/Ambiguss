@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membres{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
+{% endblock %}
+
+{% block titre %}Modération de membres{% endblock %}
+
+{% block contenu %}
+    <div class="well">
+        <table id="membresTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Pseudo</th>
+                <th>Inscription</th>
+                <th>Points</th>
+                <th>Crédits</th>
+                <th>Activé</th>
+                <th>Banni</th>
+                <th>Renomable</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Pseudo</th>
+                <th>Inscription</th>
+                <th>Points</th>
+                <th>Crédits</th>
+                <th>Activé</th>
+                <th>Banni</th>
+                <th>Renomable</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for row in membres %}
+                <tr id="membre-{{ row.id }}">
+                    <td>{{ row.id }}</td>
+                    <td><a href="{{ path('fos_user_profile_show' , {'id':row.id}) }}">{{ row.username }}</a></td>
+                    <td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y à H:i") }}</td>
+                    <td>{{ row.pointsClassement }}</td>
+                    <td>{{ row.credits }}</td>
+                    <td class="membre-active">{% if row.enabled %}Oui{% else %}Non{% endif %}</td>
+                    <td class="membre-banni">{% if row.banni %}Oui{% else %}Non{% endif %}</td>
+                    <td class="membre-renomable">{% if row.renamable %}Oui{% else %}Non{% endif %}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm editMembreButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.username }}">
+                            Modifier
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#phrasesTable').DataTable({
+                stateSave: true, // Enregistre les configurations
+                stateSaveParams: function (settings, data) {
+                    data.start = 0; // On enregistre pas la page
+                    data.order = [[0, "desc"]]; // On ordonne sur l'id
+                    data.search = {}; // On enregistre pas la recherche
+                },
+                stateDuration: 0, // pour une durée illimitée
+                columnDefs: [
+                    {targets: 7, orderable: false}
+                ],
+                order: [[0, 'asc']], // On ordonne sur l'id
+                responsive: true,
+                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+            });
+
+            // Au click sur le bouton, exécute la fonction
+            $('.editMembreButton').click(editMembreModal);
+
+            function editMembreModal(event) {
+                var button = $(this);
+
+                setModalSize('modal-lg');
+                setModalTitle('Modifier le membre "' + button.data('valeur') + '"');
+                setModalBody('{{ include('AppBundle:Membre:edit.html.twig', {'form': editMembreForm})|e('js') }}');
+
+                $("#toggleJugements").click(function () {
+                    $("#jugements").toggle("slow");
+                });
+
+                // Récupère les jugements en cours
+                $.post(Routing.generate('modo_jugements_membre_show', {id: button.data('id')}), function (data) {
+                    if (data.succes) {
+                        divJugement = $('#jugements');
+                        if (data.jugements.length === 0)
+                            divJugement.append('<span class="text-danger">Aucun jugement en cours</span>');
+                        html = '{{ include('@App/Jugement/jugement.html.twig')|e('js') }}';
+                        $.each(data.jugements, function (index) {
+                            clone = $(html);
+                            clone.find('.panel-heading').append(data.jugements[index].categorieJugement);
+                            clone.find('.panel-body').append(data.jugements[index].description);
+                            var profil = Routing.generate('fos_user_profile_show', {id: data.jugements[index].auteur_id});
+                            var dt = new Date(data.jugements[index].dateCreation * 1000);
+                            var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
+                                .getMinutes();
+                            clone.find('.lien-profil').attr('href', profil);
+                            clone.find('.lien-profil').append(data.jugements[index].auteur);
+                            clone.find('.date-creation').append(date);
+
+                            // Ajout de l'eventlistener valide
+                            clone.find('.signalement').click(function (event) {
+                                event.preventDefault();
+
+                                // On affiche l'image laoding en attendant la réponse
+                                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+
+                                $.post(Routing.generate('modo_jugement_edit', {id: data.jugements[index].id}),
+                                    {
+                                        verdict: $(this).data('verdict'),
+                                        token: '{{ csrf_token('jugement_vote') }}'
+                                    }
+                                    , function (data) {
+                                        if (data.succes) {
+                                            $(event.target).closest('.panel').remove();
+                                        }
+                                        else {
+                                            $(event.target).closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
+                                        }
+                                    })
+                                    .fail(function () {
+                                        $(this).after('<span class="text-danger">Erreur</span>');
+                                    })
+                                    .always(function () {
+                                        $('#loading').remove();
+                                    });
+                            });
+
+                            divJugement.append(clone);
+                        });
+                    }
+                    else {
+
+                    }
+                }, "json");
+
+                $('#membreEdit').click(function (data) {
+                    // On affiche l'image laoding en attendant la réponse
+                    $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+                    var id = button.data('id');
+                    var url = "{{ path('modo_membre_edit', {'id': '0'}) }}";
+                    url = url.replace('0', parseInt(id));
+                    location.href = url;
+                });
+
+            }
+        });
+    </script>
+{% endblock %}

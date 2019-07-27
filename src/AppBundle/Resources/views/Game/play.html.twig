@@ -68,7 +68,10 @@
                         <div id="{{ reponse.vars.id }}">
                             <div class="col-xs-12 col-sm-3 col-md-3 col-sm-offset-1 col-md-offset-1 text-right text-left-xs">
                                 <label class="control-label required" for="{{ reponse.glose.vars.id }}">
-                                    <span class="amb color-red size16" title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
+                                    <span class="amb color-red size16"
+                                          data-amb="{{ reponse.vars.data.motAmbiguPhrase.motAmbigu.valeur }}"
+                                          data-id="{{ reponse.vars.data.motAmbiguPhrase.motAmbigu.id }}"
+                                          title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
                                         {{ reponse.vars.data.motAmbiguPhrase.motAmbigu.valeur }}
                                     </span>
                                 </label>
@@ -169,24 +172,39 @@
                     $("#jugement_add_typeObjet").on('change', function () {
                         var idTypeObjet = $(this).val();
                         var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
+
+                        $('#jugement_add_typeObjet').next().remove();
+                        $('#jugement_add_signaler').prop('disabled', false);
+                        $('#jugement_add_idObjet').removeAttr('readonly');
+
                         if (typeObjet === 'Glose') {
-                            $('#signalementIdObjet').show();
-                            $('#jugement_add_signaler').prop('disabled', false);
                             $('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
                             $('.gloses').each(function () {
-                                var ma = $(this).next().val();
+                                var ma = $(this).closest('.reponseGroupe').find('.amb').data('amb');
                                 var opts = $(this).clone();
                                 opts.find('option').eq(0).remove();
                                 $('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+                            });
+                        }
+                        else if (typeObjet === 'Mot ambigu') {
+                            $('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez un mot ambigu</option>').prop('disabled', false);
+                            $('.amb').each(function () {
+                                $('#jugement_add_idObjet').append('<option value="' + $(this).data('id') + '">' + $(this).data('amb') + '</option>');
                             })
                         }
                         else if (typeObjet === 'Phrase') {
-                            $('#signalementIdObjet').hide();
-                            $('#jugement_add_signaler').prop('disabled', false);
-                            $('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.id }}</option>');
+                            $('#jugement_add_idObjet').attr('readonly', true);
+                            $('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
+                        }
+                        else if (typeObjet === 'Membre') {
+                            $('#jugement_add_signaler').prop('disabled', true);
+                            $('#jugement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un membre sur cette page</span>');
+                        }
+                        else if (typeObjet === 'Résultat') {
+                            $('#jugement_add_signaler').prop('disabled', true);
+                            $('#jugement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un résultat sur cette page</span>');
                         }
                         else {
-                            $('#signalementIdObjet').show();
                             $('#jugement_add_signaler').prop('disabled', true);
                         }
                     });
@@ -209,6 +227,7 @@
                                     + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
                                     + 'Élément signalé</div>'
                                 );
+                                $('#jugement_add_description').val('');
                             }
                             else {
                                 $(form).after('<div class="alert alert-danger">Erreur</div>');

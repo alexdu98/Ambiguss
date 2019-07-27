@@ -3,18 +3,20 @@
 {{ form_errors(form) }}
 
 {{ form_row(form.valeur) }}
+
 <div class="form-group">
 	{{ form_label(form.signale) }}
 	{% for input in form.signale.children %}
 		{{ form_widget(input) }}
 	{% endfor %}
 </div>
+
+{{ form_rest(form) }}
+{{ form_end(form) }}
+
 <div class="form-group text-center">
 	<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
 </div>
 <div class="form-group">
 	<div id="jugements" hidden></div>
 </div>
-
-{{ form_rest(form) }}
-{{ form_end(form) }}

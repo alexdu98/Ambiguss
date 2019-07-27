@@ -49,6 +49,18 @@ class APIController extends Controller
                     $repo = $em->getRepository('AppBundle:Glose');
                     $histMsg = "Signalement de la glose n°" . $jugement->getIdObjet() . ".";
 				}
+                elseif($jugement->getTypeObjet()->getNom() == 'Mot ambigu') {
+                    $repo = $em->getRepository('AppBundle:MotAmbigu');
+                    $histMsg = "Signalement du mot ambigu n°" . $jugement->getIdObjet() . ".";
+                }
+                elseif($jugement->getTypeObjet()->getNom() == 'Membre') {
+                    $repo = $em->getRepository('AppBundle:Membre');
+                    $histMsg = "Signalement du membre n°" . $jugement->getIdObjet() . ".";
+                }
+                elseif($jugement->getTypeObjet()->getNom() == 'Résultat') {
+                    $repo = $em->getRepository('AppBundle:Phrase');
+                    $histMsg = "Signalement du résultat de la phrase n°" . $jugement->getIdObjet() . ".";
+                }
 
                 $obj = $repo->find($jugement->getIdObjet());
                 $obj->setSignale(true);

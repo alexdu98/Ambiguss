@@ -78,7 +78,7 @@
 					        <option value="{{ g.id }}">{{ g.valeur }}</option>
 				        {% endfor %}
 			        </select>
-			        <input type="hidden" value="{{ ma.motAmbigu.valeur }}">
+			        <input type="hidden" class="motambigu" data-id="{{ ma.motAmbigu.id }}" value="{{ ma.motAmbigu.valeur }}">
 		        {% endfor %}
 	        </div>
         </div>
@@ -119,24 +119,38 @@
 				$("#jugement_add_typeObjet").on('change', function () {
 					var idTypeObjet = $(this).val();
 					var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
+
+					$('#jugement_add_typeObjet').next().remove();
+					$('#jugement_add_signaler').prop('disabled', false);
+					$('#jugement_add_idObjet').removeAttr('readonly');
+
 					if (typeObjet === 'Glose') {
-						$('#signalementIdObjet').show();
-						$('#jugement_add_signaler').prop('disabled', false);
 						$('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
 						$('.gloses').each(function () {
 							var ma = $(this).next().val();
 							var opts = $(this).clone();
-							//opts.find('option').eq(0).remove();
 							$('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
-						})
+						});
 					}
+                    else if (typeObjet === 'Mot ambigu') {
+                        $('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez un mot ambigu</option>').prop('disabled', false);
+                        $('.motambigu').each(function () {
+                            $('#jugement_add_idObjet').append('<option value="' + $(this).data('id') + '">' + $(this).val() + '</option>');
+                        })
+                    }
 					else if (typeObjet === 'Phrase') {
-						$('#signalementIdObjet').hide();
-						$('#jugement_add_signaler').prop('disabled', false);
-						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.id }}</option>');
+						$('#jugement_add_idObjet').attr('readonly', true);
+						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
+					}
+					else if (typeObjet === 'Membre') {
+						$('#jugement_add_idObjet').attr('readonly', true);
+						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.auteur.id }}">{{ phrase.auteur.username }}</option>');
+					}
+					else if (typeObjet === 'Résultat') {
+						$('#jugement_add_idObjet').attr('readonly', true);
+						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
 					}
 					else {
-						$('#signalementIdObjet').show();
 						$('#jugement_add_signaler').prop('disabled', true);
 					}
 				});
@@ -144,7 +158,7 @@
 
 
 				// On envoit le formulaire par ajax
-				$('form[name="api_jugement_new"]').ajaxForm({
+				$('form[name="jugement_add"]').ajaxForm({
 					beforeSubmit: function (arr, form, opt) {
 						// On affiche l'image laoding en attendant la réponse
 						$(form).after('<img src="' + urlImageLoading + '" id="loading">');
@@ -159,6 +173,7 @@
 								+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
 								+ 'Élément signalé</div>'
 							);
+							$('#jugement_add_description').val('');
 						}
 						else {
 							$(form).after('<div class="alert alert-danger">Erreur</div>');

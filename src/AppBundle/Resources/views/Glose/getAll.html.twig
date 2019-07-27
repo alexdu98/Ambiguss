@@ -137,10 +137,10 @@
                                     , function
                                         (data) {
                                         if (data.succes) {
-                                            clone.remove();
+                                            $(event.target).closest('.panel').remove();
                                         }
                                         else {
-                                            clone.append('<span class="text-danger">Erreur (' + data.message + ')</span>')
+                                            $(event.target).closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
                                         }
                                     })
                                     .fail(function () {

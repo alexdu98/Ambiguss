@@ -169,4 +169,19 @@ class MembreRepository extends EntityRepository
 		return $array;
 	}
 
+    /**
+     * Retourne le nombre de membres signalés
+     *
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countSignale()
+    {
+        return $this->createQueryBuilder('m')
+            ->select('count(m) signale')
+            ->where('m.signale = 1')
+            ->getQuery()->getSingleResult()['signale'];
+    }
+
 }

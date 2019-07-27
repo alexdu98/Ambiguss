@@ -34,5 +34,4 @@ class GloseType extends AbstractType
         return 'AppBundle_glose';
     }
 
-
 }

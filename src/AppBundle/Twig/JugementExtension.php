@@ -17,11 +17,21 @@ class JugementExtension extends AbstractExtension
 	}
 
     /**
+     * Retourne le nombre de membres signalés
+     *
+     * @return mixed
+     */
+    public function nbMembresSignales()
+    {
+        return $this->em->getRepository('AppBundle:Membre')->countSignale();
+    }
+
+    /**
      * Retourne le nombre de phrases signalées
      *
      * @return mixed
      */
-	public function nbPhrasesSignale()
+	public function nbPhrasesSignalees()
 	{
 		return $this->em->getRepository('AppBundle:Phrase')->countSignale();
 	}
@@ -31,7 +41,7 @@ class JugementExtension extends AbstractExtension
      *
      * @return mixed
      */
-	public function nbGlosesSignale()
+	public function nbGlosesSignalees()
 	{
 		return $this->em->getRepository('AppBundle:Glose')->countSignale();
 	}
@@ -39,13 +49,17 @@ class JugementExtension extends AbstractExtension
 	public function getFunctions()
 	{
 		return array(
-			new TwigFunction('nbPhrasesSignale', array(
+            new TwigFunction('nbMembresSignales', array(
+                $this,
+                'nbMembresSignales',
+            )),
+			new TwigFunction('nbPhrasesSignalees', array(
 				$this,
-				'nbPhrasesSignale',
+				'nbPhrasesSignalees',
 			)),
-			new TwigFunction('nbGlosesSignale', array(
+			new TwigFunction('nbGlosesSignalees', array(
 				$this,
-				'nbGlosesSignale',
+				'nbGlosesSignalees',
 			)),
 		);
 	}

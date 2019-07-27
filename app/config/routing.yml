@@ -139,6 +139,40 @@ classement_personnel_show:
 ##################################################
 ###################### MODO ######################
 ##################################################
+modo_membres_show:
+    path: /moderation/membres
+    controller: AppBundle:Modo:showMembres
+
+modo_membre_ban:
+    path: /moderation/membre/{id}/ban
+    controller: AppBundle:Modo:banMembre
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_membre_unsignale:
+    path: /moderation/membre/{id}/unsignale
+    controller: AppBundle:Modo:unsignaleMembre
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_membre_edit:
+    path: /moderation/membre/{id}/edit
+    controller: AppBundle:Modo:editMembre
+    requirements:
+        id: \d+
+
+modo_jugements_membre_show:
+    path: /moderation/jugement/membre/{id}
+    controller: AppBundle:Modo:showMembreJugements
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
 modo_phrases_show:
     path: /moderation/phrases
     controller: AppBundle:Modo:showPhrases

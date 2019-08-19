@@ -26,42 +26,38 @@ class MembreEditType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('enabled', ChoiceType::class, array(
-                'label' => 'Activé',
-                'choices' => array(
-                    'Oui' => 1,
-                    'Non' => 0,
-                ),
-                'expanded' => true,
-			))
             ->add('banni', ChoiceType::class, array(
                 'label' => 'Banni',
                 'choices' => array(
-                    'Oui' => 1,
-                    'Non' => 0,
+                    'Oui' => '1',
+                    'Non' => '0',
                 ),
                 'expanded' => true,
+                'attr' => array('class' => 'radio-inline')
             ))
             ->add('commentaireBan', TextType::class, array(
+                'required' => false
             ))
             ->add('dateDeban', DateTimeType::class, array(
-                'data' => (new \DateTime())->add(new \DateInterval('P1D'))
+                'required' => false
             ))
             ->add('renamable', ChoiceType::class, array(
                 'label' => 'Renomable',
                 'choices' => array(
-                    'Oui' => 1,
-                    'Non' => 0,
+                    'Oui' => '1',
+                    'Non' => '0',
                 ),
                 'expanded' => true,
+                'attr' => array('class' => 'radio-inline')
             ))
             ->add('signale', ChoiceType::class, array(
                 'label' => 'Signalé',
                 'choices' => array(
-                    'Oui' => 1,
-                    'Non' => 0,
+                    'Oui' => '1',
+                    'Non' => '0',
                 ),
                 'expanded' => true,
+                'attr' => array('class' => 'radio-inline')
             ))
             ->add('modifier', SubmitType::class, array(
                 'label' => 'Modifier',

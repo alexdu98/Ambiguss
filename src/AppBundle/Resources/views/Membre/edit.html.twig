@@ -4,20 +4,17 @@
 	{{ form_errors(form) }}
 
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			{{ form_label(form.signale) }} : {{ form_widget(form.signale) }}
 		</div>
-		<div class="col-md-4">
-			{{ form_label(form.enabled) }} : {{ form_widget(form.enabled) }}
-		</div>
-		<div class="col-md-4">
+		<div class="col-md-3">
 			{{ form_label(form.renamable) }} : {{ form_widget(form.renamable) }}
 		</div>
 	</div>
 
 	<br>
 
-	<div class="row">
+	<div class="row vcenter">
 		<div class="col-md-3">
 			{{ form_label(form.banni) }} : {{ form_widget(form.banni) }}
 		</div>
@@ -25,6 +22,11 @@
 			{{ form_row(form.commentaireBan) }}
 			{{ form_row(form.dateDeban) }}
 		</div>
+	</div>
+
+	<br>
+
+	<div class="row">
 		{{ form_widget(form.modifier) }}
 	</div>
 

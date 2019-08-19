@@ -214,7 +214,7 @@ class Jugement implements \JsonSerializable
 	 * AUTRES
 	 */
 
-	function jsonSerialize()
+    public function jsonSerialize()
 	{
 		return array(
 			'id' => $this->getId(),

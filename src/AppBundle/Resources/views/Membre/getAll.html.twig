@@ -18,7 +18,6 @@
                 <th>Inscription</th>
                 <th>Points</th>
                 <th>Crédits</th>
-                <th>Activé</th>
                 <th>Banni</th>
                 <th>Renomable</th>
                 <th>Actions</th>
@@ -31,7 +30,6 @@
                 <th>Inscription</th>
                 <th>Points</th>
                 <th>Crédits</th>
-                <th>Activé</th>
                 <th>Banni</th>
                 <th>Renomable</th>
                 <th>Actions</th>
@@ -45,7 +43,6 @@
                     <td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y à H:i") }}</td>
                     <td>{{ row.pointsClassement }}</td>
                     <td>{{ row.credits }}</td>
-                    <td class="membre-active">{% if row.enabled %}Oui{% else %}Non{% endif %}</td>
                     <td class="membre-banni">{% if row.banni %}Oui{% else %}Non{% endif %}</td>
                     <td class="membre-renomable">{% if row.renamable %}Oui{% else %}Non{% endif %}</td>
                     <td>
@@ -64,7 +61,7 @@
     <script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
     <script>
         $(document).ready(function () {
-            $('#phrasesTable').DataTable({
+            $('#membresTable').DataTable({
                 stateSave: true, // Enregistre les configurations
                 stateSaveParams: function (settings, data) {
                     data.start = 0; // On enregistre pas la page
@@ -89,14 +86,46 @@
                 setModalSize('modal-lg');
                 setModalTitle('Modifier le membre "' + button.data('valeur') + '"');
                 setModalBody('{{ include('AppBundle:Membre:edit.html.twig', {'form': editMembreForm})|e('js') }}');
+                $('[name="AppBundle_membre"] :input').prop("disabled", true);
+                $('#modal-title').append('<img src="' + urlImageLoading + '" id="inloading">');
+
+                $('[name="AppBundle_membre[banni]"]').on('change', function(){
+                    if ($('[name="AppBundle_membre[banni]"]:checked').val() == 1) {
+                        $('#AppBundle_membre_commentaireBan').prop('disabled', false).prop('required', true);
+                        $('[for="AppBundle_membre_commentaireBan"]').addClass('required');
+                        $('#AppBundle_membre_dateDeban :input').prop('disabled', false);
+                    }
+                    else {
+                        $('#AppBundle_membre_commentaireBan').prop('disabled', true).prop('required', false);
+                        $('[for="AppBundle_membre_commentaireBan"]').removeClass('required');
+                        $('#AppBundle_membre_dateDeban :input').prop('disabled', true);
+                    }
+                });
 
                 $("#toggleJugements").click(function () {
                     $("#jugements").toggle("slow");
                 });
 
-                // Récupère les jugements en cours
+                // Récupère les infos jugements en cours
                 $.post(Routing.generate('modo_jugements_membre_show', {id: button.data('id')}), function (data) {
                     if (data.succes) {
+                        var membre = data.membre;
+                        $('[name="AppBundle_membre[signale]"][value="' + (membre.signale ? 1 : 0) + '"]').prop('checked', true);
+                        $('[name="AppBundle_membre[renamable]"][value="' + (membre.renomable ? 1 : 0) + '"]').prop('checked', true);
+                        $('[name="AppBundle_membre[banni]"][value="' + (membre.banni ? 1 : 0) + '"]').prop('checked', true);
+                        $('#AppBundle_membre_commentaireBan').val(membre.commentaireBan);
+                        if (membre.dateDeban) {
+                            var dateDeban = new Date(membre.dateDeban * 1000);
+                            $('#AppBundle_membre_dateDeban_date_day').val(dateDeban.getUTCDate());
+                            $('#AppBundle_membre_dateDeban_date_month').val(dateDeban.getUTCMonth() + 1);
+                            $('#AppBundle_membre_dateDeban_date_year').val(dateDeban.getUTCFullYear());
+                            $('#AppBundle_membre_dateDeban_time_hour').val(dateDeban.getUTCHours());
+                            $('#AppBundle_membre_dateDeban_time_minute').val(dateDeban.getUTCMinutes());
+                        }
+                        $('[name="AppBundle_membre"] :input').prop("disabled", false);
+                        $('[name="AppBundle_membre[banni]"]').trigger('change');
+                        $('#inloading').remove();
+
                         divJugement = $('#jugements');
                         if (data.jugements.length === 0)
                             divJugement.append('<span class="text-danger">Aucun jugement en cours</span>');
@@ -148,16 +177,6 @@
 
                     }
                 }, "json");
-
-                $('#membreEdit').click(function (data) {
-                    // On affiche l'image laoding en attendant la réponse
-                    $(this).after('<img src="' + urlImageLoading + '" id="loading">');
-                    var id = button.data('id');
-                    var url = "{{ path('modo_membre_edit', {'id': '0'}) }}";
-                    url = url.replace('0', parseInt(id));
-                    location.href = url;
-                });
-
             }
         });
     </script>

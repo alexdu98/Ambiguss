@@ -160,44 +160,6 @@ class ModoController extends Controller
         ));
     }
 
-    public function unsignaleMembreAction(Request $request, Membre $membre)
-    {
-        $data = $request->request->all();
-
-        if ($this->isCsrfTokenValid('unsignale_membre', $data['token'])) {
-            $membre->setSignale(false);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($membre);
-            $em->flush();
-
-            return $this->json(array(
-                'succes' => true,
-            ));
-        }
-
-        throw new InvalidCsrfTokenException();
-    }
-
-    public function banMembreAction(Request $request, Membre $membre)
-    {
-        $data = $request->request->all();
-
-        if ($this->isCsrfTokenValid('ban_membre', $data['token'])) {
-            $membre->setBanni(true);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($membre);
-            $em->flush();
-
-            return $this->json(array(
-                'succes' => true,
-            ));
-        }
-
-        throw new InvalidCsrfTokenException();
-    }
-
     public function editMembreAction(Request $request, Membre $membre)
     {
 
@@ -207,6 +169,7 @@ class ModoController extends Controller
     {
         $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
         $repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
+        $repoM = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
 
         $typeObj = $repoTO->findOneBy(array('nom' => 'Membre'));
         $jugements = $repoJ->findBy(array(
@@ -215,8 +178,11 @@ class ModoController extends Controller
             'idObjet' => $id,
         ));
 
+        $membre = $repoM->find($id);
+
         return $this->json(array(
             'succes' => true,
+            'membre' => $membre,
             'jugements' => $jugements,
         ));
     }

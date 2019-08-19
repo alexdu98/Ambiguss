@@ -30,7 +30,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     message="Le pseudo {{ value }} est déjà utilisé"
  * )
  */
-class Membre extends User
+class Membre extends User implements \JsonSerializable
 {
     /**
      * @var int
@@ -767,7 +767,7 @@ class Membre extends User
      *
      * @return boolean
      */
-    public function isRenamable()
+    public function getRenamable()
     {
         return $this->renamable;
     }
@@ -820,4 +820,18 @@ class Membre extends User
         return $this;
     }
 
+
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'email' => $this->getEmail(),
+            'signale' => $this->getSignale(),
+            'renomable' => $this->getRenamable(),
+            'banni' => $this->getBanni(),
+            'commentaireBan' => $this->getCommentaireBan(),
+            'dateDeban' => $this->getDateDeban() ? $this->getDateDeban()->format('U') : null
+        );
+    }
 }

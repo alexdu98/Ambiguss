@@ -58,12 +58,12 @@ class MembreRepository extends EntityRepository
 
         if ($type == 'mensuel') {
             $query
-                ->where("m.pointsClassementMensuel > :points")->setParameter("points", $membre->getPointsClassement())
+                ->where("m.pointsClassementMensuel > :points")->setParameter("points", $membre->getPointsClassementMensuel())
                 ->orderBy('m.pointsClassementMensuel', 'DESC');
         }
         elseif ($type == 'hebdomadaire') {
             $query
-                ->where("m.pointsClassementHebdomadaire > :points")->setParameter("points", $membre->getPointsClassement())
+                ->where("m.pointsClassementHebdomadaire > :points")->setParameter("points", $membre->getPointsClassementHebdomadaire())
                 ->orderBy('m.pointsClassementHebdomadaire', 'DESC');
         }
         else {
@@ -182,6 +182,37 @@ class MembreRepository extends EntityRepository
             ->select('count(m) signale')
             ->where('m.signale = 1')
             ->getQuery()->getSingleResult()['signale'];
+    }
+
+    /**
+     * Retourne le nombre de points nécessaire pour passer devant le prochain joueur aux classements
+     *
+     * @param Membre $membre
+     * @return array Tableau des prochains membres pour chaque classement
+     */
+    public function getNextMembresClassements(Membre $membre)
+    {
+        $array = array();
+
+        $array['gen'] = $this->createQueryBuilder('m')
+             ->where('m.pointsClassement > :points')->setParameter('points', $membre->getPointsClassement())
+             ->orderBy('m.pointsClassement', 'ASC')
+             ->setMaxResults(1)
+             ->getQuery()->getOneOrNullResult();
+
+        $array['men'] = $this->createQueryBuilder('m')
+            ->where('m.pointsClassementMensuel > :points')->setParameter('points', $membre->getPointsClassementMensuel())
+            ->orderBy('m.pointsClassementMensuel', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()->getOneOrNullResult();
+
+        $array['heb'] = $this->createQueryBuilder('m')
+            ->where('m.pointsClassementHebdomadaire > :points')->setParameter('points', $membre->getPointsClassementHebdomadaire())
+            ->orderBy('m.pointsClassementHebdomadaire', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()->getOneOrNullResult();
+
+        return $array;
     }
 
 }

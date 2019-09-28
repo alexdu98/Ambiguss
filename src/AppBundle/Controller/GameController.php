@@ -49,6 +49,7 @@ class GameController extends Controller
             }
 
             $alreadyPlayed = false;
+            $nextMembresClassements = null;
             if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 $partieRepo = $em->getRepository('AppBundle:Partie');
                 $partie = $partieRepo->findOneBy(array(
@@ -101,6 +102,8 @@ class GameController extends Controller
                 else {
                     $alreadyPlayed = true;
                 }
+
+                $nextMembresClassements = $em->getRepository('AppBundle:Membre')->getNextMembresClassements($this->getUser());
             }
 
             // Formulaire de création de jugement
@@ -113,6 +116,7 @@ class GameController extends Controller
                 'stats' => $stats,
                 'alreadyPlayed' => $alreadyPlayed,
                 'nbPoints' => ceil($nbPoints),
+                'nextMembresClassements' => $nextMembresClassements,
                 'addJugementForm' => $addJugementForm->createView(),
             ));
         }

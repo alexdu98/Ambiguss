@@ -43,6 +43,7 @@
 		        {% endif %}
 	        </span>
 	        <br>
+
 	        <span class="color-green size18">La phrase était :</span><br>
 	        <span class="size24">{{ phrase.contenuHTML|raw }}</span><br>
 	        <span class="size16">par <a href="{{ path('fos_user_profile_show', {id: phrase.auteur.id}) }}">{{ phrase.auteur.username }}</a></span><br>
@@ -55,6 +56,7 @@
 		        {% endif %}
 	        </div>
 	        <br>
+
 	        <ul><span class="color-green size18">Les votes précédents étaient :</span>
 		        {% for ordre, ma in stats %}
 			        <li class="not-list"><b class="color-red size16" title="Ce mot est ambigu (id : {{ ordre }})">{{ ma.valeurMA }}</b>
@@ -69,6 +71,36 @@
 		        {% endfor %}
 	        </ul>
 	        <br>
+
+			{% if nextMembresClassements['gen'] or nextMembresClassements['men'] or nextMembresClassements['heb'] %}
+				<ul><span class="color-green size18">Encore :</span>
+					{% if nextMembresClassements['gen'] %}
+						<li class="not-list">
+							<b class="color-red">{{ nextMembresClassements['gen'].pointsClassement - app.user.pointsClassement }}</b> points pour rattraper
+							<a href="{{ path('fos_user_profile_show', {id: nextMembresClassements['gen'].id}) }}">
+								{{ nextMembresClassements['gen'].username }}
+							</a> au classement général.
+						</li>
+					{% endif %}
+					{% if nextMembresClassements['men'] %}
+						<li class="not-list">
+							<b class="color-red">{{ nextMembresClassements['men'].pointsClassementMensuel - app.user.pointsClassementMensuel }}</b> points pour rattraper
+							<a href="{{ path('fos_user_profile_show', {id: nextMembresClassements['men'].id}) }}">
+								{{ nextMembresClassements['men'].username }}
+							</a> au classement mensuel.
+						</li>
+					{% endif %}
+					{% if nextMembresClassements['heb'] %}
+						<li class="not-list">
+							<b class="color-red">{{ nextMembresClassements['heb'].pointsClassementHebdomadaire - app.user.pointsClassementHebdomadaire }}</b> points pour rattraper
+							<a href="{{ path('fos_user_profile_show', {id: nextMembresClassements['heb'].id}) }}">
+								{{ nextMembresClassements['heb'].username }}
+							</a> au classement hebdomadaire.
+						</li>
+					{% endif %}
+				</ul>
+				<br>
+			{% endif %}
 
             <a href="{{ path('game_show') }}" class="btn btn-primary">Rejouer</a>
 	        <div id="glosesBlock" hidden>

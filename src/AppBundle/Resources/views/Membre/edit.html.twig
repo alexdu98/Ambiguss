@@ -20,26 +20,33 @@
 		</div>
 		<div class="col-md-9">
 			{{ form_row(form.commentaireBan) }}
-			{{ form_row(form.dateDeban) }}
+			<div class="form-group">
+				{{ form_label(form.dateDeban) }}
+				{{ form_widget(form.dateDeban) }}
+				<span class="help-block">
+					<i class="fa fa-info-circle"></i> Choisir date et heure de fin ou laisser vide pour bannir à vie
+				</span>
+			</div>
 		</div>
 	</div>
 
 	<br>
 
-	<div class="row">
+	<div class="row form-group">
 		{{ form_widget(form.modifier) }}
 	</div>
 
-	<br>
+	{{ form_end(form) }}
 
-	<div class="row">
-		<div class="form-group text-center">
-			<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
-		</div>
-		<div class="form-group">
-			<div id="jugements" hidden></div>
-		</div>
+	<div class="row form-error">
+
 	</div>
 
-	{{ form_end(form) }}
+	<div class="form-group text-center">
+		<a id="toggleJugements" class="btn btn-primary">Voir/cacher les jugements en cours</a>
+	</div>
+	<div class="form-group">
+		<div id="jugements" hidden></div>
+	</div>
+
 </div>

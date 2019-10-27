@@ -477,6 +477,12 @@ class Membre extends User implements \JsonSerializable
     public function setBanni($banni)
     {
         $this->banni = $banni;
+
+        if (!$banni) {
+            $this->setCommentaireBan(null);
+            $this->setDateDeban(null);
+        }
+
         return $this;
     }
 

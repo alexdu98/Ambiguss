@@ -102,6 +102,21 @@
                     }
                 });
 
+                $('[name^="AppBundle_membre[dateDeban]"]').on('change', function(){
+                    var selects = $('[name^="AppBundle_membre[dateDeban]"]').filter(function(){
+                        return $(this).val() !== "";
+                    });
+
+                    if(selects.length > 0){
+                        $('#AppBundle_membre_dateDeban').closest('.form-group').children('label').addClass('required');
+                        $('[name^="AppBundle_membre[dateDeban]"]').prop('required', true);
+                    }
+                    else {
+                        $('#AppBundle_membre_dateDeban').closest('.form-group').children('label').removeClass('required');
+                        $('[name^="AppBundle_membre[dateDeban]"]').prop('required', false);
+                    }
+                });
+
                 $("#toggleJugements").click(function () {
                     $("#jugements").toggle("slow");
                 });
@@ -124,6 +139,7 @@
                         }
                         $('[name="AppBundle_membre"] :input').prop("disabled", false);
                         $('[name="AppBundle_membre[banni]"]').trigger('change');
+                        $('[name^="AppBundle_membre[dateDeban]"]').trigger('change');
                         $('#inloading').remove();
 
                         divJugement = $('#jugements');
@@ -177,6 +193,43 @@
 
                     }
                 }, "json");
+
+                var form = $('form[name="AppBundle_membre"]');
+                var action = form.attr('action');
+                form.attr('action', action.replace('0', button.data('id')));
+                form.ajaxForm({
+                    beforeSubmit: function (arr, form, opt) {
+                        // On affiche l'image laoding en attendant la réponse
+                        $(form).after('<img src="' + urlImageLoading + '" id="loading">');
+                    },
+                    // Quand la réponse Ajax sera reçu, on appelle ce callback
+                    success: function (data, status, xhr, form) {
+                        // On supprime l'image loading
+                        $(form).next().remove();
+                        if (data.succes) {
+                            // On trouve la ligne
+                            var row = button.parents('tr');
+
+                            var banni = data.membre.banni === "0" ? 'Non' : 'Oui';
+                            row.find('.membre-banni').html(banni);
+                            var renomable = data.membre.renomable === "0" ? 'Non' : 'Oui';
+                            row.find('.membre-renomable').html(renomable);
+
+                            // On trouve la ligne, on l'a met à jour
+                            $('#membresTable').DataTable().row('#membre-' + button.data('id')).invalidate().draw();
+
+                            // On cache la modale
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            $('.form-error').empty().append('<span class="text-danger">Erreur  (' + data.message + ')</span>');
+                        }
+                    },
+                    error: function () {
+                        $("#loading").remove();
+                        $('.form-error').empty().append('<span class="text-danger">Erreur</span>');
+                    }
+                });
             }
         });
     </script>

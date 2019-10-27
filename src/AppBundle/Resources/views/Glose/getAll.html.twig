@@ -159,6 +159,8 @@
                 }, "json");
 
                 $('#glose_edit_valeur').val(button.data('valeur'));
+                var valChecked = button.closest('tr').find('.glose-signale').html() === 'Oui' ? 1 : 0;
+                $('[name="glose_edit[signale]"][value="' + valChecked + '"]').prop('checked', true);
                 var form = $('form[name="glose_edit"]');
                 var action = form.attr('action');
                 form.attr('action', action.replace('0', button.data('id')));
@@ -179,7 +181,7 @@
                                 row.find('.glose-valeur').html(data.glose.valeur);
                                 row.find('.glose-modificateur').html('<a href="#">' + data.glose.modificateur + '</a>');
                                 row.find('.glose-dateModification').html(data.glose.dateModification);
-                                var signale = data.glose.signale === "0" ? 'Non' : 'Oui';
+                                var signale = data.glose.signale === 0 ? 'Non' : 'Oui';
                                 button.data('valeur', data.glose.valeur);
                                 row.find('.glose-signale').html(signale);
                                 // On trouve la ligne, on l'a met à jour
@@ -195,14 +197,12 @@
                             }
                         }
                         else {
-                            $(form).after('<span class="text-danger">Erreur (' + data.message + ')</span>');
+                            $('.form-error').empty().append('<span class="text-danger">Erreur (' + data.message + ')</span>');
                         }
                     },
                     error: function () {
-                        loading = $("#loading");
-                        next = loading.prev().nextAll();
-                        loading.before('<span class="text-danger">Erreur</span>');
-                        next.remove();
+                        $("#loading").remove();
+                        $('.form-error').empty().append('<span class="text-danger">Erreur</span>');
                     }
                 });
             }

@@ -162,7 +162,24 @@ class ModoController extends Controller
 
     public function editMembreAction(Request $request, Membre $membre)
     {
+        $form = $this->createForm(MembreEditType::class, $membre);
 
+        $form->handleRequest($request);
+
+        $succes = false;
+        if($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($membre);
+            $em->flush();
+
+            $succes = true;
+        }
+
+        return $this->json(array(
+            'succes' => $succes,
+            'membre' => $membre
+        ));
     }
 
     public function showMembreJugementsAction($id)

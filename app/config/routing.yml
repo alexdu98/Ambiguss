@@ -164,6 +164,8 @@ modo_membre_edit:
     controller: AppBundle:Modo:editMembre
     requirements:
         id: \d+
+    options:
+        expose: true
 
 modo_jugements_membre_show:
     path: /moderation/jugement/membre/{id}

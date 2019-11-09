@@ -186,12 +186,6 @@
                                 $('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
                             });
                         }
-                        else if (typeObjet === 'Mot ambigu') {
-                            $('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez un mot ambigu</option>').prop('disabled', false);
-                            $('.amb').each(function () {
-                                $('#jugement_add_idObjet').append('<option value="' + $(this).data('id') + '">' + $(this).data('amb') + '</option>');
-                            })
-                        }
                         else if (typeObjet === 'Phrase') {
                             $('#jugement_add_idObjet').attr('readonly', true);
                             $('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
@@ -199,10 +193,6 @@
                         else if (typeObjet === 'Membre') {
                             $('#jugement_add_signaler').prop('disabled', true);
                             $('#jugement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un membre sur cette page</span>');
-                        }
-                        else if (typeObjet === 'Résultat') {
-                            $('#jugement_add_signaler').prop('disabled', true);
-                            $('#jugement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un résultat sur cette page</span>');
                         }
                         else {
                             $('#jugement_add_signaler').prop('disabled', true);

@@ -164,12 +164,6 @@
 							$('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
 						});
 					}
-                    else if (typeObjet === 'Mot ambigu') {
-                        $('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez un mot ambigu</option>').prop('disabled', false);
-                        $('.motambigu').each(function () {
-                            $('#jugement_add_idObjet').append('<option value="' + $(this).data('id') + '">' + $(this).val() + '</option>');
-                        })
-                    }
 					else if (typeObjet === 'Phrase') {
 						$('#jugement_add_idObjet').attr('readonly', true);
 						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
@@ -177,10 +171,6 @@
 					else if (typeObjet === 'Membre') {
 						$('#jugement_add_idObjet').attr('readonly', true);
 						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.auteur.id }}">{{ phrase.auteur.username }}</option>');
-					}
-					else if (typeObjet === 'Résultat') {
-						$('#jugement_add_idObjet').attr('readonly', true);
-						$('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
 					}
 					else {
 						$('#jugement_add_signaler').prop('disabled', true);

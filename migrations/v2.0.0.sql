@@ -85,3 +85,8 @@ CREATE INDEX IDX_MEMBRE_POINTSCLASSEMENTMENSUEL ON membre(points_classement_mens
 CREATE INDEX IDX_MEMBRE_POINTSCLASSEMENTHEBDOMADAIRE ON membre(points_classement_hebdomadaire);
 
 ALTER TABLE membre ADD COLUMN signale BOOLEAN NOT NULL DEFAULT FALSE;
+
+DELETE FROM jugement WHERE type_objet_id = 5; -- Résultat
+DELETE FROM type_objet WHERE id = 5; -- Résultat
+DELETE FROM jugement WHERE type_objet_id = 1; -- Mot ambigu
+DELETE FROM type_objet WHERE id = 1; -- Mot ambigu

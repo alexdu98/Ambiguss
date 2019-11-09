@@ -66,13 +66,11 @@ class APIController extends Controller
                 $obj->setSignale(true);
 
                 // On enregistre dans l'historique du joueur
-                $histJoueur = new Historique();
-                $histJoueur->setMembre($this->getUser());
-                $histJoueur->setValeur($histMsg);
+                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+                $historiqueService->save($this->getUser(), $histMsg);
 
 				$em->persist($jugement);
 				$em->persist($obj);
-				$em->persist($histJoueur);
 
                 $em->flush();
 
@@ -172,14 +170,12 @@ class APIController extends Controller
                 $this->getUser()->updateCredits($cout);
 
                 // On enregistre dans l'historique du joueur
-                $histJoueur = new Historique();
-                $histJoueur->setMembre($this->getUser());
-                $histJoueur->setValeur("Liaison de la glose n°" . $glose->getId() . " avec le mot ambigu n°" . $motAmbigu->getId() . ".");
+                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+                $historiqueService->save($this->getUser(), "Liaison de la glose n°" . $glose->getId() . " avec le mot ambigu n°" . $motAmbigu->getId() . ".");
 
                 $em->persist($glose);
                 $em->persist($motAmbigu);
                 $em->persist($this->getUser());
-                $em->persist($histJoueur);
 
                 $em->flush();
 
@@ -257,20 +253,16 @@ class APIController extends Controller
             $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
             $action = 'like';
 
+            $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+
             // On enregistre dans l'historique du joueur
-            $histJoueur = new Historique();
-            $histJoueur->setValeur("Aime la phrase n°" . $phrase->getId() . ".");
-            $histJoueur->setMembre($this->getUser());
+            $historiqueService->save($this->getUser(), "Aime la phrase n°" . $phrase->getId() . ".");
 
             // On enregistre dans l'historique du créateur de la phrase
-            $histAuteur = new Historique();
-            $histAuteur->setValeur(
+            $historiqueService->save(
+                $phrase->getAuteur(),
                 "Un joueur a aimé votre phrase n°" . $phrase->getId() . " (+" . $this->getParameter('gainPerLikePhrasePoints') . " points)."
             );
-            $histAuteur->setMembre($phrase->getAuteur());
-
-            $em->persist($histJoueur);
-            $em->persist($histAuteur);
         }
         else
         {

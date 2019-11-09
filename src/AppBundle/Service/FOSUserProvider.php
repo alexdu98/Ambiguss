@@ -3,21 +3,20 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Groupe;
-use AppBundle\Entity\Historique;
 use AppBundle\Entity\Membre;
 use AppBundle\Exception\GenerateUsernameException;
 use AppBundle\Exception\MailAlreadyUsedException;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\Canonicalizer;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseFOSUBProvider;
 use ReflectionMethod;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class FOSUserProvider extends BaseFOSUBProvider
 {
+    private $container;
     private $em;
     private $session;
     private $services = array(
@@ -26,11 +25,12 @@ class FOSUserProvider extends BaseFOSUBProvider
         'google' => array('name' => 'Google', 'property' => 'googleId')
     );
 
-    public function __construct(UserManagerInterface $userManager, EntityManagerInterface $entityManager, SessionInterface $session, array $properties)
+    public function __construct(UserManagerInterface $userManager, ContainerInterface $container, array $properties)
     {
         parent::__construct($userManager, $properties);
-        $this->em = $entityManager;
-        $this->session = $session;
+        $this->container = $container;
+        $this->em = $container->get('doctrine')->getManager();
+        $this->session = $container->get('session');
     }
 
     /**
@@ -92,18 +92,9 @@ class FOSUserProvider extends BaseFOSUBProvider
 
                 $user->setPlainPassword(bin2hex(openssl_random_pseudo_bytes(20)));
 
-                // On met à jour les infos
-                $this->updateServiceInfos($user, $service, $response);
-
-                $this->em->persist($user);
-                $this->em->flush();
-
-                $histJoueur = new Historique();
-                $histJoueur->setMembre($user);
-                $histJoueur->setValeur("Inscription via {$this->services[$service]['name']}.");
-
-                $this->em->persist($histJoueur);
-                $this->em->flush();
+                // On enregistre dans l'historique du joueur
+                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+                $historiqueService->save($user, "Inscription via {$this->services[$service]['name']}.");
             }
             else{
                 $user = $userEmail;

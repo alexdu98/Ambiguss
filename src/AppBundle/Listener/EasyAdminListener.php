@@ -55,7 +55,7 @@ class EasyAdminListener implements EventSubscriberInterface
      */
     public function update(GenericEvent $entity)
     {
-        $this->historiqueService->save($this->user, $this->getMessage('Modification', $entity));
+        $this->historiqueService->save($this->user, $this->getMessage('Modification', $entity), true);
     }
 
     /**
@@ -66,7 +66,7 @@ class EasyAdminListener implements EventSubscriberInterface
      */
     public function persist(GenericEvent $entity)
     {
-        $this->historiqueService->save($this->user, $this->getMessage('Création', $entity));
+        $this->historiqueService->save($this->user, $this->getMessage('Création', $entity), true);
     }
 
 
@@ -78,7 +78,7 @@ class EasyAdminListener implements EventSubscriberInterface
      */
     public function remove(GenericEvent $entity)
     {
-        $this->historiqueService->save($this->user, $this->getMessage('Suppression', $entity));
+        $this->historiqueService->save($this->user, $this->getMessage('Suppression', $entity), true);
     }
 
     /**

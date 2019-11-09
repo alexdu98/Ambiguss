@@ -3,6 +3,7 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\Historique;
+use AppBundle\Service\HistoriqueService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -11,11 +12,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ChangePasswordListener implements EventSubscriberInterface
 {
 
-    private $em;
+    private $historique;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(HistoriqueService $historiqueService)
     {
-        $this->em = $entityManager;
+        $this->historique = $historiqueService;
     }
 
     public static function getSubscribedEvents()
@@ -34,12 +35,7 @@ class ChangePasswordListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
-        $histJoueur = new Historique();
-        $histJoueur->setMembre($user);
-        $histJoueur->setValeur("Modification du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
-
-        $this->em->persist($histJoueur);
-        $this->em->flush();
+        $this->historique->save($user, "Modification du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").", true);
     }
 
 }

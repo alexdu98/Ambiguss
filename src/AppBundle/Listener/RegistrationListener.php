@@ -3,21 +3,22 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\Groupe;
-use AppBundle\Entity\Historique;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class RegistrationListener implements EventSubscriberInterface
 {
 
+    private $container;
     private $em;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ContainerInterface $container)
     {
-        $this->em = $entityManager;
+        $this->container = $container;
+        $this->em = $container->get('doctrine')->getManager();
     }
 
     public static function getSubscribedEvents()
@@ -38,12 +39,8 @@ class RegistrationListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
-        $histJoueur = new Historique();
-        $histJoueur->setMembre($user);
-        $histJoueur->setValeur("Confirmation d'inscription.");
-
-        $this->em->persist($histJoueur);
-        $this->em->flush();
+        $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+        $historiqueService->save($user, "Confirmation d'inscription.", true);
     }
 
     /**
@@ -67,12 +64,8 @@ class RegistrationListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
-        $histJoueur = new Historique();
-        $histJoueur->setMembre($user);
-        $histJoueur->setValeur("Inscription via Ambiguss.");
-
-        $this->em->persist($histJoueur);
-        $this->em->flush();
+        $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+        $historiqueService->save($user, "Inscription via Ambiguss.", true);
     }
 
 }

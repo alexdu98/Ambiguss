@@ -198,6 +198,8 @@ class Membre extends User implements \JsonSerializable
 	    parent::__construct();
 		$this->dateInscription = new \DateTime();
 		$this->pointsClassement = 0;
+		$this->pointsClassementHebdomadaire = 0;
+		$this->pointsClassementMensuel = 0;
 		$this->credits = 0;
 		$this->newsletter = true;
         $this->banni = false;
@@ -208,7 +210,6 @@ class Membre extends User implements \JsonSerializable
 		$this->gloses = new ArrayCollection();
 		$this->motsAmbigus = new ArrayCollection();
 		$this->historiques = new ArrayCollection();
-
 	}
 
     /**

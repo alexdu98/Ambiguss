@@ -2,8 +2,7 @@
 
 namespace AppBundle\Listener;
 
-use AppBundle\Entity\Historique;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Service\HistoriqueService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -11,11 +10,11 @@ use Symfony\Component\Security\Http\SecurityEvents;
 class LoginListener implements EventSubscriberInterface
 {
 
-    private $em;
+    private $historique;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(HistoriqueService $historiqueService)
     {
-        $this->em = $entityManager;
+        $this->historique = $historiqueService;
     }
 
     public static function getSubscribedEvents()
@@ -34,12 +33,7 @@ class LoginListener implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        $histJoueur = new Historique();
-        $histJoueur->setMembre($user);
-        $histJoueur->setValeur("Connexion (IP : " . $_SERVER['REMOTE_ADDR'] . ").");
-
-        $this->em->persist($histJoueur);
-        $this->em->flush();
+        $this->historique->save($user, "Connexion (IP : " . $_SERVER['REMOTE_ADDR'] . ").", true);
     }
 
 }

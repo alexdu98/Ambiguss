@@ -81,19 +81,15 @@ class GameController extends Controller
                     // On donne des points au créateur de la phrase
                     $phrase->updateGainCreateur($gainCreateur);
 
+                    $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+
                     // On enregistre dans l'historique du joueur
-                    $histJoueur = new Historique();
-                    $histJoueur->setValeur("Vous avez joué la phrase n°" . $phrase->getId() . " (+" . $gainJoueur . " crédits/points).");
-                    $histJoueur->setMembre($this->getUser());
+                    $historiqueService->save($this->getUser(), "Vous avez joué la phrase n°" . $phrase->getId() . " (+" . $gainJoueur . " crédits/points).");
 
                     // On enregistre dans l'historique du createur de la phrase
-                    $histAuteur = new Historique();
-                    $histAuteur->setValeur("Un joueur a joué votre phrase n°" . $phrase->getId() . " (+" . $gainCreateur . " crédits/points).");
-                    $histAuteur->setMembre($phrase->getAuteur());
+                    $historiqueService->save($phrase->getAuteur(), "Un joueur a joué votre phrase n°" . $phrase->getId() . " (+" . $gainCreateur . " crédits/points).");
 
                     $em->persist($partie);
-                    $em->persist($histJoueur);
-                    $em->persist($histAuteur);
                     $em->persist($this->getUser());
                     $em->persist($phrase->getAuteur());
 

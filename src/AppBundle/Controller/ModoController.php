@@ -319,12 +319,10 @@ class ModoController extends Controller
             $jugement->setVerdict($repoTV->findOneBy(array('nom' => $data['verdict'])));
 
             // On enregistre dans l'historique du joueur
-            $histJoueur = new Historique();
-            $histJoueur->setMembre($jugement->getAuteur());
-            $histJoueur->setValeur("Jugement n°" . $jugement->getId() . ", verdict : " . $jugement->getVerdict()->getNom() . ".");
+            $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+            $historiqueService->save($jugement->getAuteur(), "Jugement n°" . $jugement->getId() . ", verdict : " . $jugement->getVerdict()->getNom() . ".");
 
             $em->persist($jugement);
-            $em->persist($histJoueur);
 
             $em->flush();
 

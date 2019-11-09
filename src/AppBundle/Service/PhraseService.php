@@ -67,7 +67,6 @@ class PhraseService
 
             $this->em->flush();
             $this->em->getConnection()->commit();
-
         }
 
         return $res;

@@ -2,17 +2,17 @@
 
 namespace AppBundle\Listener;
 
-use AppBundle\Entity\Historique;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProfileListener implements EventSubscriberInterface
 {
 
+    private $container;
     private $em;
     private $router;
     private $oldUsername;
@@ -21,9 +21,10 @@ class ProfileListener implements EventSubscriberInterface
     private $oldDateNaissance;
     private $oldNewsletter;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $router)
+    public function __construct(ContainerInterface $container, UrlGeneratorInterface $router)
     {
-        $this->em = $entityManager;
+        $this->container = $container;
+        $this->em = $container->get('doctrine')->getManager();
         $this->router = $router;
     }
 
@@ -76,11 +77,9 @@ class ProfileListener implements EventSubscriberInterface
             $infos[] = "newsletter : {$oldNewsletter} => {$newNewsletter}";
         }
 
-        $histJoueur = new Historique();
-        $histJoueur->setMembre($newUser);
-        $histJoueur->setValeur("Modification des informations (IP : {$_SERVER['REMOTE_ADDR']} / " . implode(', ', $infos) . ").");
+        $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+        $historiqueService->save($newUser, "Modification des informations (IP : {$_SERVER['REMOTE_ADDR']} / " . implode(', ', $infos) . ").");
 
-        $this->em->persist($histJoueur);
         $this->em->persist($newUser);
         $this->em->flush();
     }

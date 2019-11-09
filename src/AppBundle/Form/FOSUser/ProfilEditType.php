@@ -21,7 +21,6 @@ class ProfilEditType extends AbstractType
             ->remove('username')
             ->remove('current_password')
             ->add('email', EmailType::class, array(
-                'required' => false,
                 'attr' => array('placeholder' => 'Email')
             ))
             ->add('Newsletter', CheckboxType::class, array(
@@ -43,6 +42,7 @@ class ProfilEditType extends AbstractType
                     'month' => 'Mois',
                     'day' => 'Jour',
                 ),
+                'required' => false
             ))
             ->add('Valider', SubmitType::class, array(
                 'label' => 'Valider',
@@ -51,7 +51,7 @@ class ProfilEditType extends AbstractType
                 ),
             ));
 
-        if($builder->getData()->isRenamable()) {
+        if($builder->getData()->getRenamable()) {
             $builder
                 ->add('username', null, array(
                     'required' => false,

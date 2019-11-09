@@ -1,7 +1,6 @@
 security:
   encoders:
     FOS\UserBundle\Model\UserInterface: bcrypt
-
   providers:
     fos_userbundle:
       id: fos_user.user_provider.username
@@ -19,6 +18,7 @@ security:
         path: /
         name: jeton
       logout_on_user_change: true
+      user_checker: AppBundle\Service\UserChecker
       form_login:
         provider: fos_userbundle
         login_path: fos_user_security_login

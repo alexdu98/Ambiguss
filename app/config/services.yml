@@ -57,3 +57,7 @@ services:
                 facebook: 'facebook'
                 twitter: 'twitter'
                 google: 'google'
+
+    # Pour surcharger le UserChecker de HWI
+    security.user_checker:
+        class: AppBundle\Service\UserChecker

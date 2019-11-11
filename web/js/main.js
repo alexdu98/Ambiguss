@@ -102,7 +102,7 @@ $(document).ready(function () {
     // Si clic sur le bouton "J'accepte" du bandeau d'information des cookies
     $('#cookieAccept').on('click', function(){
     	// On créé un cookie pour ne plus réafficher le beandeau
-    	$.cookie('cookieInfo', true, { expires: 365, path: '/' });
+    	$.cookie('cookieInfo', true, { expires: ttl_cookie_info , path: '/' });
     	// On supprime le bandeau
     	$('#cookieInfo').remove();
 	});

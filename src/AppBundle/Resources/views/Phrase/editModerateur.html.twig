@@ -313,8 +313,8 @@
             $('#helpEditPhraseModal').click(helpEditPhraseModal);
 
             function helpEditPhraseModal(event) {
-                // Place le cookie pendant 30 jours
-                $.cookie('helpEditModoPhraseV1', 'true', {expires: 30});
+                // Place le cookie pendant X jours
+                $.cookie('helpEditModoPhraseV1', 'true', {expires: {{ ttl_helper_cookie }}});
                 setModalSize('modal-lg');
                 setModalTitle('Informations sur l\'édition de phrase');
                 setModalBody('{{ include('@App/InfosModal/editPhraseModo.html.twig')|e('js') }}');

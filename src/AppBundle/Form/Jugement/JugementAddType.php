@@ -34,7 +34,7 @@ class JugementAddType extends AbstractType
 				'required' => true,
 				'attr' => array('placeholder' => 'Détaillez le motif du signalement'),
 			))
-			// Cas: signaler les objets (gloses,mot ambigu et phrase) dans une seule modal
+			// Cas: signaler les objets (glosesn membre et phrase) dans une seule modal
 			->add('typeObjet', EntityType::class, array(
 				'class' => 'AppBundle\Entity\TypeObjet',
 				'choice_label' => 'nom',
@@ -43,7 +43,7 @@ class JugementAddType extends AbstractType
 			))
 			->remove('dateCreation')
 			->remove('dateDeliberation')
-			->add('idObjet', ChoiceType::class, array(
+			->add('objetId', ChoiceType::class, array(
 				'label' => 'Objet',
 				'required' => true,
 			))

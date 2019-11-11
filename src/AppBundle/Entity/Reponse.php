@@ -8,8 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Reponse
  *
  * @ORM\Table(name="reponse", indexes={
- *     @ORM\Index(name="IDX_REPONSE_IP", columns={"ip"}),
- *     @ORM\Index(name="IDX_REPONSE_DATEREPONSE", columns={"date_reponse"})
+ *     @ORM\Index(name="ix_rep_phraseid", columns={"phrase_id"}),
+ *     @ORM\Index(name="ix_rep_gloseid", columns={"glose_id"}),
+ *     @ORM\Index(name="ix_rep_auteurid", columns={"auteur_id"}),
+ *     @ORM\Index(name="ix_rep_motambphraseid", columns={"mot_ambigu_phrase_id"}),
+ *     @ORM\Index(name="ix_rep_dtrep", columns={"date_reponse"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ReponseRepository")
  */
@@ -23,13 +26,6 @@ class Reponse
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ip", type="string", length=39)
-     */
-    private $ip;
 
 	/**
 	 * @var \DateTime
@@ -67,13 +63,13 @@ class Reponse
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Glose")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $glose;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MotAmbiguPhrase", inversedBy="reponses")
-	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $motAmbiguPhrase;
 
@@ -89,7 +85,6 @@ class Reponse
      */
     public function __construct()
     {
-	    $this->ip = $_SERVER["REMOTE_ADDR"];
         $this->dateReponse = new \DateTime();
     }
 
@@ -101,30 +96,6 @@ class Reponse
     public function getId()
     {
         return $this->id;
-    }
-
-	/**
-	 * Get ip
-	 *
-	 * @return string
-	 */
-	public function getIp()
-	{
-		return $this->ip;
-	}
-
-    /**
-     * Set ip
-     *
-     * @param string $ip
-     *
-     * @return Reponse
-     */
-    public function setIp($ip)
-    {
-        $this->ip = $ip;
-
-        return $this;
     }
 
 	/**

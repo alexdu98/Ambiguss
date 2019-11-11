@@ -8,10 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Glose
  *
- * @ORM\Table(name="glose", indexes={
- *     @ORM\Index(name="IDX_GLOSE_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_GLOSE_DATEMODIFICATION", columns={"date_modification"})
- * })
+ * @ORM\Table(
+ *     name="glose",
+ *     indexes={
+ *         @ORM\Index(name="ix_glose_dtcreat", columns={"date_creation"}),
+ *         @ORM\Index(name="ix_glose_dtmodif", columns={"date_modification"}),
+ *         @ORM\Index(name="ix_glose_modifid", columns={"modificateur_id"}),
+ *         @ORM\Index(name="ix_glose_autid", columns={"auteur_id"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_glose_val", columns={"valeur"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GloseRepository")
  */
 class Glose implements \JsonSerializable
@@ -61,13 +69,13 @@ class Glose implements \JsonSerializable
     private $visible;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="gloses")
+     * @ORM\ManyToOne(targetEntity="Membre", inversedBy="gloses")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="Membre")
      */
     private $modificateur;
 

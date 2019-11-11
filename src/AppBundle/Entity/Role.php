@@ -7,7 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Role
  *
- * @ORM\Table(name="role")
+ * @ORM\Table(
+ *     name="role",
+ *     indexes={
+ *         @ORM\Index(name="ix_rol_parentid", columns={"parent_id"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_rol_name", columns={"name"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RoleRepository")
  */
 class Role

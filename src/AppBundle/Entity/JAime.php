@@ -7,9 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * JAime
  *
- * @ORM\Table(name="j_aime", indexes={
- *     @ORM\Index(name="IDX_JAIME_DATECREATION", columns={"date_creation"})
- * })
+ * @ORM\Table(
+ *     name="j_aime",
+ *     indexes={
+ *         @ORM\Index(name="ix_jaim_mbreid", columns={"membre_id"}),
+ *         @ORM\Index(name="ix_jaim_phraseid", columns={"phrase_id"}),
+ *         @ORM\Index(name="ix_jaim_dtcreat", columns={"date_creation"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_jaim_mbreidphraseid", columns={"membre_id", "phrase_id"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\JAimeRepository")
  */
 class JAime
@@ -45,7 +53,7 @@ class JAime
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="jAime")
-	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $phrase;
 

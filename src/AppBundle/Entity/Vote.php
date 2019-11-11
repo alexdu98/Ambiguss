@@ -7,10 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Vote
  *
- * @ORM\Table(name="vote", indexes={
- *     @ORM\Index(name="IDX_VOTE_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_VOTE_DATEMODIFICATION", columns={"date_modification"})
- * })
+ * @ORM\Table(
+ *     name="vote",
+ *     indexes={
+ *         @ORM\Index(name="ix_vot_jugid", columns={"jugement_id"}),
+ *         @ORM\Index(name="ix_vot_typvotid", columns={"type_vote_id"}),
+ *         @ORM\Index(name="ix_vot_autid", columns={"auteur_id"}),
+ *         @ORM\Index(name="ix_vot_dtcreat", columns={"date_creation"}),
+ *         @ORM\Index(name="ix_vot_dtmodif", columns={"date_modification"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_vot_jugemidautid", columns={"jugement_id", "auteur_id"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VoteRepository")
  */
 class Vote
@@ -48,10 +57,10 @@ class Vote
      * @ORM\ManyToOne(targetEntity="TypeVote")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $vote;
+    private $typeVote;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="Membre")
      * @ORM\JoinColumn(nullable=false)
      */
     private $auteur;
@@ -148,25 +157,25 @@ class Vote
     }
 
     /**
-     * Get vote
+     * Get typevote
      *
      * @return TypeVote
      */
-	public function getVote()
+	public function getTypeVote()
     {
-	    return $this->vote;
+	    return $this->typeVote;
     }
 
     /**
-     * Set vote
+     * Set typevote
      *
-     * @param TypeVote $vote
+     * @param TypeVote $typevote
      *
      * @return Vote
      */
-    public function setVote(TypeVote $vote)
+    public function setTypeVote(TypeVote $typevote)
     {
-        $this->vote = $vote;
+        $this->typeVote = $typevote;
 
         return $this;
     }

@@ -7,10 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Partie
  *
- * @ORM\Table(name="partie", indexes={
- *     @ORM\Index(name="IDX_PARTIE_DATEPARTIE", columns={"date_partie"}),
- *     @ORM\Index(name="IDX_PARTIE_GAINJOUEUR", columns={"gain_joueur"})
- * })
+ * @ORM\Table(
+ *     name="partie",
+ *     indexes={
+ *         @ORM\Index(name="ix_part_phraseid", columns={"phrase_id"}),
+ *         @ORM\Index(name="ix_part_joueurid", columns={"joueur_id"}),
+ *         @ORM\Index(name="ix_part_dtpart", columns={"date_partie"}),
+ *         @ORM\Index(name="ix_part_gainjoueur", columns={"gain_joueur"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PartieRepository")
  */
 class Partie
@@ -54,7 +59,7 @@ class Partie
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Phrase", inversedBy="parties")
-	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $phrase;
 

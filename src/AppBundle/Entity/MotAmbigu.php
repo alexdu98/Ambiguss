@@ -8,10 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MotAmbigu
  *
- * @ORM\Table(name="mot_ambigu", indexes={
- *     @ORM\Index(name="IDX_MOTAMBIGU_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_MOTAMBIGU_DATEMODIFICATION", columns={"date_modification"})
- * })
+ * @ORM\Table(
+ *     name="mot_ambigu",
+ *     indexes={
+ *         @ORM\Index(name="ix_motamb_dtcreat", columns={"date_creation"}),
+ *         @ORM\Index(name="ix_motamb_dtmodif", columns={"date_modification"}),
+ *         @ORM\Index(name="ix_motamb_modifid", columns={"modificateur_id"}),
+ *         @ORM\Index(name="ix_motamb_autid", columns={"auteur_id"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_motamb_val", columns={"valeur"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MotAmbiguRepository")
  */
 class MotAmbigu
@@ -61,13 +69,13 @@ class MotAmbigu
 	private $visible;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre", inversedBy="motsAmbigus")
+	 * @ORM\ManyToOne(targetEntity="Membre", inversedBy="motsAmbigus")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $auteur;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Membre")
+	 * @ORM\ManyToOne(targetEntity="Membre")
 	 */
 	private $modificateur;
 

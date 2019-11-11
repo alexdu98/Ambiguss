@@ -8,8 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Historique
  *
  * @ORM\Table(name="historique", indexes={
- *     @ORM\Index(name="IDX_HISTORIQUE_VALEUR", columns={"valeur"}),
- *     @ORM\Index(name="IDX_HISTORIQUE_DATEACTION", columns={"date_action"})
+ *     @ORM\Index(name="ix_hist_val", columns={"valeur"}),
+ *     @ORM\Index(name="ix_hist_mbreid", columns={"membre_id"}),
+ *     @ORM\Index(name="ix_hist_dtact", columns={"date_action"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\HistoriqueRepository")
  */
@@ -40,7 +41,7 @@ class Historique
 
     /**
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="historiques")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $membre;
 

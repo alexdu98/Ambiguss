@@ -8,7 +8,12 @@ use FOS\UserBundle\Model\Group;
 /**
  * Groupe
  *
- * @ORM\Table(name="groupe")
+ * @ORM\Table(
+ *     name="groupe",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_grp_name", columns={"name"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GroupeRepository")
  */
 class Groupe extends Group

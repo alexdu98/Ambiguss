@@ -8,9 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
  * Jugement
  *
  * @ORM\Table(name="jugement", indexes={
- *     @ORM\Index(name="IDX_JUGEMENT_DATECREATION", columns={"date_creation"}),
- *     @ORM\Index(name="IDX_JUGEMENT_DATEDELIBERATION", columns={"date_deliberation"}),
- *     @ORM\Index(name="IDX_JUGEMENT_IDOBJET", columns={"id_objet"})
+ *     @ORM\Index(name="ix_jugem_verdid", columns={"verdict_id"}),
+ *     @ORM\Index(name="ix_jugem_typobjid", columns={"type_objet_id"}),
+ *     @ORM\Index(name="ix_jugem_jugeid", columns={"juge_id"}),
+ *     @ORM\Index(name="ix_jugem_catjugemid", columns={"categorie_jugement_id"}),
+ *     @ORM\Index(name="ix_jugem_autid", columns={"auteur_id"}),
+ *     @ORM\Index(name="ix_jugem_dtcreat", columns={"date_creation"}),
+ *     @ORM\Index(name="ix_jugem_dtdelib", columns={"date_deliberation"}),
+ *     @ORM\Index(name="ix_jugem_objid", columns={"objet_id"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\JugementRepository")
  */
@@ -49,9 +54,9 @@ class Jugement implements \JsonSerializable
     /**
      * @var int
      *
-     * @ORM\Column(name="id_objet", type="integer")
+     * @ORM\Column(name="objet_id", type="integer")
      */
-    private $idObjet;
+    private $objetId;
 
     /**
      * @ORM\ManyToOne(targetEntity="CategorieJugement")
@@ -115,25 +120,25 @@ class Jugement implements \JsonSerializable
     }
 
     /**
-     * Get idObjet
+     * Get objetId
      *
      * @return int
      */
-	public function getIdObjet()
+	public function getObjetId()
     {
-	    return $this->idObjet;
+	    return $this->objetId;
     }
 
     /**
-     * Set idObjet
+     * Set objetId
      *
-     * @param integer $idObjet
+     * @param integer $objetId
      *
      * @return Jugement
      */
-    public function setIdObjet($idObjet)
+    public function setObjetId($objetId)
     {
-        $this->idObjet = $idObjet;
+        $this->objetId = $objetId;
 
         return $this;
     }

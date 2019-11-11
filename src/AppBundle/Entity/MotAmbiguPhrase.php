@@ -7,8 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MotAmbiguPhrase
- * Ne pas avoir de clé unique sur [phrase,ordre} car Doctrine fait les insert d'abord dans une transaction #editPhrase
- * @ORM\Table(name="mot_ambigu_phrase")
+ * Ne pas avoir de clé unique sur {phrase,ordre} car Doctrine fait les insert d'abord dans une transaction #editPhrase
+ * @ORM\Table(
+ *     name="mot_ambigu_phrase",
+ *     indexes={
+ *         @ORM\Index(name="fk_motambphrase_phraseid", columns={"phrase_id"}),
+ *         @ORM\Index(name="fk_motambphrase_motambid", columns={"mot_ambigu_id"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MotAmbiguPhraseRepository")
  */
 class MotAmbiguPhrase
@@ -31,7 +37,7 @@ class MotAmbiguPhrase
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Phrase", inversedBy="motsAmbigusPhrase")
-	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $phrase;
 

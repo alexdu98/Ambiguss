@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Visite
  *
  * @ORM\Table(name="visite", indexes={
- *     @ORM\Index(name="IDX_VISITE_IP", columns={"ip"}),
- *     @ORM\Index(name="IDX_VISITE_DATEVISITE", columns={"date_visite"}),
- *     @ORM\Index(name="IDX_VISITE_USERAGENT", columns={"user_agent"})
+ *     @ORM\Index(name="ix_visit_dtvisit", columns={"date_visite"}),
+ *     @ORM\Index(name="ix_visit_ip", columns={"ip"}),
+ *     @ORM\Index(name="ix_visit_useragent", columns={"user_agent"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VisiteRepository")
  */

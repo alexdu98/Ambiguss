@@ -22,7 +22,7 @@ easy_admin:
               children: ['Jugement', 'CategorieJugement', 'TypeObjet', 'TypeVote', 'Vote']
             - label: 'Application'
               icon: 'at'
-              children: ['Visite', 'Newsletter']
+              children: ['Visite']
     list:
         title: '%%entity_label%%'
         actions:
@@ -405,14 +405,14 @@ easy_admin:
                         <b>auteur</b>,
                         <b>juge</b>
                     </span>
-                fields: ['id', 'categorieJugement.nom', 'typeObjet.nom', 'idObjet', 'verdict.nom', 'auteur.usernameCanonical', 'juge.usernameCanonical']
+                fields: ['id', 'categorieJugement.nom', 'typeObjet.nom', 'objetId', 'verdict.nom', 'auteur.usernameCanonical', 'juge.usernameCanonical']
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
                     - { property: 'description', label: 'Description' }
                     - { property: 'categorieJugement', label: 'Catégorie' }
                     - { property: 'typeObjet', label: 'Type de l''objet' }
-                    - { property: 'idObjet', label: 'ID de l''objet' }
+                    - { property: 'objetId', label: 'ID de l''objet' }
                     - { property: 'verdict', label: 'Verdict' }
                     - { property: 'auteur', label: 'Auteur' }
                     - { property: 'juge', label: 'Juge' }
@@ -421,7 +421,7 @@ easy_admin:
                     - { type: 'group', label: 'Jugement', icon: 'gavel', css_class: 'col-sm-6' }
                     - { property: 'categorieJugement', label: 'Catégorie' }
                     - { property: 'typeObjet', label: 'Type d''objet' }
-                    - { property: 'idObjet', label: 'ID de l''objet' }
+                    - { property: 'objetId', label: 'ID de l''objet' }
                     - { property: 'auteur', label: 'Auteur' }
                     - { property: 'juge', label: 'Juge' }
                     - { property: 'verdict', label: 'Verdict' }
@@ -493,7 +493,3 @@ easy_admin:
                         <b>user agent</b>
                     </span>
                 fields: ['id', 'ip', 'userAgent']
-        Newsletter:
-            class: AppBundle\Entity\Newsletter
-            label: 'Newsletters'
-            disabled_actions: ['edit', 'delete']

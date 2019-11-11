@@ -5,6 +5,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM membre WHERE mdp IS NULL;
 SET FOREIGN_KEY_CHECKS=1;
 
+ALTER TABLE membre DROP FOREIGN KEY FK_F6B4FB297A45358C;
 ALTER TABLE membre 
 CHANGE pseudo username VARCHAR(180) NOT NULL, 
 ADD username_canonical VARCHAR(180) NOT NULL, 
@@ -30,7 +31,7 @@ CHANGE actif enabled TINYINT(1) NOT NULL;
 UPDATE membre SET roles = "a:0:{}";
 UPDATE membre SET roles = 'a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}' WHERE username = 'alex';
 
-DELETE FROM groupe;
+TRUNCATE groupe;
 
 ALTER TABLE groupe 
 ADD name VARCHAR(180) NOT NULL, 

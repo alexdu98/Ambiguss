@@ -18,7 +18,7 @@ class JugementType extends AbstractType
 			->add('description')
 			->add('dateCreation')
 			->add('dateDeliberation')
-			->add('idObjet')
+			->add('objetId')
 			->add('categorieJugement')
 			->add('typeObjet')
 			->add('verdict')

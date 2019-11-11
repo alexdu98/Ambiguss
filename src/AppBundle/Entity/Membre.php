@@ -11,13 +11,25 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Membre
  *
- * @ORM\Table(name="membre", indexes={
- *     @ORM\Index(name="IDX_MEMBRE_POINTSCLASSEMENT", columns={"points_classement"}),
- *     @ORM\Index(name="IDX_MEMBRE_CREDITS", columns={"credits"}),
- *     @ORM\Index(name="IDX_MEMBRE_DATEINSCRIPTION", columns={"date_inscription"}),
- *     @ORM\Index(name="IDX_MEMBRE_SEXE", columns={"sexe"}),
- *     @ORM\Index(name="IDX_MEMBRE_DATENAISSANCE", columns={"date_naissance"}),
- * })
+ * @ORM\Table(
+ *     name="membre",
+ *     indexes={
+ *         @ORM\Index(name="ix_mbre_ptsclasheb", columns={"points_classement_hebdomadaire"}),
+ *         @ORM\Index(name="ix_mbre_ptsclasmen", columns={"points_classement_mensuel"}),
+ *         @ORM\Index(name="ix_mbre_cred", columns={"credits"}),
+ *         @ORM\Index(name="ix_mbre_dtinscr", columns={"date_inscription"}),
+ *         @ORM\Index(name="ix_mbre_dtnaiss", columns={"date_naissance"}),
+ *         @ORM\Index(name="ix_mbre_ptsclas", columns={"points_classement"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_mbre_conftokn", columns={"confirmation_token"}),
+ *         @ORM\UniqueConstraint(name="uc_mbre_fbid", columns={"facebook_id"}),
+ *         @ORM\UniqueConstraint(name="uc_mbre_twitid", columns={"twitter_id"}),
+ *         @ORM\UniqueConstraint(name="uc_mbre_googlid", columns={"google_id"}),
+ *         @ORM\UniqueConstraint(name="uc_mbre_emailcan", columns={"email_canonical"}),
+ *         @ORM\UniqueConstraint(name="uc_mbre_usernamcan", columns={"username_canonical"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MembreRepository")
  * @UniqueEntity(
  *     fields={"emailCanonical"},
@@ -70,28 +82,28 @@ class Membre extends User implements \JsonSerializable
     /**
      * @var int
      *
-     * @ORM\Column(name="points_classement", type="integer")
+     * @ORM\Column(name="points_classement", type="integer", options={"default" : 0})
      */
     private $pointsClassement;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="points_classement_mensuel", type="integer")
+     * @ORM\Column(name="points_classement_mensuel", type="integer", options={"default" : 0})
      */
     private $pointsClassementMensuel;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="points_classement_hebdomadaire", type="integer")
+     * @ORM\Column(name="points_classement_hebdomadaire", type="integer", options={"default" : 0})
      */
     private $pointsClassementHebdomadaire;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="credits", type="integer")
+     * @ORM\Column(name="credits", type="integer", options={"default" : 0})
      */
     private $credits;
 
@@ -151,7 +163,7 @@ class Membre extends User implements \JsonSerializable
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Groupe", cascade={"persist"})
      * @ORM\JoinTable(name="membre_groupe",
-     *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="groupe_id", referencedColumnName="id")}
      * )
      */
@@ -173,7 +185,7 @@ class Membre extends User implements \JsonSerializable
     private $googleId;
 
     /**
-     * @ORM\Column(name="renamable", type="boolean")
+     * @ORM\Column(name="renamable", type="boolean", options={"default" : 0})
      */
     private $renamable;
 
@@ -185,7 +197,7 @@ class Membre extends User implements \JsonSerializable
     /**
      * @var bool
      *
-     * @ORM\Column(name="signale", type="boolean")
+     * @ORM\Column(name="signale", type="boolean", options={"default" : 0})
      */
     private $signale;
 
@@ -201,6 +213,7 @@ class Membre extends User implements \JsonSerializable
 		$this->pointsClassementHebdomadaire = 0;
 		$this->pointsClassementMensuel = 0;
 		$this->credits = 0;
+		$this->renamable = 0;
 		$this->newsletter = true;
         $this->banni = false;
         $this->renamable = false;

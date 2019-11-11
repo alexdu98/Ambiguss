@@ -11,10 +11,15 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="phrase",
  *     indexes={
- *          @ORM\Index(name="IDX_PHRASE_DATECREATION", columns={"date_creation"}),
- *          @ORM\Index(name="IDX_PHRASE_DATEMODIFICATION", columns={"date_modification"}),
- *          @ORM\Index(name="IDX_PHRASE_GAINCREATEUR", columns={"gain_createur"})
- *      }
+ *          @ORM\Index(name="ix_phrase_gaincreat", columns={"gain_createur"}),
+ *          @ORM\Index(name="ix_phrase_autid", columns={"auteur_id"}),
+ *          @ORM\Index(name="ix_phrase_modifid", columns={"modificateur_id"}),
+ *          @ORM\Index(name="ix_phrase_dtcreat", columns={"date_creation"}),
+ *          @ORM\Index(name="ix_phrase_dtmodif", columns={"date_modification"})
+ *      },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_phrase_contpur", columns={"contenu_pur"})
+ *     }
  * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PhraseRepository")
  */

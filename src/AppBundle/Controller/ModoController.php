@@ -192,7 +192,7 @@ class ModoController extends Controller
         $jugements = $repoJ->findBy(array(
             'typeObjet' => $typeObj,
             'verdict' => null,
-            'idObjet' => $id,
+            'objetId' => $id,
         ));
 
         $membre = $repoM->find($id);
@@ -292,7 +292,7 @@ class ModoController extends Controller
         $jugements = $repoJ->findBy(array(
             'typeObjet' => $typeObj,
             'verdict' => null,
-            'idObjet' => $id,
+            'objetId' => $id,
         ));
 
         return $this->json(array(

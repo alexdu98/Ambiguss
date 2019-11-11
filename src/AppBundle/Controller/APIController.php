@@ -36,25 +36,25 @@ class APIController extends Controller
 				$dateDeliberation = \DateTime::createFromFormat('U', $dateDeliberation->getTimestamp() + $dureeDeliberation);
 
 				$jugement->setDateDeliberation($dateDeliberation);
-				$jugement->setIdObjet($request->request->get('jugement_add')['idObjet']);
+				$jugement->setObjetId($request->request->get('jugement_add')['objetId']);
 				$jugement->setAuteur($this->getUser());
 
 				$histMsg = null;
                 $repo = null;
 				if($jugement->getTypeObjet()->getNom() == 'Phrase') {
 					$repo = $em->getRepository('AppBundle:Phrase');
-                    $histMsg = "Signalement de la phrase n°" . $jugement->getIdObjet() . ".";
+                    $histMsg = "Signalement de la phrase n°" . $jugement->getObjetId() . ".";
 				}
 				elseif($jugement->getTypeObjet()->getNom() == 'Glose') {
                     $repo = $em->getRepository('AppBundle:Glose');
-                    $histMsg = "Signalement de la glose n°" . $jugement->getIdObjet() . ".";
+                    $histMsg = "Signalement de la glose n°" . $jugement->getObjetId() . ".";
 				}
                 elseif($jugement->getTypeObjet()->getNom() == 'Membre') {
                     $repo = $em->getRepository('AppBundle:Membre');
-                    $histMsg = "Signalement du membre n°" . $jugement->getIdObjet() . ".";
+                    $histMsg = "Signalement du membre n°" . $jugement->getObjetId() . ".";
                 }
 
-                $obj = $repo->find($jugement->getIdObjet());
+                $obj = $repo->find($jugement->getObjetId());
                 $obj->setSignale(true);
 
                 // On enregistre dans l'historique du joueur

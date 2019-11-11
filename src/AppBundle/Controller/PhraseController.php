@@ -133,7 +133,7 @@ class PhraseController extends Controller
             $jugements = $repoJ->findBy(array(
                 'typeObjet' => $typeObj,
                 'verdict' => null,
-                'idObjet' => $phrase->getId(),
+                'objetId' => $phrase->getId(),
             ));
 
             $form->handleRequest($request);

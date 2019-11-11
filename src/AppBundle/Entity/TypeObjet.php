@@ -7,7 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeObjet
  *
- * @ORM\Table(name="type_objet")
+ * @ORM\Table(
+ *     name="type_objet",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_typobj_typobj", columns={"type_objet"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TypeObjetRepository")
  */
 class TypeObjet

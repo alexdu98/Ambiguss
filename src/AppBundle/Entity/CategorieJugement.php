@@ -3,11 +3,23 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * CategorieJugement
  *
- * @ORM\Table(name="categorie_jugement")
+ * @ORM\Table(
+ *     name="categorie_jugement",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uc_catjug_nom", columns={"nom"})
+ *     }
+ * )
+ * @UniqueEntity(
+ *
+ *     fields={"emailCanonical"},
+ *     errorPath="email",
+ *     message="L'email {{ value }} est déjà utilisé"
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategorieJugementRepository")
  */
 class CategorieJugement

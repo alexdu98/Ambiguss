@@ -175,20 +175,20 @@
 
                         $('#jugement_add_typeObjet').next().remove();
                         $('#jugement_add_signaler').prop('disabled', false);
-                        $('#jugement_add_idObjet').removeAttr('readonly');
+                        $('#jugement_add_objetId').removeAttr('readonly');
 
                         if (typeObjet === 'Glose') {
-                            $('#jugement_add_idObjet').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
+                            $('#jugement_add_objetId').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
                             $('.gloses').each(function () {
                                 var ma = $(this).closest('.reponseGroupe').find('.amb').data('amb');
                                 var opts = $(this).clone();
                                 opts.find('option').eq(0).remove();
-                                $('#jugement_add_idObjet').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+                                $('#jugement_add_objetId').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
                             });
                         }
                         else if (typeObjet === 'Phrase') {
-                            $('#jugement_add_idObjet').attr('readonly', true);
-                            $('#jugement_add_idObjet').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
+                            $('#jugement_add_objetId').attr('readonly', true);
+                            $('#jugement_add_objetId').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
                         }
                         else if (typeObjet === 'Membre') {
                             $('#jugement_add_signaler').prop('disabled', true);

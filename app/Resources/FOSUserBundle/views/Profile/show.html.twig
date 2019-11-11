@@ -67,12 +67,6 @@
                     </tr>
                     </tfoot>
                     <tbody>
-                    {% for row in user.historiques|reverse %}
-                        <tr>
-                            <td data-order="{{ row.dateAction|date("U") }}">{{ row.dateAction|date("d/m/Y H:i") }}</td>
-                            <td>{{ row.valeur }}</td>
-                        </tr>
-                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -85,6 +79,9 @@
     <script>
         $(document).ready(function () {
             $('#historique').DataTable({
+                serverSide: true,
+                "processing": true,
+                ajax: '{{ path('api_historique_show') }}',
                 stateSave: true, // Enregistre les configurations
                 stateSaveParams: function (settings, data) {
                     data.start = 0; // On enregistre pas la page

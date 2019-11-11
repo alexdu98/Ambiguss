@@ -95,6 +95,12 @@ api_phrase_like:
     requirements:
         id: \d+
 
+api_historique_show:
+    path: /api/historique/
+    controller: AppBundle:API:historique
+    options:
+        expose: true
+
 game_show:
     path: /jeu/{id}
     controller: AppBundle:Game:show

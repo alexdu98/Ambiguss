@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\JAime;
 use AppBundle\Entity\Jugement;
+use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseAddType;
@@ -277,6 +278,44 @@ class APIController extends Controller
             'status' => 'succes',
             'action' => $action,
         ));
+    }
+
+    public function historiqueAction(Request $request)
+    {
+        $draw = intval($request->query->get('draw'));
+        $start = $request->query->get('start');
+        $length = $request->query->get('length');
+        $search = $request->query->get('search');
+        $orders = $request->query->get('order');
+        $columns = $request->query->get('columns');
+
+        $historiqueRepo = $this->getDoctrine()->getRepository('AppBundle:Historique');
+
+        foreach ($orders as $key => $order)
+        {
+            $orders[$key]['name'] = $columns[$order['column']]['name'];
+        }
+
+        $otherConditions = array('membre' => $this->getUser());
+
+        $results = $historiqueRepo->getRequiredDTData($start, $length, $orders, $search, $columns, $otherConditions);
+
+        $total_objects_count = $historiqueRepo->countAllByMembre($this->getUser());
+
+        foreach ($results['results'] as $key => $result){
+            $results['results'][$key] = array(
+                $result['dateAction']->format('d/m/Y H:i'), $result['valeur']
+            );
+        }
+
+        $response = array(
+            'draw' => $draw,
+            'recordsTotal' => $total_objects_count,
+            'recordsFiltered' => $results["countResult"],
+            'data' => $results['results']
+        );
+
+        return $this->json($response);
     }
 
 }

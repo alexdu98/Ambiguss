@@ -81,6 +81,8 @@ easy_admin:
                     - { property: 'lastLogin', label: 'Dernière connexion' }
                     - { type: 'group', label: 'Jeu', icon: 'gamepad', css_class: 'new-row col-sm-6' }
                     - { property: 'pointsClassement', label: 'Points' }
+                    - { property: 'pointsClassementHebdomadaire', label: 'Points hebdomadaires' }
+                    - { property: 'pointsClassementMensuel', label: 'Points mensuels' }
                     - { property: 'credits', label: 'Crédits' }
                     - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
                     - { property: 'newsletter', label: 'Newsletter' }
@@ -179,7 +181,6 @@ easy_admin:
                     - { property: 'valeur', label: 'Valeur' }
                     - { property: 'dateAction', label: 'Date' }
                     - { property: 'membre', label: 'Membre' }
-
 
         # Jeu
         Phrase:
@@ -389,7 +390,6 @@ easy_admin:
             edit:
                 title: 'Édition du j''aime #%%entity_id%%'
 
-
         # Jugement
         Jugement:
             class: AppBundle\Entity\Jugement
@@ -473,7 +473,6 @@ easy_admin:
             label: 'Votes'
             edit:
                 title: 'Édition du vote #%%entity_id%%'
-
 
         # Divers
         Visite:

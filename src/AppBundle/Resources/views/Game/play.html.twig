@@ -259,7 +259,7 @@
 
                 function helpGameModal(event) {
                     // Place le cookie pendant X jours
-                    $.cookie('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }});
+                    $.cookie('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }}});
                     setModalSize('modal-lg');
                     setModalTitle('Informations sur le jeu');
                     setModalBody('{{ include('@App/InfosModal/game.html.twig')|e('js') }}');

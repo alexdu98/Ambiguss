@@ -111,7 +111,6 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_VISITE_IP ON visite');
         $this->addSql('DROP INDEX IDX_VISITE_USERAGENT ON visite');
 
-        $this->addSql('DROP TABLE aimer_phrase');
         $this->addSql('DROP TABLE membre_role');
         $this->addSql('DROP TABLE newsletter');
         $this->addSql('DROP TABLE niveau');
@@ -120,14 +119,15 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('DROP TABLE succes');
         $this->addSql('DROP TABLE succes_membre');
         $this->addSql('DROP TABLE type_succes');
-        $this->addSql('DROP TABLE vote_jugement');
 
         $this->addSql('TRUNCATE groupe');
 
-        $this->addSql('CREATE TABLE j_aime (id INT AUTO_INCREMENT NOT NULL, membre_id INT NOT NULL, phrase_id INT NOT NULL, date_creation DATETIME NOT NULL, active TINYINT(1) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('RENAME TABLE aimer_phrase TO j_aime');
+        $this->addSql('RENAME TABLE vote_jugement TO vote');
+        $this->addSql('ALTER TABLE vote CHANGE vote_id type_vote_id INT NOT NULL');
+
         $this->addSql('CREATE TABLE membre_groupe (membre_id INT NOT NULL, groupe_id INT NOT NULL, PRIMARY KEY(membre_id, groupe_id))');
         $this->addSql('CREATE TABLE role(id INT AUTO_INCREMENT PRIMARY KEY, parent_id INT NULL, name VARCHAR(255) NOT NULL)');
-        $this->addSql('CREATE TABLE vote (id INT AUTO_INCREMENT NOT NULL, jugement_id INT NOT NULL, type_vote_id INT NOT NULL, auteur_id INT NOT NULL, date_creation DATETIME NOT NULL, date_modification DATETIME DEFAULT NULL, PRIMARY KEY(id))');
 
         $this->addSql('ALTER TABLE categorie_jugement CHANGE categorie_jugement nom VARCHAR(32) NOT NULL');
         $this->addSql('ALTER TABLE groupe ADD name VARCHAR(180) NOT NULL, DROP groupe_parent_id, DROP nom, CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');

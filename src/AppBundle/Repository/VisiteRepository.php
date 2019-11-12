@@ -14,11 +14,8 @@ class VisiteRepository extends \Doctrine\ORM\EntityRepository
      * @return mixed La visite la plus récente de la période s'il y en a une, null sinon
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findLastVisitPeriod($ip, $userAgent, int $seconds){
-        $visite = new Visite();
-        $visite->setIp($ip);
-        $visite->setUserAgent($userAgent);
-        
+    public function findLastVisitPeriod(Visite $visite, int $seconds)
+    {
         $dateLastPeriod = (new \DateTime())->modify('-' . $seconds . ' seconds');
 
         $query = $this->createQueryBuilder('v')

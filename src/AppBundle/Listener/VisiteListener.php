@@ -37,12 +37,12 @@ class VisiteListener implements EventSubscriberInterface
     {
         // Si il n'y a pas de cookie de visite
         if ($event->getRequest()->cookies->has('visite')) {
+            $visite = new Visite();
+            $visite->setIp($event->getRequest()->server->get('REMOTE_ADDR'));
+            $visite->setUserAgent($event->getRequest()->server->get('HTTP_USER_AGENT'));
+
             // False si pas de visite dans la dernière période, la visite sinon
-            $lastVisitPerdiod = $this->em->getRepository('AppBundle:Visite')->findLastVisitPeriod(
-                $event->getRequest()->server->get('REMOTE_ADDR'),
-                $event->getRequest()->server->get('HTTP_USER_AGENT'),
-                $this->timeBetweenTwoVisites
-            );
+            $lastVisitPerdiod = $this->em->getRepository('AppBundle:Visite')->findLastVisitPeriod($visite, $this->timeBetweenTwoVisites);
 
             // S'il y avait déjà eu une visite, on récupère le nombre de secondes avant expiration
             if ($lastVisitPerdiod) {
@@ -51,7 +51,7 @@ class VisiteListener implements EventSubscriberInterface
                 $time = $time + $this->timeBetweenTwoVisites;
             } // Sinon on enregistre la nouvelle visite
             else {
-                $this->em->persist(new Visite());
+                $this->em->persist($visite);
                 $this->em->flush();
 
                 // La durée de vie du cookie est la durée d'une période

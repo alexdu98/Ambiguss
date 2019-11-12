@@ -78,7 +78,7 @@ class ProfileListener implements EventSubscriberInterface
         }
 
         $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
-        $historiqueService->save($newUser, "Modification des informations (IP : {$_SERVER['REMOTE_ADDR']} / " . implode(', ', $infos) . ").");
+        $historiqueService->save($newUser, "Modification des informations (IP : {$event->getRequest()->server->get('REMOTE_ADDR')} / " . implode(', ', $infos) . ").");
 
         $this->em->persist($newUser);
         $this->em->flush();

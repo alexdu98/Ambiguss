@@ -37,7 +37,7 @@ class ResettingListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
-        $this->historique->save($user, "Demande de réinitialisation du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").", true);
+        $this->historique->save($user, "Demande de réinitialisation du mot de passe (IP : " . $event->getRequest()->server->get('REMOTE_ADDR') . ").", true);
     }
 
     /**
@@ -49,7 +49,7 @@ class ResettingListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
-        $this->historique->save($user, "Réinitialisation du mot de passe (IP : " . $_SERVER['REMOTE_ADDR'] . ").", true);
+        $this->historique->save($user, "Réinitialisation du mot de passe (IP : " . $event->getRequest()->server->get('REMOTE_ADDR') . ").", true);
     }
 
 }

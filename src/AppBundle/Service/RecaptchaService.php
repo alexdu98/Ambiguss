@@ -15,8 +15,9 @@ class RecaptchaService{
 	 * Vérifie si un captcha est valide
      *
 	 * @param string $captcha
+	 * @param string $ip
 	 */
-	public function check(string $captcha){
+	public function check(string $captcha, $ip){
 
 	    if(empty($captcha))
 	        return array(
@@ -26,7 +27,7 @@ class RecaptchaService{
 
         // URL Google Recaptcha
         $url = "https://www.google.com/recaptcha/api/siteverify";
-        $url .= "?secret=" . $this->secret . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR'];
+        $url .= "?secret=" . $this->secret . "&response=" . $captcha . "&remoteip=" . $ip;
 
         // Désactive la vérification ssl
         $arrContextOptions = array(

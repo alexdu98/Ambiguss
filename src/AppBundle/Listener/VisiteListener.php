@@ -6,6 +6,7 @@ use AppBundle\Entity\Visite;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class VisiteListener implements EventSubscriberInterface
@@ -32,12 +33,16 @@ class VisiteListener implements EventSubscriberInterface
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function process()
+    public function process(GetResponseEvent $event)
     {
         // Si il n'y a pas de cookie de visite
-        if (empty($_COOKIE['visite'])) {
+        if ($event->getRequest()->cookies->has('visite')) {
             // False si pas de visite dans la dernière période, la visite sinon
-            $lastVisitPerdiod = $this->em->getRepository('AppBundle:Visite')->findLastVisitPeriod($this->timeBetweenTwoVisites);
+            $lastVisitPerdiod = $this->em->getRepository('AppBundle:Visite')->findLastVisitPeriod(
+                $event->getRequest()->server->get('REMOTE_ADDR'),
+                $event->getRequest()->server->get('HTTP_USER_AGENT'),
+                $this->timeBetweenTwoVisites
+            );
 
             // S'il y avait déjà eu une visite, on récupère le nombre de secondes avant expiration
             if ($lastVisitPerdiod) {

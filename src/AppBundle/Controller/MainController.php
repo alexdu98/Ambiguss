@@ -36,7 +36,7 @@ class MainController extends Controller
 
 			// Vérifie le captcha
 			$recaptchaService = $this->get('AppBundle\Service\RecaptchaService');
-			$recaptcha = $recaptchaService->check($request->request->get('g-recaptcha-response'));
+			$recaptcha = $recaptchaService->check($request->request->get('g-recaptcha-response'), $request->server['REMOTE_ADDR']);
 
 			// S'il y a eu une erreur avec le captcha
 			if(!$recaptcha['success']){

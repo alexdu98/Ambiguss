@@ -8,12 +8,17 @@ class VisiteRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**
-     * @param int $seconds int Nombre de secondes d'une période
+     * @param mixed $ip Adresse IP de l'utilisateur
+     * @param mixed $userAgent UserAgent de l'utilisateur
+     * @param int $seconds Nombre de secondes d'une période
      * @return mixed La visite la plus récente de la période s'il y en a une, null sinon
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findLastVisitPeriod(int $seconds){
+    public function findLastVisitPeriod($ip, $userAgent, int $seconds){
         $visite = new Visite();
+        $visite->setIp($ip);
+        $visite->setUserAgent($userAgent);
+        
         $dateLastPeriod = (new \DateTime())->modify('-' . $seconds . ' seconds');
 
         $query = $this->createQueryBuilder('v')

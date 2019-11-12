@@ -33,7 +33,7 @@ class LoginListener implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        $this->historique->save($user, "Connexion (IP : " . $_SERVER['REMOTE_ADDR'] . ").", true);
+        $this->historique->save($user, "Connexion (IP : " . $event->getRequest()->server->get('REMOTE_ADDR') . ").", true);
     }
 
 }

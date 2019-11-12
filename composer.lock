@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3302d292ff69b56fd738e27fd4c756f6",
+    "content-hash": "3b0ed2f861bd739ea859778328591a0f",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -4680,16 +4680,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.33",
+            "version": "v3.4.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "47813652695f1345987fd5dfc0df67607e738b31"
+                "reference": "c461582064eabe9b93b225be589dd6740620ce0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/47813652695f1345987fd5dfc0df67607e738b31",
-                "reference": "47813652695f1345987fd5dfc0df67607e738b31",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/c461582064eabe9b93b225be589dd6740620ce0f",
+                "reference": "c461582064eabe9b93b225be589dd6740620ce0f",
                 "shasum": ""
             },
             "require": {
@@ -4831,7 +4831,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-11-01T09:46:51+00:00"
+            "time": "2019-11-11T16:11:40+00:00"
         },
         {
             "name": "twig/extensions",

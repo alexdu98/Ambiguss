@@ -52,8 +52,6 @@ class Visite
      */
     public function __construct()
     {
-    	$this->ip = $_SERVER['REMOTE_ADDR'];
-    	$this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->dateVisite = new \DateTime();
     }
 

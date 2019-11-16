@@ -3,6 +3,7 @@
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class GameTest extends WebTestCase
 {
@@ -26,5 +27,37 @@ class GameTest extends WebTestCase
 
         // Le bouton valider est présent
         $this->assertGreaterThan(0, $crawler->filter('button#AppBundle_game_valider')->count());
+    }
+
+    public function testPlayGameDisconected()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/jeu');
+
+        // Suit les redirections (pour la validation du formulaire)
+        $client->followRedirects();
+
+        // Récupération du formulaire
+        $buttonCrawlerNode = $crawler->selectButton('AppBundle_game_valider');
+        $form = $buttonCrawlerNode->form();
+
+        // Récupération des select gloses (réponses)
+        $reponsesSelect = $crawler->filter('select.gloses');
+
+        // Séléction des gloses pour chaque réponse
+        foreach ($reponsesSelect as $select) {
+            $values = $form[$select->getAttribute('name')]->availableOptionValues();
+            $form[$select->getAttribute('name')]->select($values[1]);
+        }
+
+        // Soumission du formulaire
+        $client->submit($form);
+
+        // Instanciation de la nouvelle page
+        $newPageCrawler = new Crawler($client->getResponse()->getContent());
+
+        // Redirigé sur la page des résultats
+        $this->assertContains('Résultat', $newPageCrawler->filter('title')->html());
     }
 }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}resultat{% endblock %}
+{% block title %}Résultat{% endblock %}
 {% block titre %}Résultat de la partie{% endblock %}
 {% block contenu %}
     <div class="row">
@@ -47,15 +47,15 @@
 	        <span class="color-green size18">La phrase était :</span><br>
 	        <span class="size24">{{ phrase.contenuHTML|raw }}</span><br>
 	        <span class="size16">par <a href="{{ path('fos_user_profile_show', {id: phrase.auteur.id}) }}">{{ phrase.auteur.username }}</a></span><br>
-	        <div class="form-group">
-		        {% if app.user %}
-			        <button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
-				        <i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
-				        Signaler un élément
-			        </button>
-		        {% endif %}
-	        </div>
-	        <br>
+			{% if app.user %}
+				<div class="form-group">
+					<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
+						<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+						Signaler un élément
+					</button>
+				</div>
+			{% endif %}
+			<br>
 
 	        <ul><span class="color-green size18">Les votes précédents étaient :</span>
 		        {% for ordre, ma in stats %}
@@ -72,7 +72,7 @@
 	        </ul>
 	        <br>
 
-			{% if nextMembresClassements['gen'] or nextMembresClassements['men'] or nextMembresClassements['heb'] %}
+			{% if app.user and (nextMembresClassements['gen'] or nextMembresClassements['men'] or nextMembresClassements['heb']) %}
 				<ul><span class="color-green size18">Encore :</span>
 					{% if nextMembresClassements['gen'] %}
 						<li class="not-list">

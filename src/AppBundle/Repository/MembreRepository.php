@@ -220,10 +220,12 @@ class MembreRepository extends EntityRepository
      *
      * @return mixed Nombre de lignes modifiées
      */
-    public function resetPointsHebdomadaire() {
+    public function resetPointsHebdomadaire()
+    {
         $query = $this->createQueryBuilder('m')
             ->update()
-            ->set('m.pointsClassementHebdomadaire', 0);
+            ->set('m.pointsClassementHebdomadaire', 0)
+            ->where('m.pointsClassementHebdomadaire != 0');
 
         return $query->getQuery()->execute();
     }
@@ -233,26 +235,42 @@ class MembreRepository extends EntityRepository
      *
      * @return mixed Nombre de lignes modifiées
      */
-    public function resetPointsMensuel() {
+    public function resetPointsMensuel()
+    {
         $query = $this->createQueryBuilder('m')
             ->update()
-            ->set('m.pointsClassementMensuel', 0);
+            ->set('m.pointsClassementMensuel', 0)
+            ->where('m.pointsClassementMensuel != 0');
 
         return $query->getQuery()->execute();
     }
 
     /**
-     * Remet à zéro les points de classement hebdomadaire et mensuel
+     * Retourne un tableau de membre trié par odre décroissant du nombre de points hebdomadaire
      *
-     * @return mixed Nombre de lignes modifiées
+     * @return mixed Tableau de membre
      */
-    public function resetPointsHebdomadaireMensuel() {
+    public function getAllWithPointsHebdomadaire()
+    {
         $query = $this->createQueryBuilder('m')
-            ->update()
-            ->set('m.pointsClassementHebdomadaire', 0)
-            ->set('m.pointsClassementMensuel', 0);
+            ->where('m.pointsClassementHebdomadaire > 0')
+            ->orderBy('m.pointsClassementHebdomadaire', 'DESC');
 
-        return $query->getQuery()->execute();
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne un tableau de membre trié par odre décroissant du nombre de points mensuel
+     *
+     * @return mixed Tableau de membre
+     */
+    public function getAllWithPointsMensuel()
+    {
+        $query = $this->createQueryBuilder('m')
+            ->where('m.pointsClassementMensuel > 0')
+            ->orderBy('m.pointsClassementMensuel', 'DESC');
+
+        return $query->getQuery()->getResult();
     }
 
 }

@@ -16,47 +16,57 @@ class ReinitialisationPointsCommand extends ContainerAwareCommand {
 
 		$em = $this->getContainer()->get('doctrine')->getManager();
 		$membreRepo = $em->getRepository('AppBundle:Membre');
-
         $type = $input->getOption('type');
+        $succes = false;
 
-        $autoType = null;
-        if ($type == 'auto')
+        $io->title('Resetting ranking points (' . $type . ') [' . date('d/m/Y H\hi') . ']');
+
+        if($type == 'monthly' || $type == 'all')
         {
-            $isMonday = date('N') == 1; // 1 : monday
-            $isTheFirst = date('d') == 1; // 1 : first day of month
+            $succes = true;
+            $io->section('Réinitialisation des points mensuels');
 
-            if ($isMonday && $isTheFirst)
-                $autoType = 'both';
-            else if ($isMonday)
-                $autoType = 'weekly';
-            else if ($isTheFirst)
-                $autoType = 'monthly';
-        }
-
-        if($type == 'monthly' || $autoType == 'monthly')
-        {
+            // Calcul la durée que prend l'historisation et la réinitialisation
+            $start = microtime(true);
+            $membresMonthly = $membreRepo->getAllWithPointsMensuel();
+            $this->historize('monthly', $membresMonthly);
             $membreRepo->resetPointsMensuel();
+            $nbSec = microtime(true) - $start;
 
-            $io->success('Monthly ranking was successfully resetting.');
+            $io->text(count($membresMonthly) . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');
         }
 
-        if ($type == 'weekly' || $autoType == 'weekly')
+        if ($type == 'weekly' || $type == 'all')
         {
+            $succes = true;
+            $io->section('Réinitialisation des points hebdomadaires');
+
+            // Calcul la durée que prend l'historisation et la réinitialisation
+            $start = microtime(true);
+            $membresWeekly = $membreRepo->getAllWithPointsHebdomadaire();
+            $this->historize('weekly', $membresWeekly);
             $membreRepo->resetPointsHebdomadaire();
+            $nbSec = microtime(true) - $start;
 
-            $io->success('Weekly ranking was successfully resetting.');
+            $io->text(count($membresWeekly) . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');
         }
 
-        if ($type == 'both' || $autoType == 'both')
+        $em->flush();
+
+        if(!$succes)
         {
-            $membreRepo->resetPointsHebdomadaireMensuel();
-
-            $io->success('Monthly and weekly rankings have been successfully reset.');
+            $io->error([
+                'Type (' . $type . ') invalid.',
+                'Valid types : weekly, monthly, all',
+            ]);
         }
-
+        else
+        {
+            $io->success('Ranking (' . $type . ') have been successfully reset.');
+        }
 	}
 
-    protected function configure () {
+    protected function configure() {
         // On set le nom de la commande
 	    $this->setName('app:points:reinit');
 
@@ -64,16 +74,36 @@ class ReinitialisationPointsCommand extends ContainerAwareCommand {
 	    $this->setDescription("Resetting members' ranking points");
 
         // On set l'aide
-	    $this->setHelp("TYPE : auto, weekly, monthly, both\nResetting the members' points to 0");
+	    $this->setHelp("TYPE : weekly, monthly, all\nResetting the members' points to 0");
 
         // On set une option
         $this->addOption(
             'type',
             't',
             InputOption::VALUE_REQUIRED,
-            'Reset type',
-            'auto'
+            'Reset type'
         );
+    }
+
+    private function historize($type, $membres) {
+        $historiqueService = $this->getContainer()->get('AppBundle\Service\HistoriqueService');
+
+        $typeFR = '';
+        $method = '';
+        if ($type == 'monthly') {
+            $typeFR = 'mensuels';
+            $method = 'getPointsClassementMensuel';
+        }
+        else if ($type == 'weekly') {
+            $typeFR = 'hebdomaires';
+            $method = 'getPointsClassementHebdomadaire';
+        }
+
+        $nbJoueurs = count($membres);
+        foreach ($membres as $key => $membre) {
+            $msg = 'Réinitialisation des points ' . $typeFR . '. Position : ' . ($key + 1) . '/' . $nbJoueurs . ' (' . $membre->{$method}() . ' points).';
+            $historiqueService->save($membre, $msg);
+        }
     }
 
 }

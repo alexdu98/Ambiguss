@@ -23,6 +23,18 @@ class HistoriqueRepository extends EntityRepository
             ->getQuery()->getOneOrNullResult()['nbHistorique'];
     }
 
+    /**
+     * Retourne les lignes correspondantes aux différentes conditions (dataTable AJAX)
+     *
+     * @param $start Numéro de la première ligne retournée
+     * @param $length Nombre de ligne à retourner
+     * @param $orders Ordre du tri
+     * @param $search Recherche de caractère
+     * @param $columns Colonnes
+     * @param null $otherConditions Autres conditions
+     * @return array Tableau des données trouvées
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function getRequiredDTData($start, $length, $orders, $search, $columns, $otherConditions = null)
     {
         $query = $this->createQueryBuilder('h')
@@ -54,4 +66,5 @@ class HistoriqueRepository extends EntityRepository
 
         return $res;
     }
+
 }

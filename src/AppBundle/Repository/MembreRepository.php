@@ -215,4 +215,44 @@ class MembreRepository extends EntityRepository
         return $array;
     }
 
+    /**
+     * Remet à zéro les points de classement hebdomadaire
+     *
+     * @return mixed Nombre de lignes modifiées
+     */
+    public function resetPointsHebdomadaire() {
+        $query = $this->createQueryBuilder('m')
+            ->update()
+            ->set('m.pointsClassementHebdomadaire', 0);
+
+        return $query->getQuery()->execute();
+    }
+
+    /**
+     * Remet à zéro les points de classement mensuel
+     *
+     * @return mixed Nombre de lignes modifiées
+     */
+    public function resetPointsMensuel() {
+        $query = $this->createQueryBuilder('m')
+            ->update()
+            ->set('m.pointsClassementMensuel', 0);
+
+        return $query->getQuery()->execute();
+    }
+
+    /**
+     * Remet à zéro les points de classement hebdomadaire et mensuel
+     *
+     * @return mixed Nombre de lignes modifiées
+     */
+    public function resetPointsHebdomadaireMensuel() {
+        $query = $this->createQueryBuilder('m')
+            ->update()
+            ->set('m.pointsClassementHebdomadaire', 0)
+            ->set('m.pointsClassementMensuel', 0);
+
+        return $query->getQuery()->execute();
+    }
+
 }

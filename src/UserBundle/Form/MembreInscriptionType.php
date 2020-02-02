@@ -58,9 +58,7 @@ class MembreInscriptionType extends AbstractType
 			))
 			->add('Valider', SubmitType::class, array(
 				'attr' => array(
-					'class' => 'btn btn-primary g-recaptcha',
-					'data-sitekey' => '6LcXBhkUAAAAAIMfOvKJODxXAhw-qG2VzGG2rppj',
-					'data-callback' => 'onSubmit',
+					'class' => 'btn btn-primary'
 				),
 			));
 	}

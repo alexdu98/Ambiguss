@@ -4,8 +4,7 @@ namespace AppBundle\Services;
 
 class Recaptcha{
 
-	const CLE_PRIVEE_V2 = "6LdIRhgTAAAAAMKShVrZyBTvvJP08hHu2la0P_ks";
-	const CLE_PRIVEE_V3 = "6LcXBhkUAAAAAOXVtSYLei5DUOfYh1ZEfsIhz0yv";
+	const CLE_PRIVEE_V3 = "secret";
 	public $succes;
 	public $erreurs = array();
 
@@ -16,8 +15,20 @@ class Recaptcha{
 	 */
 	public function check($captcha){
 		if(!empty($captcha)){
-			$res = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . self::CLE_PRIVEE_V3 . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
-			$res = json_decode($res);
+			$data = array(
+			    'secret' => self::CLE_PRIVEE_V3,
+			    'response' => $captcha,
+			    'remoteip' => $_SERVER['REMOTE_ADDR']
+			);
+
+		        $verify = curl_init();
+		        curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+		        curl_setopt($verify, CURLOPT_POST, true);
+		        curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($data));
+		        curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+		        curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+
+			$res = json_decode(curl_exec($verify));
 			$this->succes = $res->success;
 			if(!$this->succes)
 				$this->erreurs[] = "Captcha invalide.";

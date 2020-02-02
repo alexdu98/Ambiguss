@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Service;
+namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Glose;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

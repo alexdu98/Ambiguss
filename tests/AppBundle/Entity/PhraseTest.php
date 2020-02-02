@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Service;
+namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Phrase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -53,15 +53,15 @@ class PhraseTest extends KernelTestCase
     public function testGetContenuHTML()
     {
         $this->entity->setContenu('<amb id="1">amb</amb>');
-        $expected = '<b id="ma1" class="ma color-red" title="Ce mot est ambigu (id : 1)">amb</b>';
+        $expected = '<amb id="ma1" class="ma color-red" title="Ce mot est ambigu (id : 1)">amb</amb>';
         $this->assertEquals($expected, $this->entity->getContenuHTML());
 
         $this->entity->setContenu('<amb id="1">amb</amb> <amb id="2">amb</amb>');
-        $expected = '<b id="ma1" class="ma color-red" title="Ce mot est ambigu (id : 1)">amb</b> <b id="ma2" class="ma color-red" title="Ce mot est ambigu (id : 2)">amb</b>';
+        $expected = '<amb id="ma1" class="ma color-red" title="Ce mot est ambigu (id : 1)">amb</amb> <amb id="ma2" class="ma color-red" title="Ce mot est ambigu (id : 2)">amb</amb>';
         $this->assertEquals($expected, $this->entity->getContenuHTML());
 
         $this->entity->setContenu('Un mot <amb id="1">amb</amb> puis un autre <amb id="2">amb</amb>.');
-        $expected = 'Un mot <b id="ma1" class="ma color-red" title="Ce mot est ambigu (id : 1)">amb</b> puis un autre <b id="ma2" class="ma color-red" title="Ce mot est ambigu (id : 2)">amb</b>.';
+        $expected = 'Un mot <amb id="ma1" class="ma color-red" title="Ce mot est ambigu (id : 1)">amb</amb> puis un autre <amb id="ma2" class="ma color-red" title="Ce mot est ambigu (id : 2)">amb</amb>.';
         $this->assertEquals($expected, $this->entity->getContenuHTML());
     }
 
@@ -100,7 +100,7 @@ class PhraseTest extends KernelTestCase
         $this->assertEquals('Plusieurs mots ?', $this->entity->getContenu());
     }
 
-    public function testIdValid()
+    public function testIsValid()
     {
         $this->entity->setContenu('<b>test</b>');
         $this->assertFalse($this->entity->isValid()['succes']);
@@ -132,15 +132,15 @@ class PhraseTest extends KernelTestCase
 
         $this->entity->setContenu('a<amb id="1">1</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('le caractère précédent une balise <amb> ou suivant une balise </amb> doit être un espace', $this->entity->isValid()['message']);
+        $this->assertContains('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">1</amb>a');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('le caractère précédent une balise <amb> ou suivant une balise </amb> doit être un espace', $this->entity->isValid()['message']);
+        $this->assertContains('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('a<amb id="1">1</amb>a');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('le caractère précédent une balise <amb> ou suivant une balise </amb> doit être un espace', $this->entity->isValid()['message']);
+        $this->assertContains('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1"> 1</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);

@@ -5,7 +5,7 @@ namespace Tests\AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
-class GameTest extends WebTestCase
+class GameControllerTest extends WebTestCase
 {
     public function testShowGameDisconected()
     {
@@ -55,9 +55,9 @@ class GameTest extends WebTestCase
         $client->submit($form);
 
         // Instanciation de la nouvelle page
-        $newPageCrawler = new Crawler($client->getResponse()->getContent());
+        $afterPlayPage = new Crawler($client->getResponse()->getContent());
 
         // Redirigé sur la page des résultats
-        $this->assertContains('Résultat', $newPageCrawler->filter('title')->html());
+        $this->assertContains('Résultat', $afterPlayPage->filter('title')->html());
     }
 }

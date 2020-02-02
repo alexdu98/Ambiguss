@@ -3,7 +3,7 @@
 {% set edit_route = path('fos_user_profile_edit') %}
 {% set password_route = path('fos_user_change_password') %}
 <div class="row">
-    <ul class="nav nav-tabs">
+    <ul id="nav-profil" class="nav nav-tabs">
         <li role="presentation" class="{% if page == profil_route %}active{% endif %}"><a href="{{ path('fos_user_profile_show') }}">Profil</a></li>
         <li role="presentation" class="{% if page == edit_route %}active{% endif %}"><a href="{{ path('fos_user_profile_edit') }}">Modification</a></li>
         {% if not app.user.isServiceCreation %}

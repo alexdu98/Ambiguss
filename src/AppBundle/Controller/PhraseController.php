@@ -46,7 +46,7 @@ class PhraseController extends Controller
         if($form->isSubmitted() && $form->isValid()) {
 
             $phraseService = $this->get('AppBundle\Service\PhraseService');
-            $mapsRep = $request->request->get('phrase_add')['motsAmbigusPhrase'];
+            $mapsRep = $request->request->get('phrase')['motsAmbigusPhrase'];
 
             $res = $phraseService->new($phrase, $this->getUser(), $mapsRep);
             $succes = $res['succes'];
@@ -117,6 +117,7 @@ class PhraseController extends Controller
             $em = $this->getDoctrine()->getManager();
             $repoJ = $em->getRepository('AppBundle:Jugement');
             $repoTO = $em->getRepository('AppBundle:TypeObjet');
+            $repoRep = $em->getRepository('AppBundle:Reponse');
 
             $form = $this->createForm(PhraseEditType::class, new Phrase(), array(
                 'signale' => $phrase->getSignale(),
@@ -142,7 +143,7 @@ class PhraseController extends Controller
 
                 $phraseService = $this->get('AppBundle\Service\PhraseService');
 
-                $mapsRep = $request->request->get('phrase_edit')['motsAmbigusPhrase'];
+                $mapsRep = $request->request->get('phrase')['motsAmbigusPhrase'];
                 $data = $form->getData();
 
                 $phrase->setContenu($data->getContenu());
@@ -173,10 +174,25 @@ class PhraseController extends Controller
                 }
             }
 
+            // Récupération des réponses du créateur
+            $reponses = $repoRep->findBy(array(
+                'auteur' => $phrase->getAuteur(),
+                'phrase' => $phrase
+            ));
+
+            // Extraction de la glose pour un mot ambigu dans une phrase
+            $repOri = array();
+            foreach ($reponses as $rep) {
+                $arr['map_ordre'] = $rep->getMotAmbiguPhrase()->getOrdre();
+                $arr['glose_id'] = $rep->getGlose()->getId();
+                $repOri[] = $arr;
+            }
+
             return $this->render('AppBundle:Phrase:editModerateur.html.twig', array(
                 'form' => $form->createView(),
                 'phrase' => $phrase,
                 'phraseOri' => $phraseOri,
+                'reponsesOri' => $repOri,
                 'newPhrase' => $newPhrase,
                 'jugements' => $jugements,
                 'addGloseForm' => $addGloseForm->createView(),

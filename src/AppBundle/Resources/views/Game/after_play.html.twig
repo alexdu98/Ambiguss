@@ -128,7 +128,7 @@
 			$('#helpResultatModal').click(helpResultatModal);
 			function helpResultatModal(event) {
 				// Place le cookie pendant X jours
-				$.cookie('helpResultatV1', 'true', {expires: {{ ttl_cookie_helper }}});
+				$.cookie('helpResultatV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
 				setModalSize('modal-lg');
 				setModalTitle('Informations sur le résultat');
 				setModalBody('{{ include('@App/InfosModal/afterPlay.html.twig')|e('js') }}');

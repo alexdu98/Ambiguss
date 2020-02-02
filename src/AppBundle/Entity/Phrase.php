@@ -519,7 +519,7 @@ class Phrase implements \JsonSerializable
 
 	public function getContenuHTML()
 	{
-		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<b id="ma$1" class="ma color-red" title="Ce mot est ambigu (id : $1)">$2</b>',
+		return preg_replace('#<amb id="([0-9]+)">(.*?)</amb>#', '<amb id="ma$1" class="ma color-red" title="Ce mot est ambigu (id : $1)">$2</amb>',
 			$this->getContenu());
 	}
 
@@ -596,8 +596,6 @@ class Phrase implements \JsonSerializable
                 'succes' => false,
                 'message' => 'Il ne faut pas dépasser 10 mots ambigus par phrase');
 
-        //ICICICICICIC
-
         // Contenu pur ne dépassent pas 255 caractères
         if(strlen($this->getContenuPur()) > 255)
         {
@@ -609,12 +607,12 @@ class Phrase implements \JsonSerializable
 
         // Mot mal sélectionné
         $arr = null;
-        preg_match_all('#[^ ]\<amb id\="([0-9]+)"\>|\</amb\>[^ ]#', $this->getContenu(), $arr, PREG_SET_ORDER);
+        preg_match_all('#[a-zA-Z]\<amb id\="([0-9]+)"\>|\</amb\>[a-zA-Z]#', $this->getContenu(), $arr, PREG_SET_ORDER);
         if(!empty($arr))
         {
             return array(
                 'succes' => false,
-                'message' => 'Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> doit être un espace)',
+                'message' => 'Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)',
             );
         }
 

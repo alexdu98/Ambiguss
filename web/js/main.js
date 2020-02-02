@@ -55,8 +55,9 @@ $('#modal').on('hidden.bs.modal', cleanModal);
  * Récupère les gloses d'un mot ambigu et les en <option> d'un <select>
  * @param select
  * @param motAmbigu
+ * @param callback
  */
-function getGloses(select, motAmbigu) {
+function getGloses(select, motAmbigu, callback) {
 	select.html('<option selected disabled value>Choisissez une glose (...)</option>');
 	// Empêche la sélection pendant le chargement
 	select.attr('disabled', 'disabled').addClass('loading');
@@ -72,6 +73,9 @@ function getGloses(select, motAmbigu) {
 			select.append('<option value="' + data.links[index].id + '">' + data.links[index].valeur + '</option>');
 		});
 		select.removeAttr('disabled').removeClass('loading');
+
+		// Appel la fonction de callback si elle existe
+		typeof callback === 'function' && callback();
 	}, "json");
 }
 
@@ -102,9 +106,35 @@ $(document).ready(function () {
     // Si clic sur le bouton "J'accepte" du bandeau d'information des cookies
     $('#cookieAccept').on('click', function(){
     	// On créé un cookie pour ne plus réafficher le beandeau
-    	$.cookie('cookieInfo', true, { expires: ttl_cookie_info , path: '/' });
+    	$.cookie('cookieInfo', true, { expires: ttl_cookie_info, path: '/' });
     	// On supprime le bandeau
     	$('#cookieInfo').remove();
+	});
+
+	// Au survol d'une réponse on surligne le MA
+	$('body').on('mouseenter', '.reponseGroupe', function () {
+		var ordre = $(this).attr('id').replace(/rep/g, '');
+		$(this).css('background', 'rgba(160, 210, 51, 0.6)');
+		$('amb#ma' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
+		$('amb#' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
+	});
+	$('body').on('mouseleave', '.reponseGroupe', function () {
+		var ordre = $(this).attr('id').replace(/rep/g, '');
+		$(this).removeAttr('style');
+		$('amb#ma' + ordre).removeAttr('style');
+		$('amb#' + ordre).removeAttr('style');
+	});
+
+	// Au survol d'un MA on surligne la réponse
+	$('body').on('mouseenter', 'amb', function () {
+		var ordre = $(this).attr('id').replace(/ma/g, '');
+		$(this).css('background', 'rgba(160, 210, 51, 0.6)');
+		$('#rep' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
+	});
+	$('body').on('mouseleave', 'amb', function () {
+		var ordre = $(this).attr('id').replace(/ma/g, '');
+		$(this).removeAttr('style');
+		$('#rep' + ordre).removeAttr('style');
 	});
 
 });

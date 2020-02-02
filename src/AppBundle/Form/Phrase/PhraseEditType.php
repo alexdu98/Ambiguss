@@ -47,11 +47,16 @@ class PhraseEditType extends AbstractType
 	        ))
 	        ->add('modifier', SubmitType::class, array(
                 'label' => 'Modifier la phrase',
-                'attr' => array('class' => 'btn btn-warning'),
+                'attr' => array('class' => 'btn btn-warning btn-phrase-editor'),
             ));
     }
 
     public function getParent(){
         return PhraseType::class;
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'phrase';
     }
 }

@@ -232,34 +232,12 @@
                     });
                 });
 
-                // Au survol d'une réponse on surligne le MA
-                $('.reponseGroupe').hover(function () {
-                    var ordre = $(this).attr('id').replace(/rep/g, '');
-                    $(this).css('background', 'rgba(160, 210, 51, 0.6)');
-                    $('#result').find('b#ma' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
-                }, function () {
-                    var ordre = $(this).attr('id').replace(/rep/g, '');
-                    $(this).css('background', 'none');
-                    $('#result').find('b#ma' + ordre).css('background', 'none');
-                });
-
-                // Au survol d'un MA on surligne la réponse
-                $('.ma').hover(function () {
-                    var ordre = $(this).attr('id').replace(/ma/g, '');
-                    $(this).css('background', 'rgba(160, 210, 51, 0.6)');
-                    $('#rep' + ordre).css('background', 'rgba(160, 210, 51, 0.6)');
-                }, function () {
-                    var ordre = $(this).attr('id').replace(/ma/g, '');
-                    $(this).css('background', 'none');
-                    $('#rep' + ordre).css('background', 'none');
-                });
-
                 // Au click sur le bouton, exécute la fonction
                 $('#helpGameModal').click(helpGameModal);
 
                 function helpGameModal(event) {
                     // Place le cookie pendant X jours
-                    $.cookie('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }}});
+                    $.cookie('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
                     setModalSize('modal-lg');
                     setModalTitle('Informations sur le jeu');
                     setModalBody('{{ include('@App/InfosModal/game.html.twig')|e('js') }}');
@@ -272,5 +250,5 @@
             });
             $('.tlt').textillate({in: {effect: 'rollIn'}});
         </script>
-        <script src="{{ asset('js/glose/addGlose.js') }}"></script>
+        <script src="{{ asset('js/addGlose.js') }}"></script>
     {% endblock %}

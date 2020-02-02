@@ -91,7 +91,7 @@ function getMotAmbiguOfReponse(reponse) {
 }
 
 $(document).ready(function () {
-    $('#addPhraseForm, #editPhraseForm, #gameForm').on('click', '.addGloseButton', function(){
+    $('#phrase-editor-form, #editPhraseForm, #gameForm').on('click', '.addGloseButton', function(){
 
         var reponseGroupe = $(this).closest('.reponseGroupe');
         var motAmbigu = getMotAmbiguOfReponse(reponseGroupe);

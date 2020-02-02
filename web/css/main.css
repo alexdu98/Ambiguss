@@ -279,7 +279,7 @@ button.infobulle img{
 	text-align: center;
 }
 .classementMe > span{
-	color: #C51B10;
+	color: var(--color-red);
 	font-weight: bold;
 }
 .classementTableMe{
@@ -288,6 +288,10 @@ button.infobulle img{
 }
 .badge{
 	background: #f0ad4e;
+}
+amb {
+	color: var(--color-red);
+	font-weight: bold;
 }
 
 /*
@@ -351,22 +355,52 @@ button.infobulle img{
 	color: #A0D233;
 	color: var(--color-green);
 }
+
 /*
     #####################################################################
     ############################### PROFIL ##############################
     #####################################################################
 */
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{
+#nav-profil.nav-tabs > li.active > a, #nav-profil.nav-tabs > li.active > a:focus, #nav-profil.nav-tabs > li.active > a:hover{
 	background: #A0D233;
 	background: var(--color-green);
 	color: #8B4513;
 	color: var(--color-brown);
 }
-.nav-tabs > li > a:hover{
+#nav-profil.nav-tabs > li > a:hover{
 	background: #A0D233;
 	background: var(--color-green);
 	color: #8B4513 !important;
 	color: var(--color-brown) !important;
+}
+
+/*
+    #####################################################################
+    ############################## EDITEUR ##############################
+    #####################################################################
+*/
+.phrase-editor{
+	outline: none;
+	background: white;
+	color: black;
+	padding: 5px;
+}
+#nav-editor{
+	list-style: none;
+	padding-left: 0;
+}
+#nav-editor a{
+	color: black;
+}
+#nav-editor li{
+	display: inline-block;
+	margin: 0 5px;
+}
+#nav-editor li.active {
+	border-top: 2px solid var(--color-brown);
+}
+#nav-editor li.active a{
+	color: var(--color-brown)
 }
 
 /*

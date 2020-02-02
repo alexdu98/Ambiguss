@@ -31,7 +31,7 @@ class PhraseService
         $res = $phrase->isValid();
 
         $succes = $res['succes'];
-        $motsAmbigus = $res['motsAmbigus'];
+        $motsAmbigus = $res['motsAmbigus'] ?? array();
 
         if($succes && $auteur->getCredits() < $coutUnitaire * count($motsAmbigus)) {
             $res['succes'] = false;

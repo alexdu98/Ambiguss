@@ -31,15 +31,20 @@ class PhraseAddType extends AbstractType
 			))
 			->add('creer', SubmitType::class, array(
 				'label' => 'Créer la phrase',
-				'attr' => array('class' => 'btn btn-primary'),
+				'attr' => array('class' => 'btn btn-primary btn-phrase-editor'),
 			))
 			->add('modifier', SubmitType::class, array(
 				'label' => 'Modifier la phrase',
-				'attr' => array('class' => 'btn btn-warning'),
+				'attr' => array('class' => 'btn btn-warning btn-phrase-editor'),
 			));
 	}
 
 	public function getParent(){
 		return PhraseType::class;
 	}
+
+    public function getBlockPrefix()
+    {
+        return 'phrase';
+    }
 }

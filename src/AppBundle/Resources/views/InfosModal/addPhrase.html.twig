@@ -9,22 +9,20 @@
 		<li>Écrivez votre phrase complète dans le champ dédié.</li>
 		<li>
 			Sélectionnez le premier mot ambigu, et cliquez sur le bouton "Rendre le mot sélectionné ambigu".<br>
-			Cela a pour effet d'entourer le mot par les balises amb avec un numéro, et d'afficher le mot en
-			rouge dans le champ de rendu.<br>
-			Cela crée aussi une nouvelle ligne dans le formulaire afin que vous puissiez choisir la glose de
-			ce mot ambigu.
+			Cela a pour effet de rendre le mot rouge en mode visuel ou d'entourer le mot par les balises amb en mode texte.<br>
+			Cela crée aussi une nouvelle ligne dans le formulaire afin que vous puissiez choisir la glose de ce mot ambigu.
 		</li>
-		<li>Choisissez une glose* pour ce mot ambigu, et indiquez si celle-ci est juste, fausse, ou si vous ne savez pas.</li>
+		<li>Choisissez une glose* pour ce mot ambigu.</li>
 		<li>Répétez les points 2 et 3 pour chaque mot ambigu de votre phrase.</li>
 		<li>
-			Appuyez sur le bouton "Créer la phrase".<br>
+			Enfin, appuyez sur le bouton "Créer la phrase".<br>
 			Vous aurez alors 5 minutes pour la modifier avant qu'elle ne soit mise en jeu et jouable.
 		</li>
 	</ol>
 	<span class="text-info">
-	Si vous vous êtes trompé pour un mot ambigu, vous pouvez le supprimer à l'aide du bouton "Supprimer le mot ambigu".<br>
-	Si aucune glose ne vous est proposée, ou que celles-ci ne vous satisfont pas, vous pouvez en ajouter avec le bouton "Ajouter une glose".
-</span><br><br>
+		Si vous vous êtes trompé pour un mot ambigu, vous pouvez le supprimer à l'aide du bouton "Supprimer le mot ambigu".<br>
+		Si aucune glose ne vous est proposée, ou que celles-ci ne vous satisfassent pas, vous pouvez en ajouter avec le bouton "Ajouter une glose".
+	</span><br><br>
 	<div class="alert alert-info">
 		La création d'une phrase<br>
 		<b>coûte</b>
@@ -34,28 +32,12 @@
 		<b>rapporte</b>
 		<ul>
 			<li>{{ gainPerLikePhrasePoints }} points par like</li>
-			<li>{{ gainPercentByGame }}% des points qu'un joueur gagne en la jouant (points/crédits).</li>
+			<li>{{ gainPercentByGame }}% des points qu'un joueur gagne en la jouant (points et crédits).</li>
 		</ul>
 	</div>
 </div>
-<hr><h4>
-	<b>Les gloses</b>
-	<a class="btn btn-primary btn-sm" role="button" data-toggle="collapse" href="#toggleGloses" aria-expanded="false" aria-controls="toggleGloses">
-		Afficher/cacher
-	</a>
-</h4>
-<div class="collapse" id="toggleGloses">
-	Définition de glose : "Explication de quelques mots qui éclaircit le sens d'autres mots".<br>
-	Vous pouvez ajouter une glose si celles déjà présentes ne vous conviennent pas, mais ce n'est pas une obligation.<br><br>
-	La formule du coût de création d'une glose est la suivante :<br>
-	<span class="text-primary">
-		Nombre de glose pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.<br>
-		Les deux premières gloses d'un mot ambigu sont gratuites.
-	</span><br>
-	<b>Exemple :</b><br>
-	Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = {{ 3 * costCreateGloseByGlosesOfMotAmbigu }}
-	crédits.<br>
-</div>
+<hr>
+{{ include('@App/InfosModal/gloses.html.twig') }}
 <hr>
 <div class="alert alert-info">
 	Vous pouvez réouvrir ce message à l'aide du bouton "INFO" situé en bas à droite de la page.

@@ -42,7 +42,9 @@ class GameService
         }
 
         if(!$phrase) {
-            if($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+            $isConnected = $this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+
+            if($isConnected)
             {
                 $phrases = $phraseRepo->findIdPhrasesNotPlayedByMembre($user, $this->container->getParameter('dureeAvantJouabiliteSecondes'));
             }
@@ -51,7 +53,9 @@ class GameService
             if(empty($phrases))
             {
                 $alreadyPlayed = true;
-                $phrases = $phraseRepo->findRandom($this->container->getParameter('dureeAvantJouabiliteSecondes'));
+                $dureeAvantJouabiliteSecondes = $this->container->getParameter('dureeAvantJouabiliteSecondes');
+                $nbPhrasesDisponiblesNonConnecte = $this->container->getParameter('dureeAvantJouabiliteSecondes');
+                $phrases = $phraseRepo->findRandom($isConnected, $dureeAvantJouabiliteSecondes, $nbPhrasesDisponiblesNonConnecte);
             }
 
             // Prend une phrase au hasard dans la liste des phrases jouables

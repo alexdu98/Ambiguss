@@ -87,19 +87,25 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Retourne les id de phrases visibles pouvant être jouées
      *
+     * @param bool $isConnected
      * @param int $dureeAvantJouabiliteSecondes
      * @return array
      */
-    public function findRandom(int $dureeAvantJouabiliteSecondes)
+    public function findRandom(bool $isConnected, int $dureeAvantJouabiliteSecondes, int $nbPhrasesDisponiblesNonConnecte)
     {
         $date = new \DateTime();
         $dateMin = $date->setTimestamp($date->getTimestamp() - $dureeAvantJouabiliteSecondes);
 
-        return $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')
             ->select('p.id')
             ->where('p.dateCreation < :dateMin')->setParameter('dateMin', $dateMin)
-            ->andWhere('p.visible = 1')
-            ->getQuery()->getArrayResult();
+            ->andWhere('p.visible = 1');
+
+        if (!$isConnected) {
+            $query->setMaxResults($nbPhrasesDisponiblesNonConnecte)->orderBy('p.id', 'ASC');
+        }
+
+        return $query->getQuery()->getArrayResult();
     }
 
     /**

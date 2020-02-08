@@ -16,6 +16,7 @@ parameters:
     gainPerLikePhrasePoints: 25
     gainPercentByGame: 10
     dureeAvantJouabiliteSecondes: 300
+    nbPhrasesDisponiblesNonConnecte: 25
     # Glose
     costCreateGloseByGlosesOfMotAmbigu: 50
     # Classement
@@ -84,6 +85,7 @@ twig:
         version: "%version%"
         ttl_cookie_helper: "%ttl_cookie_helper%"
         ttl_cookie_info: "%ttl_cookie_info%"
+        nbPhrasesDisponiblesNonConnecte: "%nbPhrasesDisponiblesNonConnecte%"
 
 # Doctrine Configuration
 doctrine:

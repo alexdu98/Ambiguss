@@ -16,7 +16,7 @@
 		        <p class="text-success">
 			        <b>
 				        <a href="{{ path('fos_user_security_login') }}" class="size18">Connectez-vous</a>
-				        pour enregistrer vos parties et avoir accès à toutes les fonctionnalités !
+						pour enregistrer vos parties et avoir accès à toutes les phrases et fonctionnalités !
 			        </b>
 		        </p>
 	        {% endif %}
@@ -59,11 +59,15 @@
 
 	        <ul><span class="color-green size18">Les votes précédents étaient :</span>
 		        {% for ordre, ma in stats %}
-			        <li class="not-list"><b class="color-red size16" title="Ce mot est ambigu (id : {{ ordre }})">{{ ma.valeurMA }}</b>
+			        <li class="not-list reponseGroupe" id="rep{{ ordre }}"><b class="color-red size16" title="Ce mot est ambigu (id : {{ ordre }})">{{ ma.valeurMA }}</b>
 				        :
 				        {% for valeurGlose, res in ma.gloses %}
 					        {% if res.isSelected %}<b>{% endif %}
-					        {{ valeurGlose ~ ' ' ~ res.nbVotes }}
+							{% if app.user %}
+								{{ valeurGlose ~ ' ' ~ res.nbVotes }}
+							{% else %}
+								{{ valeurGlose }}
+							{% endif %}
 					        {% if res.isSelected %}</b>{% endif %}
 					        {% if loop.last %}.{% else %},{% endif %}
 				        {% endfor %}

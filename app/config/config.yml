@@ -108,7 +108,7 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         dql:
             datetime_functions:
@@ -173,7 +173,6 @@ hwi_oauth:
             client_id: "%twitter_id%"
             client_secret: "%twitter_secret%"
             options:
-                display: popup
                 csrf: true
                 include_email: true
             scope: "email"

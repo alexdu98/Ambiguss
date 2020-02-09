@@ -41,6 +41,7 @@ parameters:
     # Durée avant expiration des cookies d'aide
     ttl_cookie_helper: 60 # jours
     ttl_cookie_info: 365 # jours
+    ttl_cookie_info_not_fully_accepted: 30 # jours
 
 framework:
     #esi:             ~
@@ -85,6 +86,7 @@ twig:
         version: "%version%"
         ttl_cookie_helper: "%ttl_cookie_helper%"
         ttl_cookie_info: "%ttl_cookie_info%"
+        ttl_cookie_info_not_fully_accepted: "%ttl_cookie_info_not_fully_accepted%"
         nbPhrasesDisponiblesNonConnecte: "%nbPhrasesDisponiblesNonConnecte%"
 
 # Doctrine Configuration

@@ -130,8 +130,11 @@
             // Au click sur le bouton, exécute la fonction
             $('#helpEditPhraseModal').click(helpEditPhraseModal);
             function helpEditPhraseModal(event) {
-                // Place le cookie pendant X jours
-                $.cookie('helpEditModoPhraseV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
+                // Si les cookies Ambiguss sont activés
+                if (cookieIsActivated('ambiguss')) {
+                    // Place le cookie pendant X jours
+                    $.cookie('helpEditModoPhraseV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
+                }
                 setModalSize('modal-lg');
                 setModalTitle('Informations sur l\'édition de phrase');
                 setModalBody('{{ include('@App/InfosModal/editPhraseModo.html.twig')|e('js') }}');

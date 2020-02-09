@@ -80,8 +80,11 @@
 			// Au click sur le bouton, exécute la fonction
 			$('#helpAddPhraseModal').click(helpAddPhraseModal);
 			function helpAddPhraseModal(event){
-				// Place le cookie pendant X jours
-				$.cookie('helpAddPhraseV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
+				// Si les cookies Ambiguss sont activés
+				if (cookieIsActivated('ambiguss')) {
+					// Place le cookie pendant X jours
+					$.cookie('helpAddPhraseV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
+				}
 				setModalSize('modal-lg');
 				setModalTitle('Informations sur la création de phrase');
 				setModalBody('{{ include('@App/InfosModal/addPhrase.html.twig')|e('js') }}');

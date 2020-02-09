@@ -103,13 +103,31 @@ $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
 
+    // Si l'utilisateur n'a pas explicitement accepté les cookies, on affiche la modale
+    if (!$.cookie('cookieInfo')) {
+		$('#cookieModal').modal({backdrop: 'static', keyboard: false});
+	}
+
     // Si clic sur le bouton "J'accepte" du bandeau d'information des cookies
     $('#cookieAccept').on('click', function(){
-    	// On créé un cookie pour ne plus réafficher le beandeau
-    	$.cookie('cookieInfo', true, { expires: ttl_cookie_info, path: '/' });
-    	// On supprime le bandeau
-    	$('#cookieInfo').remove();
+    	// On calcul le bitwise selon les cookies acceptés
+    	var bitWiseCookies = 0;
+    	$.each($('.configCookies:checked'), function() {
+			bitWiseCookies += bitWiseCookiesService[$(this).val()];
+		});
+
+    	var ttl_cookie = bitWiseCookies == (2 ** Object.keys(bitWiseCookiesService).length) - 1 ? ttl_cookie_info : ttl_cookie_info_not_fully_accepted;
+
+    	// On créé un cookie pour ne plus réafficher la modal
+    	$.cookie('cookieInfo', bitWiseCookies, { expires: ttl_cookie, path: '/' });
+
+    	// On supprime la modal
+    	$('#cookieModal').modal('hide');
+
+    	// On met à jour les services acceptés
+		updateServicesCookiesForOnePage();
 	});
+	updateServicesCookiesForOnePage();
 
 	// Au survol d'une réponse on surligne le MA
 	$('body').on('mouseenter', '.reponseGroupe', function () {

@@ -564,7 +564,7 @@ class Phrase implements \JsonSerializable
 
     public function isValid() {
 	    // Il faut que la phrase fasse plus de 20 caractères
-        if(strlen($this->getContenu() < 20))
+        if(strlen($this->getContenu()) < 20)
             return array('succes' => false, 'message' => 'La phrase doit faire au moins 20 caractères');
 
         // Pas d'autres balises html que <amb> et </amb>

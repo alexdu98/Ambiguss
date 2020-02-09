@@ -305,7 +305,7 @@ fos_user_change_password:
 
 fos_user_registration_register:
     path: /inscription/
-    controller: fos_user.registration.controller:registerAction
+    controller: AppBundle:User:register
     methods: [GET, POST]
 
 fos_user_registration_check_email:
@@ -319,7 +319,7 @@ fos_user_registration_confirm:
     methods: [GET]
 
 fos_user_registration_confirmed:
-    path: /inscription/confirme"
+    path: /inscription/confirme
     controller: fos_user.registration.controller:confirmedAction
     methods: [GET]
 

@@ -19,28 +19,28 @@ class RecaptchaService{
 	 */
 	public function check(string $captcha, $ip){
 
-	    if(empty($captcha))
-	        return array(
-	            'success' => false,
+	    if(empty($captcha)) {
+            return array(
+                'success' => false,
                 'error-codes' => array('Captcha non renseigné.')
             );
+        }
 
-        // URL Google Recaptcha
-        $url = "https://www.google.com/recaptcha/api/siteverify";
-        $url .= "?secret=" . $this->secret . "&response=" . $captcha . "&remoteip=" . $ip;
-
-        // Désactive la vérification ssl
-        $arrContextOptions = array(
-            "ssl" => array(
-                "verify_peer" => false,
-                "verify_peer_name" => false,
-            ),
+        $data = array(
+            'secret' => $this->secret,
+            'response' => $captcha,
+            'remoteip' => $_SERVER['REMOTE_ADDR']
         );
 
-        // Effectue la requête de vérification du captcha
-        $res = file_get_contents($url, false, stream_context_create($arrContextOptions));
+	    // Préparation de la requête
+        $verify = curl_init();
+        curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+        curl_setopt($verify, CURLOPT_POST, true);
+        curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
 
         // Renvoie le résultat sous forme de tableau
-        return json_decode($res, true);
+        return json_decode(curl_exec($verify), true);
 	}
 }

@@ -106,6 +106,62 @@ class UserController extends Controller
         ));
     }
 
+    public function registerAction(Request $request)
+    {
+        $user = $this->userManager->createUser();
+        $user->setEnabled(true);
+
+        $event = new GetResponseUserEvent($user, $request);
+        $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $form = $this->get('fos_user.registration.form.factory')->createForm();
+        $form->setData($user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            // Vérifie le captcha
+            $recaptchaService = $this->get('AppBundle\Service\RecaptchaService');
+            $recaptcha = $recaptchaService->check($request->request->get('g-recaptcha-response'), $request->server->get('REMOTE_ADDR'));
+
+            // S'il y a eu une erreur avec le captcha
+            if(!$recaptcha['success']){
+                $message = implode('<br>', $recaptcha['error-codes']);
+                $this->get('session')->getFlashBag()->add('danger', $message);
+            }
+            else if ($form->isValid()) {
+                $event = new FormEvent($form, $request);
+                $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+
+                $this->userManager->updateUser($user);
+
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->generateUrl('fos_user_registration_confirmed');
+                    $response = new RedirectResponse($url);
+                }
+
+                $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
+                return $response;
+            }
+
+            $event = new FormEvent($form, $request);
+            $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_FAILURE, $event);
+
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
+        }
+
+        return $this->render('@FOSUser/Registration/register.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
     public function checkEmailAction(Request $request)
     {
         $email = $request->getSession()->get('fos_user_send_confirmation_email/email');
@@ -155,6 +211,7 @@ class UserController extends Controller
         $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
 
         $flashBag = $this->get('session')->getFlashBag();
+        $flashBag->clear();
         $flashBag->add('success', 'Inscription confirmée, vous pouvez vous connecter.');
 
         return $response;
@@ -166,6 +223,7 @@ class UserController extends Controller
 
         $user = $this->userManager->findUserByUsernameOrEmail($username);
         $flashBag = $this->get('session')->getFlashBag();
+        $flashBag->clear();
 
         $event = new GetResponseNullableUserEvent($user, $request);
         $this->eventDispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_INITIALIZE, $event);

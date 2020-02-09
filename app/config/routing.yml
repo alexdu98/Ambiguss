@@ -310,12 +310,12 @@ fos_user_registration_register:
 
 fos_user_registration_check_email:
     path: /inscription/check-email
-    controller: fos_user.registration.controller:checkEmailAction
+    controller: AppBundle:User:checkEmail
     methods: [GET]
 
 fos_user_registration_confirm:
     path: /inscription/confirmation/{token}
-    controller: fos_user.registration.controller:confirmAction
+    controller: AppBundle:User:confirm
     methods: [GET]
 
 fos_user_registration_confirmed:
@@ -330,35 +330,15 @@ fos_user_resetting_request:
 
 fos_user_resetting_send_email:
     path: /reinitialisation/send-email
-    controller: fos_user.resetting.controller:sendEmailAction
+    controller: AppBundle:User:sendEmail
     methods: [POST]
 
 fos_user_resetting_check_email:
     path: /reinitialisation/check-email
-    controller: fos_user.resetting.controller:checkEmailAction
+    controller: AppBundle:User:sendEmail
     methods: [GET]
 
 fos_user_resetting_reset:
     path: /reinitialisation/reset/{token}
     controller: fos_user.resetting.controller:resetAction
-    methods: [GET, POST]
-
-fos_user_group_list:
-    path: /group/list
-    controller: fos_user.group.controller:listAction
-    methods: [GET]
-
-fos_user_group_new:
-    path: /group/new
-    controller: fos_user.group.controller:newAction
-    methods: [GET, POST]
-
-fos_user_group_show:
-    path: /group/{groupName}
-    controller: fos_user.group.controller:showAction
-    methods: [GET]
-
-fos_user_group_edit:
-    path: /group/{groupName}/edit
-    controller: fos_user.group.controller:editAction
     methods: [GET, POST]

@@ -214,7 +214,7 @@ class Membre extends User implements \JsonSerializable
 		$this->pointsClassementMensuel = 0;
 		$this->credits = 0;
 		$this->renamable = 0;
-		$this->newsletter = true;
+		$this->newsletter = false;
         $this->banni = false;
         $this->renamable = false;
         $this->serviceCreation = false;

@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Membre;
 use AppBundle\Form\FOSUser\ProfilEditType;
+use FOS\UserBundle\Event\GetResponseNullableUserEvent;
+use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -14,6 +16,7 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends Controller
@@ -101,6 +104,121 @@ class UserController extends Controller
         return $this->render('@FOSUser/Profile/edit.html.twig', array(
             'form' => $form->createView(),
         ));
+    }
+
+    public function checkEmailAction(Request $request)
+    {
+        $email = $request->getSession()->get('fos_user_send_confirmation_email/email');
+
+        if (empty($email)) {
+            return new RedirectResponse($this->generateUrl('fos_user_registration_register'));
+        }
+
+        $request->getSession()->remove('fos_user_send_confirmation_email/email');
+        $user = $this->userManager->findUserByEmail($email);
+
+        $flashBag = $this->get('session')->getFlashBag();
+        $flashBag->clear();
+        if (null === $user) {
+            $flashBag->add('danger', 'Inscription échouée, veuillez réessayer ou contacter un administrateur si cela persiste.');
+        }
+        else {
+            $flashBag->add('info', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyé par email à l\'adresse ' . $email . '.');
+        }
+
+        return $this->redirectToRoute('fos_user_security_login');
+    }
+
+    public function confirmAction(Request $request, $token)
+    {
+        $userManager = $this->userManager;
+
+        $user = $userManager->findUserByConfirmationToken($token);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
+        }
+
+        $user->setConfirmationToken(null);
+        $user->setEnabled(true);
+
+        $event = new GetResponseUserEvent($user, $request);
+        $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
+
+        $userManager->updateUser($user);
+
+        if (null === $response = $event->getResponse()) {
+            $url = $this->generateUrl('fos_user_security_login');
+            $response = new RedirectResponse($url);
+        }
+
+        $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
+
+        $flashBag = $this->get('session')->getFlashBag();
+        $flashBag->add('success', 'Inscription confirmée, vous pouvez vous connecter.');
+
+        return $response;
+    }
+
+    public function sendEmailAction(Request $request)
+    {
+        $username = $request->request->get('username');
+
+        $user = $this->userManager->findUserByUsernameOrEmail($username);
+        $flashBag = $this->get('session')->getFlashBag();
+
+        $event = new GetResponseNullableUserEvent($user, $request);
+        $this->eventDispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        if (null !== $user && !$user->isPasswordRequestNonExpired($this->getParameter('fos_user.resetting.retry_ttl'))) {
+            $event = new GetResponseUserEvent($user, $request);
+            $this->eventDispatcher->dispatch(FOSUserEvents::RESETTING_RESET_REQUEST, $event);
+
+            if (null !== $event->getResponse()) {
+                return $event->getResponse();
+            }
+
+            if (null === $user->getConfirmationToken()) {
+                $user->setConfirmationToken($this->get('fos_user.util.token_generator')->generateToken());
+            }
+
+            $event = new GetResponseUserEvent($user, $request);
+            $this->eventDispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_CONFIRM, $event);
+
+            if (null !== $event->getResponse()) {
+                return $event->getResponse();
+            }
+
+            $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
+            $user->setPasswordRequestedAt(new \DateTime());
+            $this->userManager->updateUser($user);
+
+            $event = new GetResponseUserEvent($user, $request);
+            $this->eventDispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_COMPLETED, $event);
+
+            $flashBag->add('success', 'Veuillez cliquer sur le lien de réinitialisation de mot de passe envoyé par email à l\'adresse ' . $user->getEmailCanonical() . '.');
+
+            if (null !== $event->getResponse()) {
+                return $event->getResponse();
+            }
+        }
+        else if (!$user) {
+            $flashBag->add('danger', 'Aucun utilisateur trouvé.');
+        }
+        else if ($user->isPasswordRequestNonExpired($this->getParameter('fos_user.resetting.retry_ttl'))) {
+            $lastReq = $user->getPasswordRequestedAt()->format('H\hi');
+            $nextReqTS = $user->getPasswordRequestedAt()->getTimestamp() + $this->getParameter('fos_user.resetting.retry_ttl');
+            $nextReq = (new \DateTime())->setTimestamp($nextReqTS)->format('H\hi');
+
+            $msg = 'Un email a déjà été envoyé à ' . $lastReq . ' à l\'adresse ' . $user->getEmailCanonical() . '.<br>Merci d\'attendre ' . $nextReq . '.';
+            $flashBag->add('danger', $msg);
+        }
+
+        return new RedirectResponse($this->generateUrl('fos_user_security_login'));
     }
 
 }

@@ -35,7 +35,7 @@ easy_admin:
     formats:
         date:     'd/m/Y'
         time:     'H:i'
-        datetime: 'd/m/Y H:i:s'
+        datetime: 'd/m/Y H:i'
         number:  '%d'
 
     entities:
@@ -48,6 +48,8 @@ easy_admin:
                     - { property: 'id', label: 'ID' }
                     - { property: 'username', label: 'Pseudo' }
                     - { property: 'email', label: 'Email', type: 'email' }
+                    - { property: 'dateInscription', label: 'Date d''inscription' }
+                    - { property: 'lastLogin', label: 'Dernière connexion' }
                     - { property: 'pointsClassement', label: 'Points' }
                     - { property: 'credits', label: 'Crédits' }
                     - { property: 'newsletter', label: 'Newsletter' }

@@ -51,7 +51,9 @@
                         <td class="glose-modificateur"><a href="#">{{ row.modificateur.username|default('') }}</a></td>
 
                     {% endif %}
-                    <td class="glose-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à H:i") }}</td>
+                    <td class="glose-dateModification" data-order="{{ row.dateModification|date("U") }}">
+                        {{ row.dateModification is empty ? "" : row.dateModification|date("d/m/Y à H:i") }}
+                    </td>
 
                     <td class="glose-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>
                     <td>

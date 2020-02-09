@@ -50,8 +50,9 @@
                     {% else %}
                         <td class="phrase-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':row.modificateur.id}) }}">{{ row.modificateur.username|default('') }}</a>
                         </td>
-                        <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">{{ row.dateModification|date("d/m/Y à
-						H:i") }}</td>
+                        <td class="phrase-dateModification" data-order="{{ row.dateModification|date("U") }}">
+                            {{ row.dateModification|date("d/m/Y à H:i") }}
+                        </td>
                     {% endif %}
 
                     <td class="phrase-signale">{% if row.signale %}Oui{% else %}Non{% endif %}</td>

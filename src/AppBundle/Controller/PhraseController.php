@@ -46,7 +46,7 @@ class PhraseController extends Controller
         if($form->isSubmitted() && $form->isValid()) {
 
             $phraseService = $this->get('AppBundle\Service\PhraseService');
-            $mapsRep = $request->request->get('phrase')['motsAmbigusPhrase'];
+            $mapsRep = $request->request->get('phrase')['motsAmbigusPhrase'] ?? array();
 
             $res = $phraseService->new($phrase, $this->getUser(), $mapsRep);
             $succes = $res['succes'];

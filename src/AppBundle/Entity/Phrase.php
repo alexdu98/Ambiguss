@@ -550,8 +550,11 @@ class Phrase implements \JsonSerializable
             return $matches[1] . mb_strtoupper($matches[2]) . $matches[3];
         }, $this->getContenu()));
 
+        // Récupération du nombre de caracètres
+        $nbChar = strlen($this->getContenu());
+
         // Ajoute le . final si non existant
-        $last_letter = $this->getContenu()[ strlen($this->getContenu()) - 1 ];
+        $last_letter = $nbChar > 0 ? $this->getContenu()[ $nbChar - 1 ] : '.';
 
         if($last_letter != '.' && $last_letter != '?' && $last_letter != '!')
         {
@@ -560,6 +563,10 @@ class Phrase implements \JsonSerializable
     }
 
     public function isValid() {
+	    // Il faut que la phrase fasse plus de 20 caractères
+        if(strlen($this->getContenu() < 20))
+            return array('succes' => false, 'message' => 'La phrase doit faire au moins 20 caractères');
+
         // Pas d'autres balises html que <amb> et </amb>
         if($this->getContenu() != strip_tags($this->getContenu(), '<amb>'))
             return array('succes' => false, 'message' => 'Il ne faut que des balises <amb> et </amb>');

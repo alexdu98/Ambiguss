@@ -10,7 +10,7 @@ class GloseTest extends KernelTestCase
     private $container;
     private $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $kernel = self::bootKernel();
 

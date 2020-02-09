@@ -25,19 +25,19 @@ class ClassementControllerTest extends WebTestCase
         $link = $crawler->selectLink('Général')->link();
         $client->click($link);
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertContains('/classement/joueurs', $client->getRequest()->getUri());
+        $this->assertStringContainsString('/classement/joueurs', $client->getRequest()->getUri());
 
         // Clic sur le lien du classement mensuel
         $link = $crawler->selectLink('Mensuel')->link();
         $client->click($link);
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertContains('/classement/joueurs?type=mensuel', $client->getRequest()->getUri());
+        $this->assertStringContainsString('/classement/joueurs?type=mensuel', $client->getRequest()->getUri());
 
         // Clic sur le lien du classement hebdomadaire
         $link = $crawler->selectLink('Hebdomadaire')->link();
         $client->click($link);
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertContains('/classement/joueurs?type=hebdomadaire', $client->getRequest()->getUri());
+        $this->assertStringContainsString('/classement/joueurs?type=hebdomadaire', $client->getRequest()->getUri());
     }
 
 }

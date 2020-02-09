@@ -20,6 +20,6 @@ class CanonicalisationCommandTest extends KernelTestCase
             'command'  => $command->getName()
         ]);
         $output = $commandTester->getDisplay();
-        $this->assertContains('[OK] All members canonized.', $output);
+        $this->assertStringContainsString('[OK] All members canonized.', $output);
     }
 }

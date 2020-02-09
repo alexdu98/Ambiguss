@@ -58,6 +58,6 @@ class GameControllerTest extends WebTestCase
         $afterPlayPage = new Crawler($client->getResponse()->getContent());
 
         // Redirigé sur la page des résultats
-        $this->assertContains('Résultat', $afterPlayPage->filter('title')->html());
+        $this->assertStringContainsString('Résultat', $afterPlayPage->filter('title')->html());
     }
 }

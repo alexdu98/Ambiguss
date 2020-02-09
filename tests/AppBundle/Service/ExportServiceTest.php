@@ -21,7 +21,7 @@ class ExportServiceTest extends KernelTestCase
         $res = $method->invoke($service);
         
         $this->assertArrayHasKey('phrase', $res[0]);
-        $this->assertContains('<amb id="1">', $res[0]['phrase']);
+        $this->assertStringContainsString('<amb id="1">', $res[0]['phrase']);
 
         $this->assertArrayHasKey('motsAmbigus', $res[0]);
         $this->assertArrayHasKey('motAmbigu', $res[0]['motsAmbigus'][0]);

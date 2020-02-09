@@ -11,7 +11,7 @@ class GithubServiceTest extends KernelTestCase
     private $container;
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $kernel = self::bootKernel();
 

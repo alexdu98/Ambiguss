@@ -10,7 +10,7 @@ class PhraseTest extends KernelTestCase
     private $container;
     private $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $kernel = self::bootKernel();
 
@@ -104,59 +104,59 @@ class PhraseTest extends KernelTestCase
     {
         $this->entity->setContenu('<b>test</b>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('que des balises <amb>', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('que des balises <amb>', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">test<amb id="2">test</amb>test</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('pas de balise <amb> imbriquée', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('pas de balise <amb> imbriquée', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb>test</amb> <amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('même nombre de balise <amb>', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('même nombre de balise <amb>', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('</amb> <amb>test</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('même nombre de balise <amb>', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('même nombre de balise <amb>', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('test');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('au moins 1 mot ambigu', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('au moins 1 mot ambigu', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">1</amb><amb id="2">2</amb><amb id="3">3</amb><amb id="4">4</amb><amb id="5">5</amb><amb id="6">6</amb><amb id="7">7</amb><amb id="8">8</amb><amb id="9">9</amb><amb id="10">10</amb><amb id="11">11</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('pas dépasser 10 mots ambigus', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('pas dépasser 10 mots ambigus', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">1</amb> test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('255 caractères maximum hors balise <amb>', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('255 caractères maximum hors balise <amb>', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('a<amb id="1">1</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">1</amb>a');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('a<amb id="1">1</amb>a');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1"> 1</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">1 </amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1"> 1 </amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('<amb id="1">1</amb> <amb id="1">1</amb>');
         $this->assertFalse($this->entity->isValid()['succes']);
-        $this->assertContains('Les mots ambigus doivent avoir des identifiants différents', $this->entity->isValid()['message']);
+        $this->assertStringContainsString('Les mots ambigus doivent avoir des identifiants différents', $this->entity->isValid()['message']);
 
         $this->entity->setContenu('Avant <amb id="2">2</amb>');
         $this->assertTrue($this->entity->isValid()['succes']);

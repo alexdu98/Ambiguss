@@ -20,7 +20,7 @@ class ExportCommandTest extends KernelTestCase
             'command'  => $command->getName(),
         ]);
         $output = $commandTester->getDisplay();
-        $this->assertContains('[OK] Data (all) was successfully exporting.', $output);
+        $this->assertStringContainsString('[OK] Data (all) was successfully exporting.', $output);
     }
 
     public function testExecuteAll()
@@ -36,7 +36,7 @@ class ExportCommandTest extends KernelTestCase
             '--type' => 'all',
         ]);
         $output = $commandTester->getDisplay();
-        $this->assertContains('[OK] Data (all) was successfully exporting.', $output);
+        $this->assertStringContainsString('[OK] Data (all) was successfully exporting.', $output);
     }
 
     public function testExecutePhrases()
@@ -53,7 +53,7 @@ class ExportCommandTest extends KernelTestCase
             '--type' => 'phrases',
         ]);
         $output = $commandTester->getDisplay();
-        $this->assertContains('[OK] Data (phrases) was successfully exporting.', $output);
+        $this->assertStringContainsString('[OK] Data (phrases) was successfully exporting.', $output);
     }
 
     public function testExecuteMotsAmbigus()
@@ -70,7 +70,7 @@ class ExportCommandTest extends KernelTestCase
             '--type' => 'motsAmbigus',
         ]);
         $output = $commandTester->getDisplay();
-        $this->assertContains('[OK] Data (motsAmbigus) was successfully exporting.', $output);
+        $this->assertStringContainsString('[OK] Data (motsAmbigus) was successfully exporting.', $output);
     }
 
     public function testExecuteBad()
@@ -86,6 +86,6 @@ class ExportCommandTest extends KernelTestCase
             '--type' => 'foo',
         ]);
         $output = $commandTester->getDisplay();
-        $this->assertContains('[ERROR]', $output);
+        $this->assertStringContainsString('[ERROR]', $output);
     }
 }

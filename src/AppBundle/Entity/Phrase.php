@@ -551,6 +551,9 @@ class Phrase implements \JsonSerializable
             return $matches[1] . mb_strtoupper($matches[2]) . $matches[3];
         }, $this->getContenu()));
 
+        // Supprime toutes les balises hors <amb>
+        $this->setContenu(strip_tags($this->getContenu(), '<amb>'));
+
         // Récupération du nombre de caracètres
         $nbChar = strlen($this->getContenu());
 

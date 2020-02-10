@@ -29,7 +29,7 @@
 
 			<div class="form-group">
 				{{ form_widget(form.contenu) }}
-				<div class="phrase-editor size16" contenteditable></div>
+				<div class="phrase-editor size16" contenteditable>{{ form.vars.data.contenuAmb|default('')|raw }}</div>
 				<ul id="nav-editor">
 					<li class="active" data-mode="wysiwyg"><a href="#">Visuel</a></li>
 					<li data-mode="source"><a href="#">Texte</a></li>

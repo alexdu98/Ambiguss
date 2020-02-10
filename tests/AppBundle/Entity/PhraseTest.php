@@ -96,6 +96,10 @@ class PhraseTest extends KernelTestCase
         $this->entity->normalize();
         $this->assertEquals('Espace.', $this->entity->getContenu());
 
+        $this->entity->setContenu('a<b>ah<b> <amb>c<br>ou<p>co</p>u</amb> test<br>');
+        $this->entity->normalize();
+        $this->assertEquals('Aah <amb>coucou</amb> test.', $this->entity->getContenu());
+
         $this->entity->setContenu('plusieurs mots !');
         $this->entity->normalize();
         $this->assertEquals('Plusieurs mots !', $this->entity->getContenu());
@@ -127,9 +131,6 @@ class PhraseTest extends KernelTestCase
     public function testIsValid()
     {
         $this->entity->setContenu('');
-        $this->tryFalseEquals(InvalidPhraseMessage::$EMPTY_PHRASE);
-
-        $this->entity->setContenu(' ');
         $this->tryFalseEquals(InvalidPhraseMessage::$EMPTY_PHRASE);
 
         $this->entity->setContenu('<b>test test</b>');

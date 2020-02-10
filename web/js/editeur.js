@@ -36,6 +36,7 @@ $(document).ready(function () {
             .replace(/&nbsp;/ig, ' ')
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
+            .replace(/<br>/g, '')
             .replace(/ style=""/g, '')
             .replace(/ title="Ce mot est ambigu \(id : [0-9]+\)"/ig, '');
     }
@@ -203,7 +204,7 @@ $(document).ready(function () {
         });
 
     });
-    phraseEditor.trigger('input'); // Pour la page d'édition
+    phraseEditor.trigger('input'); // Pour mettre en forme en cas de phrase au chargement (édition ou création échouée)
 
     // Mise à jour des gloses des mots ambigus
     phraseEditor.on('focusout', function () {

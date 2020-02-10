@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\Main\ContactType;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,7 +25,7 @@ class MainController extends Controller
 		return $this->render('AppBundle:Main:conditions.html.twig');
 	}
 
-	public function contactAction(Request $request)
+	public function contactAction(Request $request, LoggerInterface $logger)
 	{
 		$form = $this->get('form.factory')->create(ContactType::class);
 
@@ -42,6 +43,13 @@ class MainController extends Controller
 			if(!$recaptcha['success']){
                 $message = implode('<br>', $recaptcha['error-codes']);
                 $this->get('session')->getFlashBag()->add('danger', $message);
+
+                $logInfos = array(
+                    'msg' => $message,
+                    'user' => $this->getUser()->getUsername() ?? 'non connecté',
+                    'ip' => $request->server->get('REMOTE_ADDR')
+                );
+                $logger->error(json_encode($logInfos));
             }
             else {
 

@@ -7,6 +7,7 @@ use AppBundle\Form\FOSUser\ProfilEditType;
 use FOS\UserBundle\Event\GetResponseNullableUserEvent;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,7 +107,7 @@ class UserController extends Controller
         ));
     }
 
-    public function registerAction(Request $request)
+    public function registerAction(Request $request, LoggerInterface $logger)
     {
         $user = $this->userManager->createUser();
         $user->setEnabled(true);
@@ -132,6 +133,13 @@ class UserController extends Controller
             if(!$recaptcha['success']){
                 $message = implode('<br>', $recaptcha['error-codes']);
                 $this->get('session')->getFlashBag()->add('danger', $message);
+
+                $logInfos = array(
+                    'msg' => $message,
+                    'user' => $this->getUser()->getId() ?? 'non connecté',
+                    'ip' => $request->server->get('REMOTE_ADDR')
+                );
+                $logger->error(json_encode($logInfos));
             }
             else if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
@@ -162,7 +170,7 @@ class UserController extends Controller
         ));
     }
 
-    public function checkEmailAction(Request $request)
+    public function checkEmailAction(Request $request, LoggerInterface $logger)
     {
         $email = $request->getSession()->get('fos_user_send_confirmation_email/email');
 
@@ -176,7 +184,15 @@ class UserController extends Controller
         $flashBag = $this->get('session')->getFlashBag();
         $flashBag->clear();
         if (null === $user) {
-            $flashBag->add('danger', 'Inscription échouée, veuillez réessayer ou contacter un administrateur si cela persiste.');
+            $msg = 'Inscription échouée, veuillez réessayer ou contacter un administrateur si cela persiste.';
+            $flashBag->add('danger', $msg);
+
+            $logInfos = array(
+                'msg' => $msg,
+                'email' => $email,
+                'ip' => $request->server->get('REMOTE_ADDR')
+            );
+            $logger->critical(json_encode($logInfos));
         }
         else {
             $flashBag->add('info', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyé par email à l\'adresse ' . $email . '.');

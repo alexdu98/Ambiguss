@@ -13,6 +13,7 @@ use AppBundle\Form\Phrase\PhraseAddType;
 use AppBundle\Form\Phrase\PhraseEditType;
 use AppBundle\Service\PhraseService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Historique;
@@ -20,7 +21,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class PhraseController extends Controller
 {
-	public function newAction(Request $request)
+	public function newAction(Request $request, LoggerInterface $logger)
 	{
         $secu = $this->get('security.authorization_checker');
         $bag = $this->get('session')->getFlashBag();
@@ -60,6 +61,14 @@ class PhraseController extends Controller
             else {
                 $msg = "Erreur lors de l'insertion de la phrase -> " . $res['message'];
                 $bag->add('erreur', $msg);
+
+                $logInfos = array(
+                    'msg' => $msg,
+                    'user' => $this->getUser()->getUsername(),
+                    'ip' => $request->server->get('REMOTE_ADDR'),
+                    'phrase' => $phrase->getContenu()
+                );
+                $logger->error(json_encode($logInfos));
             }
         }
 
@@ -70,7 +79,7 @@ class PhraseController extends Controller
         ));
 	}
 
-	public function editAction(Request $request, Phrase $phrase)
+	public function editAction(Request $request, LoggerInterface $logger, Phrase $phrase)
 	{
         $secu = $this->get('security.authorization_checker');
         $bag = $this->get('session')->getFlashBag();
@@ -171,6 +180,14 @@ class PhraseController extends Controller
                 else {
                     $msg = "Erreur lors de l'insertion de la phrase -> " . $res['message'];
                     $bag->add('erreur', $msg);
+
+                    $logInfos = array(
+                        'msg' => $msg,
+                        'user' => $this->getUser()->getUsername(),
+                        'ip' => $request->server->get('REMOTE_ADDR'),
+                        'phrase' => $phrase->getContenu()
+                    );
+                    $logger->error(json_encode($logInfos));
                 }
             }
 

@@ -72,7 +72,7 @@ $(document).ready(function () {
         if (selText.trim() !== '') {
             var regAlpha = /[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]/;
 
-            var parentBase = sel.baseNode.parentNode;
+            var parentBase = sel.anchorNode.parentNode;
             var parentFocus = sel.focusNode.parentNode;
 
             var numPrevChar = Math.min(sel.focusOffset, sel.anchorOffset) - 1;
@@ -90,7 +90,7 @@ $(document).ready(function () {
                 errorForm.append('Le mot sélectionné est déjà ambigu<br>');
                 success = false;
             }
-            if (sel.baseNode != sel.focusNode) {
+            if (sel.anchorNode != sel.focusNode) {
                 errorForm.append('Le mot sélectionné contient déjà un mot ambigu<br>');
                 success = false;
             }

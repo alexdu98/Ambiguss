@@ -172,7 +172,6 @@ class APIController extends Controller
 
                 $em->flush();
 
-
                 $motAmbiguInfos = array(
                     'id' => $motAmbigu->getId(),
                     'valeur' => $motAmbigu->getValeur(),

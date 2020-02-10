@@ -205,6 +205,7 @@ easy_admin:
                     - { property: 'contenuPur', label: 'Contenu pur' }
                     - { property: 'gainCreateur', label: 'Gain pour l''auteur' }
                     - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'dateCreation', label: 'Date création' }
                     - { property: 'modificateur', label: 'Modificateur' }
                     - { property: 'jAime', label: 'J''aime' }
                     - { property: 'parties', label: 'Parties' }
@@ -417,6 +418,7 @@ easy_admin:
                     - { property: 'objetId', label: 'ID de l''objet' }
                     - { property: 'verdict', label: 'Verdict' }
                     - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'dateCreation', label: 'Date création' }
                     - { property: 'juge', label: 'Juge' }
             form:
                 fields:

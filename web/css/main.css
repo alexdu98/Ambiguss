@@ -384,6 +384,7 @@ amb {
 	background: white;
 	color: black;
 	padding: 5px;
+	height: 32px;
 }
 #nav-editor{
 	list-style: none;

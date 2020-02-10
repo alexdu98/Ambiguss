@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Util\InvalidPhraseMessage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -563,21 +564,21 @@ class Phrase implements \JsonSerializable
     }
 
     public function isValid() {
-	    // Il faut que la phrase fasse plus de 20 caractères
-        if(strlen($this->getContenu()) < 20)
-            return array('succes' => false, 'message' => 'La phrase doit faire au moins 20 caractères');
+	    // Il ne faut pas de phrase vide
+        if(strlen(trim($this->getContenu())) == 0)
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$EMPTY_PHRASE);
 
         // Pas d'autres balises html que <amb> et </amb>
         if($this->getContenu() != strip_tags($this->getContenu(), '<amb>'))
-            return array('succes' => false, 'message' => 'Il ne faut que des balises <amb> et </amb>');
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$ONLY_AMB_TAG);
 
         // Pas de balise <amb> imbriquée
         if(!preg_match('#^(?!.*<amb(?:(?!<\/amb).)+<amb).+$#', $this->getContenu()))
-            return array('succes' => false, 'message' => 'Il ne faut pas de balise <amb> imbriquée');
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$NESTED_AMB_TAG);
 
         // Pas de balise </amb> imbriquée
         if(!preg_match('#^(?!.*<\/amb>(?:(?!<amb).)+<\/amb>).+$#', $this->getContenu()))
-            return array('succes' => false, 'message' => 'Il ne faut pas de balise </amb> imbriquée');
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$NESTED_CAMB_TAG);
 
         // Le même nombre de balise ouvrante et fermante
         $ambOuv = $ambFer = null;
@@ -586,7 +587,7 @@ class Phrase implements \JsonSerializable
         preg_match_all($regexOuv, $this->getContenuAmb(), $ambOuv, PREG_SET_ORDER);
         preg_match_all($regexFer, $this->getContenuAmb(), $ambFer, PREG_SET_ORDER);
         if(count($ambOuv) != count($ambFer))
-            return array('succes' => false, 'message' => 'Il n\'y a pas le même nombre de balise <amb> et </amb>');
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$WRONG_NB_AMB_TAG);
 
         // récupère les mots ambigus
         $mots_ambigu = array();
@@ -595,20 +596,20 @@ class Phrase implements \JsonSerializable
 
         // Au moins 1 mot ambigu
         if(empty($mots_ambigu))
-            return array('succes' => false, 'message' => 'Il faut au moins 1 mot ambigu');
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$NB_AMB_MIN);
 
         // Pas plus de 10 mots ambigus
         if(count($mots_ambigu) > 10)
             return array(
                 'succes' => false,
-                'message' => 'Il ne faut pas dépasser 10 mots ambigus par phrase');
+                'message' => InvalidPhraseMessage::$NB_AMB_MAX);
 
         // Contenu pur ne dépassent pas 255 caractères
         if(strlen($this->getContenuPur()) > 255)
         {
             return array(
                 'succes' => false,
-                'message' => 'La phrase est trop longue (' . strlen($this->getContenuPur()) . ') (255 caractères maximum hors balise <amb>)',
+                'message' => InvalidPhraseMessage::$NB_CHAR_MAX . ' (' . strlen($this->getContenuPur()) . ' actuellement)',
             );
         }
 
@@ -619,7 +620,7 @@ class Phrase implements \JsonSerializable
         {
             return array(
                 'succes' => false,
-                'message' => 'Un mot était mal sélectionné (le caractère précédent une balise <amb> ou suivant une balise </amb> ne doit pas être alphabétique)',
+                'message' => InvalidPhraseMessage::$WRONG_SELECT_EXT,
             );
         }
 
@@ -629,7 +630,7 @@ class Phrase implements \JsonSerializable
         {
             return array(
                 'succes' => false,
-                'message' => 'Un mot était mal sélectionné (le caractère suivant une balise <amb> ou précédent une balise </amb> ne doit pas être un espace)',
+                'message' => InvalidPhraseMessage::$WRONG_SELECT_INT,
             );
         }
 
@@ -639,7 +640,7 @@ class Phrase implements \JsonSerializable
             $temp[$ma[1]] = null;
         }
         if(count($temp) !== count($mots_ambigu))
-            return array('succes' => false, 'message' => 'Les mots ambigus doivent avoir des identifiants différents');
+            return array('succes' => false, 'message' => InvalidPhraseMessage::$SAME_ID_AMB);
 
         // Réordonne les id
         foreach($mots_ambigu as $key => $ma){

@@ -3,11 +3,13 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\Visite;
+use AppBundle\Util\Bitwise;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class VisiteListener implements EventSubscriberInterface
 {
@@ -36,7 +38,7 @@ class VisiteListener implements EventSubscriberInterface
     public function process(GetResponseEvent $event)
     {
         // Si il n'y a pas de cookie de visite
-        if ($event->getRequest()->cookies->has('visite')) {
+        if (!$event->getRequest()->cookies->has('visite')) {
             $visite = new Visite();
             $visite->setIp($event->getRequest()->server->get('REMOTE_ADDR'));
             $visite->setUserAgent($event->getRequest()->server->get('HTTP_USER_AGENT'));
@@ -58,8 +60,12 @@ class VisiteListener implements EventSubscriberInterface
                 $time = $this->timeBetweenTwoVisites;
             }
 
-            // Enregistrement du cookie
-            setcookie('visite', 'visited', time() + $time);
+            $cookieInfo = $event->getRequest()->cookies->has('cookieInfo');
+            // Si les cookies Ambiguss sont acceptés
+            if ($cookieInfo && Bitwise::isSet('COOKIE_INFO', $cookieInfo, 'ambiguss')) {
+                // Enregistrement du cookie de visite
+                setcookie('visite', 'true', time() + $time, '/');
+            }
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Util;
 
-class InvalidPhraseMessage
+abstract class InvalidPhraseMessage
 {
     public static $EMPTY_PHRASE = 'La phrase ne doit pas être vide';
     public static $ONLY_AMB_TAG = 'Il ne faut que des balises <amb> et </amb>';

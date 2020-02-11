@@ -1,5 +1,3 @@
-var bitWiseCookiesService = {ambiguss: 1, facebook: 2, twitter: 4, google: 8};
-
 function servicesGamePage() {
     var routeGame = $('meta[property="og:url"]').attr("content");
     var contenuPur = $('meta[property="og:description"]').attr("content");

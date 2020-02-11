@@ -157,6 +157,7 @@
 		    var urlImageLoading = '{{ asset('images/loading.gif') }}';
 		    var ttl_cookie_info = {{ ttl_cookie_info }};
 		    var ttl_cookie_info_not_fully_accepted = {{ ttl_cookie_info_not_fully_accepted }};
+			var bitWiseCookiesService = {{ constant('AppBundle\\Util\\Bitwise::COOKIE_INFO')|json_encode|raw }};
 	    </script>
 	    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
 	    <script src="{{ asset('vendor/jquery/dist/jquery.form.min.js') }}"></script>

@@ -15,7 +15,7 @@ parameters:
     gainCreatePhrasePoints: 25
     gainPerLikePhrasePoints: 25
     gainPercentByGame: 10
-    dureeAvantJouabiliteSecondes: 300
+    dureeAvantJouabiliteSecondes: 600
     nbPhrasesDisponiblesNonConnecte: 25
     # Glose
     costCreateGloseByGlosesOfMotAmbigu: 50
@@ -81,6 +81,7 @@ twig:
         gainCreatePhrasePoints: "%gainCreatePhrasePoints%"
         gainPerLikePhrasePoints: "%gainPerLikePhrasePoints%"
         gainPercentByGame: "%gainPercentByGame%"
+        dureeAvantJouabiliteSecondes: "%dureeAvantJouabiliteSecondes%"
         costCreateGloseByGlosesOfMotAmbigu: "%costCreateGloseByGlosesOfMotAmbigu%"
         recaptcha: "%recaptcha%"
         version: "%version%"

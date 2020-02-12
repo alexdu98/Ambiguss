@@ -64,6 +64,8 @@ function cookieIsActivated(service) {
     return ($.cookie('cookieInfo') & bitWiseCookiesService[service]) > 0;
 }
 
+var deletableCookiesAmbiguss = ['helpAddPhrase', 'helpGame', 'helpResultat', 'helpEditModoPhrase', 'visite'];
+
 $(document).ready(function () {
     $('a.configCookies').on('mouseenter', function() {
         var service = $(this).attr('id').replace(/login-/, '');
@@ -76,6 +78,42 @@ $(document).ready(function () {
         $(this).attr('title', '');
     });
 
+    // Si clic sur le bouton "J'accepte" du bandeau d'information des cookies
+    $('#cookieAccept').on('click', function(){
+        // On calcul le bitwise selon les cookies acceptés
+        var bitWiseCookies = 0;
+        $.each($('.configCookies:checked'), function() {
+            bitWiseCookies += bitWiseCookiesService[$(this).val()];
+        });
+
+        var ttl_cookie = bitWiseCookies == (2 ** Object.keys(bitWiseCookiesService).length) - 1 ? ttl_cookie_info : ttl_cookie_info_not_fully_accepted;
+
+        if ($('.configCookies[value="ambiguss"]').prop('checked')) {
+            // On créé un cookie pour ne plus réafficher la modal
+            $.cookie('cookieInfo', bitWiseCookies, { expires: ttl_cookie, path: '/' });
+        }
+        else {
+            // On créé un cookie de session pour ne plus réafficher la modal le temps de la session
+            $.cookie('cookieInfo', bitWiseCookies, { path: '/' });
+
+            // On supprime les  cookies d'ambiguss s'ils existent
+            $.each(Object.keys($.cookie()), function() {
+                var realname = this.valueOf();
+                $.each(deletableCookiesAmbiguss, function() {
+                    var regex = new RegExp(this, 'g');
+                    if (realname.match(regex)) {
+                        $.removeCookie(realname, { path: '/' });
+                    }
+                });
+            });
+        }
 
 
+        // On supprime la modal
+        $('#cookieModal').modal('hide');
+
+        // On met à jour les services acceptés
+        updateServicesCookiesForOnePage();
+    });
+    updateServicesCookiesForOnePage();
 });

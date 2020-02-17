@@ -8,11 +8,13 @@
 		</h3>
 		<div class="text-center">
 			{% for map in phraseDisplay.motsAmbigusPhrase %}
-				<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
-				<small>({{ map.getOrdre }})</small> :
-				{% for reponse in map.reponses %}
-					{{ reponse.valeurGlose }}
-				{% endfor %}
+				<span class="reponseGroupe" id="rep{{ map.ordre }}">
+					<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
+					<small>({{ map.ordre }})</small> :
+					{% for reponse in map.reponses %}
+						{{ reponse.valeurGlose }}
+					{% endfor %}
+				</span>
 				<br>
 			{% endfor %}
 		</div>
@@ -29,12 +31,14 @@
 		</h3>
 		<div class="text-center">
 			{% for map in phraseDisplay.motsAmbigusPhrase %}
-				<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
-				<small>({{ map.getOrdre }})</small> :
-				{% for reponse in map.reponses %}
-					{{ reponse.valeurGlose }}
-				{% endfor %}
-				<br>
+				<span class="reponseGroupe" id="rep{{ map.ordre }}">
+					<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
+					<small>({{ map.ordre }})</small> :
+					{% for reponse in map.reponses %}
+						{{ reponse.valeurGlose }}
+					{% endfor %}
+					<br>
+				</span>
 			{% endfor %}
 			<br>
 			<a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">Rééditer la phrase</a>

@@ -159,6 +159,8 @@ $(document).ready(function () {
                 amb.val(motAmbigu);
                 $prototype.attr('id', 'rep' + indexMotAmbigu);
 
+                $prototype.find('.ordre').val(indexMotAmbigu);
+
                 var $deleteLink = $('<a href="#" class="sup-amb btn btn-danger">Supprimer le mot ambigu</a>');
                 $prototype.find('.gloseAction').append($deleteLink);
 
@@ -297,7 +299,6 @@ $(document).ready(function () {
         $(this).closest('.reponseGroupe').trigger('mouseleave');
 
         var phrase = getPhraseTexte();
-        console.log(phrase);
         // On récupère l'id qui est dans l'attribut id (id="rep1"), en supprimant le rep
         var id = $(this).closest('.reponseGroupe').attr('id').replace(/rep/, '');
         delete motsAmbigus[id];
@@ -308,7 +309,6 @@ $(document).ready(function () {
         // Modifie le textarea pour supprimé la balise <amb id=""></amb> et remettre le contenu
         if (modeEditor == 'wysiwyg') {
             phraseEditor.html(phrase.replace(reg3, '$1'));
-            console.log(phrase.replace(reg3, '$1'))
         }
         else {
             phraseEditor.text(phrase.replace(reg3, '$1'));

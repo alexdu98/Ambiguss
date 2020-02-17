@@ -53,8 +53,15 @@
 						<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
 						Signaler un élément
 					</button>
+					{% if is_granted('ROLE_MODERATEUR') %}
+						<a class="btn btn-warning btn-xs" href="{{ path('phrase_edit', {id: phrase.id}) }}">
+							<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+							Modifier la phrase
+						</a>
+					{% endif %}
 				</div>
 			{% endif %}
+
 			<br>
 
 	        <ul><span class="color-green size18">Les votes précédents étaient :</span>

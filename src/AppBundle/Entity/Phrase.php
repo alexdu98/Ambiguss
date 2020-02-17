@@ -96,7 +96,7 @@ class Phrase implements \JsonSerializable
 	private $modificateur;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\MotAmbiguPhrase", mappedBy="phrase", cascade={"persist"})
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\MotAmbiguPhrase", mappedBy="phrase", cascade={"persist", "remove"})
      * @ORM\OrderBy({"ordre" = "ASC"})
 	 */
 	private $motsAmbigusPhrase;
@@ -107,7 +107,7 @@ class Phrase implements \JsonSerializable
 	private $jAime;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Partie", mappedBy="phrase")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Partie", mappedBy="phrase", cascade={"remove"})
 	 */
 	private $parties;
 
@@ -537,7 +537,7 @@ class Phrase implements \JsonSerializable
         return $this->getVisible() && $this->getDateCreation() < $dateMin;
     }
 
-    public function normalize()
+    public function normalizePreValidation()
     {
         // Supprime les espaces multiples, option u car sinon les caractères utf8 partent en vrille
         $this->setContenu(preg_replace('#\s+#u', ' ', $this->getContenu()));
@@ -566,7 +566,17 @@ class Phrase implements \JsonSerializable
         }
     }
 
-    public function isValid() {
+    public function getArrayMotAmbigu()
+    {
+        $mots_ambigu = array();
+        $regex = '#\<amb id\="([0-9]+)"\>(.*?)\</amb\>#'; // Faux bug d'affichage PHPStorm, ne pas toucher
+        preg_match_all($regex, $this->getContenu(), $mots_ambigu, PREG_SET_ORDER);
+
+        return $mots_ambigu;
+    }
+
+    public function isValid()
+    {
 	    // Il ne faut pas de phrase vide
         if(strlen(trim($this->getContenu())) == 0)
             return array('succes' => false, 'message' => InvalidPhraseMessage::$EMPTY_PHRASE);
@@ -592,10 +602,8 @@ class Phrase implements \JsonSerializable
         if(count($ambOuv) != count($ambFer))
             return array('succes' => false, 'message' => InvalidPhraseMessage::$WRONG_NB_AMB_TAG);
 
-        // récupère les mots ambigus
-        $mots_ambigu = array();
-        $regex = '#\<amb id\="([0-9]+)"\>(.*?)\</amb\>#'; // Faux bug d'affichage PHPStorm, ne pas toucher
-        preg_match_all($regex, $this->getContenu(), $mots_ambigu, PREG_SET_ORDER);
+        // Récupère les mots ambigus sous forme de tableau
+        $mots_ambigu = $this->getArrayMotAmbigu();
 
         // Au moins 1 mot ambigu
         if(empty($mots_ambigu))
@@ -645,14 +653,36 @@ class Phrase implements \JsonSerializable
         if(count($temp) !== count($mots_ambigu))
             return array('succes' => false, 'message' => InvalidPhraseMessage::$SAME_ID_AMB);
 
-        // Réordonne les id
-        foreach($mots_ambigu as $key => $ma){
-            $regex = '#\<amb id\="' . $ma[1] . '"\>'. $ma[2] .'\</amb\>#';
-            $newContenu = preg_replace($regex, '<amb id="' . ($key + 1) . '">' . $ma[2] . '</amb>', $this->getContenu());
+        return array('succes' => true, 'motsAmbigus' => $mots_ambigu);
+    }
+
+    public function normalizePostValidation()
+    {
+        // Récupère les mots ambigus sous forme de tableau
+        $motsAmbigus = $this->getArrayMotAmbigu();
+
+        // Récupère l'id max parmis les mots ambigus
+        $maxIdMA = max(array_column($motsAmbigus, '1'));
+
+        // Réordonne les id en évitant d'en utiliser un déjà existant
+        $nextIdMA = $maxIdMA + 1;
+        foreach ($motsAmbigus as $key => $ma) {
+            $regex = '#\<amb id\="' . $ma[1] . '"\>' . $ma[2] . '\</amb\>#';
+            $newContenu = preg_replace($regex, '<amb id="' . $nextIdMA . '">' . $ma[2] . '</amb>', $this->getContenu());
             $this->setContenu($newContenu);
+            $nextIdMA++;
         }
 
-        return array('succes' => true, 'motsAmbigus' => $mots_ambigu);
+        // Réordonne les id en partant de 1
+        $nextIdMA = 1;
+        foreach ($motsAmbigus as $key => $ma) {
+            $regex = '#\<amb id\="' . ($maxIdMA + $key + 1) . '"\>' . $ma[2] . '\</amb\>#';
+            $newContenu = preg_replace($regex, '<amb id="' . $nextIdMA . '">' . $ma[2] . '</amb>', $this->getContenu());
+            $this->setContenu($newContenu);
+            $nextIdMA++;
+        }
+
+        return $motsAmbigus;
     }
 
 }

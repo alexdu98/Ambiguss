@@ -48,7 +48,7 @@ class MotAmbiguPhrase
 	private $motAmbigu;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Reponse", mappedBy="motAmbiguPhrase")
+	 * @ORM\OneToMany(targetEntity="Reponse", mappedBy="motAmbiguPhrase", cascade={"remove"})
 	 */
 	private $reponses;
 

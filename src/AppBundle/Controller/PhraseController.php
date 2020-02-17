@@ -47,9 +47,9 @@ class PhraseController extends Controller
         if($form->isSubmitted() && $form->isValid()) {
 
             $phraseService = $this->get('AppBundle\Service\PhraseService');
-            $mapsRep = $request->request->get('phrase')['motsAmbigusPhrase'] ?? array();
+            $mapRep = $request->request->get('phrase')['motsAmbigusPhrase'] ?? array();
 
-            $res = $phraseService->new($phrase, $this->getUser(), $mapsRep);
+            $res = $phraseService->new($phrase, $this->getUser(), $mapRep);
             $succes = $res['succes'];
 
             if($succes) {
@@ -87,13 +87,22 @@ class PhraseController extends Controller
 		$dateMax = $phrase->getDateCreation()->getTimestamp() + $this->getParameter('dureeAvantJouabiliteSecondes');
 		$dateActu = new \DateTime();
         $dateActu = $dateActu->getTimestamp();
-        
+
         if($secu->isGranted('ROLE_MODERATEUR') && !$secu->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-            $msg = "L'accès à la modération nécessite d'être connecté sans le système d'auto-connexion.";
+            $msg = "L'accès à la modération d'une phrase nécessite d'être connecté sans le système d'auto-connexion.";
             $bag->add('danger', $msg);
 
-            return $this->redirectToRoute('fos_user_security_login');
+            $baseUrl = $this->get('router')->getContext()->getBaseUrl();
+            $this->get('router')->getContext()->setBaseUrl('');
+            $referer = urlencode($this->generateUrl('phrase_edit', array(
+                'id' => $phrase->getId()
+            )));
+            $this->get('router')->getContext()->setBaseUrl($baseUrl);
+
+            return $this->redirectToRoute('fos_user_security_login', array(
+                'redirect' => $referer
+            ));
         }
         elseif(!$secu->isGranted('ROLE_MODERATEUR') && $secu->isGranted('IS_AUTHENTICATED_REMEMBERED') && !($phrase->getAuteur() == $this->getUser() && $dateMax < $dateActu)) {
 
@@ -146,39 +155,29 @@ class PhraseController extends Controller
                 'objetId' => $phrase->getId(),
             ));
 
+            // Récupération des réponses du créateur
+            $reponses = $repoRep->findBy(array(
+                'auteur' => $phrase->getModificateur() ?? $phrase->getAuteur(),
+                'phrase' => $phrase
+            ));
+
             $form->handleRequest($request);
 
             if($form->isSubmitted() && $form->isValid()) {
 
                 $phraseService = $this->get('AppBundle\Service\PhraseService');
+                $mapRep = $request->request->get('phrase')['motsAmbigusPhrase'] ?? array();
 
-                $mapsRep = $request->request->get('phrase')['motsAmbigusPhrase'];
-                $data = $form->getData();
-
-                $phrase->setContenu($data->getContenu());
-                $phrase->setSignale($data->getSignale());
-                $phrase->setVisible($data->getVisible());
-                $phrase->setDateModification(new \DateTime());
-                $phrase->setModificateur($this->getUser());
-                
-                $phrase->normalize();
-                $res = $phrase->isValid();
-
+                $res = $phraseService->update($phrase, $this->getUser(), $form->getData(), $mapRep);
                 $succes = $res['succes'];
-                $motsAmbigus = $res['motsAmbigus'];
 
                 if($succes) {
-
-                    $phraseService->update($phrase, $this->getUser(), $motsAmbigus, $mapsRep);
-
                     $newPhrase = $phrase;
 
-                    // Réinitialise le formulaire
-                    $phrase = new Phrase();
-                    $form = $this->createForm(PhraseEditType::class, $phrase);
+                    $phraseOri = clone $phrase;
                 }
                 else {
-                    $msg = "Erreur lors de l'insertion de la phrase -> " . $res['message'];
+                    $msg = "Erreur lors de la modification de la phrase -> " . $res['message'];
                     $bag->add('erreur', $msg);
 
                     $logInfos = array(
@@ -190,12 +189,6 @@ class PhraseController extends Controller
                     $logger->error(json_encode($logInfos));
                 }
             }
-
-            // Récupération des réponses du créateur
-            $reponses = $repoRep->findBy(array(
-                'auteur' => $phrase->getAuteur(),
-                'phrase' => $phrase
-            ));
 
             // Extraction de la glose pour un mot ambigu dans une phrase
             $repOri = array();

@@ -159,8 +159,6 @@ $(document).ready(function () {
                 amb.val(motAmbigu);
                 $prototype.attr('id', 'rep' + indexMotAmbigu);
 
-                $prototype.find('.ordre').val(indexMotAmbigu);
-
                 var $deleteLink = $('<a href="#" class="sup-amb btn btn-danger">Supprimer le mot ambigu</a>');
                 $prototype.find('.gloseAction').append($deleteLink);
 

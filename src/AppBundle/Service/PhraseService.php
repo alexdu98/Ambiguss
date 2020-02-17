@@ -52,7 +52,7 @@ class PhraseService
             try {
                 $this->em->getConnection()->beginTransaction();
 
-                $this->treat($phrase, $auteur, $beforeReorder, $mapRep, false);
+                $reps = $this->treat($phrase, $auteur, $beforeReorder, $mapRep, false);
 
                 $this->em->persist($phrase);
                 $this->em->flush();
@@ -105,13 +105,6 @@ class PhraseService
                 $this->em->getConnection()->beginTransaction();
 
                 $reps = $this->treat($phrase, $modificateur, $beforeReorder, $mapRep, true);
-
-//                foreach($phrase->getMotsAmbigusPhrase() as $map) {
-//                    var_dump($map->getMotAmbigu()->getValeur());
-//                    var_dump($map->getOrdre());
-//                    var_dump($map->getReponses()->getValues());
-//                }
-//                die;
 
                 // On enregistre dans l'historique du modificateur
                 $historiqueService->save($modificateur, "Modification d'une phrase (n° " . $phrase->getId() . ").");

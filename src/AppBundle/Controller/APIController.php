@@ -111,6 +111,8 @@ class APIController extends Controller
     {
         if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
         {
+            $succes = true;
+            $message = null;
             $glose = new Glose();
             $form = $this->createForm(GloseAddType::class, $glose);
 
@@ -134,7 +136,7 @@ class APIController extends Controller
                 if($g)
                     $glose = $g;
 
-                // Si le mot ambigu n'existe pas on le créé (cas création de phrase)
+                // Si le mot ambigu n'existe pas on le créé (cas création/modification de phrase)
                 $motAmbigu = $repoMA->findOneBy(array('valeur' => $request->request->get('glose_add')['motAmbigu']));
                 $isLinked = false;
                 if(!$motAmbigu){
@@ -149,10 +151,11 @@ class APIController extends Controller
                             break;
                         }
                     }
+                }
 
-                    // Si la liaison MA-G n'existait pas déjà on la créé
-                    if (!$isLinked)
-                        $motAmbigu->addGlose($glose);
+                // Si la liaison MA-G n'existait pas déjà on la créé
+                if (!$isLinked) {
+                    $motAmbigu->addGlose($glose);
                 }
 
                 // Les 2 premières gloses d'un mot ambigu sont gratuites
@@ -160,17 +163,29 @@ class APIController extends Controller
 
                 // On débite les crédits
                 $cout = -($nbGloses * $coutNewGlose);
-                $this->getUser()->updateCredits($cout);
 
-                // On enregistre dans l'historique du joueur
-                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
-                $historiqueService->save($this->getUser(), "Liaison de la glose n°" . $glose->getId() . " avec le mot ambigu n°" . $motAmbigu->getId() . ".");
+                if ($this->getUser()->getCredits() >= $cout) {
+                    $em->getConnection()->beginTransaction();
 
-                $em->persist($glose);
-                $em->persist($motAmbigu);
-                $em->persist($this->getUser());
+                    $em->persist($motAmbigu);
+                    $em->persist($glose);
+                    $em->flush();
 
-                $em->flush();
+                    $this->getUser()->updateCredits($cout);
+
+                    // On enregistre dans l'historique du joueur
+                    $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+                    $historiqueService->save($this->getUser(), "Liaison de la glose n°" . $glose->getId() . " avec le mot ambigu n°" . $motAmbigu->getId() . ".");
+
+                    $em->persist($this->getUser());
+
+                    $em->flush();
+                    $em->getConnection()->commit();
+                }
+                else {
+                    $message = 'Vous n\'avez pas assez de crédits';
+                    $succes = false;
+                }
 
                 $motAmbiguInfos = array(
                     'id' => $motAmbigu->getId(),
@@ -182,11 +197,12 @@ class APIController extends Controller
                 );
 
                 return $this->json(array(
-                    'succes' => true,
+                    'succes' => $succes,
                     'motAmbigu' => $motAmbiguInfos,
                     'glose' => $gloseInfos,
                     'liaisonExiste' => $isLinked,
-                    'credits' => $this->getUser()->getCredits()
+                    'credits' => $this->getUser()->getCredits(),
+                    'message' => $message
                 ));
             }
         }

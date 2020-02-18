@@ -70,7 +70,7 @@ function addGloseModal(params) {
                 }
                 $(form).clearForm();
             } else {
-                $(form).after('<div class="alert alert-danger">Erreur</div>');
+                $(form).after('<div class="alert alert-danger">Erreur : ' + data.message + '</div>');
             }
         },
         error: function () {

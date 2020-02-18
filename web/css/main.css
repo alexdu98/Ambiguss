@@ -293,6 +293,9 @@ amb {
 	color: var(--color-red);
 	font-weight: bold;
 }
+.form-control[disabled].deleteLink {
+	background-color: #d9534f;
+}
 
 /*
     #####################################################################

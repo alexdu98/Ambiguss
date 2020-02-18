@@ -353,15 +353,13 @@ easy_admin:
                         <b>ID</b>,
                         <b>auteur</b>,
                         <b>phrase</b>,
-                        <b>glose</b>,
-                        <b>IP</b>
+                        <b>glose</b>
                     </span>
-                fields: ['id', 'auteur.usernameCanonical', 'phrase.contenuPur', 'glose.valeur', 'ip']
+                fields: ['id', 'auteur.usernameCanonical', 'phrase.contenuPur', 'glose.valeur']
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
                     - { property: 'auteur', label: 'Auteur' }
-                    - { property: 'ip', label: 'IP' }
                     - { property: 'motAmbiguPhrase', label: 'Mot ambigu phrase' }
                     - { property: 'valeurGlose', label: 'Glose' }
                     - { property: 'dateReponse', label: 'Date' }

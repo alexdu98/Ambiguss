@@ -93,64 +93,83 @@
                 $.post(url, dataSend)
                     .done(function (data) {
                         if (isValidJSON(data)) {
-                            var inputs = '';
+                            var inputs = '<div class="row">';
                             var other = '';
 
                             if (data.links.length === 0) {
 								inputs += 'Aucune liaison';
                             }
 
+                            var i = 1;
+                            var elemParLigne = 4;
                             if (type === 'searchMA') {
-                                other = 'du mot ambigu "' + $('#ma').val() + '"';
+                                other = 'du mot ambigu "<b>' + $('#ma').val() + '</b>"';
                                 $('#ma_id').val(data.ownerId);
 
                                 for (obj in data.links) {
-                                    inputs += '<div id="o' + data.links[obj].id + '' + data.ownerId + '"><label>' + data.links[obj].valeur + '</label> <button class="deleteLink ' +
+                                	if (i % (elemParLigne+1) == 0)
+                                		inputs += '</div><div class="row">';
+
+                                    inputs += '<div class="col-sm-3 elemGrp"><div class="input-group" id="o' + data.links[obj].id + '' + data.ownerId + '"><span ' +
+											'class="input-group-addon">' + data
+													.links[obj].valeur +
+											'</span> <button ' +
+											'class="form-control deleteLink ' +
 										'btn ' +
                                         'btn-danger ' +
                                         'btn-sm" data-g="' + data.links[obj].id + '" data-ma="' + data.ownerId + '"' + '>Supprimer la ' +
-                                        'liaison</button></div><br>';
+                                        'liaison</button></div></div>';
+
+                                    i++;
                                 }
                             }
                             else {
-                                other = 'de la glose "' + $('#g').val() + '"';
+                                other = 'de la glose "<b>' + $('#g').val() + '</b>"';
                                 $('#g_id').val(data.ownerId);
 
                                 for (obj in data.links) {
-                                    inputs += '<div id="o' + data.ownerId + '' + data.links[obj].id + '"><label>' + data.links[obj].valeur + '</label> <button class="deleteLink ' +
+									if (i % (elemParLigne+1) == 0)
+										inputs += '</div><div class="row" style="margin-top: 10px;">';
+
+                                    inputs += '<div class="col-sm-3 elemGrp"><div class="input-group" id="o' + data.ownerId + '' + data.links[obj].id + '"><span ' +
+											'class="input-group-addon">' + data.links[obj].valeur +
+											'</span> <button class="form-control deleteLink ' +
 										'btn btn-danger ' +
                                         'btn-sm" data-g="' + data.ownerId + '" data-ma="' + data.links[obj].id + '"' + '>Supprimer la ' +
-                                        'liaison</button></div><br>';
+                                        'liaison</button></div></div>';
+
+                                    i++;
                                 }
                             }
 
+                            inputs += '</div>';
 
-                            $('#res').empty().append('<hr><h4 class=text-center>Liaisons ' + other + '</h4>' + inputs);
+                            $('#res').empty().append('<hr><h4 class=text-center>Liaisons ' + other + '</h4><br>' + inputs);
 
                             $('.deleteLink').click(function () {
                                 g_id = $(this).data('g');
                                 ma_id = $(this).data('ma');
+								liaison = $('#o' + g_id + '' + ma_id);
+
 
                                 // On affiche l'image laoding en attendant la réponse
-                                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+								liaison.closest('.elemGrp').append('<img src="' + urlImageLoading + '" id="loading">');
 
                                 var url = Routing.generate('modo_mots_ambigus_gloses_delete');
                                 $.post(url, {motAmbigu: ma_id, glose: g_id, token: "{{ csrf_token('delete_mag') }}"})
 									.done(function (data) {
-										liaison = $('#o' + g_id + '' + ma_id);
 										if (data.succes) {
-											liaison.find('.deleteLink').remove();
-											liaison.append('<span class="text-success">Liaison supprimée</span>');
+											liaison.find('.deleteLink').attr('disabled', true).html('Liaison supprimée');
 										}
 										else {
-											liaison.append('<span class="text-danger">' + data.message + '</span>');
+											liaison.closest('.elemGrp').append('<span class="text-danger">' + data.message + '</span>');
 										}
 									})
                                     .fail(function (test, status, xhr) {
-                                        $(this).after('<span class="text-danger">' + status + ' (' + xhr + ')</span>');
+										liaison.closest('.elemGrp').append('<span class="text-danger">' + status + ' (' + xhr + ')</span>');
                                     })
                                     .always(function () {
-                                        $('#loading').remove();
+										liaison.closest('.elemGrp').find('#loading').remove();
                                     });
                             });
                         }

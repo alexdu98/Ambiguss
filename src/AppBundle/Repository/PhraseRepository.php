@@ -40,20 +40,6 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getResult();
 	}
 
-    /**
-     * Retourne les phrases signalées
-     *
-     * @return array
-     */
-    public function getSignalees()
-    {
-        return $this->createQueryBuilder('p')
-            ->innerJoin('p.auteur', 'a', 'WITH', 'p.auteur = a.id')->addSelect('a')
-            ->leftJoin('p.modificateur', 'm', 'WITH', 'p.modificateur = m.id')->addSelect('m')
-            ->where('p.signale = 1')
-            ->getQuery()->getResult();
-    }
-
 	/**
 	 * Retoune un tableau de tableau avec un champ correspondant à l'id d'une phrase non joué et existante depuis plus de $dureeAv par le membre
 	 *

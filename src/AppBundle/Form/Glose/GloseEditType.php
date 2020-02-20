@@ -35,15 +35,24 @@ class GloseEditType extends AbstractType
 			))
 			->remove('dateCreation')
 			->remove('dateModification')
-			->add('signale', ChoiceType::class, array(
-				'label' => 'Signalé',
-				'choices' => array(
-					'Oui' => 1,
-					'Non' => 0,
-				),
-				'expanded' => true,
-			))
-			->remove('visible')
+            ->add('visible', ChoiceType::class, array(
+                'label' => 'Visible',
+                'choices' => array(
+                    'Oui' => '1',
+                    'Non' => '0',
+                ),
+                'expanded' => true,
+                'attr' => array('class' => 'radio-inline')
+            ))
+            ->add('signale', ChoiceType::class, array(
+                'label' => 'Signalé',
+                'choices' => array(
+                    'Oui' => '1',
+                    'Non' => '0',
+                ),
+                'expanded' => true,
+                'attr' => array('class' => 'radio-inline')
+            ))
 			->remove('auteur')
 			->remove('modificateur')
 			->remove('motsAmbigus')
@@ -51,17 +60,7 @@ class GloseEditType extends AbstractType
 				'label' => 'Modifier',
 				'attr' => array('class' => 'btn btn-warning'),
 			));
-
-        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'));
 	}
-
-    public function onPostSetData(FormEvent $event)
-    {
-        $glose = $event->getData();
-
-        $glose->setModificateur($this->security->getUser());
-        $glose->setDateModification(new \DateTime());
-    }
 
 	public function getParent()
 	{

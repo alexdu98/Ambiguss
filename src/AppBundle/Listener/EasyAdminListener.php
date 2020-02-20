@@ -134,7 +134,7 @@ class EasyAdminListener implements EventSubscriberInterface
         else
             $id = $classe->getId();
 
-        $message = "[admin] {$type} {$articleEntite} #{$id}";
+        $message = "[admin:{$entity->getArgument('request')->server->get('REMOTE_ADDR')}] {$type} {$articleEntite} #{$id}";
 
         return $message;
     }

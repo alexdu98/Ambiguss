@@ -46,7 +46,7 @@
 					</td>
 					<td>{{ row.nbJAime }}</td>
 					<td>{{ row.gainCreateur }}</td>
-					<td data-order="{{ row.dateCreation|date("U") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
+					<td data-order="{{ row.dateCreation|date("U") + row.dateCreation|date("Z") }}">{{ row.dateCreation|date("d/m/Y à H:i") }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

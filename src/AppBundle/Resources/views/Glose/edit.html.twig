@@ -6,11 +6,13 @@
 
 	{{ form_row(form.valeur) }}
 
-	<div class="form-group">
-		{{ form_label(form.signale) }}
-		{% for input in form.signale.children %}
-			{{ form_widget(input) }}
-		{% endfor %}
+	<div class="row">
+		<div class="col-md-3">
+			{{ form_label(form.signale) }} : {{ form_widget(form.signale) }}
+		</div>
+		<div class="col-md-3">
+			{{ form_label(form.visible) }} : {{ form_widget(form.visible) }}
+		</div>
 	</div>
 
 	{{ form_rest(form) }}

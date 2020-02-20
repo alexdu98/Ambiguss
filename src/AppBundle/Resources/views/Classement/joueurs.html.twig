@@ -70,7 +70,7 @@
 								Novice
 							{% endif %}
 						</td>
-						<td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y") }}</td>
+						<td data-order="{{ row.dateInscription|date("U") + row.dateInscription|date("Z") }}">{{ row.dateInscription|date("d/m/Y") }}</td>
 						<td>{{ row.pointsClassement }}</td>
 						<td>{{ row.nbPhrases }}</td>
 						<td>{{ row.nbJAime }}</td>

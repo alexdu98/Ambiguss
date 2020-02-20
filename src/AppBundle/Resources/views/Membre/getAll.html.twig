@@ -6,47 +6,60 @@
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
 {% endblock %}
 
-{% block titre %}Modération de membres{% endblock %}
+{% block titre %}Modération des membres{% endblock %}
 
 {% block contenu %}
     <div class="well">
         <table id="membresTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
             <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Pseudo</th>
-                <th>Inscription</th>
+                <th>Date d'inscription</th>
+                <th>Dernière connexion</th>
                 <th>Points</th>
                 <th>Crédits</th>
                 <th>Banni</th>
+                <th>Date déban</th>
                 <th>Renomable</th>
+                <th>Signalé</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tfoot>
             <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Pseudo</th>
-                <th>Inscription</th>
+                <th>Date d'inscription</th>
+                <th>Dernière connexion</th>
                 <th>Points</th>
                 <th>Crédits</th>
                 <th>Banni</th>
+                <th>Date déban</th>
                 <th>Renomable</th>
+                <th>Signalé</th>
                 <th>Actions</th>
             </tr>
             </tfoot>
             <tbody>
-            {% for row in membres %}
-                <tr id="membre-{{ row.id }}">
-                    <td>{{ row.id }}</td>
-                    <td><a href="{{ path('fos_user_profile_show' , {'id':row.id}) }}">{{ row.username }}</a></td>
-                    <td data-order="{{ row.dateInscription|date("U") }}">{{ row.dateInscription|date("d/m/Y à H:i") }}</td>
-                    <td>{{ row.pointsClassement }}</td>
-                    <td>{{ row.credits }}</td>
-                    <td class="membre-banni">{% if row.banni %}Oui{% else %}Non{% endif %}</td>
-                    <td class="membre-renomable">{% if row.renamable %}Oui{% else %}Non{% endif %}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm editMembreButton" data-toggle="modal" data-target="#modal" data-id="{{ row.id }}" data-valeur="{{ row.username }}">
+            {% for membre in membres %}
+                <tr id="membre-{{ membre.id }}" {% if membre.signale %}class="text-danger"{% endif %}>
+                    <td>{{ membre.id }}</td>
+                    <td><a href="{{ path('fos_user_profile_show' , {'id': membre.id}) }}">{{ membre.username }}</a></td>
+                    <td data-order="{{ membre.dateInscription|date("U") + membre.dateInscription|date("Z") }}">{{ membre.dateInscription|date("d/m/Y H:i") }}</td>
+                    <td data-order="{{ membre.lastLogin is empty ? '' : membre.lastLogin|date("U") + membre.lastLogin|date("Z") }}">
+                        {{ membre.lastLogin is empty ? '' : membre.lastLogin|date("d/m/Y H:i") }}
+                    </td>
+                    <td>{{ membre.pointsClassement }}</td>
+                    <td>{{ membre.credits }}</td>
+                    <td class="membre-banni" data-comment="{{ membre.commentaireBan|e('html') }}">{% if membre.banni %}Oui{% else %}Non{% endif %}</td>
+                    <td class="membre-dateDeban" data-order="{{ membre.dateDeban is empty ? '' : membre.dateDeban|date("U") + membre.dateDeban|date("Z") }}">
+                        {{ membre.dateDeban is empty ? '' : membre.dateDeban|date("d/m/Y H:i") }}
+                    </td>
+                    <td class="membre-renomable">{% if membre.renamable %}Oui{% else %}Non{% endif %}</td>
+                    <td class="membre-signale">{% if membre.signale %}Oui <span class="badge">!</span>{% else %}Non{% endif %}</td>
+                    <td class="text-center">
+                        <button class="btn btn-warning btn-sm editMembreButton" data-toggle="modal" data-target="#modal" data-id="{{ membre.id }}" data-valeur="{{ membre.username }}">
                             Modifier
                         </button>
                     </td>
@@ -65,14 +78,14 @@
                 stateSave: true, // Enregistre les configurations
                 stateSaveParams: function (settings, data) {
                     data.start = 0; // On enregistre pas la page
-                    data.order = [[0, "desc"]]; // On ordonne sur l'id
+                    data.order = [[9, "desc"]]; // On ordonne sur l'id
                     data.search = {}; // On enregistre pas la recherche
                 },
                 stateDuration: 0, // pour une durée illimitée
                 columnDefs: [
-                    {targets: 7, orderable: false}
+                    {targets: 10, orderable: false}
                 ],
-                order: [[0, 'asc']], // On ordonne sur l'id
+                order: [[9, 'desc']], // On ordonne sur l'id
                 responsive: true,
                 language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
             });
@@ -84,10 +97,8 @@
                 var button = $(this);
 
                 setModalSize('modal-lg');
-                setModalTitle('Modifier le membre "' + button.data('valeur') + '"');
+                setModalTitle('Modifier le membre "<b class="color-red">' + button.data('valeur') + '</b>"');
                 setModalBody('{{ include('AppBundle:Membre:edit.html.twig', {'form': editMembreForm})|e('js') }}');
-                $('[name="AppBundle_membre"] :input').prop("disabled", true);
-                $('#modal-title').append('<img src="' + urlImageLoading + '" id="inloading">');
 
                 $('[name="AppBundle_membre[banni]"]').on('change', function(){
                     if ($('[name="AppBundle_membre[banni]"]:checked').val() == 1) {
@@ -121,27 +132,31 @@
                     $("#jugements").toggle("slow");
                 });
 
+                var ligne = button.closest('tr');
+                var signale = ligne.find('.membre-signale').html().includes('Oui');
+                var renamable = ligne.find('.membre-renomable').html().includes('Oui');
+                var banni = ligne.find('.membre-banni').html().includes('Oui');
+
+                $('[name="AppBundle_membre[signale]"][value="' + (signale ? 1 : 0) + '"]').prop('checked', true);
+                $('[name="AppBundle_membre[renamable]"][value="' + (renamable ? 1 : 0) + '"]').prop('checked', true);
+                $('[name="AppBundle_membre[banni]"][value="' + (banni ? 1 : 0) + '"]').prop('checked', true);
+
+                $('#AppBundle_membre_commentaireBan').val(ligne.find('.membre-banni').data('comment'));
+                if (ligne.find('.membre-dateDeban').data('order')) {
+                    var dateDeban = new Date(ligne.find('.membre-dateDeban').data('order') * 1000);
+                    $('#AppBundle_membre_dateDeban_date_day').val(dateDeban.getUTCDate());
+                    $('#AppBundle_membre_dateDeban_date_month').val(dateDeban.getUTCMonth() + 1);
+                    $('#AppBundle_membre_dateDeban_date_year').val(dateDeban.getUTCFullYear());
+                    $('#AppBundle_membre_dateDeban_time_hour').val(dateDeban.getUTCHours());
+                    $('#AppBundle_membre_dateDeban_time_minute').val(dateDeban.getUTCMinutes());
+                }
+
+                $('[name="AppBundle_membre[banni]"]').trigger('change');
+                $('[name^="AppBundle_membre[dateDeban]"]').trigger('change');
+
                 // Récupère les infos jugements en cours
                 $.post(Routing.generate('modo_jugements_membre_show', {id: button.data('id')}), function (data) {
                     if (data.succes) {
-                        var membre = data.membre;
-                        $('[name="AppBundle_membre[signale]"][value="' + (membre.signale ? 1 : 0) + '"]').prop('checked', true);
-                        $('[name="AppBundle_membre[renamable]"][value="' + (membre.renomable ? 1 : 0) + '"]').prop('checked', true);
-                        $('[name="AppBundle_membre[banni]"][value="' + (membre.banni ? 1 : 0) + '"]').prop('checked', true);
-                        $('#AppBundle_membre_commentaireBan').val(membre.commentaireBan);
-                        if (membre.dateDeban) {
-                            var dateDeban = new Date(membre.dateDeban * 1000);
-                            $('#AppBundle_membre_dateDeban_date_day').val(dateDeban.getUTCDate());
-                            $('#AppBundle_membre_dateDeban_date_month').val(dateDeban.getUTCMonth() + 1);
-                            $('#AppBundle_membre_dateDeban_date_year').val(dateDeban.getUTCFullYear());
-                            $('#AppBundle_membre_dateDeban_time_hour').val(dateDeban.getUTCHours());
-                            $('#AppBundle_membre_dateDeban_time_minute').val(dateDeban.getUTCMinutes());
-                        }
-                        $('[name="AppBundle_membre"] :input').prop("disabled", false);
-                        $('[name="AppBundle_membre[banni]"]').trigger('change');
-                        $('[name^="AppBundle_membre[dateDeban]"]').trigger('change');
-                        $('#inloading').remove();
-
                         divJugement = $('#jugements');
                         if (data.jugements.length === 0)
                             divJugement.append('<span class="text-danger">Aucun jugement en cours</span>');
@@ -210,10 +225,22 @@
                             // On trouve la ligne
                             var row = button.parents('tr');
 
+                            if (data.membre.signale === "0") {
+                                row.removeClass('text-danger');
+                            }
+                            else {
+                                row.addClass('text-danger');
+                            }
+
                             var banni = data.membre.banni === "0" ? 'Non' : 'Oui';
                             row.find('.membre-banni').html(banni);
+                            row.find('.membre-banni').data('comment', data.membre.comBan);
+                            row.find('.membre-dateDeban').attr('data-order', data.membre.dateDebanTS);
+                            row.find('.membre-dateDeban').html(data.membre.dateDeban);
                             var renomable = data.membre.renomable === "0" ? 'Non' : 'Oui';
                             row.find('.membre-renomable').html(renomable);
+                            var signale = data.membre.signale === "0" ? 'Non' : 'Oui <span class="badge">!</span>';
+                            row.find('.membre-signale').html(signale);
 
                             // On trouve la ligne, on l'a met à jour
                             $('#membresTable').DataTable().row('#membre-' + button.data('id')).invalidate().draw();

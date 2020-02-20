@@ -151,22 +151,6 @@ modo_membres_show:
     path: /moderation/membres
     controller: AppBundle:Modo:showMembres
 
-modo_membre_ban:
-    path: /moderation/membre/{id}/ban
-    controller: AppBundle:Modo:banMembre
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-modo_membre_unsignale:
-    path: /moderation/membre/{id}/unsignale
-    controller: AppBundle:Modo:unsignaleMembre
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
 modo_membre_edit:
     path: /moderation/membre/{id}/edit
     controller: AppBundle:Modo:editMembre
@@ -187,22 +171,6 @@ modo_phrases_show:
     path: /moderation/phrases
     controller: AppBundle:Modo:showPhrases
 
-modo_phrase_delete:
-    path: /moderation/phrase/{id}/delete
-    controller: AppBundle:Modo:deletePhrase
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-modo_phrase_unsignale:
-    path: /moderation/phrase/{id}/unsignale
-    controller: AppBundle:Modo:unsignalePhrase
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
 modo_gloses_show:
     path: /moderation/gloses
     controller: AppBundle:Modo:showGloses
@@ -212,22 +180,6 @@ modo_glose_edit:
     controller: AppBundle:Modo:editGlose
     requirements:
         id: \d+
-
-modo_glose_count_reponses:
-    path: /moderation/glose/{id}/reponses/count
-    controller: AppBundle:Modo:countReponses
-    requirements:
-        id: \d+
-    options:
-        expose: true
-
-modo_glose_delete:
-    path: /moderation/glose/{id}/delete
-    controller: AppBundle:Modo:deleteGlose
-    requirements:
-        id: \d+
-    options:
-        expose: true
 
 modo_mots_ambigus_gloses_show:
     path: /moderation/mots-ambigus-gloses

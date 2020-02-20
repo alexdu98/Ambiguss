@@ -56,6 +56,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Activé' }
                     - { property: 'banni', label: 'Banni', type: 'boolean' }
                     - { property: 'renamable', label: 'Renomable' }
+                    - { property: 'signale', label: 'Signalé' }
                     - { property: 'roles', label: 'Rôles' }
             search:
                 help: >
@@ -90,6 +91,7 @@ easy_admin:
                     - { property: 'newsletter', label: 'Newsletter' }
                     - { property: 'enabled', label: 'Activé' }
                     - { property: 'renamable', label: 'Renomable' }
+                    - { property: 'signale', label: 'Signalé' }
 
                     - { type: 'tab' , label: 'Sécurité', icon: 'key' }
                     - { type: 'group', label: 'Mot de passe', icon: 'key' }
@@ -203,10 +205,11 @@ easy_admin:
                 fields:
                     - { property: 'id', label: 'ID' }
                     - { property: 'contenuPur', label: 'Contenu pur' }
-                    - { property: 'gainCreateur', label: 'Gain pour l''auteur' }
                     - { property: 'auteur', label: 'Auteur' }
+                    - { property: 'gainCreateur', label: 'Gain pour l''auteur' }
                     - { property: 'dateCreation', label: 'Date création' }
                     - { property: 'modificateur', label: 'Modificateur' }
+                    - { property: 'dateModification', label: 'Date de modification' }
                     - { property: 'jAime', label: 'J''aime' }
                     - { property: 'parties', label: 'Parties' }
                     - { property: 'visible', label: 'Visible' }

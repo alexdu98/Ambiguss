@@ -31,20 +31,6 @@ class GloseRepository extends \Doctrine\ORM\EntityRepository
 	}
 
     /**
-     * Retourne les gloses signalées
-     *
-     * @return array
-     */
-	public function getSignalees()
-	{
-		return $this->createQueryBuilder('g')
-			->innerJoin('g.auteur', 'a', 'WITH', 'g.auteur = a.id')->addSelect('a')
-			->leftJoin('g.modificateur', 'm', 'WITH', 'g.modificateur = m.id')->addSelect('m')
-			->where('g.signale = 1')
-			->getQuery()->getResult();
-	}
-
-    /**
      * Retourne le nombre de gloses signalées
      *
      * @return int

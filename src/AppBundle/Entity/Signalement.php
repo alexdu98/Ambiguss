@@ -5,21 +5,21 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Jugement
+ * Signalement
  *
- * @ORM\Table(name="jugement", indexes={
- *     @ORM\Index(name="ix_jugem_verdid", columns={"verdict_id"}),
- *     @ORM\Index(name="ix_jugem_typobjid", columns={"type_objet_id"}),
- *     @ORM\Index(name="ix_jugem_jugeid", columns={"juge_id"}),
- *     @ORM\Index(name="ix_jugem_catjugemid", columns={"categorie_jugement_id"}),
- *     @ORM\Index(name="ix_jugem_autid", columns={"auteur_id"}),
- *     @ORM\Index(name="ix_jugem_dtcreat", columns={"date_creation"}),
- *     @ORM\Index(name="ix_jugem_dtdelib", columns={"date_deliberation"}),
- *     @ORM\Index(name="ix_jugem_objid", columns={"objet_id"})
+ * @ORM\Table(name="signalement", indexes={
+ *     @ORM\Index(name="ix_sig_verdid", columns={"verdict_id"}),
+ *     @ORM\Index(name="ix_sig_typobjid", columns={"type_objet_id"}),
+ *     @ORM\Index(name="ix_sig_jugeid", columns={"juge_id"}),
+ *     @ORM\Index(name="ix_sig_catsigid", columns={"categorie_signalement_id"}),
+ *     @ORM\Index(name="ix_sig_autid", columns={"auteur_id"}),
+ *     @ORM\Index(name="ix_sig_dtcreat", columns={"date_creation"}),
+ *     @ORM\Index(name="ix_sig_dtdelib", columns={"date_deliberation"}),
+ *     @ORM\Index(name="ix_sig_objid", columns={"objet_id"})
  * })
- * @ORM\Entity(repositoryClass="AppBundle\Repository\JugementRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SignalementRepository")
  */
-class Jugement implements \JsonSerializable
+class Signalement implements \JsonSerializable
 {
     /**
      * @var int
@@ -59,10 +59,10 @@ class Jugement implements \JsonSerializable
     private $objetId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CategorieJugement")
+     * @ORM\ManyToOne(targetEntity="CategorieSignalement")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $categorieJugement;
+    private $categorieSignalement;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="TypeObjet")
@@ -110,7 +110,7 @@ class Jugement implements \JsonSerializable
      *
      * @param \DateTime $dateDeliberation
      *
-     * @return Jugement
+     * @return Signalement
      */
     public function setDateDeliberation($dateDeliberation)
     {
@@ -134,7 +134,7 @@ class Jugement implements \JsonSerializable
      *
      * @param integer $objetId
      *
-     * @return Jugement
+     * @return Signalement
      */
     public function setObjetId($objetId)
     {
@@ -158,7 +158,7 @@ class Jugement implements \JsonSerializable
      *
      * @param TypeObjet $typeObjet
      *
-     * @return Jugement
+     * @return Signalement
      */
     public function setTypeObjet(TypeObjet $typeObjet)
     {
@@ -182,7 +182,7 @@ class Jugement implements \JsonSerializable
      *
      * @param TypeVote $verdict
      *
-     * @return Jugement
+     * @return Signalement
      */
     public function setVerdict(TypeVote $verdict = null)
     {
@@ -206,7 +206,7 @@ class Jugement implements \JsonSerializable
      *
      * @param Membre $juge
      *
-     * @return Jugement
+     * @return Signalement
      */
     public function setJuge(Membre $juge = null)
     {
@@ -223,7 +223,7 @@ class Jugement implements \JsonSerializable
 	{
 		return array(
 			'id' => $this->getId(),
-			'categorieJugement' => $this->getCategorieJugement()->getNom(),
+			'categorieSignalement' => $this->getCategorieSignalement()->getNom(),
 			'description' => $this->getDescription(),
 			'dateCreation' => $this->getDateCreation()->getTimestamp(),
 			'auteur' => $this->getAuteur()->getUsername(),
@@ -242,25 +242,25 @@ class Jugement implements \JsonSerializable
 	}
 
 	/**
-	 * Get categorieJugement
+	 * Get categorieSignalement
 	 *
-	 * @return CategorieJugement
+	 * @return CategorieSignalement
 	 */
-	public function getCategorieJugement()
+	public function getCategorieSignalement()
 	{
-		return $this->categorieJugement;
+		return $this->categorieSignalement;
 	}
 
 	/**
-	 * Set categorieJugement
+	 * Set categorieSignalement
 	 *
-	 * @param CategorieJugement $categorieJugement
+	 * @param CategorieSignalement $categorieSignalement
 	 *
-	 * @return Jugement
+	 * @return Signalement
 	 */
-	public function setCategorieJugement(CategorieJugement $categorieJugement)
+	public function setCategorieSignalement(CategorieSignalement $categorieSignalement)
 	{
-		$this->categorieJugement = $categorieJugement;
+		$this->categorieSignalement = $categorieSignalement;
 
 		return $this;
 	}
@@ -280,7 +280,7 @@ class Jugement implements \JsonSerializable
 	 *
 	 * @param string $description
 	 *
-	 * @return Jugement
+	 * @return Signalement
 	 */
 	public function setDescription($description)
 	{
@@ -304,7 +304,7 @@ class Jugement implements \JsonSerializable
 	 *
 	 * @param \DateTime $dateCreation
 	 *
-	 * @return Jugement
+	 * @return Signalement
 	 */
 	public function setDateCreation($dateCreation)
 	{
@@ -328,7 +328,7 @@ class Jugement implements \JsonSerializable
 	 *
 	 * @param Membre $auteur
 	 *
-	 * @return Jugement
+	 * @return Signalement
 	 */
 	public function setAuteur(Membre $auteur)
 	{

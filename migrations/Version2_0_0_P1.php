@@ -22,6 +22,8 @@ final class Version2_0_0_P1 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('ALTER TABLE aimer_phrase DROP FOREIGN KEY FK_F9374D828671F084');
+        $this->addSql('ALTER TABLE aimer_phrase DROP FOREIGN KEY FK_F9374D826A99F74A');
         $this->addSql('ALTER TABLE glose DROP FOREIGN KEY FK_E681270460BB6FE6');
         $this->addSql('ALTER TABLE glose DROP FOREIGN KEY FK_E6812704D3DF658');
         $this->addSql('ALTER TABLE groupe DROP FOREIGN KEY FK_4B98C2122EE1947');
@@ -51,6 +53,9 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('ALTER TABLE succes DROP FOREIGN KEY FK_BFC22383FA37F5BB');
         $this->addSql('ALTER TABLE succes_membre DROP FOREIGN KEY FK_E1857E2A4EF1B4AB');
 
+        $this->addSql('DROP INDEX IDX_F9374D828671F084 ON aimer_phrase');
+        $this->addSql('DROP INDEX IDX_F9374D826A99F74A ON aimer_phrase');
+        $this->addSql('DROP INDEX IDX_AIMERPHRASE_DATECREATION ON aimer_phrase');
         $this->addSql('DROP INDEX UNIQ_CDBBCF3ACDBBCF3A ON categorie_jugement');
         $this->addSql('DROP INDEX UNIQ_E68127041B44CD51 ON glose');
         $this->addSql('DROP INDEX IDX_E681270460BB6FE6 ON glose');
@@ -119,17 +124,19 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('DROP TABLE succes');
         $this->addSql('DROP TABLE succes_membre');
         $this->addSql('DROP TABLE type_succes');
+        $this->addSql('DROP TABLE vote_jugement');
 
         $this->addSql('TRUNCATE groupe');
 
         $this->addSql('RENAME TABLE aimer_phrase TO j_aime');
-        $this->addSql('RENAME TABLE vote_jugement TO vote');
-        $this->addSql('ALTER TABLE vote CHANGE vote_id type_vote_id INT NOT NULL');
+        $this->addSql('RENAME TABLE jugement TO signalement');
+        $this->addSql('RENAME TABLE categorie_jugement TO categorie_signalement');
 
         $this->addSql('CREATE TABLE membre_groupe (membre_id INT NOT NULL, groupe_id INT NOT NULL, PRIMARY KEY(membre_id, groupe_id))');
         $this->addSql('CREATE TABLE role(id INT AUTO_INCREMENT PRIMARY KEY, parent_id INT NULL, name VARCHAR(255) NOT NULL)');
 
-        $this->addSql('ALTER TABLE categorie_jugement CHANGE categorie_jugement nom VARCHAR(32) NOT NULL');
+        $this->addSql('ALTER TABLE signalement CHANGE categorie_jugement_id categorie_signalement_id INT NOT NULL');
+        $this->addSql('ALTER TABLE categorie_signalement CHANGE categorie_jugement nom VARCHAR(32) NOT NULL');
         $this->addSql('ALTER TABLE groupe ADD name VARCHAR(180) NOT NULL, DROP groupe_parent_id, DROP nom, CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
 
         $this->addSql('DELETE FROM glose WHERE auteur_id IN (SELECT id FROM membre WHERE mdp IS NULL)');
@@ -146,9 +153,9 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('UPDATE reponse r INNER JOIN mot_ambigu_phrase map ON map.id=r.mot_ambigu_phrase_id SET r.phrase_id = map.phrase_id');
         $this->addSql('ALTER TABLE reponse CHANGE phrase_id phrase_id INT NOT NULL, DROP ip');
 
-        $this->addSql('ALTER TABLE jugement CHANGE id_objet objet_id INT NOT NULL');
+        $this->addSql('ALTER TABLE signalement CHANGE id_objet objet_id INT NOT NULL');
 
-        $this->addSql('ALTER TABLE categorie_jugement ADD CONSTRAINT uc_catjug_nom UNIQUE (nom)');
+        $this->addSql('ALTER TABLE categorie_signalement ADD CONSTRAINT uc_catsig_nom UNIQUE (nom)');
         $this->addSql('ALTER TABLE glose ADD CONSTRAINT uc_glose_val UNIQUE (valeur)');
         $this->addSql('ALTER TABLE groupe ADD CONSTRAINT uc_grp_name UNIQUE (name)');
         $this->addSql('ALTER TABLE j_aime ADD CONSTRAINT uc_jaim_mbreidphraseid UNIQUE (membre_id, phrase_id)');
@@ -161,18 +168,17 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('ALTER TABLE role ADD CONSTRAINT uc_rol_name UNIQUE (name)');
         $this->addSql('ALTER TABLE type_objet ADD CONSTRAINT uc_typobj_typobj UNIQUE (type_objet)');
         $this->addSql('ALTER TABLE type_vote ADD CONSTRAINT uc_typvot_typvot UNIQUE (type_vote)');
-        $this->addSql('ALTER TABLE vote ADD CONSTRAINT uc_vot_jugemidautid UNIQUE (jugement_id, auteur_id)');
 
         $this->addSql('ALTER TABLE glose ADD CONSTRAINT fk_glose_autid FOREIGN KEY (auteur_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE glose ADD CONSTRAINT fk_glose_modifid FOREIGN KEY (modificateur_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE historique ADD CONSTRAINT fk_hist_mbreid FOREIGN KEY (membre_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE j_aime ADD CONSTRAINT fk_jaim_mbreid FOREIGN KEY (membre_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE j_aime ADD CONSTRAINT fk_jaim_phraseid FOREIGN KEY (phrase_id) REFERENCES phrase (id)');
-        $this->addSql('ALTER TABLE jugement ADD CONSTRAINT fk_jugem_verdid FOREIGN KEY (verdict_id) REFERENCES type_vote (id)');
-        $this->addSql('ALTER TABLE jugement ADD CONSTRAINT fk_jugem_typobjid FOREIGN KEY (type_objet_id) REFERENCES type_objet (id)');
-        $this->addSql('ALTER TABLE jugement ADD CONSTRAINT fk_jugem_jugeid FOREIGN KEY (juge_id) REFERENCES membre (id)');
-        $this->addSql('ALTER TABLE jugement ADD CONSTRAINT fk_jugem_catjugemid FOREIGN KEY (categorie_jugement_id) REFERENCES categorie_jugement (id)');
-        $this->addSql('ALTER TABLE jugement ADD CONSTRAINT fk_jugem_autid FOREIGN KEY (auteur_id) REFERENCES membre (id)');
+        $this->addSql('ALTER TABLE signalement ADD CONSTRAINT fk_sig_verdid FOREIGN KEY (verdict_id) REFERENCES type_vote (id)');
+        $this->addSql('ALTER TABLE signalement ADD CONSTRAINT fk_sig_typobjid FOREIGN KEY (type_objet_id) REFERENCES type_objet (id)');
+        $this->addSql('ALTER TABLE signalement ADD CONSTRAINT fk_sig_jugeid FOREIGN KEY (juge_id) REFERENCES membre (id)');
+        $this->addSql('ALTER TABLE signalement ADD CONSTRAINT fk_sig_catsigid FOREIGN KEY (categorie_signalement_id) REFERENCES categorie_signalement (id)');
+        $this->addSql('ALTER TABLE signalement ADD CONSTRAINT fk_sig_autid FOREIGN KEY (auteur_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE mot_ambigu ADD CONSTRAINT fk_motamb_autid FOREIGN KEY (auteur_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE mot_ambigu ADD CONSTRAINT fk_motamb_modifid FOREIGN KEY (modificateur_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE mot_ambigu_phrase ADD CONSTRAINT fk_motambphrase_phraseid FOREIGN KEY (phrase_id) REFERENCES phrase (id)');
@@ -186,9 +192,6 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('ALTER TABLE reponse ADD CONSTRAINT fk_rep_motambphraseid FOREIGN KEY (mot_ambigu_phrase_id) REFERENCES mot_ambigu_phrase (id)');
         $this->addSql('ALTER TABLE reponse ADD CONSTRAINT fk_rep_phraseid FOREIGN KEY (phrase_id) REFERENCES phrase (id)');
         $this->addSql('ALTER TABLE role ADD CONSTRAINT fk_rol_parentid FOREIGN KEY (parent_id) REFERENCES role (id)');
-        $this->addSql('ALTER TABLE vote ADD CONSTRAINT fk_vot_jugid FOREIGN KEY (jugement_id) REFERENCES jugement (id)');
-        $this->addSql('ALTER TABLE vote ADD CONSTRAINT fk_vot_typvotid FOREIGN KEY (type_vote_id) REFERENCES type_vote (id)');
-        $this->addSql('ALTER TABLE vote ADD CONSTRAINT fk_vot_autid FOREIGN KEY (auteur_id) REFERENCES membre (id)');
 
         $this->addSql('CREATE INDEX ix_glose_autid ON glose (auteur_id)');
         $this->addSql('CREATE INDEX ix_glose_modifid ON glose (modificateur_id)');
@@ -200,14 +203,14 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('CREATE INDEX ix_jaim_mbreid ON j_aime (membre_id)');
         $this->addSql('CREATE INDEX ix_jaim_phraseid ON j_aime (phrase_id)');
         $this->addSql('CREATE INDEX ix_jaim_dtcreat ON j_aime (date_creation)');
-        $this->addSql('CREATE INDEX ix_jugem_verdid ON jugement (verdict_id)');
-        $this->addSql('CREATE INDEX ix_jugem_typobjid ON jugement (type_objet_id)');
-        $this->addSql('CREATE INDEX ix_jugem_jugeid ON jugement (juge_id)');
-        $this->addSql('CREATE INDEX ix_jugem_catjugemid ON jugement (categorie_jugement_id)');
-        $this->addSql('CREATE INDEX ix_jugem_autid ON jugement (auteur_id)');
-        $this->addSql('CREATE INDEX ix_jugem_dtcreat ON jugement (date_creation)');
-        $this->addSql('CREATE INDEX ix_jugem_dtdelib ON jugement (date_deliberation)');
-        $this->addSql('CREATE INDEX ix_jugem_objid ON jugement (objet_id)');
+        $this->addSql('CREATE INDEX ix_sig_verdid ON signalement (verdict_id)');
+        $this->addSql('CREATE INDEX ix_sig_typobjid ON signalement (type_objet_id)');
+        $this->addSql('CREATE INDEX ix_sig_jugeid ON signalement (juge_id)');
+        $this->addSql('CREATE INDEX ix_sig_catsigid ON signalement (categorie_signalement_id)');
+        $this->addSql('CREATE INDEX ix_sig_autid ON signalement (auteur_id)');
+        $this->addSql('CREATE INDEX ix_sig_dtcreat ON signalement (date_creation)');
+        $this->addSql('CREATE INDEX ix_sig_dtdelib ON signalement (date_deliberation)');
+        $this->addSql('CREATE INDEX ix_sig_objid ON signalement (objet_id)');
         $this->addSql('CREATE INDEX ix_mbre_ptsclasheb ON membre (points_classement_hebdomadaire)');
         $this->addSql('CREATE INDEX ix_mbre_ptsclasmen ON membre (points_classement_mensuel)');
         $this->addSql('CREATE INDEX ix_mbre_cred ON membre (credits)');
@@ -235,11 +238,6 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('CREATE INDEX ix_rep_motambphraseid ON reponse (mot_ambigu_phrase_id)');
         $this->addSql('CREATE INDEX ix_rep_dtrep ON reponse (date_reponse)');
         $this->addSql('CREATE INDEX ix_rol_parentid ON role (parent_id)');
-        $this->addSql('CREATE INDEX ix_vot_jugid ON vote (jugement_id)');
-        $this->addSql('CREATE INDEX ix_vot_typvotid ON vote (type_vote_id)');
-        $this->addSql('CREATE INDEX ix_vot_autid ON vote (auteur_id)');
-        $this->addSql('CREATE INDEX ix_vot_dtcreat ON vote (date_creation)');
-        $this->addSql('CREATE INDEX ix_vot_dtmodif ON vote (date_modification)');
         $this->addSql('CREATE INDEX ix_visit_dtvisit ON visite (date_visite)');
         $this->addSql('CREATE INDEX ix_visit_ip ON visite (ip)');
         $this->addSql('CREATE INDEX ix_visit_useragent ON visite (user_agent)');
@@ -262,10 +260,12 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('UPDATE membre SET roles = "a:0:{}"');
         $this->addSql('UPDATE membre SET roles = \'a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}\' WHERE username = \'alex\'');
 
-        $this->addSql('DELETE FROM jugement WHERE type_objet_id = 5');
+        $this->addSql('DELETE FROM signalement WHERE type_objet_id = 5');
         $this->addSql('DELETE FROM type_objet WHERE id = 5');
-        $this->addSql('DELETE FROM jugement WHERE type_objet_id = 1');
+        $this->addSql('DELETE FROM signalement WHERE type_objet_id = 1');
         $this->addSql('DELETE FROM type_objet WHERE id = 1');
+
+        $this->addSql('UPDATE signalement SET date_deliberation = NULL WHERE verdict_id IS NULL');
     }
 
     public function down(Schema $schema) : void

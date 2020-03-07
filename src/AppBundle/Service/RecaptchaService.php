@@ -40,7 +40,16 @@ class RecaptchaService{
         curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
 
+        $res = curl_exec($verify);
+
+        if (!$res) {
+            $res = array(
+                'success' => false,
+                'error-codes' => array('Erreur lors de la vérification du captcha.')
+            );
+        }
+
         // Renvoie le résultat sous forme de tableau
-        return json_decode(curl_exec($verify), true);
+        return json_decode($res, true);
 	}
 }

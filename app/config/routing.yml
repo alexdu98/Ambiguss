@@ -57,9 +57,9 @@ ambiguss_export:
     path: /export
     controller: AppBundle:Main:export
 
-api_jugement_new:
-    path: /api/jugement/new
-    controller: AppBundle:API:newJugement
+api_signalement_new:
+    path: /api/signalement/new
+    controller: AppBundle:API:newSignalement
 
 api_autocomplete_glose:
     path: /api/autocomplete/glose
@@ -159,9 +159,9 @@ modo_membre_edit:
     options:
         expose: true
 
-modo_jugements_membre_show:
-    path: /moderation/jugement/membre/{id}
-    controller: AppBundle:Modo:showMembreJugements
+modo_signalements_membre_show:
+    path: /moderation/signalement/membre/{id}
+    controller: AppBundle:Modo:showMembreSignalements
     requirements:
         id: \d+
     options:
@@ -191,17 +191,25 @@ modo_mots_ambigus_gloses_delete:
     options:
         expose: true
 
-modo_jugement_edit:
-    path: /moderation/jugement/edit/{id}
-    controller: AppBundle:Modo:editJugement
+modo_signalement_edit:
+    path: /moderation/signalement/{id}/edit
+    controller: AppBundle:Modo:editSignalement
     requirements:
         id: \d+
     options:
         expose: true
 
-modo_jugements_glose_show:
-    path: /moderation/jugement/glose/{id}
-    controller: AppBundle:Modo:showGloseJugements
+modo_signalements_glose_show:
+    path: /moderation/signalement/glose/{id}
+    controller: AppBundle:Modo:showGloseSignalements
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+modo_signalements_show:
+    path: /moderation/signalements
+    controller: AppBundle:Modo:showSignalements
     requirements:
         id: \d+
     options:
@@ -247,7 +255,7 @@ fos_user_profile_show:
 
 fos_user_profile_edit:
     path: /profil/edit
-    controller: AppBundle:User:edit
+    controller: fos_user.profile.controller:editAction
     methods: [GET, POST]
 
 fos_user_change_password:
@@ -257,17 +265,17 @@ fos_user_change_password:
 
 fos_user_registration_register:
     path: /inscription/
-    controller: AppBundle:User:register
+    controller: fos_user.registration.controller:registerAction
     methods: [GET, POST]
 
 fos_user_registration_check_email:
     path: /inscription/check-email
-    controller: AppBundle:User:checkEmail
+    controller: fos_user.registration.controller:checkEmailAction
     methods: [GET]
 
 fos_user_registration_confirm:
     path: /inscription/confirmation/{token}
-    controller: AppBundle:User:confirm
+    controller: fos_user.registration.controller:confirmAction
     methods: [GET]
 
 fos_user_registration_confirmed:
@@ -282,12 +290,12 @@ fos_user_resetting_request:
 
 fos_user_resetting_send_email:
     path: /reinitialisation/send-email
-    controller: AppBundle:User:sendEmail
+    controller: fos_user.resetting.controller:sendEmailAction
     methods: [POST]
 
 fos_user_resetting_check_email:
     path: /reinitialisation/check-email
-    controller: AppBundle:User:sendEmail
+    controller: fos_user.resetting.controller:checkEmailAction
     methods: [GET]
 
 fos_user_resetting_reset:

@@ -136,45 +136,58 @@
                     var boutonSignal = $(this);
                     setModalSize('modal-lg');
                     setModalTitle("Signaler un élément de la phrase \"{{ phrase.contenuHTML|replace({'"':'\\"'})|raw }}\"");
-                    setModalBody('{{ include('AppBundle:Signalement:add.html.twig', {'form': addJugementForm})|e('js') }}');
+                    setModalBody('{{ include('AppBundle:Signalement:add.html.twig', {'form': addSignalementForm})|e('js') }}');
                     $("#modal").modal("show");
 
                     // MAJ type objet signalement
-                    $("#jugement_add_typeObjet").on('change', function () {
+                    $("#signalement_add_typeObjet").on('change', function () {
                         var idTypeObjet = $(this).val();
                         var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
 
-                        $('#jugement_add_typeObjet').next().remove();
-                        $('#jugement_add_signaler').prop('disabled', false);
-                        $('#jugement_add_objetId').removeAttr('readonly');
+                        $('#signalement_add_typeObjet').next().remove();
+                        $('#signalement_add_signaler').prop('disabled', false);
+                        $('#signalement_add_objetId').removeAttr('readonly');
+                        $('#signalement_add_objetId').attr('required', true);
 
                         if (typeObjet === 'Glose') {
-                            $('#jugement_add_objetId').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
+                            $('#signalement_add_objetId').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
                             $('.gloses').each(function () {
                                 var ma = $(this).closest('.reponseGroupe').find('.amb').data('amb');
                                 var opts = $(this).clone();
                                 opts.find('option').eq(0).remove();
-                                $('#jugement_add_objetId').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+                                $('#signalement_add_objetId').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
                             });
                         }
                         else if (typeObjet === 'Phrase') {
-                            $('#jugement_add_objetId').attr('readonly', true);
-                            $('#jugement_add_objetId').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
+                            $('#signalement_add_objetId').attr('readonly', true);
+                            $('#signalement_add_objetId').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
                         }
                         else if (typeObjet === 'Membre') {
-                            $('#jugement_add_signaler').prop('disabled', true);
-                            $('#jugement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un membre sur cette page</span>');
+                            $('#signalement_add_signaler').prop('disabled', true);
+                            $('#signalement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un membre sur cette page</span>');
                         }
                         else {
-                            $('#jugement_add_signaler').prop('disabled', true);
+                            $('#signalement_add_signaler').prop('disabled', true);
                         }
                     });
-                    $("#jugement_add_typeObjet").trigger('change');
+                    $("#signalement_add_typeObjet").trigger('change');
 
 
                     // On envoit le formulaire par ajax
-                    $('form[name="jugement_add"]').ajaxForm({
+                    $('form[name="signalement_add"]').ajaxForm({
                         beforeSubmit: function (arr, form, opt) {
+                            var idTypeObjet = $('#signalement_add_typeObjet').val();
+                            var typeObjet = $('#signalement_add_typeObjet').find('[value="' + idTypeObjet + '"]').html();
+
+                            $('#signalement_add_objetId').next().remove();
+
+                            // Si pas d'objet sélectionné, pas d'envoi
+                            if($('#signalement_add_objetId').val() == null && (typeObjet == 'Phrase' || typeObjet == 'Glose')) {
+
+                                $('#signalement_add_objetId').after('<span class="text-danger">Sélectionnez un objet</span>');
+                                return false;
+                            }
+
                             // On affiche l'image laoding en attendant la réponse
                             $(form).after('<img src="' + urlImageLoading + '" id="loading">');
                         },
@@ -188,7 +201,7 @@
                                     + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
                                     + 'Élément signalé</div>'
                                 );
-                                $('#jugement_add_description').val('');
+                                $('#signalement_add_description').val('');
                             }
                             else {
                                 $(form).after('<div class="alert alert-danger">Erreur</div>');

@@ -56,7 +56,7 @@
 			var erreurs = [];
 
 			{% if not app.user %}
-			var pseudo = $('#appbundle_contact_pseudo');
+			var pseudo = $('#AppBundle_contact_pseudo');
 			if (pseudo.val() === '') {
 				erreurs.push('pseudo');
 				pseudo.next().remove();
@@ -72,7 +72,7 @@
 				pseudo.next().remove();
 			}
 
-			var email = $('#appbundle_contact_email');
+			var email = $('#AppBundle_contact_email');
 			if (email.val() === '') {
 				erreurs.push('email');
 				email.next().remove();
@@ -83,7 +83,7 @@
 			}
 			{% endif %}
 
-			var message = $('#appbundle_contact_message');
+			var message = $('#AppBundle_contact_message');
 			if (message.val() === '') {
 				erreurs.push('message');
 				message.next().remove();
@@ -99,7 +99,7 @@
 		}
 
 		function onload() {
-			var element = document.getElementById('appbundle_contact_envoyer');
+			var element = document.getElementById('AppBundle_contact_envoyer');
 			element.onclick = validate;
 		}
 

@@ -48,7 +48,7 @@ class ContactType extends AbstractType
 	 */
 	public function getBlockPrefix()
 	{
-		return 'appbundle_contact';
+		return 'AppBundle_contact';
 	}
 
 }

@@ -40,6 +40,19 @@
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-md-4 col-sm-offset-1 col-md-offset-4 well">
 
+            <div class="row">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ message|raw }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
             {{ form_start(form , {'form-type' : 'horizontal', 'attr' : {'id' : 'formInscription'}}) }}
 
             {{ form_errors(form) }}
@@ -48,12 +61,13 @@
             {{ form_row(form.email) }}
             {{ form_row(form.plainPassword) }}
 
-            {{ form_rest(form) }}
-
             <div id='recaptcha' class="g-recaptcha"
                  data-sitekey="{{ recaptcha }}"
                  data-callback="onSubmit"
-                 data-size="invisible"></div>
+                 data-size="invisible">
+            </div>
+
+            {{ form_rest(form) }}
 
             <input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="Valider">
 
@@ -65,13 +79,81 @@
                     // Ne pas supprimé, callback recaptcha
                     function onSubmit(token) {
                         // On rempli le champ de formulaire Symfony
-                        $('#{{ form.captcha.vars.id }}').val(token);
                         $('#formInscription').submit();
                     }
 
                     function validate(event) {
                         event.preventDefault();
-                        grecaptcha.execute();
+                        var erreurs = [];
+
+                        var pseudo = $('#fos_user_registration_form_username');
+                        if (pseudo.val() === '') {
+                            erreurs.push('pseudo');
+                            pseudo.next().remove();
+                            pseudo.after('<span class="color-red">Vous devez indiquer un pseudo</span>');
+                        }
+                        else if(!pseudo.val().match(/^[a-zA-Z0-9-_]{3,32}$/)){
+                            erreurs.push('pseudoreg');
+                            pseudo.next().remove();
+                            pseudo.after('<span class="color-red">Le pseudo doit être alphanumérique (- et _ autorisé) et faire entre 3 et 32 caractères</span>');
+                        }
+                        else{
+                            pseudo.next().remove();
+                        }
+
+                        var mdpf = $('#fos_user_registration_form_plainPassword_first');
+                        if (mdpf.val() === '') {
+                            erreurs.push('mdpf');
+                            mdpf.next().remove();
+                            mdpf.after('<span class="color-red">Vous devez indiquer un mot de passe</span>');
+                        }
+                        else{
+                            mdpf.next().remove();
+                        }
+
+                        var mdps = $('#fos_user_registration_form_plainPassword_second');
+                        if (mdps.val() === '') {
+                            erreurs.push('mdps');
+                            mdps.next().remove();
+                            mdps.after('<span class="color-red">Vous devez indiquer une confirmation de mot de passe</span>');
+                        }
+                        else if(mdpf.val() !== mdps.val()){
+                            erreurs.push('mdpeq');
+                            mdps.next().remove();
+                            mdps.after('<span class="color-red">Les mots de passe doivent être identiques</span>');
+                        }
+                        else if(!mdpf.val().match(/^.{6,72}$/)){
+                            erreurs.push('mdpreg');
+                            mdps.next().remove();
+                            mdps.after('<span class="color-red">Le mot de passe doit faire entre 6 et 72 caractères</span>');
+                        }
+                        else{
+                            mdps.next().remove();
+                        }
+
+                        var email = $('#fos_user_registration_form_email');
+                        if (email.val() === '') {
+                            erreurs.push('email');
+                            email.next().remove();
+                            email.after('<span class="color-red">Vous devez indiquer un email</span>');
+                        }
+                        else{
+                            email.next().remove();
+                        }
+
+                        var conditions = $('#fos_user_registration_form_Conditions');
+                        if (!conditions.is(':checked')) {
+                            erreurs.push('conditions');
+                            conditions.next().remove();
+                            conditions.after('<span class="color-red" style="float:right;margin-left:3px;">Vous devez accepter les CGU</span>');
+                        }
+                        else{
+                            conditions.next().remove();
+                        }
+
+                        if(erreurs.length === 0) {
+                            grecaptcha.execute();
+                        }
                     }
 
                     function onload() {

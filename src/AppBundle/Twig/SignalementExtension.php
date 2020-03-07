@@ -6,10 +6,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class JugementExtension extends AbstractExtension
+class SignalementExtension extends AbstractExtension
 {
 
 	private $em;
+	private $nbMembresSignales;
+	private $nbPhrasesSignalees;
+	private $nbGlosesSignalees;
+	private $nbSignalementsEnCours;
 
 	public function __construct(EntityManagerInterface $em)
 	{
@@ -23,7 +27,7 @@ class JugementExtension extends AbstractExtension
      */
     public function nbMembresSignales()
     {
-        return $this->em->getRepository('AppBundle:Membre')->countSignale();
+        return $this->nbMembresSignales ?? ($this->nbMembresSignales = $this->em->getRepository('AppBundle:Membre')->countSignale());
     }
 
     /**
@@ -33,7 +37,7 @@ class JugementExtension extends AbstractExtension
      */
 	public function nbPhrasesSignalees()
 	{
-		return $this->em->getRepository('AppBundle:Phrase')->countSignale();
+		return $this->nbPhrasesSignalees ?? ($this->nbPhrasesSignalees = $this->em->getRepository('AppBundle:Phrase')->countSignale());
 	}
 
     /**
@@ -43,8 +47,18 @@ class JugementExtension extends AbstractExtension
      */
 	public function nbGlosesSignalees()
 	{
-		return $this->em->getRepository('AppBundle:Glose')->countSignale();
+		return $this->nbGlosesSignalees ?? ($this->nbGlosesSignalees = $this->em->getRepository('AppBundle:Glose')->countSignale());
 	}
+
+    /**
+     * Retourne le nombre de signalements en cours
+     *
+     * @return mixed
+     */
+    public function nbSignalementsEnCours()
+    {
+        return $this->nbSignalementsEnCours ?? ($this->nbSignalementsEnCours = $this->em->getRepository('AppBundle:Signalement')->countEnCours());
+    }
 
 	public function getFunctions()
 	{
@@ -61,6 +75,10 @@ class JugementExtension extends AbstractExtension
 				$this,
 				'nbGlosesSignalees',
 			)),
+            new TwigFunction('nbSignalementsEnCours', array(
+                $this,
+                'nbSignalementsEnCours',
+            ))
 		);
 	}
 }

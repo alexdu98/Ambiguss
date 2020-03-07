@@ -27,7 +27,7 @@
 			<b><a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
 		{% endif %}
 		<h3 id="result" class="text-center">
-			{{ phraseDisplay.contenuHTML|raw }}
+			{{ phraseDisplay.contenuHTML|getPhraseHTML }}
 		</h3>
 		<div class="text-center">
 			{% for map in phraseDisplay.motsAmbigusPhrase %}

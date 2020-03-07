@@ -2,17 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Game;
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Game\GameType;
 use AppBundle\Form\Glose\GloseAddType;
-use AppBundle\Entity\Jugement;
-use AppBundle\Form\Jugement\JugementAddType;
+use AppBundle\Entity\Signalement;
+use AppBundle\Form\Signalement\SignalementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\Historique;
 
 class GameController extends Controller
 {
@@ -102,9 +100,9 @@ class GameController extends Controller
                 $nextMembresClassements = $em->getRepository('AppBundle:Membre')->getNextMembresClassements($this->getUser());
             }
 
-            // Formulaire de création de jugement
-            $addJugementForm = $this->createForm(JugementAddType::class, new Jugement(), array(
-                'action' => $this->generateUrl('api_jugement_new'),
+            // Formulaire de création de signalement
+            $addSignalementForm = $this->createForm(SignalementAddType::class, new Signalement(), array(
+                'action' => $this->generateUrl('api_signalement_new'),
             ));
 
             return $this->render('AppBundle:Game:after_play.html.twig', array(
@@ -113,7 +111,7 @@ class GameController extends Controller
                 'alreadyPlayed' => $alreadyPlayed,
                 'nbPoints' => ceil($nbPoints),
                 'nextMembresClassements' => $nextMembresClassements,
-                'addJugementForm' => $addJugementForm->createView(),
+                'addSignalementForm' => $addSignalementForm->createView(),
             ));
         }
 
@@ -148,9 +146,9 @@ class GameController extends Controller
             'action' => $this->generateUrl('api_glose_new'),
         ));
 
-        // Formulaire de création de jugement
-        $addJugementForm = $this->createForm(JugementAddType::class, new Jugement(), array(
-            'action' => $this->generateUrl('api_jugement_new'),
+        // Formulaire de création de signalement
+        $addSignalementForm = $this->createForm(SignalementAddType::class, new Signalement(), array(
+            'action' => $this->generateUrl('api_signalement_new'),
         ));
 
         return $this->render('AppBundle:Game:play.html.twig', array(
@@ -159,7 +157,7 @@ class GameController extends Controller
             'alreadyPlayed' => $game->alreadyPlayed,
             'liked' => $liked,
             'addGloseForm' => $addGloseForm->createView(),
-            'addJugementForm' => $addJugementForm->createView(),
+            'addSignalementForm' => $addSignalementForm->createView(),
         ));
     }
 

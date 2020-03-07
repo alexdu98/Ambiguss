@@ -133,7 +133,7 @@ class PhraseController extends Controller
         else if($secu->isGranted('ROLE_MODERATEUR')) {
 
             $em = $this->getDoctrine()->getManager();
-            $repoJ = $em->getRepository('AppBundle:Jugement');
+            $repoS = $em->getRepository('AppBundle:Signalement');
             $repoTO = $em->getRepository('AppBundle:TypeObjet');
             $repoRep = $em->getRepository('AppBundle:Reponse');
 
@@ -149,7 +149,7 @@ class PhraseController extends Controller
             $newPhrase = null;
             $phraseOri = clone $phrase;
             $typeObj = $repoTO->findOneBy(array('nom' => 'Phrase'));
-            $jugements = $repoJ->findBy(array(
+            $signalements = $repoS->findBy(array(
                 'typeObjet' => $typeObj,
                 'verdict' => null,
                 'objetId' => $phrase->getId(),
@@ -198,13 +198,13 @@ class PhraseController extends Controller
                 $repOri[] = $arr;
             }
 
-            return $this->render('AppBundle:Phrase:editModerateur.html.twig', array(
+            return $this->render('AppBundle:Moderation/Phrase:edit.html.twig', array(
                 'form' => $form->createView(),
                 'phrase' => $phrase,
                 'phraseOri' => $phraseOri,
                 'reponsesOri' => $repOri,
                 'newPhrase' => $newPhrase,
-                'jugements' => $jugements,
+                'signalements' => $signalements,
                 'addGloseForm' => $addGloseForm->createView(),
             ));
         }

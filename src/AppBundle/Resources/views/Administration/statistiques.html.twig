@@ -3,11 +3,6 @@
 {% block page_title %}Statistiques{% endblock %}
 {% block content_title %}Statistiques{% endblock %}
 
-{% block head_stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-{% endblock %}
-
 {% block main %}
 
     <div class="panel panel-green">
@@ -246,29 +241,29 @@
 
     <div class="panel panel-green">
         <div class="panel-heading">
-            <b>Jugements</b>
+            <b>Signalements</b>
         </div>
         <div class="panel-body">
             <div class="row tile_count">
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-user"></i> Totaux</span>
-                    <div class="count">{{ stat.jugements.total|number_format(0, '.', ' ') }}</div>
+                    <div class="count">{{ stat.signalements.total|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 30j</span>
-                    <div class="count">{{ stat.jugements.creationJ30|number_format(0, '.', ' ') }}</div>
+                    <div class="count">{{ stat.signalements.creationJ30|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-clock-o"></i> Dernièrs 7j</span>
-                    <div class="count">{{ stat.jugements.creationJ7|number_format(0, '.', ' ') }}</div>
+                    <div class="count">{{ stat.signalements.creationJ7|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
-                    <div class="count">{{ stat.jugements.creationH24|number_format(0, '.', ' ') }}</div>
+                    <div class="count">{{ stat.signalements.creationH24|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-hourglass-half"></i> En attente</span>
-                    <div class="count">{{ stat.jugements.enAttente|number_format(0, '.', ' ') }}</div>
+                    <div class="count">{{ stat.signalements.enAttente|number_format(0, '.', ' ') }}</div>
                 </div>
             </div>
         </div>

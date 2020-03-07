@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Jugement;
+namespace AppBundle\Form\Signalement;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -9,8 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class JugementAddType extends AbstractType
+class SignalementAddType extends AbstractType
 {
 
 	/**
@@ -27,8 +28,8 @@ class JugementAddType extends AbstractType
 				'label' => 'Description',
 				'attr' => array('placeholder' => 'Détaillez le motif du signalement'),
 			))
-			->add('categorieJugement', EntityType::class, array(
-				'class' => 'AppBundle\Entity\CategorieJugement',
+			->add('categorieSignalement', EntityType::class, array(
+				'class' => 'AppBundle\Entity\CategorieSignalement',
 				'choice_label' => 'nom',
 				'label' => 'Catégorie',
 				'required' => true,
@@ -59,16 +60,16 @@ class JugementAddType extends AbstractType
 
 	}
 
-	public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+	public function setDefaultOptions(OptionsResolver $resolver)
 	{
-		$resolver->setDefaults(array(
-			'validation_groups' => false,
-		));
+//		$resolver->setDefaults(array(
+//			'validation_groups' => false,
+//		));
 	}
 
 	public function getParent()
 	{
-		return JugementType::class;
+		return SignalementType::class;
 	}
 
 }

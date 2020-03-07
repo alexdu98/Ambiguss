@@ -22,8 +22,8 @@ parameters:
     # Classement
     maxResultForClassementGeneral: 100
     maxResultForClassementPhrases: 100
-    # Jugement
-    dureeDeliberationSecondes: 432000 # 5 jours
+    # Signalement
+    gainSignalementValide: 25
     # Emails contact
     emailContact: "alexdu98@gmx.fr"
     # Email from
@@ -141,19 +141,15 @@ fos_user:
             enabled: true
         form:
             type: AppBundle\Form\FOSUser\RegistrationType
-            validation_groups: ~
     profile:
         form:
             type: AppBundle\Form\FOSUser\ProfilEditType
-            validation_groups: ~
     change_password:
         form:
             type: AppBundle\Form\FOSUser\ChangePasswordType
-            validation_groups: ~
     resetting:
         form:
             type: AppBundle\Form\FOSUser\ResettingType
-            validation_groups: ~
 
 hwi_oauth:
     connect:

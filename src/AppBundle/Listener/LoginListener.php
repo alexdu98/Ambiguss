@@ -32,8 +32,15 @@ class LoginListener implements EventSubscriberInterface
     public function process(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
+        $request = $event->getRequest();
 
-        $this->historique->save($user, "Connexion (IP : " . $event->getRequest()->server->get('REMOTE_ADDR') . ").", true);
+        $remember = '';
+        if ($request->cookies->get('jeton')) {
+            $remember = ' avec jeton';
+        }
+
+        $this->historique->save($user, "Connexion{$remember} (IP : " . $event->getRequest()->server->get('REMOTE_ADDR') . ").", true);
+
     }
 
 }

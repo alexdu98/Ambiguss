@@ -17,9 +17,9 @@ easy_admin:
             - label: 'Jeu'
               icon: 'gamepad'
               children: ['Phrase', 'Glose', 'MotAmbigu', 'Partie', 'Reponse', 'JAime']
-            - label: 'Jugement'
+            - label: 'Signalement'
               icon: 'gavel'
-              children: ['Jugement', 'CategorieJugement', 'TypeObjet', 'TypeVote', 'Vote']
+              children: ['Signalement', 'CategorieSignalement', 'TypeObjet', 'TypeVote']
             - label: 'Application'
               icon: 'at'
               children: ['Visite']
@@ -204,7 +204,7 @@ easy_admin:
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
-                    - { property: 'contenuPur', label: 'Contenu pur' }
+                    - { property: 'contenuHTML', label: 'Contenu', type: 'raw' }
                     - { property: 'auteur', label: 'Auteur' }
                     - { property: 'gainCreateur', label: 'Gain pour l''auteur' }
                     - { property: 'dateCreation', label: 'Date création' }
@@ -394,10 +394,10 @@ easy_admin:
             edit:
                 title: 'Édition du j''aime #%%entity_id%%'
 
-        # Jugement
-        Jugement:
-            class: AppBundle\Entity\Jugement
-            label: 'Jugements'
+        # Signalement
+        Signalement:
+            class: AppBundle\Entity\Signalement
+            label: 'Signalements'
             search:
                 help: >
                     <span class="text-info">Recherche effectuée sur les champs :
@@ -409,12 +409,12 @@ easy_admin:
                         <b>auteur</b>,
                         <b>juge</b>
                     </span>
-                fields: ['id', 'categorieJugement.nom', 'typeObjet.nom', 'objetId', 'verdict.nom', 'auteur.usernameCanonical', 'juge.usernameCanonical']
+                fields: ['id', 'categorieSignalement.nom', 'typeObjet.nom', 'objetId', 'verdict.nom', 'auteur.usernameCanonical', 'juge.usernameCanonical']
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
                     - { property: 'description', label: 'Description' }
-                    - { property: 'categorieJugement', label: 'Catégorie' }
+                    - { property: 'categorieSignalement', label: 'Catégorie' }
                     - { property: 'typeObjet', label: 'Type de l''objet' }
                     - { property: 'objetId', label: 'ID de l''objet' }
                     - { property: 'verdict', label: 'Verdict' }
@@ -423,8 +423,8 @@ easy_admin:
                     - { property: 'juge', label: 'Juge' }
             form:
                 fields:
-                    - { type: 'group', label: 'Jugement', icon: 'gavel', css_class: 'col-sm-6' }
-                    - { property: 'categorieJugement', label: 'Catégorie' }
+                    - { type: 'group', label: 'Signalement', icon: 'gavel', css_class: 'col-sm-6' }
+                    - { property: 'categorieSignalement', label: 'Catégorie' }
                     - { property: 'typeObjet', label: 'Type d''objet' }
                     - { property: 'objetId', label: 'ID de l''objet' }
                     - { property: 'auteur', label: 'Auteur' }
@@ -436,10 +436,10 @@ easy_admin:
                     - { type: 'group', label: 'Description', icon: 'info' }
                     - { property: 'description', label: 'Description' }
             edit:
-                title: 'Édition du jugement #%%entity_id%%'
-        CategorieJugement:
-            class: AppBundle\Entity\CategorieJugement
-            label: 'Catégories de jugements'
+                title: 'Édition du signalement #%%entity_id%%'
+        CategorieSignalement:
+            class: AppBundle\Entity\CategorieSignalement
+            label: 'Catégories de signalement'
             search:
                 help: >
                     <span class="text-info">Recherche effectuée sur les champs :
@@ -448,10 +448,11 @@ easy_admin:
                     </span>
                 fields: ['id', 'nom']
             edit:
-                title: 'Édition de la catégorie de jugement #%%entity_id%%'
+                title: 'Édition de la catégorie de signalement #%%entity_id%%'
         TypeObjet:
             class: AppBundle\Entity\TypeObjet
             label: 'Types d''objets'
+            disabled_actions: ['edit', 'new', 'delete']
             search:
                 help: >
                     <span class="text-info">Recherche effectuée sur les champs :
@@ -473,11 +474,6 @@ easy_admin:
                 fields: ['id', 'nom']
             edit:
                 title: 'Édition du type de vote #%%entity_id%%'
-        Vote:
-            class: AppBundle\Entity\Vote
-            label: 'Votes'
-            edit:
-                title: 'Édition du vote #%%entity_id%%'
 
         # Divers
         Visite:

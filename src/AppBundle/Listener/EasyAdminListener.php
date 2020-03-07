@@ -3,11 +3,11 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\JAime;
-use AppBundle\Entity\CategorieJugement;
+use AppBundle\Entity\CategorieSignalement;
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Historique;
-use AppBundle\Entity\Jugement;
+use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\Newsletter;
@@ -101,7 +101,7 @@ class EasyAdminListener implements EventSubscriberInterface
             case $classe instanceof Membre:
             case $classe instanceof Groupe:
             case $classe instanceof Role:
-            case $classe instanceof Jugement:
+            case $classe instanceof Signalement:
             case $classe instanceof MotAmbigu:
             case $classe instanceof TypeObjet:
             case $classe instanceof TypeVote:
@@ -119,7 +119,7 @@ class EasyAdminListener implements EventSubscriberInterface
             case $classe instanceof Reponse:
             case $classe instanceof Visite:
             case $classe instanceof Newsletter:
-            case $classe instanceof CategorieJugement:
+            case $classe instanceof CategorieSignalement:
                 $articleEntite = "de la {$entityName}";
                 break;
 

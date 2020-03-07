@@ -43,7 +43,7 @@
             {% for phrase in phrases %}
                 <tr id="phrase-{{ phrase.id }}" {% if phrase.signale %}class="text-danger"{% endif %}>
                     <td>{{ phrase.id }}</td>
-                    <td><a style="color:black" href="{{ path('game_show' , {'id': phrase.id}) }}">{{ phrase | getPhraseHTML | raw }}</a></td>
+                    <td><a href="{{ path('game_show' , {'id': phrase.id}) }}">{{ phrase | getPhraseHTML | raw }}</a></td>
                     <td><a href="{{ path('fos_user_profile_show' , {'id': phrase.auteur.id}) }}">{{ phrase.auteur.username }}</a></td>
                     <td>{{ phrase.gainCreateur }}</td>
                     <td data-order="{{ phrase.dateCreation|date("U") + phrase.dateCreation|date("Z") }}">{{ phrase.dateCreation|date("d/m/Y H:i") }}</td>

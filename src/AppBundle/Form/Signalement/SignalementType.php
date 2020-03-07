@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Form\Jugement;
+namespace AppBundle\Form\Signalement;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class JugementType extends AbstractType
+class SignalementType extends AbstractType
 {
 
 	/**
@@ -19,7 +19,7 @@ class JugementType extends AbstractType
 			->add('dateCreation')
 			->add('dateDeliberation')
 			->add('objetId')
-			->add('categorieJugement')
+			->add('categorieSignalement')
 			->add('typeObjet')
 			->add('verdict')
 			->add('auteur')
@@ -32,7 +32,7 @@ class JugementType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'AppBundle\Entity\Jugement',
+			'data_class' => 'AppBundle\Entity\Signalement',
 		));
 	}
 
@@ -41,7 +41,7 @@ class JugementType extends AbstractType
 	 */
 	public function getBlockPrefix()
 	{
-		return 'judgmentbundle_jugement';
+		return 'AppBundle_signalement';
 	}
 
 }

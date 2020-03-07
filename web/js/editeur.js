@@ -226,7 +226,7 @@ $(document).ready(function () {
         }
     });
 
-    // Désactive le copier/coller formater
+    // Coller sans le formatage
     phraseEditor.on('paste', function(e) {
         e.preventDefault();
 
@@ -238,6 +238,8 @@ $(document).ready(function () {
         else {
             $(this).text(text);
         }
+
+        phraseEditor.trigger('input'); // Pour mettre en forme après avoir collé
     });
 
     // Modification d'un mot ambigu

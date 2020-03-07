@@ -89,17 +89,17 @@
                 language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
             });
 
-            // Au click sur le bouton, exécute la fonction
+            // Au click sur le bouton, exécute la fonctionF
             $('.editGloseButton').click(editGloseModal);
 
             function editGloseModal(event) {
                 var button = $(this);
                 setModalSize('modal-lg');
                 setModalTitle('Modifier la glose "<b class="color-red">' + button.data('valeur') + '</b>"');
-                setModalBody('{{ include('AppBundle:Glose:edit.html.twig', {'form': editGloseForm})|e('js') }}');
+                setModalBody('{{ include('AppBundle:Moderation/Glose:edit.html.twig', {'form': editGloseForm})|e('js') }}');
 
-                $("#toggleJugements").click(function () {
-                    $("#jugements").toggle("slow");
+                $("#toggleSignalements").click(function () {
+                    $("#signalements").toggle("slow");
                 });
 
                 var ligne = button.closest('tr');
@@ -109,23 +109,23 @@
                 $('[name="glose_edit[signale]"][value="' + (signale ? 1 : 0) + '"]').prop('checked', true);
                 $('[name="glose_edit[visible]"][value="' + (visible ? 1 : 0) + '"]').prop('checked', true);
 
-                // Récupère les jugements en cours
-                $.post(Routing.generate('modo_jugements_glose_show', {id: button.data('id')}), function (data) {
+                // Récupère les signalements en cours
+                $.post(Routing.generate('modo_signalements_glose_show', {id: button.data('id')}), function (data) {
                     if (data.succes) {
-                        divJugement = $('#jugements');
-                        if (data.jugements.length === 0)
-                            divJugement.append('<span class="text-danger">Aucun jugement en cours</span>');
-                        html = '{{ include('@App/Jugement/jugement.html.twig')|e('js') }}';
-                        $.each(data.jugements, function (index) {
+                        divSignalement = $('#signalements');
+                        if (data.signalements.length === 0)
+                            divSignalement.append('<span class="text-danger">Aucun signalement en cours</span>');
+                        html = '{{ include('@App/Signalement/edit.html.twig')|e('js') }}';
+                        $.each(data.signalements, function (index) {
                             clone = $(html);
-                            clone.find('.panel-heading').append(data.jugements[index].categorieJugement);
-                            clone.find('.panel-body').append(data.jugements[index].description);
-                            var profil = Routing.generate('fos_user_profile_show', {id: data.jugements[index].auteur_id});
-                            var dt = new Date(data.jugements[index].dateCreation * 1000);
+                            clone.find('.panel-heading').append(data.signalements[index].categorieSignalement);
+                            clone.find('.panel-body').append(data.signalements[index].description);
+                            var profil = Routing.generate('fos_user_profile_show', {id: data.signalements[index].auteur_id});
+                            var dt = new Date(data.signalements[index].dateCreation * 1000);
                             var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
                                 .getMinutes();
                             clone.find('.lien-profil').attr('href', profil);
-                            clone.find('.lien-profil').append(data.jugements[index].auteur);
+                            clone.find('.lien-profil').append(data.signalements[index].auteur);
                             clone.find('.date-creation').append(date);
 
                             // Ajout de l'eventlistener valide
@@ -135,10 +135,10 @@
                                 // On affiche l'image laoding en attendant la réponse
                                 $(this).after('<img src="' + urlImageLoading + '" id="loading">');
 
-                                $.post(Routing.generate('modo_jugement_edit', {id: data.jugements[index].id}),
+                                $.post(Routing.generate('modo_signalement_edit', {id: data.signalements[index].id}),
                                     {
                                         verdict: $(this).data('verdict'),
-                                        token: '{{ csrf_token('jugement_vote') }}'
+                                        token: '{{ csrf_token('signalement_vote') }}'
                                     }
                                     , function
                                         (data) {
@@ -157,7 +157,7 @@
                                     });
                             });
 
-                            divJugement.append(clone);
+                            divSignalement.append(clone);
                         });
                     }
                     else {

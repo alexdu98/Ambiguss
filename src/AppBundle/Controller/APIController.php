@@ -4,12 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\JAime;
-use AppBundle\Entity\Jugement;
+use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseAddType;
-use AppBundle\Form\Jugement\JugementAddType;
+use AppBundle\Form\Signalement\SignalementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Historique;
@@ -17,52 +17,46 @@ use AppBundle\Entity\Historique;
 class APIController extends Controller
 {
 
-	public function newJugementAction(Request $request)
+	public function newSignalementAction(Request $request)
 	{
 		if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 		{
-			$jugement = new Jugement();
-			$form = $this->get('form.factory')->create(JugementAddType::class, $jugement);
+			$signalement = new Signalement();
+			$form = $this->get('form.factory')->create(SignalementAddType::class, $signalement);
 
 			$form->handleRequest($request);
 
 			if($form->isSubmitted() && $form->isValid())
 			{
                 $em = $this->getDoctrine()->getManager();
-				$jugement = $form->getData();
-				$dureeDeliberation = $this->getParameter('dureeDeliberationSecondes');
+				$signalement = $form->getData();
 
-				// Calcul la date de délibération automatique
-				$dateDeliberation = new \DateTime();
-				$dateDeliberation = \DateTime::createFromFormat('U', $dateDeliberation->getTimestamp() + $dureeDeliberation);
-
-				$jugement->setDateDeliberation($dateDeliberation);
-				$jugement->setObjetId($request->request->get('jugement_add')['objetId']);
-				$jugement->setAuteur($this->getUser());
+				$signalement->setObjetId($request->request->get('signalement_add')['objetId']);
+                $signalement->setAuteur($this->getUser());
 
 				$histMsg = null;
                 $repo = null;
-				if($jugement->getTypeObjet()->getNom() == 'Phrase') {
+				if($signalement->getTypeObjet()->getNom() == 'Phrase') {
 					$repo = $em->getRepository('AppBundle:Phrase');
-                    $histMsg = "Signalement de la phrase n°" . $jugement->getObjetId() . ".";
+                    $histMsg = "Signalement de la phrase n°" . $signalement->getObjetId() . ".";
 				}
-				elseif($jugement->getTypeObjet()->getNom() == 'Glose') {
+				elseif($signalement->getTypeObjet()->getNom() == 'Glose') {
                     $repo = $em->getRepository('AppBundle:Glose');
-                    $histMsg = "Signalement de la glose n°" . $jugement->getObjetId() . ".";
+                    $histMsg = "Signalement de la glose n°" . $signalement->getObjetId() . ".";
 				}
-                elseif($jugement->getTypeObjet()->getNom() == 'Membre') {
+                elseif($signalement->getTypeObjet()->getNom() == 'Membre') {
                     $repo = $em->getRepository('AppBundle:Membre');
-                    $histMsg = "Signalement du membre n°" . $jugement->getObjetId() . ".";
+                    $histMsg = "Signalement du membre n°" . $signalement->getObjetId() . ".";
                 }
 
-                $obj = $repo->find($jugement->getObjetId());
+                $obj = $repo->find($signalement->getObjetId());
                 $obj->setSignale(true);
 
                 // On enregistre dans l'historique du joueur
                 $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
                 $historiqueService->save($this->getUser(), $histMsg);
 
-				$em->persist($jugement);
+				$em->persist($signalement);
 				$em->persist($obj);
 
                 $em->flush();

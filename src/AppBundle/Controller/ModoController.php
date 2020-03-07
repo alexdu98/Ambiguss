@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\Historique;
+use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Phrase;
 use AppBundle\Form\Glose\GloseEditType;
@@ -25,7 +26,7 @@ class ModoController extends Controller
             'action' => $this->generateUrl('modo_glose_edit', array('id' => 0)),
         ));
 
-        return $this->render('AppBundle:Glose:getAll.html.twig', array(
+        return $this->render('AppBundle:Moderation:Glose/list.html.twig', array(
             'gloses' => $gloses,
             'editGloseForm' => $editGloseForm->createView(),
         ));
@@ -142,7 +143,7 @@ class ModoController extends Controller
         $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
         $phrases = $repo->findAll();
 
-        return $this->render('AppBundle:Phrase:getAll.html.twig', array(
+        return $this->render('AppBundle:Moderation:Phrase/list.html.twig', array(
             'phrases' => $phrases,
         ));
     }
@@ -157,7 +158,7 @@ class ModoController extends Controller
             'action' => $this->generateUrl('modo_membre_edit', array('id' => 0)),
         ));
 
-        return $this->render('AppBundle:Membre:getAll.html.twig', array(
+        return $this->render('AppBundle:Moderation:Membre/list.html.twig', array(
             'membres' => $membres,
             'editMembreForm' => $editMembreForm->createView(),
         ));
@@ -227,14 +228,14 @@ class ModoController extends Controller
         ));
     }
 
-    public function showMembreJugementsAction($id)
+    public function showMembreSignalementsAction($id)
     {
-        $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
+        $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Signalement');
         $repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
         $repoM = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
 
         $typeObj = $repoTO->findOneBy(array('nom' => 'Membre'));
-        $jugements = $repoJ->findBy(array(
+        $signalements = $repoJ->findBy(array(
             'typeObjet' => $typeObj,
             'verdict' => null,
             'objetId' => $id,
@@ -242,13 +243,13 @@ class ModoController extends Controller
 
         return $this->json(array(
             'succes' => true,
-            'jugements' => $jugements,
+            'signalements' => $signalements,
         ));
     }
 
     public function showMotsAmbigusGlosesAction()
     {
-        return $this->render('AppBundle:MAG:get.html.twig');
+        return $this->render('AppBundle:Moderation:MAG/searchAndRemove.html.twig');
     }
 
     public function deleteMotsAmbigusGlosesAction(Request $request)
@@ -293,13 +294,13 @@ class ModoController extends Controller
         throw new InvalidCsrfTokenException();
     }
 
-    public function showGloseJugementsAction($id)
+    public function showGloseSignalementsAction($id)
     {
-        $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Jugement');
+        $repoS = $this->getDoctrine()->getManager()->getRepository('AppBundle:Signalement');
         $repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
 
         $typeObj = $repoTO->findOneBy(array('nom' => 'Glose'));
-        $jugements = $repoJ->findBy(array(
+        $signalements = $repoS->findBy(array(
             'typeObjet' => $typeObj,
             'verdict' => null,
             'objetId' => $id,
@@ -307,46 +308,83 @@ class ModoController extends Controller
 
         return $this->json(array(
             'succes' => true,
-            'jugements' => $jugements,
+            'signalements' => $signalements,
         ));
     }
 
-    public function editJugementAction(Request $request, $id)
+    public function editSignalementAction(Request $request, Signalement $signalement)
     {
         $data = $request->request->all();
 
-        if($this->isCsrfTokenValid('jugement_vote', $data['token']))
+        if($this->isCsrfTokenValid('signalement_vote', $data['token']))
         {
-            $em = $this->getDoctrine()->getManager();
-            $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+            $succes = false;
 
-            $repoJ = $em->getRepository('AppBundle:Jugement');
-            $repoTV = $em->getRepository('AppBundle:TypeVote');
+            if (!$signalement->getVerdict()) {
+                $em = $this->getDoctrine()->getManager();
+                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
 
-            // On met à jour le jugement
-            $jugement = $repoJ->find($id);
-            $jugement->setDateDeliberation(new \DateTime());
-            $jugement->setJuge($this->getUser());
-            $jugement->setVerdict($repoTV->findOneBy(array('nom' => $data['verdict'])));
+                $repoTV = $em->getRepository('AppBundle:TypeVote');
+                $verdict = $repoTV->findOneBy(array('nom' => $data['verdict']));
 
-            $histo ="[modo:{$request->server->get('REMOTE_ADDR')}] Jugement #{$jugement->getId()}, verdict : {$jugement->getVerdict()->getNom()}.";
+                // On met à jour le signalement
+                $signalement->setDateDeliberation(new \DateTime());
+                $signalement->setJuge($this->getUser());
+                $signalement->setVerdict($verdict);
 
-            // On enregistre dans l'historique du modérateur
-            $historiqueService->save($this->getUser(), $histo);
+                $histo = "[modo:{$request->server->get('REMOTE_ADDR')}] Signalement #{$signalement->getId()}, verdict : {$signalement->getVerdict()->getNom()}.";
 
-            // On enregistre dans l'historique du joueur ayant fait le signalement
-            $historiqueService->save($jugement->getAuteur(), "Jugement #{$jugement->getId()}, verdict : {$jugement->getVerdict()->getNom()}.");
+                // On enregistre dans l'historique du modérateur
+                $historiqueService->save($this->getUser(), $histo);
 
-            $em->persist($jugement);
+                // Si le signalement obtient un verdict valide on donne des points
+                $msgHisto = '';
+                if ($verdict->getNom() == 'Valide') {
+                    $gainSignalementValide = $this->getParameter('gainSignalementValide');
 
-            $em->flush();
+                    // Mise à jour du nombre de crédits et de points de l'auteur
+                    $signalement->getAuteur()->updateCredits($gainSignalementValide);
+                    $signalement->getAuteur()->updatePoints($gainSignalementValide);
+
+                    $msgHisto = ' (+' . $gainSignalementValide . ' crédits/points)';
+                }
+
+                // On enregistre dans l'historique du joueur ayant fait le signalement
+                $historiqueService->save($signalement->getAuteur(), "Signalement #{$signalement->getId()}, verdict : {$signalement->getVerdict()->getNom()}{$msgHisto}.");
+
+                $em->persist($signalement);
+
+                $em->flush();
+
+                $succes = true;
+
+                $res = array(
+                    'id' => $signalement->getId(),
+                    'dateDeliberation' => $signalement->getDateDeliberation() != null ? $signalement->getDateDeliberation()->format('d/m/Y H:i') : '',
+                    'dateDeliberationTS' => $signalement->getDateDeliberation() != null ? $signalement->getDateDeliberation()->format('U') + $signalement->getDateDeliberation()->format('Z') : '',
+                    'juge' => $signalement->getJuge()->getUsername(),
+                    'jugeID' => $signalement->getJuge()->getId(),
+                    'verdict' => $signalement->getVerdict()->getNom()
+                );
+            }
 
             return $this->json(array(
-                'succes' => true,
+                'succes' => $succes,
+                'signalement' => $res
             ));
         }
 
         throw new InvalidCsrfTokenException();
+    }
+
+    public function showSignalementsAction()
+    {
+        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Signalement');
+        $signalements = $repo->getAllWithObject();
+
+        return $this->render('AppBundle:Moderation/Signalement:list.html.twig', array(
+            'signalements' => $signalements
+        ));
     }
 
 }

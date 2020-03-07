@@ -2,11 +2,14 @@
 namespace AppBundle\Form\FOSUser;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationType extends AbstractType
 {
@@ -48,8 +51,17 @@ class RegistrationType extends AbstractType
                 ),
                 'translation_domain' => 'FOSUserBundle'
             ))
-            ->add('captcha', HiddenType::class, array(
-                'mapped' => false
+            ->add('Newsletter', CheckboxType::class, array(
+                'label' => "J'accepte de recevoir les newsletter du site",
+                'required' => false,
+            ))
+            ->add('Conditions', CheckboxType::class, array(
+                'label' => "J'accepte les conditions d'utilisation du site",
+                'required' => true,
+                'mapped' => false,
+                'constraints' => array(
+                    new IsTrue(['message' => 'Les conditions d\'utilisation doivent être acceptés.'])
+                )
             ));
     }
 

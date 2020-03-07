@@ -5,9 +5,11 @@ namespace AppBundle\Listener;
 use AppBundle\Entity\Groupe;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class RegistrationListener implements EventSubscriberInterface
 {
@@ -24,14 +26,72 @@ class RegistrationListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            FOSUserEvents::REGISTRATION_INITIALIZE => ['initialize', 100],
+            FOSUserEvents::REGISTRATION_CONFIRM => 'confirm',
             FOSUserEvents::REGISTRATION_CONFIRMED => 'confirmed',
-            FOSUserEvents::REGISTRATION_SUCCESS => 'success',
-            FOSUserEvents::REGISTRATION_COMPLETED => 'completed'
+            FOSUserEvents::REGISTRATION_SUCCESS => ['success', -100],
+            FOSUserEvents::REGISTRATION_COMPLETED => ['completed', -100],
+            FOSUserEvents::REGISTRATION_FAILURE => 'failure'
         ];
     }
 
     /**
-     * Enregistre la confirmation d'inscription dans l'historique du membre
+     * Vérifie le captcha
+     *
+     * @param FormEvent $event
+     */
+    public function initialize(GetResponseUserEvent $event)
+    {
+        if ($event->getRequest()->isMethod('POST')) {
+            $recaptchaService = $this->container->get('AppBundle\Service\RecaptchaService');
+
+            $captcha = $event->getRequest()->request->get('g-recaptcha-response');
+            $ip = $event->getRequest()->server->get('REMOTE_ADDR');
+
+            $recaptcha = $recaptchaService->check($captcha, $ip);
+            if (empty($recaptcha['success']) || !$recaptcha['success']) {
+                $message = implode('<br>', $recaptcha['error-codes']);
+                $this->container->get('session')->getFlashBag()->add('danger', $message);
+
+                $logger = $this->container->get('logger');
+                $logInfos = array(
+                    'msg' => $message,
+                    'email' => 'non connecté',
+                    'ip' => $event->getRequest()->server->get('REMOTE_ADDR'),
+                );
+                $logger->critical(json_encode($logInfos));
+
+                $form = $this->container->get('fos_user.registration.form.factory')->createForm();
+                $form->setData($event->getUser());
+                $form->handleRequest($event->getRequest());
+
+                $this->container->get('event_dispatcher')->dispatch(FOSUserEvents::REGISTRATION_FAILURE, new FormEvent($form, $event->getRequest()));
+
+                $url = $this->container->get('router')->generate('fos_user_registration_register');
+                $response = new RedirectResponse($url);
+
+                $event->setResponse($response);
+
+                $event->stopPropagation();
+            }
+        }
+    }
+
+    /**
+     * Modification de l'URL de redirection
+     *
+     * @param GetResponseUserEvent $event
+     */
+    public function confirm(GetResponseUserEvent $event)
+    {
+        $url = $this->container->get('router')->generate('fos_user_security_login');
+        $response = new RedirectResponse($url);
+
+        $event->setResponse($response);
+    }
+
+    /**
+     * Enregistre la confirmation d'inscription dans l'historique du membre et ajout du message flash
      *
      * @param FilterUserResponseEvent $event
      */
@@ -41,6 +101,10 @@ class RegistrationListener implements EventSubscriberInterface
 
         $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
         $historiqueService->save($user, "Confirmation d'inscription.", true);
+
+        $flashBag = $this->container->get('session')->getFlashBag();
+        $flashBag->clear();
+        $flashBag->add('success', 'Inscription confirmée, vous pouvez vous connecter.');
     }
 
     /**
@@ -53,6 +117,11 @@ class RegistrationListener implements EventSubscriberInterface
         $user = $event->getForm()->getData();
 
         $user->addGroup($this->em->getRepository(Groupe::class)->findOneBy(['name' => 'Membre']));
+
+        $url = $this->container->get('router')->generate('fos_user_security_login');
+        $response = new RedirectResponse($url);
+
+        $event->setResponse($response);
     }
 
     /**
@@ -66,6 +135,31 @@ class RegistrationListener implements EventSubscriberInterface
 
         $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
         $historiqueService->save($user, "Inscription via Ambiguss.", true);
+
+        $email = $event->getRequest()->getSession()->get('fos_user_send_confirmation_email/email');
+
+        $flashBag = $this->container->get('session')->getFlashBag();
+        $flashBag->clear();
+        $flashBag->add('info', 'Inscription réussie, veuillez cliquer sur le lien de confirmation envoyé par email à l\'adresse "' . $email . '".');
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function failure(FormEvent $event)
+    {
+        $flashBag = $this->container->get('session')->getFlashBag();
+        $logger = $this->container->get('logger');
+
+        $msg = 'Inscription échouée, veuillez réessayer ou contacter un administrateur si cela persiste.';
+        $flashBag->add('danger', $msg);
+
+        $logInfos = array(
+            'msg' => $msg,
+            'email' => $event->getRequest()->getSession()->get('fos_user_send_confirmation_email/email'),
+            'ip' => $event->getRequest()->server->get('REMOTE_ADDR'),
+        );
+        $logger->critical(json_encode($logInfos));
     }
 
 }

@@ -1,3 +1,12 @@
+html{
+    --color-green: #A0D233;
+    --color-yellow: #FFFCBC;
+    --color-brown: #8B4513;
+    --color-black: #000000;
+    --color-red: #C51B10;
+    --color-white: #FFF;
+}
+
 .green{
     color: #A0D233;
 }
@@ -17,4 +26,8 @@ hr {
     background-color: #A0D233;
     border-color: #A0D233;
     font-size: 20px;
+}
+amb {
+    color: var(--color-red);
+    font-weight: bold;
 }

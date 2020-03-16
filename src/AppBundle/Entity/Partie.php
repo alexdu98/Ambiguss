@@ -205,7 +205,7 @@ class Partie
 
     public function __toString()
     {
-        return (string) $this->joueur;
+        return (string) $this->joueur . ' : ' . $this->phrase;
     }
 
 }

@@ -29,7 +29,7 @@ class TypeVote
     /**
      * @var string
      *
-     * @ORM\Column(name="type_vote", type="string", length=16, unique=true)
+     * @ORM\Column(name="nom", type="string", length=16, unique=true)
      */
     private $nom;
 

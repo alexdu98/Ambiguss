@@ -31,8 +31,10 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
      */
 	public function getClassementPhrasesUser(Membre $user)
 	{
-		return $this->createQueryBuilder('p')->select('p.id, p.contenu, p.dateCreation, p.gainCreateur')->distinct()
-			->addSelect('(SELECT COUNT(lp2.id) FROM AppBundle\Entity\JAime lp2 WHERE lp2.phrase = p.id AND lp2.active = 1) as nbJAime')
+		return $this->createQueryBuilder('p')
+            ->select('p.id, p.contenu, p.dateCreation, p.gainCreateur')
+            ->distinct()
+			->addSelect('(SELECT COUNT(lp2.id) FROM AppBundle\Entity\JAime lp2 WHERE lp2.phrase = p.id AND lp2.membre != :user AND lp2.active = 1) as nbJAime')
 			->leftJoin("p.jAime", "lp", 'WITH', 'lp.id = p.id')
 			->where('p.auteur = :user')->setParameter('user', $user)
 			->groupBy('p.id')
@@ -143,6 +145,18 @@ class PhraseRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery();
 
         return $query->getArrayResult();
+    }
+
+    public function getByDayForMembre(Membre $membre)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('DATE_FORMAT(p.dateCreation, \'%Y-%m-%d\') as date, count(p) as count')
+            ->where('p.auteur = :membre')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->setParameter('membre', $membre);
+
+        return $query->getQuery()->getResult();
     }
 
     /**

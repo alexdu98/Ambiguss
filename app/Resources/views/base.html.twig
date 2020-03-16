@@ -163,6 +163,7 @@
 		    var ttl_cookie_info = {{ ttl_cookie_info }};
 		    var ttl_cookie_info_not_fully_accepted = {{ ttl_cookie_info_not_fully_accepted }};
 			var bitWiseCookiesService = {{ constant('AppBundle\\Util\\Bitwise::COOKIE_INFO')|json_encode|raw }};
+			var notifies = {{ app.flashes(['notifies'])['notifies']|json_encode|raw }};
 	    </script>
 	    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
 	    <script src="{{ asset('vendor/jquery/dist/jquery.form.min.js') }}"></script>
@@ -172,6 +173,7 @@
 		<script src="{{ asset('vendor/Lettering.js/jquery.lettering.js') }}"></script>
 		<script src="{{ asset('vendor/textillate/jquery.textillate.js') }}"></script>
 	    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+	    <script src="{{ asset('js/notify.min.js') }}"></script>
 	    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
 	    <script src="{{ asset('js/cookiesServices.js') }}"></script>
 	    <script src="{{ asset('js/main.js') }}"></script>

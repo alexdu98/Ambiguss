@@ -8,10 +8,12 @@ use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Phrase;
 use AppBundle\Entity\Reponse;
+use AppBundle\Event\AmbigussEvents;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class PhraseService
 {
@@ -34,7 +36,6 @@ class PhraseService
 
         $phrase->normalizePreValidation();
         $res = $phrase->isValid();
-        $beforeReorder = $phrase->normalizePostValidation();
 
         $succes = $res['succes'];
         $motsAmbigus = $res['motsAmbigus'] ?? array();
@@ -45,9 +46,13 @@ class PhraseService
         }
 
         if($succes) {
+            $ed = $this->container->get('event_dispatcher');
+
             // Mise à jour du nombre de crédits et de points de l'auteur
             $auteur->updateCredits(-$coutUnitaire * count($motsAmbigus));
             $auteur->updatePoints($gainCreation);
+
+            $beforeReorder = $phrase->normalizePostValidation();
 
             try {
                 $this->em->getConnection()->beginTransaction();
@@ -69,6 +74,11 @@ class PhraseService
 
                 $this->em->flush();
                 $this->em->getConnection()->commit();
+
+                $event = new GenericEvent(AmbigussEvents::POINTS_GAGNES, array(
+                    'membre' => $auteur,
+                ));
+                $ed->dispatch(AmbigussEvents::POINTS_GAGNES, $event);
 
                 /** @var MotAmbiguPhrase $map */
                 foreach ($phrase->getMotsAmbigusPhrase() as $map) {
@@ -96,11 +106,12 @@ class PhraseService
 
         $phrase->normalizePreValidation();
         $res = $phrase->isValid();
-        $beforeReorder = $phrase->normalizePostValidation();
 
         $succes = $res['succes'];
 
         if($succes) {
+            $beforeReorder = $phrase->normalizePostValidation();
+
             try {
                 $this->em->getConnection()->beginTransaction();
 

@@ -8,9 +8,11 @@ use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
 use AppBundle\Entity\Phrase;
+use AppBundle\Event\AmbigussEvents;
 use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Form\Signalement\SignalementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Historique;
 
@@ -245,43 +247,62 @@ class APIController extends Controller
         ));
 
         $em = $this->getDoctrine()->getManager();
+        $ed = $this->get('event_dispatcher');
 
         $action = null;
         if(!$jaime)
         {
             $jaime = new JAime();
             $jaime->setPhrase($phrase)->setMembre($this->getUser());
-            // Ajoute X points au créateur
-            $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
+
+            $em->persist($jaime);
+            $em->flush();
+
+            if ($this->getUser()->getId() != $phrase->getAuteur()->getId()) {
+
+                // Ajoute X points au créateur
+                $jaime->getPhrase()->getAuteur()->updatePoints($this->getParameter('gainPerLikePhrasePoints'));
+
+                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+
+                // On enregistre dans l'historique du joueur
+                $historiqueService->save($this->getUser(), "Aime la phrase n°" . $phrase->getId() . ".");
+
+                // On enregistre dans l'historique du créateur de la phrase
+                $historiqueService->save(
+                    $phrase->getAuteur(),
+                    "Un joueur a aimé votre phrase n°" . $phrase->getId() . " (+" . $this->getParameter('gainPerLikePhrasePoints') . " points)."
+                );
+
+                $em->flush();
+
+                $event = new GenericEvent(AmbigussEvents::POINTS_GAGNES, array(
+                    'membre' => $phrase->getAuteur(),
+                ));
+                $ed->dispatch(AmbigussEvents::POINTS_GAGNES, $event);
+            }
+
             $action = 'like';
-
-            $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
-
-            // On enregistre dans l'historique du joueur
-            $historiqueService->save($this->getUser(), "Aime la phrase n°" . $phrase->getId() . ".");
-
-            // On enregistre dans l'historique du créateur de la phrase
-            $historiqueService->save(
-                $phrase->getAuteur(),
-                "Un joueur a aimé votre phrase n°" . $phrase->getId() . " (+" . $this->getParameter('gainPerLikePhrasePoints') . " points)."
-            );
         }
-        else
-        {
-            if($jaime->getActive() === false)
-            {
-                $jaime->setActive(true);
-                $action = 'relike';
-            }
-            else
-            {
-                $jaime->setActive(false);
-                $action = 'unlike';
-            }
+        else if($jaime->getActive() === false) {
+            $jaime->setActive(true);
+            $action = 'relike';
+        }
+        else {
+            $jaime->setActive(false);
+            $action = 'unlike';
         }
 
         $em->persist($jaime);
         $em->flush();
+
+        if (($action == 'like' || $action == 'relike') && $this->getUser()->getId() != $phrase->getAuteur()->getId()) {
+            $event = new GenericEvent(AmbigussEvents::PHRASE_AIMEE, array(
+                'membre' => $phrase->getAuteur(),
+                'phrase' => $phrase
+            ));
+            $ed->dispatch(AmbigussEvents::PHRASE_AIMEE, $event);
+        }
 
         return $this->json(array(
             'status' => 'succes',

@@ -8,6 +8,7 @@ use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Phrase;
 use AppBundle\Entity\Reponse;
+use AppBundle\Event\AmbigussEvents;
 use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Form\Phrase\PhraseAddType;
 use AppBundle\Form\Phrase\PhraseEditType;
@@ -15,6 +16,7 @@ use AppBundle\Service\PhraseService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Historique;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -57,6 +59,13 @@ class PhraseController extends Controller
 
                 // Réinitialise le formulaire
                 $form = $this->createForm(PhraseAddType::class, new Phrase());
+
+                $ed = $this->get('event_dispatcher');
+                $event = new GenericEvent(AmbigussEvents::PHRASE_CREEE, array(
+                    'membre' => $this->getUser(),
+                    'phrase' => $newPhrase
+                ));
+                $ed->dispatch(AmbigussEvents::PHRASE_CREEE, $event);
             }
             else {
                 $msg = "Erreur lors de l'insertion de la phrase -> " . $res['message'];

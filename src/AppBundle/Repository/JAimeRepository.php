@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
-class JAimeRepository extends \Doctrine\ORM\EntityRepository
+use Doctrine\ORM\EntityRepository;
+
+class JAimeRepository extends EntityRepository
 {
 }

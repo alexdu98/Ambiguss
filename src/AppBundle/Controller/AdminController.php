@@ -38,6 +38,7 @@ class AdminController extends BaseAdminController
         $stat['parties'] = $em->getRepository('AppBundle:Partie')->getStat();
         $stat['reponses'] = $em->getRepository('AppBundle:Reponse')->getStat();
         $stat['signalements'] = $em->getRepository('AppBundle:Signalement')->getStat();
+        $stat['badges'] = $em->getRepository('AppBundle:MembreBadge')->getStat();
 
         return $this->render('@App/Administration/statistiques.html.twig', array(
             'stat' => $stat,

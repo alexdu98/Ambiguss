@@ -5,11 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Phrase;
+use AppBundle\Event\AmbigussEvents;
 use AppBundle\Form\Game\GameType;
 use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Entity\Signalement;
 use AppBundle\Form\Signalement\SignalementAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 class GameController extends Controller
@@ -57,6 +59,8 @@ class GameController extends Controller
 
                 // Si le joueur n'avait pas déjà joué la phrase
                 if (empty($partie) || $partie->getJoue() == false) {
+                    $ed = $this->get('event_dispatcher');
+
                     // On lui ajoute les points et crédits
                     $gainJoueur = ceil($nbPoints);
                     $this->getUser()->updatePoints($gainJoueur);
@@ -92,6 +96,22 @@ class GameController extends Controller
                     $em->persist($phrase->getAuteur());
 
                     $em->flush();
+
+                    $event = new GenericEvent(AmbigussEvents::GAME_PLAYED, array(
+                        'membre' => $this->getUser(),
+                        'phrase' => $phrase
+                    ));
+                    $ed->dispatch(AmbigussEvents::GAME_PLAYED, $event);
+
+                    $event = new GenericEvent(AmbigussEvents::POINTS_GAGNES, array(
+                        'membre' => $phrase->getAuteur(),
+                    ));
+                    $ed->dispatch(AmbigussEvents::POINTS_GAGNES, $event);
+
+                    $event = new GenericEvent(AmbigussEvents::POINTS_GAGNES, array(
+                        'membre' => $this->getUser(),
+                    ));
+                    $ed->dispatch(AmbigussEvents::POINTS_GAGNES, $event);
                 }
                 else {
                     $alreadyPlayed = true;

@@ -2,11 +2,13 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Event\AmbigussEvents;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class ReinitialisationPointsCommand extends ContainerAwareCommand {
 
@@ -14,6 +16,7 @@ class ReinitialisationPointsCommand extends ContainerAwareCommand {
 	{
 		$io = new SymfonyStyle($input, $output);
 
+		$ed = $this->getContainer()->get('event_dispatcher');
 		$em = $this->getContainer()->get('doctrine')->getManager();
 		$membreRepo = $em->getRepository('AppBundle:Membre');
         $type = $input->getOption('type');
@@ -31,6 +34,11 @@ class ReinitialisationPointsCommand extends ContainerAwareCommand {
             $membresMonthly = $membreRepo->getAllWithPointsMensuel();
             $this->historize('monthly', $membresMonthly);
             $membreRepo->resetPointsMensuel();
+            $event = new GenericEvent($type, array(
+                'membres' => $membresMonthly,
+                'type' => $type
+            ));
+            $ed->dispatch(AmbigussEvents::REINITIALISATION_POINTS, $event);
             $nbSec = microtime(true) - $start;
 
             $io->text(count($membresMonthly) . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');
@@ -46,6 +54,11 @@ class ReinitialisationPointsCommand extends ContainerAwareCommand {
             $membresWeekly = $membreRepo->getAllWithPointsHebdomadaire();
             $this->historize('weekly', $membresWeekly);
             $membreRepo->resetPointsHebdomadaire();
+            $event = new GenericEvent($type, array(
+                'membres' => $membresWeekly,
+                'type' => $type
+            ));
+            $ed->dispatch(AmbigussEvents::REINITIALISATION_POINTS, $event);
             $nbSec = microtime(true) - $start;
 
             $io->text(count($membresWeekly) . ' en ' . number_format($nbSec, 2, '.', '') . ' secondes');

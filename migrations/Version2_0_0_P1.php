@@ -134,9 +134,12 @@ final class Version2_0_0_P1 extends AbstractMigration
 
         $this->addSql('CREATE TABLE membre_groupe (membre_id INT NOT NULL, groupe_id INT NOT NULL, PRIMARY KEY(membre_id, groupe_id))');
         $this->addSql('CREATE TABLE role(id INT AUTO_INCREMENT PRIMARY KEY, parent_id INT NULL, name VARCHAR(255) NOT NULL)');
+        $this->addSql('CREATE TABLE badge (id INT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, nombre INT NOT NULL, ordre INT NOT NULL, description VARCHAR(255) NOT NULL, points INT NOT NULL, UNIQUE INDEX uc_badg_typnbr (type, nombre), PRIMARY KEY(id), UNIQUE INDEX uc_badg_typordr (type, ordre))');
+        $this->addSql('CREATE TABLE membre_badge (id INT AUTO_INCREMENT NOT NULL, membre_id INT NOT NULL, badge_id INT NOT NULL, date_obtention DATETIME NOT NULL, INDEX ix_mbrebadg_mbreid (membre_id), INDEX ix_mbrebadg_badgid (badge_id), INDEX ix_mbrebadg_dtobt (date_obtention), UNIQUE INDEX uc_mbrebadg_mbreidbadgid (membre_id, badge_id), PRIMARY KEY(id))');
 
         $this->addSql('ALTER TABLE signalement CHANGE categorie_jugement_id categorie_signalement_id INT NOT NULL');
         $this->addSql('ALTER TABLE categorie_signalement CHANGE categorie_jugement nom VARCHAR(32) NOT NULL');
+        $this->addSql('ALTER TABLE type_vote CHANGE type_vote nom VARCHAR(16) NOT NULL');
         $this->addSql('ALTER TABLE groupe ADD name VARCHAR(180) NOT NULL, DROP groupe_parent_id, DROP nom, CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
 
         $this->addSql('DELETE FROM glose WHERE auteur_id IN (SELECT id FROM membre WHERE mdp IS NULL)');
@@ -167,7 +170,7 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('ALTER TABLE phrase ADD CONSTRAINT uc_phrase_contpur UNIQUE (contenu_pur)');
         $this->addSql('ALTER TABLE role ADD CONSTRAINT uc_rol_name UNIQUE (name)');
         $this->addSql('ALTER TABLE type_objet ADD CONSTRAINT uc_typobj_typobj UNIQUE (type_objet)');
-        $this->addSql('ALTER TABLE type_vote ADD CONSTRAINT uc_typvot_typvot UNIQUE (type_vote)');
+        $this->addSql('ALTER TABLE type_vote ADD CONSTRAINT uc_typvot_typvot UNIQUE (nom)');
 
         $this->addSql('ALTER TABLE glose ADD CONSTRAINT fk_glose_autid FOREIGN KEY (auteur_id) REFERENCES membre (id)');
         $this->addSql('ALTER TABLE glose ADD CONSTRAINT fk_glose_modifid FOREIGN KEY (modificateur_id) REFERENCES membre (id)');
@@ -256,6 +259,60 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('INSERT INTO role(id, parent_id, name) VALUES(3, 2, \'ROLE_MODERATEUR\')');
         $this->addSql('INSERT INTO role(id, parent_id, name) VALUES(4, 3, \'ROLE_USER\')');
         $this->addSql('INSERT INTO membre_groupe SELECT m.id, 3 FROM membre m WHERE m.id not in (SELECT membre_id FROM membre_groupe)');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_TOTAL\', 10, 1, 30, \'Jouer 10 parties\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_TOTAL\', 50, 2, 150, \'Jouer 50 parties\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_TOTAL\', 250, 3, 750, \'Jouer 250 parties\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_TOTAL\', 500, 4, 1500, \'Jouer 500 parties\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_TOTAL\', 1000, 5, 3000, \'Jouer 1000 parties\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_1_JOUR\', 10, 1, 35, \'Jouer 10 parties en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_1_JOUR\', 50, 2, 175, \'Jouer 50 parties en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_1_JOUR\', 250, 3, 875, \'Jouer 250 parties en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_1_JOUR\', 500, 4, 1750, \'Jouer 500 parties en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_3_JOURS\', 10, 1, 60, \'Jouer 10 phrases tous les jours pendant 3 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_3_JOURS\', 25, 2, 150, \'Jouer 25 phrases tous les jours pendant 3 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_3_JOURS\', 50, 3, 300, \'Jouer 50 phrases tous les jours pendant 3 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_3_JOURS\', 100, 4, 600, \'Jouer 100 phrases tous les jours pendant 3 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_7_JOURS\', 10, 1, 210, \'Jouer 10 phrases tous les jours pendant 7 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_7_JOURS\', 25, 2, 525, \'Jouer 25 phrases tous les jours pendant 7 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_7_JOURS\', 50, 3, 1050, \'Jouer 50 phrases tous les jours pendant 7 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'JOUER_PARTIE_7_JOURS\', 100, 4, 2100, \'Jouer 100 phrases tous les jours pendant 7 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 5, 1, 55, \'Créer 5 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 10, 2, 110, \'Créer 10 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 25, 3, 275, \'Créer 25 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 50, 4, 550, \'Créer 50 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 125, 5, 1375, \'Créer 125 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 250, 6, 2750, \'Créer 250 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_TOTAL\', 500, 7, 5500, \'Créer 500 phrases\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_1_JOUR\', 5, 1, 55, \'Créer 5 phrases en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_1_JOUR\', 15, 2, 165, \'Créer 15 phrases en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_1_JOUR\', 30, 3, 330, \'Créer 30 phrases en 1 jour\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_3_JOURS\', 5, 1, 155, \'Créer 5 phrases tous les jours pendant 3 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_3_JOURS\', 10, 2, 310, \'Créer 10 phrases tous les jours pendant 3 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_7_JOURS\', 5, 1, 355, \'Créer 5 phrases tous les jours pendant 7 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CREER_PHRASE_7_JOURS\', 10, 2, 710, \'Créer 10 phrases tous les jours pendant 7 jours\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_TOTAL\', 10, 1, 60, \'Recevoir 10 "j\'\'aime"\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_TOTAL\', 50, 2, 300, \'Recevoir 50 "j\'\'aime"\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_TOTAL\', 125, 3, 750, \'Recevoir 125 "j\'\'aime"\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_TOTAL\', 250, 4, 1500, \'Recevoir 250 "j\'\'aime"\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_TOTAL\', 500, 5, 3000, \'Recevoir 500 "j\'\'aime"\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_1_PHRASE\', 5, 1, 105, \'Recevoir 5 "j\'\'aime" sur 1 phrase\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_1_PHRASE\', 10, 2, 210, \'Recevoir 10 "j\'\'aime" sur 1 phrase\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_1_PHRASE\', 25, 3, 525, \'Recevoir 25 "j\'\'aime" sur 1 phrase\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_1_PHRASE\', 50, 4, 1050, \'Recevoir 50 "j\'\'aime" sur 1 phrase\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'RECEVOIR_JAIME_1_PHRASE\', 100, 5, 2100, \'Recevoir 100 "j\'\'aime" sur 1 phrase\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'SIGNALEMENT_VALIDE_TOTAL\', 5, 1, 105, \'Faire 5 signalements valides\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'SIGNALEMENT_VALIDE_TOTAL\', 10, 2, 210, \'Faire 10 signalements valides\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'SIGNALEMENT_VALIDE_TOTAL\', 25, 3, 525, \'Faire 25 signalements valides\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'SIGNALEMENT_VALIDE_TOTAL\', 50, 4, 1050, \'Faire 50 signalements valides\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'SIGNALEMENT_VALIDE_TOTAL\', 100, 5, 2100, \'Faire 100 signalements valides\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'SIGNALEMENT_VALIDE_TOTAL\', 250, 6, 5250, \'Faire 250 signalements valides\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_HEBDO\', 3, 1, 250, \'Finir dans les 3 premiers au classement hebdomadaire\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_HEBDO\', 1, 2, 500, \'Finir premier au classement hebdomadaire\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_MEN\', 3, 1, 500, \'Finir dans les 3 premiers au classement mensuel\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_MEN\', 1, 2, 1000, \'Finir premier au classement mensuel\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_GEN\', 10, 1, 100, \'Être dans les 10 premiers au classement général\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_GEN\', 3, 2, 250, \'Être dans les 3 premiers au classement général\')');
+        $this->addSql('INSERT INTO badge(type, nombre, ordre, points, description) VALUES(\'CLASSEMENT_GEN\', 1, 3, 500, \'Être premier au classement général\')');
 
         $this->addSql('UPDATE membre SET roles = "a:0:{}"');
         $this->addSql('UPDATE membre SET roles = \'a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}\' WHERE username = \'alex\'');

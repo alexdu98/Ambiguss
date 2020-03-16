@@ -161,6 +161,11 @@ class Membre extends User implements \JsonSerializable
     private $parties;
 
     /**
+     * @ORM\OneToMany(targetEntity="MembreBadge", mappedBy="membre")
+     */
+    private $badges;
+
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Groupe", cascade={"persist"})
      * @ORM\JoinTable(name="membre_groupe",
      *      joinColumns={@ORM\JoinColumn(name="membre_id", referencedColumnName="id")},
@@ -223,6 +228,8 @@ class Membre extends User implements \JsonSerializable
 		$this->gloses = new ArrayCollection();
 		$this->motsAmbigus = new ArrayCollection();
 		$this->historiques = new ArrayCollection();
+		$this->parties = new ArrayCollection();
+		$this->badges = new ArrayCollection();
 	}
 
     /**
@@ -702,6 +709,40 @@ class Membre extends User implements \JsonSerializable
     public function getParties()
     {
         return $this->parties;
+    }
+
+    /**
+     * Add badge
+     *
+     * @param Badge $badge
+     *
+     * @return Membre
+     */
+    public function addBadge(Badge $badge)
+    {
+        $this->badges[] = $badge;
+
+        return $this;
+    }
+
+    /**
+     * Remove badge
+     *
+     * @param Badge $badge
+     */
+    public function removeBadge(Badge $badge)
+    {
+        $this->badges->removeElement($badge);
+    }
+
+    /**
+     * Get badges
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBadges()
+    {
+        return $this->badges;
     }
 
     /**

@@ -29,8 +29,12 @@ class UserControllerTest extends WebTestCase
         // Le sous menu est présent
         $this->assertGreaterThan(0, $crawler->filter('#nav-profil')->count());
 
-        // Le tableau est présent
-        $this->assertStringContainsString('Historique', $crawler->filter('h3')->text());
+        // La partie badges est présente
+        $this->assertStringContainsString('Badges', $crawler->filter('#badges h3')->text());
+        $this->assertGreaterThan(0, $crawler->filter('#badges')->count());
+
+        // Le tableau d'historique est présent
+        $this->assertStringContainsString('Historique', $crawler->filter('#historique h3')->text());
         $this->assertGreaterThan(0, $crawler->filter('#historique')->count());
 
         $this->assertStringContainsString('Parties :', $crawler->filter('.bulle')->html());
@@ -72,7 +76,13 @@ class UserControllerTest extends WebTestCase
 
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $this->assertStringContainsString('Profil', $crawler->filter('h1')->text());
-        $this->assertEquals(0, $crawler->filter('h3')->count());
+
+        // La partie badges est présente
+        $this->assertStringContainsString('Badges', $crawler->filter('#badges h3')->text());
+        $this->assertGreaterThan(0, $crawler->filter('#badges')->count());
+
+        // La partie historique n'est pas présente
+        $this->assertEquals(0, $crawler->filter('#historique h3')->count());
 
         $this->assertStringContainsString('Parties :', $crawler->filter('.bulle')->html());
         $this->assertStringContainsString('Points :', $crawler->filter('.bulle')->html());

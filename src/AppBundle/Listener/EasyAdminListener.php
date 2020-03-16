@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\Badge;
 use AppBundle\Entity\JAime;
 use AppBundle\Entity\CategorieSignalement;
 use AppBundle\Entity\Glose;
@@ -10,7 +11,6 @@ use AppBundle\Entity\Historique;
 use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
-use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Phrase;
 use AppBundle\Entity\Reponse;
@@ -18,7 +18,6 @@ use AppBundle\Entity\Role;
 use AppBundle\Entity\TypeObjet;
 use AppBundle\Entity\TypeVote;
 use AppBundle\Entity\Visite;
-use AppBundle\Entity\Vote;
 use AppBundle\Service\HistoriqueService;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -98,6 +97,7 @@ class EasyAdminListener implements EventSubscriberInterface
         // MotAmbigu => mot ambigu
         $entityName = trim(mb_strtolower(implode(' ', preg_split('/(?=[A-Z])/', (new \ReflectionClass($classe))->getShortName()))));
         switch ($classe) {
+            case $classe instanceof Badge:
             case $classe instanceof Membre:
             case $classe instanceof Groupe:
             case $classe instanceof Role:
@@ -105,7 +105,6 @@ class EasyAdminListener implements EventSubscriberInterface
             case $classe instanceof MotAmbigu:
             case $classe instanceof TypeObjet:
             case $classe instanceof TypeVote:
-            case $classe instanceof Vote:
                 $articleEntite = "du {$entityName}";
                 break;
 
@@ -118,7 +117,6 @@ class EasyAdminListener implements EventSubscriberInterface
             case $classe instanceof Partie:
             case $classe instanceof Reponse:
             case $classe instanceof Visite:
-            case $classe instanceof Newsletter:
             case $classe instanceof CategorieSignalement:
                 $articleEntite = "de la {$entityName}";
                 break;

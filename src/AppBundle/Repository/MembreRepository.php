@@ -273,4 +273,24 @@ class MembreRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * Retourne le nombre de j'aime reçu pour un membre
+     *
+     * @param Membre $membre
+     * @return integer
+     */
+    public function countJAimeRecu(Membre $membre)
+    {
+        $query = $this->createQueryBuilder('m')
+            ->select('count(j) as nbJAime')
+            ->innerJoin('m.phrases', 'p')
+            ->innerJoin('p.jAime', 'j')
+            ->where('m.id = :membre')
+            ->andWhere('j.membre != :membre')
+            ->andWhere('j.active = 1')
+            ->setParameter('membre', $membre);
+
+        return $query->getQuery()->getOneOrNullResult()['nbJAime'];
+    }
+
 }

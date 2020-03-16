@@ -39,29 +39,39 @@ class UserController extends Controller
             return $this->redirectToRoute('fos_user_security_login');
         }
 
-        $repoPh = $this->getDoctrine()->getManager()->getRepository('AppBundle:Phrase');
-        $nbPhrases = $repoPh->countAllVisible();
+        $em = $this->getDoctrine()->getManager();
 
-        $repoP = $this->getDoctrine()->getManager()->getRepository('AppBundle:Partie');
+        $repoP = $em->getRepository('AppBundle:Partie');
+        $repoPh = $em->getRepository('AppBundle:Phrase');
+        $repoB = $em->getRepository('AppBundle:Badge');
+
+        $nbPhrases = $repoPh->countAllVisible();
 
         // Consultation de son propre profil
         if($user == null)
         {
             $nbParties = $repoP->countAllGamesByMembre($this->getUser());
+            $bestBadges = $repoB->getBestWinForMembre($this->getUser());
+            $nextBadges = $repoB->getNextWinForMembre($this->getUser());
+
             return $this->render('@FOSUser/Profile/show.html.twig', array(
                 'user' => $this->getUser(),
                 'nbParties' => $nbParties['nbParties'],
                 'nbPhrases' => $nbPhrases['nbPhrases'],
+                'bestBadges' => $bestBadges,
+                'nextBadges' => $nextBadges
             ));
         }
         // Consultation du profil public d'un membre
         else{
             $nbParties = $repoP->countAllGamesByMembre($user);
+            $bestBadges = $repoB->getBestWinForMembre($user);
 
             return $this->render('@App/User/show_public.html.twig', array(
                 'user' => $user,
                 'nbParties' => $nbParties['nbParties'],
                 'nbPhrases' => $nbPhrases['nbPhrases'],
+                'bestBadges' => $bestBadges
             ));
         }
     }

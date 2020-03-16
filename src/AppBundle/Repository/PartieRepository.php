@@ -24,6 +24,18 @@ class PartieRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery()->getSingleResult();
 	}
 
+	public function getByDayForMembre(Membre $membre)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('DATE_FORMAT(p.datePartie, \'%Y-%m-%d\') as date, count(p) as count')
+            ->where('p.joueur = :membre')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->setParameter('membre', $membre);
+
+        return $query->getQuery()->getResult();
+    }
+
     /**
      * Retourne un tableau de statistiques de l'entité
      *

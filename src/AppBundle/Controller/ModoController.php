@@ -7,9 +7,11 @@ use AppBundle\Entity\Historique;
 use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Phrase;
+use AppBundle\Event\AmbigussEvents;
 use AppBundle\Form\Glose\GloseEditType;
 use AppBundle\Form\Membre\MembreEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
@@ -232,7 +234,6 @@ class ModoController extends Controller
     {
         $repoJ = $this->getDoctrine()->getManager()->getRepository('AppBundle:Signalement');
         $repoTO = $this->getDoctrine()->getManager()->getRepository('AppBundle:TypeObjet');
-        $repoM = $this->getDoctrine()->getManager()->getRepository('AppBundle:Membre');
 
         $typeObj = $repoTO->findOneBy(array('nom' => 'Membre'));
         $signalements = $repoJ->findBy(array(
@@ -353,8 +354,22 @@ class ModoController extends Controller
                 $historiqueService->save($signalement->getAuteur(), "Signalement #{$signalement->getId()}, verdict : {$signalement->getVerdict()->getNom()}{$msgHisto}.");
 
                 $em->persist($signalement);
-
                 $em->flush();
+
+                if ($verdict->getNom() == 'Valide') {
+                    $ed = $this->get('event_dispatcher');
+
+                    $event = new GenericEvent(AmbigussEvents::SIGNALEMENT_VALIDE, array(
+                        'membre' => $signalement->getAuteur(),
+                        'signalement' => $signalement
+                    ));
+                    $ed->dispatch(AmbigussEvents::SIGNALEMENT_VALIDE, $event);
+
+                    $event = new GenericEvent(AmbigussEvents::POINTS_GAGNES, array(
+                        'membre' => $signalement->getAuteur(),
+                    ));
+                    $ed->dispatch(AmbigussEvents::POINTS_GAGNES, $event);
+                }
 
                 $succes = true;
 

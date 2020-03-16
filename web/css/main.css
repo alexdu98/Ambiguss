@@ -61,6 +61,9 @@ a:hover{
 	color: #A0D233;
 	color: var(--color-green);
 }
+.color-gold{
+	color: gold;
+}
 .row-eq-height{
 	display: flex;
 }

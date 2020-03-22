@@ -15,8 +15,8 @@ class ClassementController extends Controller
         $typeClassement = in_array($type, ['mensuel', 'hebdomadaire']) ? $type : 'général';
         $maxResult = $this->getParameter('maxResultForClassementGeneral');
 
-        $classement = $repoMembre->getClassementGeneral($typeClassement, $maxResult);
-        $nbMembreTotal = $repoMembre->countEnabled();
+        $classement = $repoMembre->getClassement($typeClassement, $maxResult);
+        $nbMembreTotal = $repoMembre->countClassement($typeClassement);
 
         // Si c'est un membre, on calcul sa position dans le classement
         $position = $this->getUser() ? $repoMembre->getPositionClassement($typeClassement, $this->getUser()) : null;

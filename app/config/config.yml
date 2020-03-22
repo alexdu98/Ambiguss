@@ -83,6 +83,7 @@ twig:
         gainPercentByGame: "%gainPercentByGame%"
         dureeAvantJouabiliteSecondes: "%dureeAvantJouabiliteSecondes%"
         costCreateGloseByGlosesOfMotAmbigu: "%costCreateGloseByGlosesOfMotAmbigu%"
+        maxResultForClassementGeneral: "%maxResultForClassementGeneral%"
         recaptcha: "%recaptcha%"
         version: "%version%"
         ttl_cookie_helper: "%ttl_cookie_helper%"

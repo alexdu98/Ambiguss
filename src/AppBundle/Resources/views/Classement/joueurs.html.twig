@@ -20,9 +20,13 @@
 			<li role="presentation" class="{% if page == mensuel %}active{% endif %}"><a href="{{ path('classement_joueurs_show', {type: 'mensuel'}) }}">Mensuel</a></li>
 			<li role="presentation" class="{% if page == hebdomadaire %}active{% endif %}"><a href="{{ path('classement_joueurs_show', {type: 'hebdomadaire'}) }}">Hebdomadaire</a></li>
 		</ul>
-		{% if app.user and classement is not empty and position <= classement|length %}
+		{% if app.user and classement is not empty %}
 			<h4 class="classementMe">
-				Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement {{ typeClassement }}.
+				{% if position <= nbMembreTotal %}
+					Vous êtes à la position <span>{{ position }}</span>/{{ nbMembreTotal }} dans le classement {{ typeClassement }}<sup>*</sup>.
+				{% else %}
+					Vous n'apparaissez pas car vous vous n'avez aucun point pour le classement {{ typeClassement }}<sup>*</sup>.
+				{% endif %}
 			</h4>
 		{% else %}
 			<br>
@@ -78,6 +82,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		<div class="text-info">
+			<sup>*</sup>Classement limité aux {{ maxResultForClassementGeneral }} premiers joueurs.
+		</div>
 	</div>
 {% endblock %}
 

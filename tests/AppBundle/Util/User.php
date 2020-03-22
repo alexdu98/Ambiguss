@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Util;
 
+use AppBundle\Entity\Membre;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -13,23 +14,28 @@ class User
     public static $MODO = 174;
     public static $MEMBRE = 76;
 
-    public static function logIn(Client $client, KernelInterface $kernel, $login)
+    public static function logIn(Client $client, KernelInterface $kernel, int $login)
     {
         $session = $client->getContainer()->get('session');
 
         $firewall = 'main';
         $userManager = $kernel->getContainer()->get('doctrine')->getRepository('AppBundle:Membre');
 
-        $user = null;
-        if (is_int($login)) {
-            $user = $userManager->find($login);
-        }
-        else {
-            $user = $userManager->findUserByEmail($login);
-        }
+        /** @var Membre $user */
+        $user = $userManager->find($login);
 
         if (!$user) {
             throw new \Exception('Utilisateur "' . $login . '" inconnu');
+        }
+
+        if ($login == self::$MEMBRE && $user->getGroupNames()[0] != 'Membre') {
+            throw new \Exception('Utilisateur "' . $login . '" non membre');
+        }
+        elseif ($login == self::$MODO && $user->getGroupNames()[0] != 'Modérateur') {
+            throw new \Exception('Utilisateur "' . $login . '" non modérateur');
+        }
+        elseif ($login == self::$ADMIN && $user->getGroupNames()[0] != 'Administrateur') {
+            throw new \Exception('Utilisateur "' . $login . '" non administrateur');
         }
 
         $token = new UsernamePasswordToken($user, $user->getPassword(), $firewall, $user->getRoles());

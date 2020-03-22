@@ -9,12 +9,12 @@ class MembreRepository extends EntityRepository
 {
 
     /**
-     * Retourne le tableau des $limit premiers joueurs
+     * Retourne le tableau des $limit premiers joueurs selon le type de classement
      *
      * @param int $limit
      * @return array
      */
-	public function getClassementGeneral($type, int $limit){
+	public function getClassement($type, int $limit){
 		$query = $this->createQueryBuilder('m')
             ->select('m.id, m.username, m.dateInscription')
 			->leftJoin("m.phrases", "p")->addSelect('count(distinct p.id) as nbPhrases')
@@ -45,15 +45,14 @@ class MembreRepository extends EntityRepository
 	}
 
     /**
-     *
-     *
+     * @param String $type
      * @param Membre $membre
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
 	public function getPositionClassement($type, Membre $membre)
 	{
-		$query =  $this->createQueryBuilder('m')
+		$query = $this->createQueryBuilder('m')
 			->select('count(m) position');
 
         if ($type == 'mensuel') {
@@ -72,22 +71,31 @@ class MembreRepository extends EntityRepository
 			    ->orderBy('m.pointsClassement', 'DESC');
         }
 
-			return $query->getQuery()->getOneOrNullResult()['position'] + 1;
+        return $query->getQuery()->getOneOrNullResult()['position'] + 1;
 	}
 
     /**
      * Retourne le nombre de membres activés
      *
+     * @param String $type
      * @return int
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-	public function countEnabled()
+	public function countClassement($type)
 	{
-		return $this->createQueryBuilder('m')
-			->select('count(m) total')
-            ->where('m.enabled = 1')
-			->getQuery()->getSingleResult()['total'];
+		$query = $this->createQueryBuilder('m')
+			->select('count(m) total');
+
+        if ($type == 'mensuel') {
+            $query->where("m.pointsClassementMensuel > 0");
+        }
+        elseif ($type == 'hebdomadaire') {
+            $query->where("m.pointsClassementHebdomadaire > 0");
+        }
+        else {
+            $query->where("m.pointsClassement > 0");
+        }
+
+        return $query->getQuery()->getSingleResult()['total'];
 	}
 
     /**

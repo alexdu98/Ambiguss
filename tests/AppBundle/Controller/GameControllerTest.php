@@ -4,15 +4,53 @@ namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Response;
+use Tests\AppBundle\Util\User;
 
 class GameControllerTest extends WebTestCase
 {
-    public function testShowGameDisconected()
+    private $client = null;
+    private $user = null;
+
+    public function setUp(): void
     {
-        $client = static::createClient();
+        $this->client = static::createClient();
+    }
 
-        $crawler = $client->request('GET', '/jeu');
+    public function testPlayGameDisconnected()
+    {
+        $crawler = $this->client->request('GET', '/jeu');
 
+        // Suit les redirections (pour la validation du formulaire)
+        $this->client->followRedirects();
+
+        $form = $this->checkGame($crawler);
+
+        // Soumission du formulaire
+        $this->client->submit($form);
+
+        $this->checkAfterPlay();
+    }
+
+    public function testPlayGameConnected()
+    {
+        $this->user = User::logIn($this->client, static::$kernel, User::$MEMBRE);
+
+        $crawler = $this->client->request('GET', '/jeu');
+
+        // Suit les redirections (pour la validation du formulaire)
+        $this->client->followRedirects();
+
+        $form = $this->checkGame($crawler);
+
+        // Soumission du formulaire
+        $this->client->submit($form);
+
+        $this->checkAfterPlay();
+    }
+
+    private function checkGame(Crawler $crawler)
+    {
         // La phrase est présente
         $this->assertGreaterThan(0, $crawler->filter('h3#result')->count());
         // Le formulaire des réponses est présent
@@ -25,18 +63,13 @@ class GameControllerTest extends WebTestCase
         // Il y a le même nombre de mots ambigus que de réponses
         $this->assertEquals($nbMA, $nbRep);
 
+        // Il y a le même nombre de bouton d'ajout de glose que de mots ambigus
+        $nbBtnAddGloseAttendu = $this->user ? $nbRep : 0;
+        $nbBtnAddGlose = $crawler->filter('button#addGloseModal')->count();
+        $this->assertEquals($nbBtnAddGloseAttendu, $nbBtnAddGlose);
+
         // Le bouton valider est présent
         $this->assertGreaterThan(0, $crawler->filter('button#AppBundle_game_valider')->count());
-    }
-
-    public function testPlayGameDisconected()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/jeu');
-
-        // Suit les redirections (pour la validation du formulaire)
-        $client->followRedirects();
 
         // Récupération du formulaire
         $buttonCrawlerNode = $crawler->selectButton('AppBundle_game_valider');
@@ -51,13 +84,16 @@ class GameControllerTest extends WebTestCase
             $form[$select->getAttribute('name')]->select($values[1]);
         }
 
-        // Soumission du formulaire
-        $client->submit($form);
+        return $form;
+    }
 
+    private function checkAfterPlay()
+    {
         // Instanciation de la nouvelle page
-        $afterPlayPage = new Crawler($client->getResponse()->getContent());
+        $afterPlayPage = new Crawler($this->client->getResponse()->getContent());
 
         // Redirigé sur la page des résultats
         $this->assertStringContainsString('Résultat', $afterPlayPage->filter('title')->html());
+        $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
 }

@@ -10,6 +10,9 @@ parameters:
     locale: fr
     site_name: "Ambiguss"
     version: "1.2.0"
+    github_web: "https://github.com"
+    github_api: "https://api.github.com"
+    ambiguss_repo: "alexdu98/Ambiguss"
     # Phrase
     costCreatePhraseByMotAmbiguCredits: 100
     gainCreatePhrasePoints: 25
@@ -77,6 +80,9 @@ twig:
     form_themes:
         - 'bootstrap_3_layout.html.twig'
     globals:
+        github_web: "%github_web%"
+        github_api: "%github_api%"
+        ambiguss_repo: "%ambiguss_repo%"
         costCreatePhraseByMotAmbiguCredits: "%costCreatePhraseByMotAmbiguCredits%"
         gainCreatePhrasePoints: "%gainCreatePhrasePoints%"
         gainPerLikePhrasePoints: "%gainPerLikePhrasePoints%"

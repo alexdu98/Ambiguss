@@ -17,9 +17,18 @@
 					<b>Tuteur</b> : Mathieu Lafourcade<br>
 					<b>Groupe</b> : IMNA<br>
 					<b>Membres</b> : Isna Ouazi, Melissa Mekaoui, Nicolas Delalande, Alexandre Culty<br>
-					<b>Github</b> : <a href="https://github.com/alexdu98/Ambiguss" target="_blank" rel="noreferrer noopener">Ambiguss</a><br>
-					<b>Version actuelle</b> : <a href="https://github.com/alexdu98/Ambiguss/releases/tag/v{{ version }}" target="_blank" rel="noreferrer noopener">{{ version }}</a>
-						 <small>({{ actualCommit.commit.committer.date|date('d/m/Y') }})</small><br>
+					<b>Github</b> : <a href="{{ github_web }}/{{ ambiguss_repo }}" target="_blank" rel="noreferrer noopener">Ambiguss</a><br>
+
+					<b>Version actuelle</b> :
+					{% set github_url = github_web ~ '/' ~ ambiguss_repo %}
+					{% set github_url = actualCommit ? github_url ~ '/releases/tag/v' ~ version : github_url %}
+					<a href="{{ github_url }}" target="_blank" rel="noreferrer noopener">
+						{{ version }}
+					</a>
+					 <small>
+						 ({{ actualCommit ? actualCommit.commit.committer.date|date('d/m/Y') : '?' }})
+					 </small><br>
+
 					<b>Dernier développement</b> :
 						<a href="{{ lastDev.html_url }}" target="_blank" rel="noreferrer noopener" data-toggle="tooltip" data-placement="top" title="{{ lastDev.commit.message }}">
 							{{ lastDev.commit.message|length > 50 ? lastDev.commit.message|slice(0, 50) ~ '...' : lastDev.commit.message }}

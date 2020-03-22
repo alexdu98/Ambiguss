@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GithubService
 {
     private $container;
-    private $url = "https://api.github.com/repos/alexdu98/Ambiguss";
+    private $url;
     private $opts = array(
         'http' => array(
             'method' => 'GET',
@@ -18,6 +18,7 @@ class GithubService
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->url = $container->getParameter('github_api') . '/repos/' . $container->getParameter('ambiguss_repo');
     }
 
     private function get($url)
@@ -28,7 +29,7 @@ class GithubService
 
     public function getLastDev()
     {
-        $url = $this->url . "/commits/develop";
+        $url = $this->url . "/commits/master";
         return $this->get($url);
     }
 
@@ -36,7 +37,11 @@ class GithubService
     {
         $tag = $this->getActualTag();
 
-        return $this->get($tag->commit->url);
+        if (!empty($tag)) {
+            return $this->get($tag->commit->url);
+        }
+
+        return null;
     }
 
     public function getAllTags()

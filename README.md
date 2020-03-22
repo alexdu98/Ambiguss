@@ -1,5 +1,5 @@
-<p align="center"><a href="https://ambiguss.calyxe.fr" target="_blank">
-    <img src="https://ambiguss.calyxe.fr/images/logo.png">
+<p align="center"><a href="https://www.ambiguss.fr" target="_blank">
+    <img src="https://www.ambiguss.fr/images/logo.png">
 </a></p>
 
 [Ambiguss][1] est un site web réalisé dans le cadre d'un TER (Travail d'Étude et de Recherche) de première 
@@ -16,4 +16,4 @@ Ce type de jeu est très utilisé dans le milieu scientifique car il permet d'ac
 
 **Membres** : Isna Ouazi, Melissa Mekaoui, Nicolas Delalande, Alexandre Culty
 
-[1]: https://ambiguss.calyxe.fr
+[1]: https://www.ambiguss.fr

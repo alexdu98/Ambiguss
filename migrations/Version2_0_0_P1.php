@@ -132,10 +132,10 @@ final class Version2_0_0_P1 extends AbstractMigration
         $this->addSql('RENAME TABLE jugement TO signalement');
         $this->addSql('RENAME TABLE categorie_jugement TO categorie_signalement');
 
-        $this->addSql('CREATE TABLE membre_groupe (membre_id INT NOT NULL, groupe_id INT NOT NULL, PRIMARY KEY(membre_id, groupe_id))');
-        $this->addSql('CREATE TABLE role(id INT AUTO_INCREMENT PRIMARY KEY, parent_id INT NULL, name VARCHAR(255) NOT NULL)');
-        $this->addSql('CREATE TABLE badge (id INT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, nombre INT NOT NULL, ordre INT NOT NULL, description VARCHAR(255) NOT NULL, points INT NOT NULL, UNIQUE INDEX uc_badg_typnbr (type, nombre), PRIMARY KEY(id), UNIQUE INDEX uc_badg_typordr (type, ordre))');
-        $this->addSql('CREATE TABLE membre_badge (id INT AUTO_INCREMENT NOT NULL, membre_id INT NOT NULL, badge_id INT NOT NULL, date_obtention DATETIME NOT NULL, INDEX ix_mbrebadg_mbreid (membre_id), INDEX ix_mbrebadg_badgid (badge_id), INDEX ix_mbrebadg_dtobt (date_obtention), UNIQUE INDEX uc_mbrebadg_mbreidbadgid (membre_id, badge_id), PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE membre_groupe (membre_id INT NOT NULL, groupe_id INT NOT NULL, PRIMARY KEY(membre_id, groupe_id)) engine=InnoDB collate=utf8_unicode_ci');
+        $this->addSql('CREATE TABLE role(id INT AUTO_INCREMENT PRIMARY KEY, parent_id INT NULL, name VARCHAR(255) NOT NULL) engine=InnoDB collate=utf8_unicode_ci');
+        $this->addSql('CREATE TABLE badge (id INT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, nombre INT NOT NULL, ordre INT NOT NULL, description VARCHAR(255) NOT NULL, points INT NOT NULL, UNIQUE INDEX uc_badg_typnbr (type, nombre), PRIMARY KEY(id), UNIQUE INDEX uc_badg_typordr (type, ordre)) engine=InnoDB collate=utf8_unicode_ci');
+        $this->addSql('CREATE TABLE membre_badge (id INT AUTO_INCREMENT NOT NULL, membre_id INT NOT NULL, badge_id INT NOT NULL, date_obtention DATETIME NOT NULL, INDEX ix_mbrebadg_mbreid (membre_id), INDEX ix_mbrebadg_badgid (badge_id), INDEX ix_mbrebadg_dtobt (date_obtention), UNIQUE INDEX uc_mbrebadg_mbreidbadgid (membre_id, badge_id), PRIMARY KEY(id)) engine=InnoDB collate=utf8_unicode_ci');
 
         $this->addSql('ALTER TABLE signalement CHANGE categorie_jugement_id categorie_signalement_id INT NOT NULL');
         $this->addSql('ALTER TABLE categorie_signalement CHANGE categorie_jugement nom VARCHAR(32) NOT NULL');

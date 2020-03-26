@@ -87,8 +87,10 @@ class FOSUserProvider extends BaseFOSUBProvider
                 }
 
                 // On prévient l'utilisateur qu'il peut changer de pseudo
-                if($tryGenerateNumber > 1)
+                if($tryGenerateNumber > 1) {
+                    $user->setRenamable(true);
                     $this->session->getFlashBag()->add('info', 'Vous pouvez modifier le pseudo généré <b>UNE FOIS</b>, en allant sur votre profil.');
+                }
 
                 $user->setPlainPassword(bin2hex(openssl_random_pseudo_bytes(20)));
 
@@ -132,7 +134,7 @@ class FOSUserProvider extends BaseFOSUBProvider
                 $user->setUsername($response->getNickname());
                 break;
             case 'google':
-                $user->setUsername($response->getFirstName() . ' ' . $response->getLastName()[0]);
+                $user->setUsername(explode('@', $response->getData()['email'])[0]);
                 break;
         }
         $user->setServiceCreation(true);

@@ -6,6 +6,7 @@ easy_admin:
             - label: 'Accueil Ambiguss'
               route: 'accueil_show'
             - label: 'Statistiques'
+              default: true
               icon: 'line-chart'
               route: 'admin_stats'
             - label: 'Modération'

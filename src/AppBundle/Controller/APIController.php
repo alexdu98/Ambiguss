@@ -33,22 +33,45 @@ class APIController extends Controller
                 $em = $this->getDoctrine()->getManager();
 				$signalement = $form->getData();
 
-				$signalement->setObjetId($request->request->get('signalement_add')['objetId']);
+                $objetId = $request->request->get('signalement_add')['objetId'];
+
+                $signalement->setObjetId($objetId);
                 $signalement->setAuteur($this->getUser());
 
-				$histMsg = null;
+                $histMsg = null;
                 $repo = null;
-				if($signalement->getTypeObjet()->getNom() == 'Phrase') {
-					$repo = $em->getRepository('AppBundle:Phrase');
+                if($signalement->getTypeObjet()->getNom() == 'Phrase') {
+                    $repo = $em->getRepository('AppBundle:Phrase');
                     $histMsg = "Signalement de la phrase n°" . $signalement->getObjetId() . ".";
-				}
-				elseif($signalement->getTypeObjet()->getNom() == 'Glose') {
+                }
+                elseif($signalement->getTypeObjet()->getNom() == 'Glose') {
                     $repo = $em->getRepository('AppBundle:Glose');
                     $histMsg = "Signalement de la glose n°" . $signalement->getObjetId() . ".";
-				}
+                }
                 elseif($signalement->getTypeObjet()->getNom() == 'Membre') {
                     $repo = $em->getRepository('AppBundle:Membre');
                     $histMsg = "Signalement du membre n°" . $signalement->getObjetId() . ".";
+                }
+                else {
+                    return $this->json(array(
+                        'succes' => false,
+                        'message' => 'Type d\'objet inconnu',
+                    ));
+                }
+
+                $signalementRepo = $em->getRepository('AppBundle:Signalement');
+                $signalementObjUserActif = $signalementRepo->findBy(array(
+                    'auteur' => $this->getUser(),
+                    'objetId' => $objetId,
+                    'typeObjet' => $signalement->getTypeObjet(),
+                    'verdict' => null
+                ));
+
+                if($signalementObjUserActif) {
+                    return $this->json(array(
+                        'succes' => false,
+                        'message' => 'Vous avez déjà signalé cet élément et le verdict n\'a pas encore été rendu.',
+                    ));
                 }
 
                 $obj = $repo->find($signalement->getObjetId());

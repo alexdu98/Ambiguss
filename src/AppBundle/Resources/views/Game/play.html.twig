@@ -204,7 +204,7 @@
                                 $('#signalement_add_description').val('');
                             }
                             else {
-                                $(form).after('<div class="alert alert-danger">Erreur</div>');
+                                $(form).after('<div class="alert alert-danger">Erreur : ' + data.message + '</div>');
                             }
                         },
                         error: function () {

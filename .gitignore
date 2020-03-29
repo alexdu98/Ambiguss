@@ -16,12 +16,6 @@
 /vendor/
 /web/bundles/
 /.idea/
-/access.log
-/error.log
-/backup
-/ambiguss.log
-/dumpBD.default
 /web/download/*
 !web/download/.gitkeep
-dumpBD
 *~

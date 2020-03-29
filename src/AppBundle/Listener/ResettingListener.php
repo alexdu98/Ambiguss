@@ -88,6 +88,11 @@ class ResettingListener implements EventSubscriberInterface
         $this->flashBag->add('success', 'Veuillez cliquer sur le lien de réinitialisation de mot de passe envoyé par email à l\'adresse "' . $user->getEmailCanonical() . '".');
 
         $this->historique->save($user, "Demande de réinitialisation du mot de passe (IP : " . $event->getRequest()->server->get('REMOTE_ADDR') . ").", true);
+
+        $url = $this->container->get('router')->generate('fos_user_resetting_request');
+        $response = new RedirectResponse($url);
+
+        $event->setResponse($response);
     }
 
     /**

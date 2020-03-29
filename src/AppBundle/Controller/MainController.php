@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\Main\ContactType;
+use AppBundle\Service\MailerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +47,7 @@ class MainController extends Controller
 
                 $logInfos = array(
                     'msg' => $message,
-                    'user' => $this->getUser()->getUsername() ?? 'non connecté',
+                    'user' => $this->getUser() ? $this->getUser()->getUsername() : 'non connecté',
                     'ip' => $request->server->get('REMOTE_ADDR')
                 );
                 $logger->error(json_encode($logInfos));
@@ -67,8 +68,8 @@ class MainController extends Controller
 
                 // On envoie le mail de contact
                 $mailerService = $this->get('AppBundle\Service\MailerService');
-                $nbMail = $mailerService->sendContactEmailMessage(
-                    $this->getParameter('emailContact'),
+                $nbMail = $mailerService->sendEmail(
+                    MailerService::CONTACT,
                     array(
                         'pseudoExpediteur' => $data['pseudo'],
                         'emailExpediteur' => $data['email'],

@@ -21,7 +21,7 @@
 
 	<article>
 		<p>
-			Bonjour {{ recipient }},
+			Bonjour{{ pseudoReceveur is defined ? ' ' ~ pseudoReceveur : '' }},
 		</p>
 		<div>
 			{% block content %}{% endblock %}
@@ -34,7 +34,9 @@
 			L'équipe <span class="color-green">Amb</span>iguss.
 		</p>
 		<p class="info">
-			IP : {{ app.request.server.get("REMOTE_ADDR") }}<br>
+			{% if app.request %}
+				IP : {{ app.request.server.get("REMOTE_ADDR") }}<br>
+			{% endif %}
 			Date : {{ "now"|date("d/m/Y à H:i") }}
 		</p>
 	</footer>

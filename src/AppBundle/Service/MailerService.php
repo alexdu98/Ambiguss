@@ -8,86 +8,102 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MailerService implements MailerInterface
 {
+    const USER_CONFIRM = 0;
+    const USER_RESET = 1;
+    const CONTACT = 2;
+    const DUMP_BD = 3;
 
-    private $mailer;
-    private $templating;
-    private $from;
+    private $container;
 
     public function __construct(ContainerInterface $container)
     {
-        $this->mailer = $container->get('mailer');
-        $this->templating = $container->get('templating');
-        $this->from = $container->getParameter('emailFrom');
+        $this->container = $container;
     }
 
     /**
      * Envoie le mail de confirmation d'inscription au membre
-     *
-     * @param UserInterface $user
-     * @return int
-     * @throws \Twig\Error\Error
      */
     public function sendConfirmationEmailMessage(UserInterface $user)
     {
-        $subject = 'Inscription';
-        $body = $this->templating->render('AppBundle:Mail:inscription.html.twig', array(
-            'recipient' => $user,
-            'subject' => $subject,
-        ));
-
-        return $this->sendEmailMessage($subject, $this->from, $user->getEmail(), $body);
+        return $this->sendEmail(
+            self::USER_CONFIRM,
+            array(
+                'user' => $user,
+                'pseudoReceveur' => $user->getUsername()
+            )
+        );
     }
 
     /**
      * Envoie le mail de réinitialisation de mot de passe au membre
-     *
-     * @param UserInterface $user
-     * @return int
-     * @throws \Twig\Error\Error
      */
     public function sendResettingEmailMessage(UserInterface $user)
     {
-        $subject = 'Réinitialisation de mot de passe';
-        $body = $this->templating->render('AppBundle:Mail:/reinitialisation.html.twig', array(
-            'recipient' => $user,
-            'subject' => $subject,
-        ));
-
-        return $this->sendEmailMessage($subject, $this->from, $user->getEmail(), $body);
+        return $this->sendEmail(
+            self::USER_RESET,
+            array(
+                'user' => $user,
+                'pseudoReceveur' => $user->getUsername()
+            )
+        );
     }
 
-    /**
-     * Envoie le mail de contact
-     *
-     * @param string $recipient
-     * @param array $params
-     * @return int
-     * @throws \Twig\Error\Error
-     */
-    public function sendContactEmailMessage(string $recipient, array $params)
+    public function sendEmail($type, $params = null)
     {
-        $subject = 'Contact';
-        $body = $this->templating->render('AppBundle:Mail:contact.html.twig', array_merge(
+        $from = $this->container->getParameter('mailer_from');
+        $subject = $recipient = $template = $attach = null;
+
+        switch ($type) {
+            case self::USER_CONFIRM:
+                $subject = 'Inscription';
+                $recipient = $params['user']->getEmail();
+                $template = 'AppBundle:Mail:inscription.html.twig';
+
+                break;
+
+            case self::USER_RESET:
+                $subject = 'Réinitialisation de mot de passe';
+                $recipient = $params['user']->getEmail();
+                $template = 'AppBundle:Mail:reinitialisation.html.twig';
+
+                break;
+
+            case self::CONTACT:
+                $subject = 'Contact';
+                $recipient = $this->container->getParameter('contact_email');
+                $template = 'AppBundle:Mail:contact.html.twig';
+
+                break;
+
+            case self::DUMP_BD:
+                $subject = 'Dump du ' . $params['date'] . ' : ' . ($params['dumpSuccess'] ? 'OK' : 'KO');
+                $recipient = $this->container->getParameter('dump_email');
+                $template = 'AppBundle:Mail:dump.html.twig';
+                $params['dump_dir'] = $this->container->getParameter('dump_dir');
+                $params['dumpAbsPath'] = $params['dump_dir'] . '/' . $params['dumpName'];
+
+                if ($params['dumpSuccess'])
+                    $attach = $params['dumpAbsPath'];
+
+                break;
+        }
+
+        $params = array_merge(
             array(
-                'recipient' => $recipient,
                 'subject' => $subject,
+                'recipient' => $recipient,
             ),
             $params
-        ));
+        );
+        $body = $this->container->get('templating')->render($template, $params);
 
-        return $this->sendEmailMessage($subject, $this->from, $recipient, $body);
+        return $this->sendEmailMessage($subject, $from, $recipient, $body, $attach);
     }
 
     /**
      * Envoie un mail
-     *
-     * @param string $subject
-     * @param string $from
-     * @param string $recipient
-     * @param string $body
-     * @return int Le nombre de destinataire. 0 si erreur
      */
-    protected function sendEmailMessage(string $subject, string $from, string $recipient, string $body)
+    private function sendEmailMessage(string $subject, string $from, string $recipient, string $body, ?string $attach)
     {
         $message = (new \Swift_Message())
             ->setSubject('[Ambiguss] ' . $subject)
@@ -95,7 +111,10 @@ class MailerService implements MailerInterface
             ->setTo($recipient)
             ->setBody($body, 'text/html');
 
-        return $this->mailer->send($message);
+        if(!empty($attach))
+            $message->attach(\Swift_Attachment::fromPath($attach));
+
+        return $this->container->get('mailer')->send($message);
     }
 
 }

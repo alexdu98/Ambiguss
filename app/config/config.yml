@@ -27,10 +27,6 @@ parameters:
     maxResultForClassementPhrases: 100
     # Signalement
     gainSignalementValide: 25
-    # Emails contact
-    emailContact: "alexdu98@gmx.fr"
-    # Email from
-    emailFrom: "noreply@ambiguss.fr"
     # Visite
     timeBetweenTwoVisitesSecondes: 86400 # 1 jour
     # Download directory of export

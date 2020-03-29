@@ -4,8 +4,8 @@
     <p>
         Vous venez de vous inscrire sur Ambiguss et nous vous en remercions.<br><br>
         Pour confirmer votre inscription, merci de visiter le lien suivant : <br>
-        <a href="{{ url('fos_user_registration_confirm', {'token': recipient.confirmationToken}) }}">
-            {{ url('fos_user_registration_confirm', {'token': recipient.confirmationToken}) }}
+        <a href="{{ url('fos_user_registration_confirm', {'token': user.confirmationToken}) }}">
+            {{ url('fos_user_registration_confirm', {'token': user.confirmationToken}) }}
         </a>
     </p>
 {% endblock %}

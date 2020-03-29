@@ -1,0 +1,10 @@
+{% extends "base_email.html.twig" %}
+
+{% block content %}
+	{% if dumpSuccess %}
+		Le dump {{ dumpName }} est également disponible dans {{ dump_dir }}.
+	{% else %}
+		Erreur lors de la création du dump.<br>
+		{{ resultCmd }}
+	{% endif %}
+{% endblock %}

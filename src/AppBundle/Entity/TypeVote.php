@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="type_vote",
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="uc_typvot_typvot", columns={"type_vote"})
+ *         @ORM\UniqueConstraint(name="uc_typvot_typvot", columns={"nom"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TypeVoteRepository")

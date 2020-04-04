@@ -3,6 +3,7 @@
 namespace Tests\AppBundle\Util;
 
 use AppBundle\Entity\Membre;
+use PHPUnit\Framework\Warning;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -29,13 +30,13 @@ class User
         }
 
         if ($login == self::$MEMBRE && $user->getGroupNames()[0] != 'Membre') {
-            throw new \Exception('Utilisateur "' . $login . '" non membre');
+            throw new Warning('Utilisateur "' . $login . '" non membre');
         }
         elseif ($login == self::$MODO && $user->getGroupNames()[0] != 'Modérateur') {
-            throw new \Exception('Utilisateur "' . $login . '" non modérateur');
+            throw new Warning('Utilisateur "' . $login . '" non modérateur');
         }
         elseif ($login == self::$ADMIN && $user->getGroupNames()[0] != 'Administrateur') {
-            throw new \Exception('Utilisateur "' . $login . '" non administrateur');
+            throw new Warning('Utilisateur "' . $login . '" non administrateur');
         }
 
         $token = new UsernamePasswordToken($user, $user->getPassword(), $firewall, $user->getRoles());

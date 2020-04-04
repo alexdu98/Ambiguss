@@ -2,6 +2,8 @@
 
 namespace Tests\AppBundle\Service;
 
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\Warning;
 use \stdClass;
 use AppBundle\Service\GithubService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -21,16 +23,21 @@ class GithubServiceTest extends KernelTestCase
 
     public function testGetLastDev()
     {
-        $game = $this->service->getLastDev();
+        $tag = $this->service->getLastDev();
 
-        $this->assertInstanceOf(stdClass::class, $game);
+        $this->assertInstanceOf(stdClass::class, $tag);
     }
 
     public function testGetActualCommit()
     {
-        $game = $this->service->getActualCommit();
+        $tag = $this->service->getActualCommit();
 
-        $this->assertInstanceOf(stdClass::class, $game);
+        try {
+            $this->assertInstanceOf(stdClass::class, $tag);
+        }
+        catch (ExpectationFailedException $e) {
+            throw new Warning('Le tag de la version actuelle (' . $this->container->getParameter('version') . ') n\'existe pas.');
+        }
     }
 
 }

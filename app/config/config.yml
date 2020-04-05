@@ -9,7 +9,7 @@ imports:
 parameters:
     locale: fr
     site_name: "Ambiguss"
-    version: "1.2.0"
+    version: "2.0.0"
     github_web: "https://github.com"
     github_api: "https://api.github.com"
     ambiguss_repo: "alexdu98/Ambiguss"

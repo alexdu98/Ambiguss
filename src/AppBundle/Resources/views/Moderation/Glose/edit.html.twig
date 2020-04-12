@@ -1,5 +1,13 @@
 <div class="container-fluid">
 
+	<div class="alert alert-danger">
+		<b>TRÈS IMPORTANT :</b><br>
+		La modification d'une glose sera effective pour tous les mots ambigus liés.<br>
+		Avant de la modifier, <a href="{{ path('modo_mots_ambigus_gloses_show') }}" target="_blank">assurez-vous que la nouvelle glose sera toujours valide</a> pour les mots
+		ambigus liés.<br>
+		Si besoin, créez une nouvelle glose, liez-là au mot ambigu, puis supprimez le lien du mot ambigu et de l'ancienne glose.
+	</div>
+
 	{{ form_start(form) }}
 
 	{{ form_errors(form) }}

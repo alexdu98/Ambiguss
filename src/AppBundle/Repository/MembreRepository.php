@@ -16,19 +16,23 @@ class MembreRepository extends EntityRepository
      */
 	public function getClassement($type, int $limit){
 		$query = $this->createQueryBuilder('m')
-            ->select('m.id, m.username, m.dateInscription')
-			->leftJoin("m.phrases", "p")->addSelect('count(distinct p.id) as nbPhrases')
-			->leftJoin("p.jAime", "lp", 'with', 'lp.active = 1')->addSelect('count(distinct lp.id) as nbJAime')
+            ->select('m.id, m.username, m.dateInscription, count(distinct p) as nbPhrases, count(distinct part) as nbParties, count(distinct mb) as nbBadges')
 			->groupBy('m.id')
 			->setMaxResults($limit);
 
 		if ($type == 'mensuel') {
+            $tsPeriod = strtotime('midnight first day of this month');
+            $startDate = (new \DateTime())->setTimestamp($tsPeriod);
+
             $query
                 ->addSelect('m.pointsClassementMensuel pointsClassement')
                 ->where("m.pointsClassementMensuel > 0")
                 ->orderBy('m.pointsClassementMensuel', 'DESC');
         }
         elseif ($type == 'hebdomadaire') {
+            $tsPeriod = strtotime('midnight this week');
+            $startDate = (new \DateTime())->setTimestamp($tsPeriod);
+
             $query
                 ->addSelect('m.pointsClassementHebdomadaire pointsClassement')
                 ->where("m.pointsClassementHebdomadaire > 0")
@@ -38,7 +42,19 @@ class MembreRepository extends EntityRepository
             $query
                 ->addSelect('m.pointsClassement')
                 ->where("m.pointsClassement > 0")
-                ->orderBy('m.pointsClassement', 'DESC');
+                ->orderBy('m.pointsClassement', 'DESC')
+                ->leftJoin("m.phrases", "p")
+                ->leftJoin("m.parties", "part", 'with', 'part.joue = 1')
+                ->leftJoin("m.badges", "mb")
+                ->leftJoin("p.jAime", "lp", 'with', 'lp.active = 1 and lp.membre != p.auteur')->addSelect('count(distinct lp) as nbJAime');
+        }
+
+        if ($type != 'général') {
+            $query
+                ->leftJoin("m.phrases", "p", 'with', 'p.dateCreation >= :startDate')
+                ->leftJoin("m.parties", "part", 'with', 'part.joue = 1 and part.datePartie >= :startDate')
+                ->leftJoin("m.badges", "mb", 'with', 'mb.dateObtention >= :startDate')
+                ->setParameter('startDate', $startDate);
         }
 
 		return $query->getQuery()->getResult();

@@ -28,7 +28,7 @@ class ClassementControllerTest extends WebTestCase
         // Le sous menu est présent
         $this->assertGreaterThan(0, $crawler->filter('div.well ul.nav')->count());
         // Le tableau est présent
-        $this->assertGreaterThan(0, $crawler->filter('#classement')->count());
+        $this->assertGreaterThan(0, $crawler->filter('#classement-général')->count());
 
         // Clic sur le lien du classement général
         $link = $crawler->selectLink('Général')->link();
@@ -62,7 +62,7 @@ class ClassementControllerTest extends WebTestCase
         // Le sous menu est présent
         $this->assertGreaterThan(0, $crawler->filter('div.well ul.nav')->count());
         // Le tableau est présent
-        $this->assertGreaterThan(0, $crawler->filter('#classement')->count());
+        $this->assertGreaterThan(0, $crawler->filter('#classement-général')->count());
 
         // Clic sur le lien du classement général
         $link = $crawler->selectLink('Général')->link();

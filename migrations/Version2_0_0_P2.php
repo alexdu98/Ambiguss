@@ -24,6 +24,8 @@ final class Version2_0_0_P2 extends AbstractMigration
 
         $this->addSql('ALTER TABLE membre ADD CONSTRAINT uc_mbre_usernamcan UNIQUE (username_canonical)');
         $this->addSql('ALTER TABLE membre ADD CONSTRAINT uc_mbre_emailcan UNIQUE (email_canonical)');
+
+        $this->addSql('CREATE TABLE sessions (sess_id VARCHAR(128) NOT NULL PRIMARY KEY, sess_data BLOB NOT NULL, sess_time INTEGER UNSIGNED NOT NULL, sess_lifetime INTEGER UNSIGNED NOT NULL) COLLATE utf8mb4_bin, ENGINE = InnoDB;');
     }
 
     public function down(Schema $schema) : void

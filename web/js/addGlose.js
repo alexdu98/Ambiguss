@@ -107,7 +107,7 @@ $(document).ready(function () {
 
         setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="' + costCreateGloseByGlosesOfMotAmbigu + '" class="costNewGlose">' + cost + '</b> crédit(s).</div><br>');
 
-        if ($('#credits').html() > cost) {
+        if (getCredits() > cost) {
             setModalBody(gloseAddForm);
             addGloseModal({motAmbigu: motAmbigu, select: selectGlose});
         }

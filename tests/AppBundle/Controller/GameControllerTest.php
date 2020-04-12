@@ -65,7 +65,7 @@ class GameControllerTest extends WebTestCase
 
         // Il y a le même nombre de bouton d'ajout de glose que de mots ambigus
         $nbBtnAddGloseAttendu = $this->user ? $nbRep : 0;
-        $nbBtnAddGlose = $crawler->filter('button#addGloseModal')->count();
+        $nbBtnAddGlose = $crawler->filter('button.addGloseModal')->count();
         $this->assertEquals($nbBtnAddGloseAttendu, $nbBtnAddGlose);
 
         // Le bouton valider est présent

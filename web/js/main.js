@@ -86,12 +86,29 @@ function messageNeedConnectionModal() {
 	setModalBody('<div class="alert alert-danger">Il faut être connecté pour utiliser cette fonctionnalité</div>');
 }
 
+function getPoints() {
+	return parseInt($('#points').data('value'));
+}
 function updatePoints(points) {
-	$('#points').html(parseInt($('#points').html()) + parseInt(points));
+	var newVal = getPoints() + parseInt(points);
+	$('#points').html(formatNumber(newVal)).data('value', newVal);
 }
 
+function getCredits() {
+	return parseInt($('#credits').data('value'));
+}
 function updateCredits(credits) {
-	$('#credits').html(parseInt($('#credits').html()) + parseInt(credits));
+	var newVal = getCredits() + parseInt(credits);
+	$('#credits').html(formatNumber(newVal)).data('value', newVal);
+}
+
+function formatNumber(nStr) {
+	nStr += '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(nStr)) {
+		nStr = nStr.replace(rgx, '$1' + ' ' + '$2');
+	}
+	return nStr;
 }
 
 $(document).ready(function () {

@@ -21,6 +21,41 @@
 
             {{ form_errors(form) }}
 
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Créateur</div>
+                            <input type="text" class="form-control" value="{{ phrase.auteur.username }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Date création</div>
+                            <input type="text" class="form-control" value="{{ phrase.dateCreation|date('d/m/Y H:i') }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Modificateur</div>
+                            <input type="text" class="form-control" value="{{ phrase.modificateur.username|default('') }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Date modification</div>
+                            <input type="text" class="form-control" value="{{ phrase.dateModification is empty ? '' : phrase.dateModification|date('d/m/Y H:i') }}" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
                 Phrase originale :
                 <div class="size16" style="background: white; color: black; padding: 5px;">{{ phraseOri.contenuHTML|raw }}</div>

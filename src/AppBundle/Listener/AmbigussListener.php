@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\Membre;
 use AppBundle\Event\AmbigussEvents;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -85,15 +86,18 @@ class AmbigussListener implements EventSubscriberInterface
     {
         $badgeService = $this->container->get('AppBundle\Service\BadgeService');
 
+        /* @var Membre[] $membres*/
         $membres = $event['membres'];
 
         if ($event['type'] == 'weekly') {
             foreach ($membres as $membre) {
+                $membre->setPointsClassementHebdomadaire(0);
                 $badgeService->check($membre, 'CLASSEMENT_HEBDO');
             }
         }
         else if ($event['type'] == 'monthly') {
             foreach ($membres as $membre) {
+                $membre->setPointsClassementMensuel(0);
                 $badgeService->check($membre, 'CLASSEMENT_MEN');
             }
         }

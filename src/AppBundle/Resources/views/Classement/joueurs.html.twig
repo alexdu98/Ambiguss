@@ -31,27 +31,39 @@
 		{% else %}
 			<br>
 		{% endif %}
-		<table id="classement" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+		<table id="classement-{{ typeClassement }}" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
 			<thead>
 				<tr>
 					<th>#</th>
 					<th>Pseudo</th>
-					<th>Titre</th>
+					{% if page == general %}
+						<th>Titre</th>
+					{% endif %}
 					<th>Inscription</th>
-					<th>Points</th>
-					<th>Nombre de phrases totales</th>
-					<th>Nombre de j'aime totaux</th>
+					<th>Points gagnés</th>
+					<th>Phrases créées</th>
+					{% if page == general %}
+						<th>Nombre de « j'aime » reçu</th>
+					{% endif %}
+					<th>Parties jouées</th>
+					<th>Badges gagnés</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<th>#</th>
 					<th>Pseudo</th>
-					<th>Titre</th>
+					{% if page == general %}
+						<th>Titre</th>
+					{% endif %}
 					<th>Inscription</th>
-					<th>Points</th>
-					<th>Nombre de phrases totales</th>
-					<th>Nombre de j'aime totaux</th>
+					<th>Points gagnés</th>
+					<th>Phrases créées</th>
+					{% if page == general %}
+						<th>Nombre de « j'aime » reçu</th>
+					{% endif %}
+					<th>Parties jouées</th>
+					<th>Badges gagnés</th>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -59,25 +71,31 @@
 					<tr {% if app.user and row.id == app.user.id %}class="classementTableMe"{% endif %}>
 						<td>{{ loop.index }}</td>
 						<td><a href="{{ path('fos_user_profile_show' , {'id':row.id}) }}">{{ row.username }}</a></td>
-						<td>
-							{% if loop.index == 1 %}
-								Ambigator
-							{% elseif loop.index >= 2 and loop.index < 5 %}
-								Bâtonnier
-							{% elseif loop.index >= 5 and loop.index < 10 %}
-								Grand Maître
-							{% elseif loop.index >= 10 and loop.index < 20 %}
-								Maître
-							{% elseif loop.index >= 20 and row.pointsClassement >= 3000 %}
-								Challenger
-							{% else %}
-								Novice
-							{% endif %}
-						</td>
+						{% if page == general %}
+							<td>
+								{% if loop.index == 1 %}
+									Ambigator
+								{% elseif loop.index >= 2 and loop.index < 5 %}
+									Bâtonnier
+								{% elseif loop.index >= 5 and loop.index < 10 %}
+									Grand Maître
+								{% elseif loop.index >= 10 and loop.index < 20 %}
+									Maître
+								{% elseif loop.index >= 20 and row.pointsClassement >= 3000 %}
+									Challenger
+								{% else %}
+									Novice
+								{% endif %}
+							</td>
+						{% endif %}
 						<td data-order="{{ row.dateInscription|date("U") + row.dateInscription|date("Z") }}">{{ row.dateInscription|date("d/m/Y") }}</td>
-						<td>{{ row.pointsClassement }}</td>
+						<td data-order="{{ row.pointsClassement }}">{{ row.pointsClassement|number_format(0, ',', ' ') }}</td>
 						<td>{{ row.nbPhrases }}</td>
-						<td>{{ row.nbJAime }}</td>
+						{% if page == general %}
+							<td>{{ row.nbJAime }}</td>
+						{% endif %}
+						<td>{{ row.nbParties }}</td>
+						<td>{{ row.nbBadges }}</td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -92,18 +110,24 @@
 	<script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
 	<script>
 		$(document).ready(function() {
-			$('#classement').DataTable({
-				stateSave: true, // Enregistre les configurations
-				stateSaveParams: function (settings, data) {
-					data.start = 0; // On enregistre pas la page
-					data.order = [[4, "desc"]]; // On ordonne sur le nombre de points
-					data.search = {}; // On enregistre pas la recherche
-				},
-				stateDuration: 0, // pour une durée illimitée
-				order: [[4, 'desc']], // On ordonne sur le nombre de points
-				responsive: true,
-				language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
-			});
+			var options = function(numColPoints) {
+				return {
+					stateSave: true, // Enregistre les configurations
+					stateSaveParams: function (settings, data) {
+						data.start = 0; // On enregistre pas la page
+						data.order = [[numColPoints, "desc"]]; // On ordonne sur le nombre de points
+						data.search = {}; // On enregistre pas la recherche
+					},
+					stateDuration: 0, // pour une durée illimitée
+					order: [[numColPoints, 'desc']], // On ordonne sur le nombre de points
+					responsive: true,
+					language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+				};
+			};
+
+			var numColPoints = "{{ typeClassement }}" == "général" ? 4 : 3;
+
+			$('#classement-{{ typeClassement }}').DataTable(options(numColPoints));
 		});
 	</script>
 {% endblock %}

@@ -1,47 +1,31 @@
-{% if add %}
-	<div class="alert alert-success alert-dismissible fade in" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-		La phrase a bien été ajoutée. Vous disposez de <b>{{ dureeAvantJouabiliteSecondes / 60 }} minutes</b> pour <b><a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la
-				modifier</a></b>.
-		<h3 id="result" class="text-center">
-			{{ phraseDisplay.contenuHTML|raw }}
-		</h3>
-		<div class="text-center">
-			{% for map in phraseDisplay.motsAmbigusPhrase %}
-				<span class="reponseGroupe" id="rep{{ map.ordre }}">
-					<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
-					<small>({{ map.ordre }})</small> :
-					{% for reponse in map.reponses %}
-						{{ reponse.valeurGlose }}
-					{% endfor %}
-				</span>
-				<br>
-			{% endfor %}
-		</div>
-	</div>
-{% else %}
-	<div class="alert alert-success alert-dismissible fade in" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+<div class="alert alert-success alert-dismissible fade in" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	{% if add %}
+		La phrase a bien été ajoutée.
+		Vous disposez de <b>{{ dureeAvantJouabiliteSecondes / 60 }} minutes</b> pour <b>
+		<a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
+	{% else %}
 		{% if modo is not defined %}
 			La phrase a bien été modifiée. Vous disposez de <b>{{ dureeAvantJouabiliteSecondes / 60 }} minutes</b> pour
 			<b><a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
 		{% endif %}
-		<h3 id="result" class="text-center">
-			{{ phraseDisplay.contenuHTML|getPhraseHTML }}
-		</h3>
-		<div class="text-center">
-			{% for map in phraseDisplay.motsAmbigusPhrase %}
-				<span class="reponseGroupe" id="rep{{ map.ordre }}">
-					<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
-					<small>({{ map.ordre }})</small> :
-					{% for reponse in map.reponses %}
-						{{ reponse.valeurGlose }}
-					{% endfor %}
-					<br>
-				</span>
-			{% endfor %}
+	{% endif %}
+	<h3 id="result" class="text-center">
+		{{ phraseDisplay.contenuHTML|raw }}
+	</h3>
+	<div class="text-center">
+		{% for map in phraseDisplay.motsAmbigusPhrase %}
+			<span class="reponseGroupe" id="rep{{ map.ordre }}">
+				<b class="color-red">{{ map.getMotAmbigu.getValeur }}</b>
+				<small>({{ map.ordre }})</small> :
+				{% for reponse in map.reponses %}
+					{{ reponse.valeurGlose }}
+				{% endfor %}
+			</span>
 			<br>
+		{% endfor %}
+		{% if not add %}
 			<a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">Rééditer la phrase</a>
-		</div>
+		{% endif %}
 	</div>
-{% endif %}
+</div>

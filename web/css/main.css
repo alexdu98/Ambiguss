@@ -189,7 +189,10 @@ nav ul.coDecoMenu li a:not(.linkCoMenu){
 	display: block;
 	padding: 10px 0;
 }
-
+#points{
+	color: #8B4513;
+	color: var(--color-brown);
+}
 
 /*
     #####################################################################

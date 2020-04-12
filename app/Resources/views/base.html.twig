@@ -97,8 +97,8 @@
 										</a></li> •
 								    <li><a class="linkCoMenu" href="{{ path('fos_user_security_logout') }}">Se déconnecter</a></li>
 								    <div>
-									    Points : <span id="points">{{ app.user.pointsClassement|capitalize }}</span> |
-									    Crédits : <span id="credits">{{ app.user.Credits|capitalize }}</span>
+									    Points : <span id="points" data-value="{{ app.user.pointsClassement }}">{{ app.user.pointsClassement|number_format(0, ',', ' ') }}</span> |
+									    Crédits : <span id="credits" data-value="{{ app.user.credits }}">{{ app.user.credits|number_format(0, ',', ' ') }}</span>
 								    </div>
 							    {% else %}
 								    <li><a href="{{ path('fos_user_registration_register') }}">S'inscrire</a></li>

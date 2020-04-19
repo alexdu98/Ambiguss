@@ -65,7 +65,7 @@ function addGloseModal(params) {
                     costNewGlose = $('.costNewGlose');
                     updateCredits(-costNewGlose.html());
                     opt = params.select.find('option').length - 1;
-                    if (opt >= 2)
+                    if (opt >= nbGlosesFree)
                         costNewGlose.html(opt * parseInt(costNewGlose.data('cost')));
                 }
                 $(form).clearForm();
@@ -100,14 +100,14 @@ $(document).ready(function () {
         setModalTitle('Ajouter une glose au mot ambigu "' + motAmbigu + '"');
 
         nbGloses = $(this).closest('.reponseGroupe').find('select.gloses option').length - 1;
-        if (nbGloses >= 2)
+        if (nbGloses >= nbGlosesFree)
             cost = costCreateGloseByGlosesOfMotAmbigu * nbGloses;
         else
             cost = 0;
 
         setModalBody('<div class="text-danger">Cela vous coûtera <b data-cost="' + costCreateGloseByGlosesOfMotAmbigu + '" class="costNewGlose">' + cost + '</b> crédit(s).</div><br>');
 
-        if (getCredits() > cost) {
+        if (getCredits() >= cost) {
             setModalBody(gloseAddForm);
             addGloseModal({motAmbigu: motAmbigu, select: selectGlose});
         }

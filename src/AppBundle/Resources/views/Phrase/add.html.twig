@@ -73,6 +73,7 @@
 	<script src="{{ asset('js/editeur.js') }}"></script>
 	<script src="{{ asset('js/addGlose.js') }}"></script>
 	<script>
+		var nbGlosesFree = {{ nbGlosesFree }};
         var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
         var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
 		$(document).ready(function()

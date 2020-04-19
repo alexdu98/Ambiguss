@@ -141,7 +141,6 @@ class APIController extends Controller
             {
                 $em = $this->getDoctrine()->getManager();
                 $glose = $form->getData();
-                $coutNewGlose = $this->getParameter('costCreateGloseByGlosesOfMotAmbigu');
 
                 $glose->setAuteur($this->getUser());
 
@@ -177,19 +176,18 @@ class APIController extends Controller
                     $motAmbigu->addGlose($glose);
                 }
 
-                // Les 2 premières gloses d'un mot ambigu sont gratuites
-                $nbGloses = $motAmbigu && $motAmbigu->getGloses()->count() >= 2 ? $motAmbigu->getGloses()->count() : 0;
+                $gloseService = $this->get('AppBundle\Service\GloseService');
+                $nbGlosesActuelles = $motAmbigu->getGloses()->count() > 0 ? $motAmbigu->getGloses()->count() - 1 : 0;
 
-                // On débite les crédits
-                $cout = -($nbGloses * $coutNewGlose);
-
-                if ($this->getUser()->getCredits() >= $cout) {
+                if ($gloseService->isCreatable($nbGlosesActuelles, $this->getUser()->getCredits())) {
                     $em->getConnection()->beginTransaction();
 
                     $em->persist($motAmbigu);
                     $em->persist($glose);
                     $em->flush();
 
+                    // On débite les crédits
+                    $cout = -$gloseService->getCostCreate($nbGlosesActuelles);
                     $this->getUser()->updateCredits($cout);
 
                     // On enregistre dans l'historique du joueur

@@ -114,6 +114,7 @@
 {% endblock %}
     {% block js %}
         <script>
+            var nbGlosesFree = {{ nbGlosesFree }};
             var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
             var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
             $(document).ready(function () {

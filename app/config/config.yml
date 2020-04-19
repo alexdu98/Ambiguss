@@ -21,6 +21,7 @@ parameters:
     dureeAvantJouabiliteSecondes: 600
     nbPhrasesDisponiblesNonConnecte: 25
     # Glose
+    nbGlosesFree: 2
     costCreateGloseByGlosesOfMotAmbigu: 50
     # Classement
     maxResultForClassementGeneral: 100
@@ -82,6 +83,7 @@ twig:
         gainPerLikePhrasePoints: "%gainPerLikePhrasePoints%"
         gainPercentByGame: "%gainPercentByGame%"
         dureeAvantJouabiliteSecondes: "%dureeAvantJouabiliteSecondes%"
+        nbGlosesFree: "%nbGlosesFree%"
         costCreateGloseByGlosesOfMotAmbigu: "%costCreateGloseByGlosesOfMotAmbigu%"
         maxResultForClassementGeneral: "%maxResultForClassementGeneral%"
         recaptcha: "%recaptcha%"

@@ -3,17 +3,19 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Historique;
-use AppBundle\Entity\Membre;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class HistoriqueService
 {
     private $em;
+    private $msg_start_modo;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
         $this->em = $entityManager;
+        $this->msg_start_modo = "[modo:{$requestStack->getCurrentRequest()->server->get('REMOTE_ADDR')}] ";
     }
 
     /**
@@ -21,11 +23,16 @@ class HistoriqueService
      *
      * @param UserInterface $membre
      * @param $message
+     * @param $flush
+     * @param $modo
      */
-    public function save(UserInterface $membre, $message, $flush = false){
+    public function save(UserInterface $membre, $message, $flush = false, $modo = false)
+    {
+        $msg_start = $modo ? $this->msg_start_modo : null;
+
         $histJoueur = new Historique();
         $histJoueur->setMembre($membre);
-        $histJoueur->setValeur($message);
+        $histJoueur->setValeur($msg_start . $message);
 
         $this->em->persist($histJoueur);
 

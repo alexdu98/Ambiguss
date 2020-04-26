@@ -30,12 +30,17 @@
                 <p class="text-warning size16">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
             {% endif %}
 
-            {% for flashMessage in app.session.flashbag.get('succes') %}
-                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message|raw }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-            {% for flashMessage in app.session.flashbag.get('erreur') %}
-                <div class="alert alert-danger">{{ flashMessage }}</div>
-            {% endfor %}
+
             <h3 id="result">{{ phrase.contenuHTML|raw }}</h3>
             <div class="form-group">
                 {% if app.user %}
@@ -52,7 +57,7 @@
                     </button>
                 {% endif %}
                 {% if is_granted('ROLE_MODERATEUR') %}
-                    <a class="btn btn-warning btn-xs" href="{{ path('phrase_edit', {id: phrase.id}) }}">
+                    <a class="btn btn-warning btn-xs" href="{{ path('modo_phrase_edit', {id: phrase.id}) }}">
                         <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
                         Modifier la phrase
                     </a>

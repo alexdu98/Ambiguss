@@ -171,6 +171,10 @@ modo_phrases_show:
     path: /moderation/phrases
     controller: AppBundle:Modo:showPhrases
 
+modo_phrase_edit:
+    path: /moderation/phrase/{id}/edit
+    controller: AppBundle:Modo:editPhrase
+
 modo_gloses_show:
     path: /moderation/gloses
     controller: AppBundle:Modo:showGloses

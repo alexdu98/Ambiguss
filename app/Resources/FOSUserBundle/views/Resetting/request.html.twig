@@ -10,7 +10,7 @@
             <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
 
                 <div class="row">
-                    {% for label, messages in app.flashes %}
+                    {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
                         {% for message in messages %}
                             <div class="alert alert-{{ label }} alert-dismissible" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

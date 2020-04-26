@@ -1,0 +1,28 @@
+{% if phraseOri is defined %}
+    <div class="form-group">
+        Phrase originale :
+        <div class="size16" style="background: white; color: black; padding: 5px;">{{ phraseOri.contenuHTML|raw }}</div>
+    </div>
+{% endif %}
+
+<div class="form-group">
+    {{ form_widget(form.contenu) }}
+    <div class="phrase-editor size16" contenteditable>{{ phraseOri.contenuAmb|default('')|raw }}</div>
+    <ul id="nav-editor">
+        <li class="active" data-mode="wysiwyg"><a href="#">Visuel</a></li>
+        <li data-mode="source"><a href="#">Texte</a></li>
+    </ul>
+</div>
+
+<div id="form-errors" class="alert alert-danger" hidden></div>
+
+<div class="form-group">
+    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
+</div>
+
+<div class="form-group">
+    <div id="proto_motsAmbigusPhrase"
+         data-prototype="{{ include('AppBundle:Reponse:add.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}">
+    </div>
+</div>
+{% do form.motsAmbigusPhrase.setRendered %}

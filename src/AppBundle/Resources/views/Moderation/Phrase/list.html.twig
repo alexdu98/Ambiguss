@@ -60,7 +60,7 @@
                     <td class="phrase-visible">{% if phrase.visible %}Oui{% else %}Non{% endif %}</td>
                     <td class="phrase-signale">{% if phrase.signale %}Oui <span class="badge">!</span>{% else %}Non{% endif %}</td>
                     <td class="text-center">
-                        <a class="btn btn-warning btn-sm" href="{{ path('phrase_edit', {id: phrase.id}) }}">Modifier</a>
+                        <a class="btn btn-warning btn-sm" href="{{ path('modo_phrase_edit', {id: phrase.id}) }}">Modifier</a>
                     </td>
                 </tr>
             {% endfor %}

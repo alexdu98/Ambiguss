@@ -5,9 +5,9 @@
 		Vous disposez de <b>{{ dureeAvantJouabiliteSecondes / 60 }} minutes</b> pour <b>
 		<a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
 	{% else %}
-		{% if modo is not defined %}
+		{% if not modo %}
 			La phrase a bien été modifiée. Vous disposez de <b>{{ dureeAvantJouabiliteSecondes / 60 }} minutes</b> pour
-			<b><a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la modifier</a></b>.
+			<b><a href="{{ path('phrase_edit', {id : phraseDisplay.id}) }}">la remodifier</a></b>.
 		{% endif %}
 	{% endif %}
 	<h3 id="result" class="text-center">
@@ -24,7 +24,8 @@
 			</span>
 			<br>
 		{% endfor %}
-		{% if not add %}
+		{% if not add and modo %}
+			<br>
 			<a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">Rééditer la phrase</a>
 		{% endif %}
 	</div>

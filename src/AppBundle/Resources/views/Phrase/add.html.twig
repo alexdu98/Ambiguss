@@ -7,7 +7,7 @@
 	<div class="row">
 	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
 		    {% if newPhrase is not null %}
-			    {{ include('@App/Phrase/displayPhrase.html.twig', {'add': true, 'phraseDisplay' : newPhrase}) }}
+			    {{ include('@App/Phrase/displayPhrase.html.twig', {'add': true, 'modo': false, 'phraseDisplay' : newPhrase}) }}
 		    {% endif %}
 
 		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
@@ -16,50 +16,29 @@
 			    </div>
 		    {% endif %}
 
-		    {% for flashMessage in app.session.flashbag.get('succes') %}
-			    <div class="alert alert-success">{{ flashMessage }}</div>
-		    {% endfor %}
-		    {% for flashMessage in app.session.flashbag.get('erreur') %}
-			    <div class="alert alert-danger">{{ flashMessage }}</div>
+			{% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+				{% for message in messages %}
+					<div class="alert alert-{{ label }} alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						{{ message|raw }}
+					</div>
+				{% endfor %}
 			{% endfor %}
 
-		    {{ form_start(form , {'attr': {'id': 'phrase-editor-form'}, 'form-type' : 'horizontal'}) }}
+			{{ form_start(form , {'attr': {'id': 'phrase-editor-form'}, 'form-type' : 'horizontal'}) }}
 
-		    {{ form_errors(form) }}
+			{{ form_errors(form) }}
 
-			<div class="form-group">
-				{{ form_widget(form.contenu) }}
-				<div class="phrase-editor size16" contenteditable>{{ form.vars.data.contenuAmb|default('')|raw }}</div>
-				<ul id="nav-editor">
-					<li class="active" data-mode="wysiwyg"><a href="#">Visuel</a></li>
-					<li data-mode="source"><a href="#">Texte</a></li>
-				</ul>
-			</div>
+			{{ include('AppBundle:Phrase:editor.html.twig', {'form' : form }) }}
 
-            <div id="form-errors" class="alert alert-danger" hidden></div>
+			{% do form.modifier.setRendered %}
+			{% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
+				{% do form.creer.setRendered %}
+			{% endif %}
 
-		    <div class="form-group">
-			    <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
-		    </div>
-
-		    <div class="form-group">
-		    	<div id="proto_motsAmbigusPhrase" data-prototype="
-					{{ include('AppBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}
-				">
-		    	</div>
-		    </div>
-		    {% do form.motsAmbigusPhrase.setRendered %}
-
-		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
-			    {% do form.creer.setRendered %}
-		    {% else %}
-			    {{ form_row(form.creer) }}
-			    {% do form.modifier.setRendered %}
-		    {% endif %}
-
-		    {{ form_rest(form) }}
-
-		    {{ form_end(form) }}
+			{{ form_end(form) }}
 
 		</div>
 	</div>

@@ -1,18 +1,27 @@
-<div class="container-fluid" id="amb__id__">
-	<div class="row">
-		<label class="control-label required">__name__label__</label>
-		<div id="phrase_motsAmbigus___name__" class="col-md-5">
-			<label class="control-label required" for="phrase_motsAmbigus___name___valeur">Mot
-					ambigu</label>
-			<input type="text" id="phrase_motsAmbigus___name___valeur" name="phrase[motsAmbigus][__name__][valeur]" required="required" placeholder="Mot ambigu" class="form-control amb" disabled="disabled" value="(id : __id__)"/>
+<div class='form-group reponseGroupe'>
+	<div id='phrase_motsAmbigusPhrase___name__' class="row row-eq-height">
+		<div class="col-xs-12 col-sm-3 col-md-3 colAmb">
+			<div class='form-group'>
+				<label class='control-label required' for='phrase_motsAmbigusPhrase___name___valeur'>Mot ambigu
+					<small>(__id__)</small>
+				</label>
+				{{ form_widget(form.children.valeur) }}
+			</div>
 		</div>
-		<div class="col-md-5">
-			<label class="control-label required" for="phrase_motsAmbigus___name___gloses">Glose</label>
-			{{ form_widget(select) }}
+		<div class="col-xs-12 col-sm-4 col-md-4">
+			<div class='form-group'>
+				<label class='control-label required' for='phrase_motsAmbigusPhrase___name___gloses'>Glose associée</label>
+				{{ form_widget(form.children.gloses) }}
+				<input type="hidden" value="__MA__">
+			</div>
 		</div>
-		<div class="col-md-2">
-			<label class="control-label required"></label>
-			<div class="deleteLink"></div>
+		<div class="col-xs-12 col-sm-5 col-md-5">
+			<div class='form-group'>
+				<label class='control-label'>Actions</label>
+				<div class='gloseAction'>
+					<button type="button" class="btn btn-primary addGloseButton" data-toggle="modal" data-target="#modal">Ajouter une glose</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

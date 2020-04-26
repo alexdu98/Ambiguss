@@ -1,4 +1,52 @@
-{% extends '@App/Phrase/add.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Modification de phrase{% endblock %}
 {% block titre %}Modification de phrase{% endblock %}
+
+{% block contenu %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
+            {% if newPhrase is not null %}
+                {{ include('@App/Phrase/displayPhrase.html.twig', {'add': false, 'modo': false, 'phraseDisplay' : newPhrase}) }}
+            {% endif %}
+
+            {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message|raw }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {{ form_start(form , {'attr': {'id': 'phrase-editor-form'}, 'form-type' : 'horizontal'}) }}
+
+            {{ form_errors(form) }}
+
+            {{ include('AppBundle:Phrase:editor.html.twig', {'form' : form, 'phraseOri' : phraseOri }) }}
+
+            {% do form.creer.setRendered %}
+
+            {% if timeExceeded %}
+                {% do form.modifier.setRendered %}
+            {% endif %}
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
+    <script src="{{ asset('js/editeur.js') }}"></script>
+    <script src="{{ asset('js/addGlose.js') }}"></script>
+    <script>
+        var nbGlosesFree = {{ nbGlosesFree }};
+        var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
+        var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
+        var reponsesOri = {{ reponsesOri|json_encode|raw }};
+    </script>
+{% endblock %}

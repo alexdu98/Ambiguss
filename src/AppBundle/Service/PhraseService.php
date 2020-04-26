@@ -11,7 +11,6 @@ use AppBundle\Entity\Reponse;
 use AppBundle\Event\AmbigussEvents;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -26,9 +25,8 @@ class PhraseService
         $this->container = $container;
     }
 
-    public function new(Phrase $phrase, Membre $auteur, array $mapRep, $isEdit = false)
+    public function new(Phrase $phrase, Membre $auteur, array $mapRep)
     {
-        $coutUnitaire = $this->container->getParameter('costCreatePhraseByMotAmbiguCredits');
         $gainCreation = $this->container->getParameter('gainCreatePhrasePoints');
 
         $phrase->setAuteur($auteur);
@@ -37,34 +35,35 @@ class PhraseService
         $phrase->normalizePreValidation();
         $res = $phrase->isValid();
 
-        $succes = $res['succes'];
         $motsAmbigus = $res['motsAmbigus'] ?? array();
+        $pricePhrase = $this->getPrice(count($motsAmbigus));
 
-        if($succes && $auteur->getCredits() < $coutUnitaire * count($motsAmbigus)) {
+        if($res['succes'] && !$this->isCreatable(count($motsAmbigus), $auteur->getCredits())) {
             $res['succes'] = false;
             $res['message'] = "Vous n'avez pas assez de crédits pour créer une phrase avec " . count($motsAmbigus) . " mots ambigus.";
         }
 
-        if($succes) {
-            $ed = $this->container->get('event_dispatcher');
-
-            // Mise à jour du nombre de crédits et de points de l'auteur
-            $auteur->updateCredits(-$coutUnitaire * count($motsAmbigus));
-            $auteur->updatePoints($gainCreation);
+        if($res['succes']) {
 
             $beforeReorder = $phrase->normalizePostValidation();
 
             try {
+                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+
                 $this->em->getConnection()->beginTransaction();
 
                 $reps = $this->treat($phrase, $auteur, $beforeReorder, $mapRep, false);
+
+                // Mise à jour du nombre de crédits et de points de l'auteur
+                $auteur->updatePoints($gainCreation);
+                $auteur->updateCredits(-$pricePhrase);
 
                 $this->em->persist($phrase);
                 $this->em->flush();
 
                 // On enregistre dans l'historique de l'auteur
-                $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
-                $historiqueService->save($auteur, "Création de la phrase n°" . $phrase->getId() . " (+ " . $gainCreation . " points).");
+                $msg = "Création de la phrase n°" . $phrase->getId() . " (+" . $gainCreation . " points, -" . $pricePhrase . " crédits).";
+                $historiqueService->save($auteur, $msg);
 
                 $partie = new Partie();
                 $partie->setJoueur($auteur);
@@ -74,6 +73,8 @@ class PhraseService
 
                 $this->em->flush();
                 $this->em->getConnection()->commit();
+
+                $ed = $this->container->get('event_dispatcher');
 
                 $event = new GenericEvent(AmbigussEvents::POINTS_GAGNES, array(
                     'membre' => $auteur,
@@ -94,7 +95,71 @@ class PhraseService
         return $res;
     }
 
-    public function update(Phrase $phrase, Membre $modificateur, Phrase $formData, array $mapRep)
+    public function update(Phrase $phrase, Membre $modificateur, Phrase $newPhrase, array $mapRep)
+    {
+        $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
+        $maps = $phrase->getMotsAmbigusPhrase();
+
+        $phrase->setDateCreation(new \DateTime()); // Repousse le début de la jouabilité
+        $phrase->setContenu($newPhrase->getContenu());
+        $phrase->removeMotsAmbigusPhrase();
+
+        $phrase->normalizePreValidation();
+        $res = $phrase->isValid();
+
+        $motsAmbigus = $res['motsAmbigus'] ?? array();
+        $pricePhrase = $this->getPrice(count($motsAmbigus));
+
+        if ($res['succes']) {
+            $diffMA = count($motsAmbigus) - count($maps);
+            $pricePhrase = $this->getPrice(count($maps)) - $pricePhrase;
+
+            if (!$this->isCreatable($diffMA, $modificateur->getCredits())) {
+                $res['succes'] = false;
+                $res['message'] = "Vous n'avez pas assez de crédits pour ajouter " . $diffMA . " mots ambigus.";
+            }
+        }
+
+        if($res['succes']) {
+            $beforeReorder = $phrase->normalizePostValidation();
+
+            try {
+                $this->em->getConnection()->beginTransaction();
+
+                // Supprime les anciens MAP
+                foreach ($maps as $map) {
+                    $this->em->remove($map);
+                }
+
+                $reps = $this->treat($phrase, $modificateur, $beforeReorder, $mapRep, true);
+
+                // Mise à jour du nombre de crédits
+                $phrase->getAuteur()->updateCredits($pricePhrase);
+
+                // On enregistre dans l'historique de l'auteur
+                $signe = $pricePhrase == 0 ? '-' : ($pricePhrase > 0 ? '+' : '');
+                $msg = "Modification de la phrase n°" . $phrase->getId() . ' (' . $signe . $pricePhrase . " crédits).";
+                $historiqueService->save($modificateur, $msg);
+
+                $this->em->persist($phrase);
+                $this->em->flush();
+                $this->em->getConnection()->commit();
+
+                /** @var MotAmbiguPhrase $map */
+                foreach ($phrase->getMotsAmbigusPhrase() as $map) {
+                    $map->addReponse($reps[$map->getOrdre()]);
+                }
+            }
+            catch (UniqueConstraintViolationException $e) {
+                $res['succes'] = false;
+                $res['message'] = 'La phrase existe déjà';
+            }
+        }
+
+        return $res;
+    }
+
+    public function updateModo(Phrase $phrase, Membre $modificateur, Phrase $formData, array $mapRep)
     {
         $historiqueService = $this->container->get('AppBundle\Service\HistoriqueService');
 
@@ -118,7 +183,7 @@ class PhraseService
                 $reps = $this->treat($phrase, $modificateur, $beforeReorder, $mapRep, true);
 
                 // On enregistre dans l'historique du modificateur
-                $historiqueService->save($modificateur, "Modification d'une phrase (n° " . $phrase->getId() . ").");
+                $historiqueService->save($modificateur, "Modification d'une phrase (n° " . $phrase->getId() . ").", false, true);
                 // On enregistre dans l'historique de l'auteur
                 $historiqueService->save($phrase->getAuteur(), "Modification d'une de vos phrase (n° " . $phrase->getId() . ").");
 
@@ -138,6 +203,16 @@ class PhraseService
         }
 
         return $res;
+    }
+
+    public function isCreatable($nbMA, $nbCredits)
+    {
+        return $nbCredits >= $this->getPrice($nbMA);
+    }
+
+    public function getPrice($nbMA)
+    {
+        return $nbMA * $this->container->getParameter('costCreatePhraseByMotAmbiguCredits');
     }
 
     public function treat(Phrase $phrase, Membre $auteur, $beforeReorder, $mapsRep, $isEdit)

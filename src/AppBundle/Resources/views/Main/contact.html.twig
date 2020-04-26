@@ -9,7 +9,7 @@
 			<div class="bulle">
 				<div class="row">
 					<div class="col-md-10 col-md-offset-1 well text-left">
-                        {% for label, messages in app.flashes %}
+                        {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
                             {% for message in messages %}
 								<div class="alert alert-{{ label }}">
                                     {{ message }}

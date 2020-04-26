@@ -10,16 +10,16 @@
                 {{ include('@App/Phrase/displayPhrase.html.twig', {'add': false, 'modo': true, 'phraseDisplay' : newPhrase}) }}
             {% endif %}
 
-            {% for flashMessage in app.session.flashbag.get('succes') %}
-                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message|raw }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-            {% for flashMessage in app.session.flashbag.get('erreur') %}
-                <div class="alert alert-danger">{{ flashMessage }}</div>
-            {% endfor %}
-
-            {{ form_start(form , {'attr': {'id': 'phrase-editor-form'}, 'form-type' : 'horizontal'}) }}
-
-            {{ form_errors(form) }}
 
             <div class="row">
                 <div class="col-xs-12 col-sm-3 col-md-3">
@@ -33,7 +33,7 @@
                 <div class="col-xs-12 col-sm-3 col-md-3">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">Date création</div>
+                            <div class="input-group-addon">Création le</div>
                             <input type="text" class="form-control" value="{{ phrase.dateCreation|date('d/m/Y H:i') }}" disabled>
                         </div>
                     </div>
@@ -49,40 +49,18 @@
                 <div class="col-xs-12 col-sm-3 col-md-3">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">Date modification</div>
+                            <div class="input-group-addon">Modification le</div>
                             <input type="text" class="form-control" value="{{ phrase.dateModification is empty ? '' : phrase.dateModification|date('d/m/Y H:i') }}" disabled>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                Phrase originale :
-                <div class="size16" style="background: white; color: black; padding: 5px;">{{ phraseOri.contenuHTML|raw }}</div>
-            </div>
+            {{ form_start(form , {'attr': {'id': 'phrase-editor-form'}, 'form-type' : 'horizontal'}) }}
 
-            <div class="form-group">
-                {{ form_widget(form.contenu) }}
-                <div class="phrase-editor size16" contenteditable>{{ phraseOri.contenuAmb|raw }}</div>
-                <ul id="nav-editor">
-                    <li class="active" data-mode="wysiwyg"><a href="#">Visuel</a></li>
-                    <li data-mode="source"><a href="#">Texte</a></li>
-                </ul>
-            </div>
+            {{ form_errors(form) }}
 
-            <div id="form-errors" class="alert alert-danger" hidden></div>
-
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" id="addAmb">Rendre le mot sélectionné ambigu</button>
-            </div>
-
-            <div class="form-group">
-                <div id="proto_motsAmbigusPhrase" data-prototype="
-					{{ include('AppBundle:Phrase:horizontal.html.twig', {'form' : form.motsAmbigusPhrase.vars.prototype }) |e ('html_attr') }}
-				"></div>
-            </div>
-
-            {% do form.motsAmbigusPhrase.setRendered %}
+            {{ include('AppBundle:Phrase:editor.html.twig', {'form' : form, 'phraseOri' : phraseOri }) }}
 
             <hr>
 
@@ -108,9 +86,6 @@
                     {% endfor %}
                 </div>
             </div>
-            {{ form_row(form.modifier) }}
-
-            {{ form_rest(form) }}
 
             {{ form_end(form) }}
         </div>

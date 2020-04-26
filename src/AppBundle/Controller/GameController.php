@@ -135,7 +135,7 @@ class GameController extends Controller
             ));
         }
 
-        $this->get('session')->getFlashBag()->add('erreur', "Formulaire invalide");
+        $this->get('session')->getFlashBag()->add('danger', "Formulaire invalide");
         return $this->redirectToRoute('game_show');
     }
 

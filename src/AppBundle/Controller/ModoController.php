@@ -8,8 +8,11 @@ use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Phrase;
 use AppBundle\Event\AmbigussEvents;
+use AppBundle\Form\Glose\GloseAddType;
 use AppBundle\Form\Glose\GloseEditType;
 use AppBundle\Form\Membre\MembreEditType;
+use AppBundle\Form\Phrase\PhraseEditType;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,8 +80,8 @@ class ModoController extends Controller
                 }
 
                 // On enregistre dans l'historique du modérateur
-                $histo = '[modo] Fusion de la glose #' . $glose->getId() . '(' . $glose->getValeur() . ') => #' . $gloseM->getId() . ' (' . $gloseM->getValeur() . ').';
-                $historiqueService->save($this->getUser(), $histo);
+                $histo = "Fusion de la glose #{$glose->getId()} ({$glose->getValeur()}) => #{$gloseM->getId()} ({$gloseM->getValeur()}).";
+                $historiqueService->save($this->getUser(), $histo, false, true);
 
                 // Supprime la glose
                 $em->remove($glose);
@@ -100,10 +103,10 @@ class ModoController extends Controller
                     $infos[] = "visible : {$oldVisible} => {$newVisible}";
                 }
 
-                $histo ="[modo:{$request->server->get('REMOTE_ADDR')}] Modification de la glose #" . $glose->getId() . ' (' . implode(', ', $infos) . ").";
 
                 // On enregistre dans l'historique du modérateur
-                $historiqueService->save($this->getUser(), $histo);
+                $histo ="Modification de la glose #" . $glose->getId() . ' (' . implode(', ', $infos) . ").";
+                $historiqueService->save($this->getUser(), $histo, false, true);
 
                 $em->persist($glose);
             }
@@ -203,10 +206,9 @@ class ModoController extends Controller
                 $infos[] = "commentaire ban : {$membreO->getCommentaireBan()} => {$membre->getCommentaireBan()}";
             }
 
-            $histo ="[modo:{$request->server->get('REMOTE_ADDR')}] Modification du membre #" . $membre->getId() . ' (' . implode(', ', $infos) . ").";
-
             // On enregistre dans l'historique du modérateur
-            $historiqueService->save($this->getUser(), $histo);
+            $histo ="Modification du membre #" . $membre->getId() . ' (' . implode(', ', $infos) . ").";
+            $historiqueService->save($this->getUser(), $histo, false, true);
 
             $em->persist($membre);
             $em->flush();
@@ -273,10 +275,9 @@ class ModoController extends Controller
 
                 $ma->removeGlose($g);
 
-                $histo ="[modo:{$request->server->get('REMOTE_ADDR')}] Suppression de la liaison entre le mot ambigu #{$ma->getId()} ({$ma->getValeur()}) et la glose #{$g->getId()} ({$g->getValeur()}).";
-
                 // On enregistre dans l'historique du modérateur
-                $historiqueService->save($this->getUser(), $histo);
+                $histo ="Suppression de la liaison entre le mot ambigu #{$ma->getId()} ({$ma->getValeur()}) et la glose #{$g->getId()} ({$g->getValeur()}).";
+                $historiqueService->save($this->getUser(), $histo, false, true);
 
                 $em->persist($ma);
                 $em->flush();
@@ -333,10 +334,9 @@ class ModoController extends Controller
                 $signalement->setJuge($this->getUser());
                 $signalement->setVerdict($verdict);
 
-                $histo = "[modo:{$request->server->get('REMOTE_ADDR')}] Signalement #{$signalement->getId()}, verdict : {$signalement->getVerdict()->getNom()}.";
-
                 // On enregistre dans l'historique du modérateur
-                $historiqueService->save($this->getUser(), $histo);
+                $histo = "Signalement #{$signalement->getId()}, verdict : {$signalement->getVerdict()->getNom()}.";
+                $historiqueService->save($this->getUser(), $histo, false, true);
 
                 // Si le signalement obtient un verdict valide on donne des points
                 $msgHisto = '';
@@ -399,6 +399,87 @@ class ModoController extends Controller
 
         return $this->render('AppBundle:Moderation/Signalement:list.html.twig', array(
             'signalements' => $signalements
+        ));
+    }
+
+    public function editPhraseAction(Request $request, LoggerInterface $logger, Phrase $phrase)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoS = $em->getRepository('AppBundle:Signalement');
+        $repoTO = $em->getRepository('AppBundle:TypeObjet');
+        $repoRep = $em->getRepository('AppBundle:Reponse');
+
+        $form = $this->createForm(PhraseEditType::class, new Phrase(), array(
+            'signale' => $phrase->getSignale(),
+            'visible' => $phrase->getVisible(),
+        ));
+
+        $addGloseForm = $this->get('form.factory')->create(GloseAddType::class, new Glose(), array(
+            'action' => $this->generateUrl('api_glose_new'),
+        ));
+
+        $newPhrase = null;
+        $phraseOri = clone $phrase;
+        $typeObj = $repoTO->findOneBy(array('nom' => 'Phrase'));
+        $signalements = $repoS->findBy(array(
+            'typeObjet' => $typeObj,
+            'verdict' => null,
+            'objetId' => $phrase->getId(),
+        ));
+
+        // Récupération des réponses du créateur
+        $reponses = $repoRep->findBy(array(
+            'auteur' => $phrase->getModificateur() ?? $phrase->getAuteur(),
+            'phrase' => $phrase
+        ));
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $phraseService = $this->get('AppBundle\Service\PhraseService');
+            $mapRep = $request->request->get('phrase')['motsAmbigusPhrase'] ?? array();
+
+            $res = $phraseService->updateModo($phrase, $this->getUser(), $form->getData(), $mapRep);
+            $succes = $res['succes'];
+
+            if($succes) {
+                $newPhrase = $phrase;
+
+                $phraseOri = clone $phrase;
+            }
+            else {
+                $bag = $this->get('session')->getFlashBag();
+
+                $msg = "Erreur lors de la modification de la phrase -> " . $res['message'];
+                $bag->add('danger', $msg);
+
+                $logInfos = array(
+                    'msg' => $msg,
+                    'user' => $this->getUser()->getUsername(),
+                    'ip' => $request->server->get('REMOTE_ADDR'),
+                    'phrase' => $phrase->getContenu()
+                );
+                $logger->error(json_encode($logInfos));
+            }
+        }
+
+        // Extraction de la glose pour un mot ambigu dans une phrase
+        $repOri = array();
+        foreach ($reponses as $rep) {
+            $arr['map_ordre'] = $rep->getMotAmbiguPhrase()->getOrdre();
+            $arr['glose_id'] = $rep->getGlose()->getId();
+            $repOri[] = $arr;
+        }
+
+        return $this->render('AppBundle:Moderation/Phrase:edit.html.twig', array(
+            'form' => $form->createView(),
+            'phrase' => $phrase,
+            'phraseOri' => $phraseOri,
+            'reponsesOri' => $repOri,
+            'newPhrase' => $newPhrase,
+            'signalements' => $signalements,
+            'addGloseForm' => $addGloseForm->createView(),
         ));
     }
 

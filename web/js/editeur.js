@@ -123,12 +123,13 @@ $(document).ready(function () {
             }
 
             // Transformation du texte sélectionné en mot ambigu selon le mode utilisé
-            if (modeEditor == 'wysiwyg') {
-                document.execCommand('insertHTML', false, '<amb>' + selText.trim() + '</amb>');
-            }
-            else {
-                document.execCommand('insertText', false, '<amb>' + selText.trim() + '</amb>')
-            }
+            var range = document.getSelection().getRangeAt(0);
+            var clone = $(range.cloneContents());
+
+            range.deleteContents();
+            range.insertNode($('<amb>').append(clone).get(0));
+            document.getSelection().setPosition(null);
+            phraseEditor.trigger('input');
         }
     });
 

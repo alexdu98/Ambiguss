@@ -100,6 +100,50 @@ class PhraseTest extends KernelTestCase
         $this->entity->normalizePreValidation();
         $this->assertEquals('Aah <amb>coucou</amb> test.', $this->entity->getContenu());
 
+        $this->entity->setContenu('A <amb id="1">id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb id=\'1\'>id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb id=\'1\'>id</amb> test <amb id=\'2\'>id2</amb>');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test <amb id="2">id2</amb>.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb id="1" color="red">id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb id="1" color="red" size="16px">id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb  id="1"  color="red"  size="16px" >id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb color="red" id="1">id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb color="red" size="16px" id="1">id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb  color="red"  size="16px"  id="1" >id</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test.', $this->entity->getContenu());
+
+        $this->entity->setContenu('A <amb color="red" id="1" size="16px">id</amb> test <amb color="red" id="2" size="16px">id2</amb>');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('A <amb id="1">id</amb> test <amb id="2">id2</amb>.', $this->entity->getContenu());
+
+        $this->entity->setContenu('<amb>majuscule</amb> test');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('<amb>Majuscule</amb> test.', $this->entity->getContenu());
+
         $this->entity->setContenu('plusieurs mots !');
         $this->entity->normalizePreValidation();
         $this->assertEquals('Plusieurs mots !', $this->entity->getContenu());
@@ -107,6 +151,14 @@ class PhraseTest extends KernelTestCase
         $this->entity->setContenu('plusieurs  mots ?');
         $this->entity->normalizePreValidation();
         $this->assertEquals('Plusieurs mots ?', $this->entity->getContenu());
+
+        $this->entity->setContenu('Un <amb id="1">test</amb> un <amb id="2">test</amb>.');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('Un <amb id="1">test</amb> un <amb id="2">test</amb>.', $this->entity->getContenu());
+
+        $this->entity->setContenu('Un <amb id="5">test</amb> un <amb id="3">test</amb>.');
+        $this->entity->normalizePreValidation();
+        $this->assertEquals('Un <amb id="5">test</amb> un <amb id="3">test</amb>.', $this->entity->getContenu());
     }
 
     private function tryIsValidFalseEquals($p) {

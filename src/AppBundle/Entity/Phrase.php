@@ -545,14 +545,17 @@ class Phrase implements \JsonSerializable
         // Trim
         $this->setContenu(trim($this->getContenu()));
 
+        // Supprime toutes les balises hors <amb>
+        $this->setContenu(strip_tags($this->getContenu(), '<amb>'));
+
+        // Supprime toutes les attributs hors id
+        $this->setContenu(preg_replace('#\<amb .*?(?:id=[\'\"]([0-9]+)[\'\"].*?\>)#i', '<amb id="$1">', $this->getContenu()));
+
         // Met la première lettre en majuscule
-        $this->setContenu(preg_replace_callback('#^(\<amb id\="[0-9]+"\>)?([a-z])(.*)#', function($matches)
+        $this->setContenu(preg_replace_callback('#^(\<amb.*?\>)?([a-z])(.*)#i', function($matches)
         {
             return $matches[1] . mb_strtoupper($matches[2]) . $matches[3];
         }, $this->getContenu()));
-
-        // Supprime toutes les balises hors <amb>
-        $this->setContenu(strip_tags($this->getContenu(), '<amb>'));
 
         // Récupération du nombre de caracètres
         $nbChar = strlen($this->getContenu());

@@ -37,9 +37,10 @@
         </div>
         <div class="panel-body">
             <div class="row tile_count">
+                <div class="col-md-12 size18 text-bold green">Inscriptions</div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-user"></i> Totaux</span>
-                    <div class="count">{{ stat.membres.total|number_format(0, '.', ' ') }}</div>
+                    <span class="count_top"><i class="fa fa-user"></i> Totales</span>
+                    <div class="count">{{ stat.membres.inscriptionTotal|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-clock-o"></i> Derniers 30j</span>
@@ -53,6 +54,34 @@
                     <span class="count_top"><i class="fa fa-clock-o"></i> Dernières 24h</span>
                     <div class="count">{{ stat.membres.inscriptionH24 }}</div>
                 </div>
+                <hr class="clrb">
+            </div>
+            <div class="row tile_count">
+                <div class="col-md-12 size18 text-bold green">Connexions</div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> Totales</span>
+                    <div class="count">{{ stat.membres.connexionTotal|number_format(0, '.', ' ') }}</div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-clock-o"></i> Connexions 30j</span>
+                    <div class="count">{{ stat.membres.connexionJ30|number_format(0, '.', ' ') }}</div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-clock-o"></i> Connexions 7j</span>
+                    <div class="count">{{ stat.membres.connexionJ7 }}</div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-clock-o"></i> Connexions 24h</span>
+                    <div class="count">{{ stat.membres.connexionH24 }}</div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-facebook"></i><i class="fa fa-twitter"></i><i class="fa fa-google"></i> Via service</span>
+                    <div class="count">{{ stat.membres.service|number_format(0, '.', ' ') }}</div>
+                </div>
+                <hr class="clrb">
+            </div>
+            <div class="row tile_count">
+                <div class="col-md-12 size18 text-bold green">Autres</div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-ban"></i> Bannis</span>
                     <div class="count">{{ stat.membres.bannis|number_format(0, '.', ' ') }}</div>
@@ -62,12 +91,12 @@
                     <div class="count">{{ stat.membres.inactifs|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-envelope"></i> Abonnés newsletter</span>
-                    <div class="count">{{ stat.membres.newsletter|number_format(0, '.', ' ') }}</div>
+                    <span class="count_top"><i class="fa fa-pencil"></i> Renommables</span>
+                    <div class="count">{{ stat.membres.renommable|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-facebook"></i><i class="fa fa-twitter"></i><i class="fa fa-google"></i> Via service</span>
-                    <div class="count">{{ stat.membres.service|number_format(0, '.', ' ') }}</div>
+                    <span class="count_top"><i class="fa fa-envelope"></i> Abonnés newsletter</span>
+                    <div class="count">{{ stat.membres.newsletter|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-male"></i> Homme</span>
@@ -80,6 +109,14 @@
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-money"></i> Points moyens</span>
                     <div class="count">{{ stat.membres.moyPoints|number_format(0, '.', ' ') }}</div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-money"></i> Points moyens mens.</span>
+                    <div class="count">{{ stat.membres.moyPointsMensuel|number_format(0, '.', ' ') }}</div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-money"></i> Points moyens hebdo.</span>
+                    <div class="count">{{ stat.membres.moyPointsHebdo|number_format(0, '.', ' ') }}</div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-money"></i> Crédits moyens</span>

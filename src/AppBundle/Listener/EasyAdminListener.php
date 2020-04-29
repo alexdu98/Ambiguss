@@ -8,6 +8,8 @@ use AppBundle\Entity\CategorieSignalement;
 use AppBundle\Entity\Glose;
 use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Historique;
+use AppBundle\Entity\MembreBadge;
+use AppBundle\Entity\MotAmbiguPhrase;
 use AppBundle\Entity\Signalement;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\MotAmbigu;
@@ -103,6 +105,7 @@ class EasyAdminListener implements EventSubscriberInterface
             case $classe instanceof Role:
             case $classe instanceof Signalement:
             case $classe instanceof MotAmbigu:
+            case $classe instanceof MotAmbiguPhrase:
             case $classe instanceof TypeObjet:
             case $classe instanceof TypeVote:
                 $articleEntite = "du {$entityName}";
@@ -123,6 +126,10 @@ class EasyAdminListener implements EventSubscriberInterface
 
             case $classe instanceof JAime:
                 $articleEntite = "du j'aime";
+                break;
+
+            case $classe instanceof MembreBadge:
+                $articleEntite = "du badge gagné";
                 break;
         }
 

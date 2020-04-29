@@ -17,7 +17,7 @@ easy_admin:
               children: ['Membre', 'Groupe', 'Role', 'Historique']
             - label: 'Jeu'
               icon: 'gamepad'
-              children: ['Phrase', 'Glose', 'MotAmbigu', 'Partie', 'Reponse', 'JAime', 'Badge', 'MembreBadge']
+              children: ['Phrase', 'Glose', 'MotAmbigu', 'MotAmbiguPhrase', 'Partie', 'Reponse', 'JAime', 'Badge', 'MembreBadge']
             - label: 'Signalement'
               icon: 'gavel'
               children: ['Signalement', 'CategorieSignalement', 'TypeObjet', 'TypeVote']
@@ -44,34 +44,31 @@ easy_admin:
         Membre:
             class: AppBundle\Entity\Membre
             label: 'Membres'
+            disabled_actions: ['new', 'delete']
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
                     - { property: 'username', label: 'Pseudo' }
                     - { property: 'email', label: 'Email', type: 'email' }
-                    - { property: 'dateInscription', label: 'Date d''inscription' }
-                    - { property: 'lastLogin', label: 'Dernière connexion' }
-                    - { property: 'pointsClassement', label: 'Points' }
-                    - { property: 'credits', label: 'Crédits' }
+                    - { property: 'dateInscription', label: 'Inscription' }
+                    - { property: 'lastLogin', label: 'Connexion' }
                     - { property: 'newsletter', label: 'Newsletter' }
                     - { property: 'enabled', label: 'Activé' }
                     - { property: 'banni', label: 'Banni', type: 'boolean' }
                     - { property: 'renamable', label: 'Renomable' }
                     - { property: 'signale', label: 'Signalé' }
-                    - { property: 'roles', label: 'Rôles' }
+                    - { property: 'groups[0].name', label: 'Groupe' }
             search:
                 help: >
                     <span class="text-info">Recherche effectuée sur les champs :
                         <b>ID</b>,
                         <b>pseudo</b>,
                         <b>email</b>,
-                        <b>points</b>,
-                        <b>crédits</b>,
                         <b>groupes</b>,
                         <b>sexe</b>,
                         <b>ID de services</b>
                     </span>
-                fields: ['id', 'usernameCanonical', 'emailCanonical', 'pointsClassement', 'credits', 'groups.name', 'sexe', 'facebookId', 'twitterId', 'googleId']
+                fields: ['id', 'usernameCanonical', 'emailCanonical', 'groups.name', 'sexe', 'facebookId', 'twitterId', 'googleId']
             form:
                 fields:
                     - { type: 'tab' , label: 'Compte', icon: 'user' }
@@ -125,6 +122,7 @@ easy_admin:
         Groupe:
             class: AppBundle\Entity\Groupe
             label: 'Groupes'
+            disabled_actions: ['new', 'delete']
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
@@ -149,6 +147,7 @@ easy_admin:
         Role:
             class: AppBundle\Entity\Role
             label: 'Rôles'
+            disabled_actions: ['new', 'delete', 'edit']
             list:
                 fields:
                     - { property: 'id', label: 'ID' }
@@ -174,6 +173,7 @@ easy_admin:
         Historique:
             class: AppBundle\Entity\Historique
             label: 'Historiques'
+            disabled_actions: ['new', 'delete', 'edit']
             search:
                 help: >
                     <span class="text-info">Recherche effectuée sur les champs :
@@ -209,12 +209,10 @@ easy_admin:
                     - { property: 'id', label: 'ID' }
                     - { property: 'contenuHTML', label: 'Contenu', type: 'raw' }
                     - { property: 'auteur', label: 'Auteur' }
-                    - { property: 'gainCreateur', label: 'Gain pour l''auteur' }
+                    - { property: 'gainCreateur', label: 'Gain créateur' }
                     - { property: 'dateCreation', label: 'Date création' }
                     - { property: 'modificateur', label: 'Modificateur' }
                     - { property: 'dateModification', label: 'Date de modification' }
-                    - { property: 'jAime', label: 'J''aime' }
-                    - { property: 'parties', label: 'Parties' }
                     - { property: 'visible', label: 'Visible' }
                     - { property: 'signale', label: 'Signalée' }
             form:
@@ -230,9 +228,6 @@ easy_admin:
                     - { type: 'group', label: 'Témoins', icon: 'flag', css_class: 'col-sm-3' }
                     - { property: 'signale', label: 'Signalé' }
                     - { property: 'visible', label: 'Visible' }
-                    - { type: 'group', label: 'Liaisons', icon: 'star' }
-                    - { property: 'jAime', label: 'J''aime' }
-                    - { property: 'parties', label: 'Parties' }
             edit:
                 title: 'Édition de la phrase #%%entity_id%%'
                 fields:
@@ -318,6 +313,32 @@ easy_admin:
                 title: 'Édition du mot ambigu #%%entity_id%%'
                 fields:
                     - { property: 'valeur', label: 'Valeur', type_options: { disabled: true }, help: 'Modifiable par la modération.' }
+        MotAmbiguPhrase:
+            class: AppBundle\Entity\MotAmbiguPhrase
+            label: 'Mots ambigus phrase'
+            search:
+                help: >
+                    <span class="text-info">Recherche effectuée sur les champs :
+                        <b>ID</b>,
+                        <b>phrase</b>,
+                        <b>mot ambigu</b>
+                    </span>
+                fields: ['id', 'phrase.id', 'phrase.contenuPur', 'motAmbigu.id', 'motAmbigu.valeur']
+            list:
+                fields:
+                    - { property: 'id', label: 'ID' }
+                    - { property: 'phrase', label: 'Phrase' }
+                    - { property: 'motAmbigu', label: 'Mot ambigu' }
+                    - { property: 'ordre', label: 'Ordre' }
+                    - { property: 'reponses', label: 'Réponses' }
+            form:
+                fields:
+                    - { type: 'group', label: 'Mot ambigu phrase', icon: 'gamepad', css_class: 'col-sm-12' }
+                    - { property: 'phrase', label: 'Phrase' }
+                    - { property: 'motAmbigu', label: 'Mot ambigu' }
+                    - { property: 'ordre', label: 'Ordre' }
+            edit:
+                title: 'Édition du mot ambigu phrase #%%entity_id%%'
         Partie:
             class: AppBundle\Entity\Partie
             label: 'Parties'

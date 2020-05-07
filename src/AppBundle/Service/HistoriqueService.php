@@ -15,7 +15,8 @@ class HistoriqueService
     public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
         $this->em = $entityManager;
-        $this->msg_start_modo = "[modo:{$requestStack->getCurrentRequest()->server->get('REMOTE_ADDR')}] ";
+        if (!empty($requestStack->getCurrentRequest()))
+            $this->msg_start_modo = "[modo:{$requestStack->getCurrentRequest()->server->get('REMOTE_ADDR')}] ";
     }
 
     /**

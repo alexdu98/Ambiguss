@@ -5,5 +5,5 @@
 30 3 * * * php ${deployDir}/bin/console app:export:generate >> /var/log/${params.ENV}/export.log 2>&1
 
 # Reinitialisation des points
-0 0 1 * * php ${deployDir}/bin/console app:points:reinit -t monthly >> /var/log/${params.ENV}/points_monthly.log 2>&1
+5 0 1 * * php ${deployDir}/bin/console app:points:reinit -t monthly >> /var/log/${params.ENV}/points_monthly.log 2>&1
 0 0 * * 1 php ${deployDir}/bin/console app:points:reinit -t weekly >> /var/log/${params.ENV}/points_weekly.log 2>&1

@@ -229,7 +229,7 @@
                     // Si les cookies Ambiguss sont activés
                     if (cookieIsActivated('ambiguss')) {
                         // Place le cookie pendant X jours
-                        $.cookie('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/'});
+                        $.cookie('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/', secure: true, SameSite: 'Strict'});
                     }
                     setModalSize('modal-lg');
                     setModalTitle('Informations sur le jeu');

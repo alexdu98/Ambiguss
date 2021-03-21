@@ -90,11 +90,11 @@ $(document).ready(function () {
 
         if ($('.configCookies[value="ambiguss"]').prop('checked')) {
             // On créé un cookie pour ne plus réafficher la modal
-            $.cookie('cookieInfo', bitWiseCookies, { expires: ttl_cookie, path: '/' });
+            $.cookie('cookieInfo', bitWiseCookies, { expires: ttl_cookie, path: '/', secure: true, SameSite: 'Strict' });
         }
         else {
             // On créé un cookie de session pour ne plus réafficher la modal le temps de la session
-            $.cookie('cookieInfo', bitWiseCookies, { path: '/' });
+            $.cookie('cookieInfo', bitWiseCookies, { path: '/', secure: true, SameSite: 'Strict' });
 
             // On supprime les  cookies d'ambiguss s'ils existent
             $.each(Object.keys($.cookie()), function() {

@@ -25,7 +25,7 @@ $response->headers->addCacheControlDirective('must-revalidate', true);
 $response->headers->add(array(
     'X-Frame-Options' => 'deny',
     'X-Content-Type-Options' => 'nosniff',
-    'Strict-Transport-Security' => 'max-age: 15552000',
+    'Strict-Transport-Security' => 'max-age=15552000; includeSubDomains; preload',
     'Content-Security-Policy' => "" .
         "default-src 'self' ambiguss.fr ambiguss.test;" .
         "script-src 'self' 'unsafe-inline' *.google.com *.gstatic.com *.facebook.net *.twitter.com;" .

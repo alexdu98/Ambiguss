@@ -61,7 +61,7 @@ function updateServicesCookiesForOnePage() {
 }
 
 function cookieIsActivated(service) {
-    return ($.cookie('cookieInfo') & bitWiseCookiesService[service]) > 0;
+    return (Cookies.get('cookieInfo') & bitWiseCookiesService[service]) > 0;
 }
 
 var deletableCookiesAmbiguss = ['helpAddPhrase', 'helpGame', 'helpResultat', 'helpEditModoPhrase', 'visite'];
@@ -90,19 +90,19 @@ $(document).ready(function () {
 
         if ($('.configCookies[value="ambiguss"]').prop('checked')) {
             // On créé un cookie pour ne plus réafficher la modal
-            $.cookie('cookieInfo', bitWiseCookies, { expires: ttl_cookie, path: '/', secure: true, SameSite: 'Strict' });
+            Cookies.set('cookieInfo', bitWiseCookies, {expires: ttl_cookie, secure: true, sameSite: 'strict'});
         }
         else {
             // On créé un cookie de session pour ne plus réafficher la modal le temps de la session
-            $.cookie('cookieInfo', bitWiseCookies, { path: '/', secure: true, SameSite: 'Strict' });
+            Cookies.set('cookieInfo', bitWiseCookies, {secure: true, sameSite: 'strict'});
 
             // On supprime les  cookies d'ambiguss s'ils existent
-            $.each(Object.keys($.cookie()), function() {
+            $.each(Object.keys(Cookies.get()), function() {
                 var realname = this.valueOf();
                 $.each(deletableCookiesAmbiguss, function() {
                     var regex = new RegExp(this, 'g');
                     if (realname.match(regex)) {
-                        $.removeCookie(realname, { path: '/' });
+                        Cookies.remove(realname)
                     }
                 });
             });

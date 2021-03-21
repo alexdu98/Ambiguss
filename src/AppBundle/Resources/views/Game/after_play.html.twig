@@ -145,7 +145,7 @@
 				// Si les cookies Ambiguss sont activés
 				if (cookieIsActivated('ambiguss')) {
 					// Place le cookie pendant X jours
-					$.cookie('helpResultatV1', 'true', {expires: {{ ttl_cookie_helper }}, path: '/', secure: true, SameSite: 'Strict'});
+					Cookies.set('helpResultatV1', 'true', {expires: {{ ttl_cookie_helper }}, secure: true, sameSite: 'strict'});
 				}
 				setModalSize('modal-lg');
 				setModalTitle('Informations sur le résultat');

@@ -22,7 +22,7 @@ pipeline {
                 echo 'Cloning...'
                 git url: repositoryUrl, credentialsId: gitCredentials, branch: branch
                 script {
-                    env.COMMIT = sh(script: "git describe --always", returnStdout: true).trim()
+                    env.COMMIT = sh(script: "git describe --tags", returnStdout: true).trim()
                 }
                 echo 'Cloning ended'
             }

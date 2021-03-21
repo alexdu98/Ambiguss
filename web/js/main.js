@@ -121,7 +121,7 @@ $(document).ready(function () {
     });
 
     // Si l'utilisateur n'a pas explicitement accepté les cookies, on affiche la modale
-    if (!$.cookie('cookieInfo')) {
+    if (!Cookies.get('cookieInfo')) {
 		$('#cookieModal').modal({backdrop: 'static', keyboard: false});
 	}
 

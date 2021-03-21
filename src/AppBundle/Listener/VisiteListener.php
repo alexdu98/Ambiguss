@@ -64,7 +64,14 @@ class VisiteListener implements EventSubscriberInterface
             // Si les cookies Ambiguss sont acceptés
             if ($cookieInfo && Bitwise::isSet('COOKIE_INFO', $cookieInfo, 'ambiguss')) {
                 // Enregistrement du cookie de visite
-                setcookie('visite', 'true', time() + $time, '/');
+                setcookie('visite', 'true', array(
+                    'expires' => time() + $time,
+                    'path' => '/',
+                    'domain' => '',
+                    'secure' => true,
+                    'httponly' => true,
+                    'samesite' => 'Strict'
+                ));
             }
         }
     }

@@ -27,6 +27,7 @@
         "gedmo/doctrine-extensions": "^2.4",
         "hwi/oauth-bundle": "^0.6.3",
         "incenteev/composer-parameter-handler": "^2.0",
+        "laminas/laminas-code": "<4.4",
         "php-http/guzzle6-adapter": "~1.1.1",
         "php-http/httplug-bundle": "~1.13",
         "sensio/distribution-bundle": "^5.0.19",

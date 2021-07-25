@@ -1,0 +1,263 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membres{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
+{% endblock %}
+
+{% block titre %}Modération des membres{% endblock %}
+
+{% block contenu %}
+    <div class="well">
+        <table id="membresTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pseudo</th>
+                <th>Date d'inscription</th>
+                <th>Dernière connexion</th>
+                <th>Points</th>
+                <th>Crédits</th>
+                <th>Banni</th>
+                <th>Date déban</th>
+                <th>Renomable</th>
+                <th>Signalé</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Pseudo</th>
+                <th>Date d'inscription</th>
+                <th>Dernière connexion</th>
+                <th>Points</th>
+                <th>Crédits</th>
+                <th>Banni</th>
+                <th>Date déban</th>
+                <th>Renomable</th>
+                <th>Signalé</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for membre in membres %}
+                <tr id="membre-{{ membre.id }}" {% if membre.signale %}class="text-danger"{% endif %}>
+                    <td>{{ membre.id }}</td>
+                    <td><a href="{{ path('fos_user_profile_show' , {'id': membre.id}) }}">{{ membre.username }}</a></td>
+                    <td data-order="{{ membre.dateInscription|date("U") + membre.dateInscription|date("Z") }}">{{ membre.dateInscription|date("d/m/Y H:i") }}</td>
+                    <td data-order="{{ membre.lastLogin is empty ? '' : membre.lastLogin|date("U") + membre.lastLogin|date("Z") }}">
+                        {{ membre.lastLogin is empty ? '' : membre.lastLogin|date("d/m/Y H:i") }}
+                    </td>
+                    <td>{{ membre.pointsClassement }}</td>
+                    <td>{{ membre.credits }}</td>
+                    <td class="membre-banni" data-comment="{{ membre.commentaireBan|e('html') }}">{% if membre.banni %}Oui{% else %}Non{% endif %}</td>
+                    <td class="membre-dateDeban" data-order="{{ membre.dateDeban is empty ? '' : membre.dateDeban|date("U") + membre.dateDeban|date("Z") }}">
+                        {{ membre.dateDeban is empty ? '' : membre.dateDeban|date("d/m/Y H:i") }}
+                    </td>
+                    <td class="membre-renomable">{% if membre.renamable %}Oui{% else %}Non{% endif %}</td>
+                    <td class="membre-signale">{% if membre.signale %}Oui <span class="badge">!</span>{% else %}Non{% endif %}</td>
+                    <td class="text-center">
+                        <button class="btn btn-warning btn-sm editMembreButton" data-toggle="modal" data-target="#modal" data-id="{{ membre.id }}" data-valeur="{{ membre.username }}">
+                            Modifier
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#membresTable').DataTable({
+                stateSave: true, // Enregistre les configurations
+                stateSaveParams: function (settings, data) {
+                    data.start = 0; // On enregistre pas la page
+                    data.order = [[9, "desc"]]; // On ordonne sur l'id
+                    data.search = {}; // On enregistre pas la recherche
+                },
+                stateDuration: 0, // pour une durée illimitée
+                columnDefs: [
+                    {targets: 10, orderable: false}
+                ],
+                order: [[9, 'desc']], // On ordonne sur l'id
+                responsive: true,
+                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+            });
+
+            // Au click sur le bouton, exécute la fonction
+            $('.editMembreButton').click(editMembreModal);
+
+            function editMembreModal(event) {
+                var button = $(this);
+
+                setModalSize('modal-lg');
+                setModalTitle('Modifier le membre "<b class="color-red">' + button.data('valeur') + '</b>"');
+                setModalBody('{{ include('App:Membre:edit.html.twig', {'form': editMembreForm})|e('js') }}');
+
+                $('[name="App_membre[banni]"]').on('change', function(){
+                    if ($('[name="App_membre[banni]"]:checked').val() == 1) {
+                        $('#App_membre_commentaireBan').prop('disabled', false).prop('required', true);
+                        $('[for="App_membre_commentaireBan"]').addClass('required');
+                        $('#App_membre_dateDeban :input').prop('disabled', false);
+                    }
+                    else {
+                        $('#App_membre_commentaireBan').prop('disabled', true).prop('required', false);
+                        $('[for="App_membre_commentaireBan"]').removeClass('required');
+                        $('#App_membre_dateDeban :input').prop('disabled', true);
+                    }
+                });
+
+                $('[name^="App_membre[dateDeban]"]').on('change', function(){
+                    var selects = $('[name^="App_membre[dateDeban]"]').filter(function(){
+                        return $(this).val() !== "";
+                    });
+
+                    if(selects.length > 0){
+                        $('#App_membre_dateDeban').closest('.form-group').children('label').addClass('required');
+                        $('[name^="App_membre[dateDeban]"]').prop('required', true);
+                    }
+                    else {
+                        $('#App_membre_dateDeban').closest('.form-group').children('label').removeClass('required');
+                        $('[name^="App_membre[dateDeban]"]').prop('required', false);
+                    }
+                });
+
+                $("#toggleSignalements").click(function () {
+                    $("#signalements").toggle("slow");
+                });
+
+                var ligne = button.closest('tr');
+                var signale = ligne.find('.membre-signale').html().includes('Oui');
+                var renamable = ligne.find('.membre-renomable').html().includes('Oui');
+                var banni = ligne.find('.membre-banni').html().includes('Oui');
+
+                $('[name="App_membre[signale]"][value="' + (signale ? 1 : 0) + '"]').prop('checked', true);
+                $('[name="App_membre[renamable]"][value="' + (renamable ? 1 : 0) + '"]').prop('checked', true);
+                $('[name="App_membre[banni]"][value="' + (banni ? 1 : 0) + '"]').prop('checked', true);
+
+                $('#App_membre_commentaireBan').val(ligne.find('.membre-banni').data('comment'));
+                if (ligne.find('.membre-dateDeban').data('order')) {
+                    var dateDeban = new Date(ligne.find('.membre-dateDeban').data('order') * 1000);
+                    $('#App_membre_dateDeban_date_day').val(dateDeban.getUTCDate());
+                    $('#App_membre_dateDeban_date_month').val(dateDeban.getUTCMonth() + 1);
+                    $('#App_membre_dateDeban_date_year').val(dateDeban.getUTCFullYear());
+                    $('#App_membre_dateDeban_time_hour').val(dateDeban.getUTCHours());
+                    $('#App_membre_dateDeban_time_minute').val(dateDeban.getUTCMinutes());
+                }
+
+                $('[name="App_membre[banni]"]').trigger('change');
+                $('[name^="App_membre[dateDeban]"]').trigger('change');
+
+                // Récupère les infos signalements en cours
+                $.post(Routing.generate('modo_signalements_membre_show', {id: button.data('id')}), function (data) {
+                    if (data.succes) {
+                        divSignalement = $('#signalements');
+                        if (data.signalements.length === 0)
+                            divSignalement.append('<span class="text-danger">Aucun signalement en cours</span>');
+                        html = '{{ include('Signalement/edit.html.twig')|e('js') }}';
+                        $.each(data.signalements, function (index) {
+                            clone = $(html);
+                            clone.find('.panel-heading').append(data.signalements[index].categorieSignalement);
+                            clone.find('.panel-body').append(data.signalements[index].description);
+                            var profil = Routing.generate('fos_user_profile_show', {id: data.signalements[index].auteur_id});
+                            var dt = new Date(data.signalements[index].dateCreation * 1000);
+                            var date = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() + ' à ' + dt.getHours() + ':' + dt
+                                .getMinutes();
+                            clone.find('.lien-profil').attr('href', profil);
+                            clone.find('.lien-profil').append(data.signalements[index].auteur);
+                            clone.find('.date-creation').append(date);
+
+                            // Ajout de l'eventlistener valide
+                            clone.find('.signalement').click(function (event) {
+                                event.preventDefault();
+
+                                // On affiche l'image laoding en attendant la réponse
+                                $(this).after('<img src="' + urlImageLoading + '" id="loading">');
+
+                                $.post(Routing.generate('modo_signalement_edit', {id: data.signalements[index].id}),
+                                    {
+                                        verdict: $(this).data('verdict'),
+                                        token: '{{ csrf_token('signalement_vote') }}'
+                                    }
+                                    , function (data) {
+                                        if (data.succes) {
+                                            $(event.target).closest('.panel').remove();
+                                        }
+                                        else {
+                                            $(event.target).closest('.panel').append('<span class="text-danger">Erreur (' + data.message + ')</span>')
+                                        }
+                                    })
+                                    .fail(function () {
+                                        $(this).after('<span class="text-danger">Erreur</span>');
+                                    })
+                                    .always(function () {
+                                        $('#loading').remove();
+                                    });
+                            });
+
+                            divSignalement.append(clone);
+                        });
+                    }
+                    else {
+
+                    }
+                }, "json");
+
+                var form = $('form[name="App_membre"]');
+                var action = form.attr('action');
+                form.attr('action', action.replace('0', button.data('id')));
+                form.ajaxForm({
+                    beforeSubmit: function (arr, form, opt) {
+                        // On affiche l'image laoding en attendant la réponse
+                        $(form).after('<img src="' + urlImageLoading + '" id="loading">');
+                    },
+                    // Quand la réponse Ajax sera reçu, on appelle ce callback
+                    success: function (data, status, xhr, form) {
+                        // On supprime l'image loading
+                        $(form).next().remove();
+                        if (data.succes) {
+                            // On trouve la ligne
+                            var row = button.parents('tr');
+
+                            if (data.membre.signale === "0") {
+                                row.removeClass('text-danger');
+                            }
+                            else {
+                                row.addClass('text-danger');
+                            }
+
+                            var banni = data.membre.banni === "0" ? 'Non' : 'Oui';
+                            row.find('.membre-banni').html(banni);
+                            row.find('.membre-banni').data('comment', data.membre.comBan);
+                            row.find('.membre-dateDeban').attr('data-order', data.membre.dateDebanTS);
+                            row.find('.membre-dateDeban').html(data.membre.dateDeban);
+                            var renomable = data.membre.renomable === "0" ? 'Non' : 'Oui';
+                            row.find('.membre-renomable').html(renomable);
+                            var signale = data.membre.signale === "0" ? 'Non' : 'Oui <span class="badge">!</span>';
+                            row.find('.membre-signale').html(signale);
+
+                            // On trouve la ligne, on l'a met à jour
+                            $('#membresTable').DataTable().row('#membre-' + button.data('id')).invalidate().draw();
+
+                            // On cache la modale
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            $('.form-error').empty().append('<span class="text-danger">Erreur  (' + data.message + ')</span>');
+                        }
+                    },
+                    error: function () {
+                        $("#loading").remove();
+                        $('.form-error').empty().append('<span class="text-danger">Erreur</span>');
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

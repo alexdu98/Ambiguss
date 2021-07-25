@@ -1,0 +1,43 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        users:
+            entity:
+                class: App\Entity\Membre
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: lazy
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 7 jours
+                path: /
+                name: jeton
+            oauth:
+                resource_owners:
+                    facebook: "/login/check-facebook"
+                    twitter: "/login/check-twitter"
+                    google: "/login/check-google"
+                login_path: /connexion
+                failure_path: /connexion
+                use_forward: false
+                oauth_user_provider:
+                    service: App\Service\MembreProvider
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/deconnexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reinitialisation, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/moderation/, role: ROLE_MODERATEUR }
+        - { path: ^/admin/, role: ROLE_ADMINISTRATEUR }

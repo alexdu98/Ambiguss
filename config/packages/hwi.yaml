@@ -1,0 +1,33 @@
+hwi_oauth:
+  firewall_names: [main]
+  resource_owners:
+    facebook:
+      type: facebook
+      client_id: "%app.facebook_id%"
+      client_secret: "%env(resolve:APP_FACEBOOK_SECRET)%"
+      options:
+        display: popup
+        csrf: true
+      scope: "email"
+    twitter:
+      type: twitter
+      client_id: "%app.twitter_id%"
+      client_secret: "%env(resolve:APP_TWITTER_SECRET)%"
+      options:
+        csrf: true
+        include_email: true
+      scope: "email"
+    google:
+      type: google
+      client_id: "%app.google_id%"
+      client_secret: "%env(resolve:APP_GOOGLE_SECRET)%"
+      options:
+        display: popup
+        csrf: true
+      scope: "email"
+  fosub:
+    username_iterations: 30
+    properties:
+      facebook: facebookId
+      twitter: twitterId
+      google: googleId

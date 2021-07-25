@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création de phrase{% endblock %}
+{% block titre %}Création d'une phrase{% endblock %}
+
+{% block contenu %}
+	<div class="row">
+	    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 well">
+		    {% if newPhrase is not null %}
+			    {{ include('Phrase/displayPhrase.html.twig', {'add': true, 'modo': false, 'phraseDisplay' : newPhrase}) }}
+		    {% endif %}
+
+		    {% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
+			    <div class="alert alert-danger">
+				    Vous n'avez pas assez de crédits pour créer une phrase.
+			    </div>
+		    {% endif %}
+
+			{% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+				{% for message in messages %}
+					<div class="alert alert-{{ label }} alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						{{ message|raw }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			{{ form_start(form , {'attr': {'id': 'phrase-editor-form'}, 'form-type' : 'horizontal'}) }}
+
+			{{ form_errors(form) }}
+
+			{{ include('App:Phrase:editor.html.twig', {'form' : form }) }}
+
+			{% do form.modifier.setRendered %}
+			{% if app.user.credits < costCreatePhraseByMotAmbiguCredits %}
+				{% do form.creer.setRendered %}
+			{% endif %}
+
+			{{ form_end(form) }}
+
+		</div>
+	</div>
+	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpAddPhraseModal">
+		<img src="{{ asset('images/infobulle.png') }}">
+	</button>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ asset('vendor/rangyinputs/rangyinputs-jquery.js') }}"></script>
+	<script src="{{ asset('js/editeur.js') }}"></script>
+	<script src="{{ asset('js/addGlose.js') }}"></script>
+	<script>
+		var nbGlosesFree = {{ nbGlosesFree }};
+        var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
+        var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
+		$(document).ready(function()
+		{
+			// Au click sur le bouton, exécute la fonction
+			$('#helpAddPhraseModal').click(helpAddPhraseModal);
+			function helpAddPhraseModal(event){
+				// Si les cookies Ambiguss sont activés
+				if (cookieIsActivated('ambiguss')) {
+					// Place le cookie pendant X jours
+					Cookies.set('helpAddPhraseV1', 'true', {expires: {{ ttl_cookie_helper }}, secure: true, sameSite: 'strict'});
+				}
+				setModalSize('modal-lg');
+				setModalTitle('Informations sur la création de phrase');
+				setModalBody('{{ include('InfosModal/addPhrase.html.twig')|e('js') }}');
+			}
+
+			// Affiche automatiquement la modal si le visiteur n'a pas le cookie comme quoi il a déjà vu les infos
+			{% if not app.request.cookies.has('helpAddPhraseV1') %}
+				$('#helpAddPhraseModal').trigger('click');
+			{% endif %}
+
+		});
+	</script>
+{% endblock %}

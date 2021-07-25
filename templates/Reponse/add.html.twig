@@ -1,0 +1,27 @@
+<div class='form-group reponseGroupe'>
+	<div id='phrase_motsAmbigusPhrase___name__' class="row row-eq-height">
+		<div class="col-xs-12 col-sm-3 col-md-3 colAmb">
+			<div class='form-group'>
+				<label class='control-label required' for='phrase_motsAmbigusPhrase___name___valeur'>Mot ambigu
+					<small>(__id__)</small>
+				</label>
+				{{ form_widget(form.children.valeur) }}
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4">
+			<div class='form-group'>
+				<label class='control-label required' for='phrase_motsAmbigusPhrase___name___gloses'>Glose associée</label>
+				{{ form_widget(form.children.gloses) }}
+				<input type="hidden" value="__MA__">
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-5 col-md-5">
+			<div class='form-group'>
+				<label class='control-label'>Actions</label>
+				<div class='gloseAction'>
+					<button type="button" class="btn btn-primary addGloseButton" data-toggle="modal" data-target="#modal">Ajouter une glose</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

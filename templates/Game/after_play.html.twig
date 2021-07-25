@@ -1,0 +1,259 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultat{% endblock %}
+{% block titre %}Résultat de la partie{% endblock %}
+{% block contenu %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 bulle">
+			{% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+				{% for message in messages %}
+					<div class="alert alert-{{ label }} alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						{{ message|raw }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+	        {% if app.user is null %}
+		        <p class="text-success">
+			        <b>
+				        <a href="{{ path('fos_user_security_login') }}" class="size18">Connectez-vous</a>
+						pour enregistrer vos parties et avoir accès à toutes les phrases et fonctionnalités !
+			        </b>
+		        </p>
+	        {% endif %}
+	        <span class="size24">
+		        {% if app.user %}
+			        {% if phrase.auteur == app.user %}
+				        Vous êtes l'auteur de cette phrase, vous ne gagnez donc pas de points.<br>
+			        {% elseif alreadyPlayed %}
+				        Vous avez déjà joué cette phrase, vous ne gagnez donc pas de points.<br>
+			        {% else %}
+						{% if nbPoints <= 0 %}
+							Dommage, vous n'avez pas gagné de point cette fois.
+						{% elseif nbPoints == 1 %}
+							Bravo, vous avez gagné 1 point.
+						{% else %}
+							Félicitation, vous avez gagné <span id="fun-level" style="color: #C51B10;">0</span> points !
+						{% endif %}
+				        <div>
+							<img src="{{ asset('avogif.gif') }} " alt="gif" style="max-width: 100%;">
+						</div>
+			        {% endif %}
+		        {% else %}
+			        Vous n'êtes pas connecté, vous ne gagnez donc pas de points.<br>
+		        {% endif %}
+	        </span>
+	        <br>
+
+	        <span class="color-green size18">La phrase était :</span><br>
+	        <span class="size24">{{ phrase.contenuHTML|raw }}</span><br>
+	        <span class="size16">par <a href="{{ path('fos_user_profile_show', {id: phrase.auteur.id}) }}">{{ phrase.auteur.username }}</a></span><br>
+			{% if app.user %}
+				<div class="form-group">
+					<button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
+						<i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+						Signaler un élément
+					</button>
+					{% if is_granted('ROLE_MODERATEUR') %}
+						<a class="btn btn-warning btn-xs" href="{{ path('modo_phrase_edit', {id: phrase.id}) }}">
+							<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+							Modifier la phrase
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			<br>
+
+	        <ul><span class="color-green size18">Les votes précédents étaient :</span>
+		        {% for ordre, ma in stats %}
+			        <li class="not-list reponseGroupe" id="rep{{ ordre }}"><b class="color-red size16" title="Ce mot est ambigu (id : {{ ordre }})">{{ ma.valeurMA }}</b>
+				        :
+				        {% for valeurGlose, res in ma.gloses %}
+					        {% if res.isSelected %}<b>{% endif %}
+							{% if app.user %}
+								{{ valeurGlose ~ ' ' ~ res.nbVotes }}
+							{% else %}
+								{{ valeurGlose }}
+							{% endif %}
+					        {% if res.isSelected %}</b>{% endif %}
+					        {% if loop.last %}.{% else %},{% endif %}
+				        {% endfor %}
+			        </li>
+		        {% endfor %}
+	        </ul>
+	        <br>
+
+			{% if app.user and (nextMembresClassements['gen'] or nextMembresClassements['men'] or nextMembresClassements['heb']) %}
+				<ul><span class="color-green size18">Encore :</span>
+					{% if nextMembresClassements['gen'] %}
+						<li class="not-list">
+							<b class="color-red">{{ nextMembresClassements['gen'].pointsClassement - app.user.pointsClassement }}</b> points pour rattraper
+							<a href="{{ path('fos_user_profile_show', {id: nextMembresClassements['gen'].id}) }}">
+								{{ nextMembresClassements['gen'].username }}
+							</a> au classement général.
+						</li>
+					{% endif %}
+					{% if nextMembresClassements['men'] %}
+						<li class="not-list">
+							<b class="color-red">{{ nextMembresClassements['men'].pointsClassementMensuel - app.user.pointsClassementMensuel }}</b> points pour rattraper
+							<a href="{{ path('fos_user_profile_show', {id: nextMembresClassements['men'].id}) }}">
+								{{ nextMembresClassements['men'].username }}
+							</a> au classement mensuel.
+						</li>
+					{% endif %}
+					{% if nextMembresClassements['heb'] %}
+						<li class="not-list">
+							<b class="color-red">{{ nextMembresClassements['heb'].pointsClassementHebdomadaire - app.user.pointsClassementHebdomadaire }}</b> points pour rattraper
+							<a href="{{ path('fos_user_profile_show', {id: nextMembresClassements['heb'].id}) }}">
+								{{ nextMembresClassements['heb'].username }}
+							</a> au classement hebdomadaire.
+						</li>
+					{% endif %}
+				</ul>
+				<br>
+			{% endif %}
+
+            <a href="{{ path('game_show') }}" class="btn btn-primary">Rejouer</a>
+	        <div id="glosesBlock" hidden>
+		        {% for ma in phrase.motsAmbigusPhrase %}
+			        <select class="gloses">
+				        {% for g in ma.motAmbigu.gloses %}
+					        <option value="{{ g.id }}">{{ g.valeur }}</option>
+				        {% endfor %}
+			        </select>
+			        <input type="hidden" class="motambigu" data-id="{{ ma.motAmbigu.id }}" value="{{ ma.motAmbigu.valeur }}">
+		        {% endfor %}
+	        </div>
+        </div>
+    </div>
+	<button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpResultatModal">
+		<img src="{{ asset('images/infobulle.png') }}">
+	</button>
+{% endblock %}
+
+{% block js %}
+	<script>
+		$(document).ready(function()
+		{
+			// Au click sur le bouton, exécute la fonction
+			$('#helpResultatModal').click(helpResultatModal);
+			function helpResultatModal(event) {
+				// Si les cookies Ambiguss sont activés
+				if (cookieIsActivated('ambiguss')) {
+					// Place le cookie pendant X jours
+					Cookies.set('helpResultatV1', 'true', {expires: {{ ttl_cookie_helper }}, secure: true, sameSite: 'strict'});
+				}
+				setModalSize('modal-lg');
+				setModalTitle('Informations sur le résultat');
+				setModalBody('{{ include('InfosModal/afterPlay.html.twig')|e('js') }}');
+			}
+
+			// Affiche automatiquement la modal si le visiteur n'a pas le cookie comme quoi il a déjà vu les infos
+			{% if not app.request.cookies.has('helpResultatV1') %}
+				$('#helpResultatModal').trigger('click');
+			{% endif %}
+
+			// Signalement
+			$("#phraseSignal").click(function () {
+				var boutonSignal = $(this);
+				setModalSize('modal-lg');
+				setModalTitle("Signaler un élément de la phrase \"{{ phrase.contenuHTML|replace({'"':'\\"'})|raw }}\"");
+				setModalBody('{{ include('Signalement/add.html.twig', {'form': addSignalementForm})|e('js') }}');
+				$("#modal").modal("show");
+
+				// MAJ type objet signalement
+				$("#signalement_add_typeObjet").on('change', function () {
+					var idTypeObjet = $(this).val();
+					var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
+
+					$('#signalement_add_typeObjet').next().remove();
+					$('#signalement_add_signaler').prop('disabled', false);
+					$('#signalement_add_objetId').removeAttr('readonly');
+					$('#signalement_add_objetId').attr('required', true);
+
+					if (typeObjet === 'Glose') {
+						$('#signalement_add_objetId').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
+						$('.gloses').each(function () {
+							var ma = $(this).next().val();
+							var opts = $(this).clone();
+							$('#signalement_add_objetId').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+						});
+					}
+					else if (typeObjet === 'Phrase') {
+						$('#signalement_add_objetId').attr('readonly', true);
+						$('#signalement_add_objetId').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
+					}
+					else if (typeObjet === 'Membre') {
+						$('#signalement_add_objetId').attr('readonly', true);
+						$('#signalement_add_objetId').empty().append('<option selected value="{{ phrase.auteur.id }}">{{ phrase.auteur.username }}</option>');
+					}
+					else {
+						$('#signalement_add_signaler').prop('disabled', true);
+					}
+				});
+				$("#signalement_add_typeObjet").trigger('change');
+
+
+				// On envoit le formulaire par ajax
+				$('form[name="signalement_add"]').ajaxForm({
+					beforeSubmit: function (arr, form, opt) {
+						var idTypeObjet = $('#signalement_add_typeObjet').val();
+						var typeObjet = $('#signalement_add_typeObjet').find('[value="' + idTypeObjet + '"]').html();
+
+						$('#signalement_add_objetId').next().remove();
+
+						// Si pas d'objet sélectionné, pas d'envoi
+						if($('#signalement_add_objetId').val() == null && (typeObjet == 'Phrase' || typeObjet == 'Glose')) {
+
+							$('#signalement_add_objetId').after('<span class="text-danger">Sélectionnez un objet</span>');
+							return false;
+						}
+
+						// On affiche l'image laoding en attendant la réponse
+						$(form).after('<img src="' + urlImageLoading + '" id="loading">');
+					},
+					// Quand la réponse Ajax sera reçu, on appelle ce callback
+					success: function (data, status, xhr, form) {
+						// On supprime l'image loading
+						$(form).next().remove();
+						if (data.succes) {
+							$(form).after(
+								'<div class="alert alert-success alert-dismissible fade in" role="alert">'
+								+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+								+ 'Élément signalé</div>'
+							);
+							$('#signalement_add_description').val('');
+						}
+						else {
+							$(form).after('<div class="alert alert-danger">Erreur</div>');
+						}
+					},
+					error: function () {
+						loading = $("#loading");
+						next = loading.prev().nextAll();
+						loading.before('<span class="text-danger">Erreur</span>');
+						next.remove();
+					}
+				});
+			});
+		});
+
+	</script>
+
+	<script src="{{ asset('js/jquery.animateNumber.js') }}"></script>
+
+    <script>
+        $('#fun-level').animateNumber(
+            {
+                number: {{ nbPoints }},
+                'font-size': '30px',
+                easing: 'easeInQuad'
+            },
+	        1500
+        );
+	</script>
+{% endblock %}

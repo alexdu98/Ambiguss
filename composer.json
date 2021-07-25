@@ -1,78 +1,108 @@
 {
-    "name": "ambiguss/ambiguss",
-    "license": "MIT",
     "type": "project",
-    "description": "TER M1",
-    "autoload": {
-        "psr-4": { "AppBundle\\": "src/AppBundle" },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
-    },
-    "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" },
-        "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
-    },
+    "license": "proprietary",
     "require": {
-        "php": ">=7.2.11",
+        "php": ">=7.1.3",
+        "ext-ctype": "*",
         "ext-curl": "*",
+        "ext-iconv": "*",
         "ext-json": "*",
         "ext-openssl": "*",
         "ext-zlib": "*",
-        "beberlei/doctrineextensions": "^1.2",
-        "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-migrations-bundle": "^2.0",
-        "doctrine/orm": "^2.5",
-        "easycorp/easyadmin-bundle": "^1.17",
-        "friendsofsymfony/jsrouting-bundle": "^2.0",
-        "friendsofsymfony/user-bundle": "^2.1",
-        "gedmo/doctrine-extensions": "^2.4",
-        "hwi/oauth-bundle": "^0.6.3",
-        "incenteev/composer-parameter-handler": "^2.0",
-        "laminas/laminas-code": "<4.4",
-        "php-http/guzzle6-adapter": "~1.1.1",
-        "php-http/httplug-bundle": "~1.13",
-        "sensio/distribution-bundle": "^5.0.19",
-        "sensio/framework-extra-bundle": "^5.0.0",
-        "symfony/monolog-bundle": "^3.1.2",
-        "symfony/polyfill-apcu": "^1.0",
-        "symfony/swiftmailer-bundle": "^3.0",
-        "symfony/symfony": "3.4.*",
-        "twig/twig": "^1.0||^2.0"
+        "composer/package-versions-deprecated": "1.11.99.2",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^2.4",
+        "doctrine/doctrine-migrations-bundle": "^3.1",
+        "doctrine/orm": "^2.9",
+        "easycorp/easyadmin-bundle": "^3.4",
+        "friendsofsymfony/jsrouting-bundle": "^2.7",
+        "guzzlehttp/promises": "^1.4",
+        "hwi/oauth-bundle": "^1.3",
+        "nyholm/psr7": "^1.4",
+        "php-http/httplug-bundle": "^1.21",
+        "phpdocumentor/reflection-docblock": "^5.2",
+        "sensio/framework-extra-bundle": "^5.1",
+        "symfony/apache-pack": "^1.0",
+        "symfony/asset": "4.4.*",
+        "symfony/console": "4.4.*",
+        "symfony/dotenv": "4.4.*",
+        "symfony/expression-language": "4.4.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/form": "4.4.*",
+        "symfony/framework-bundle": "4.4.*",
+        "symfony/http-client": "4.4.*",
+        "symfony/intl": "4.4.*",
+        "symfony/mailer": "4.4.*",
+        "symfony/mailgun-mailer": "4.4.*",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/process": "4.4.*",
+        "symfony/property-access": "4.4.*",
+        "symfony/property-info": "4.4.*",
+        "symfony/proxy-manager-bridge": "4.4.*",
+        "symfony/security-bundle": "4.4.*",
+        "symfony/serializer": "4.4.*",
+        "symfony/translation": "4.4.*",
+        "symfony/twig-bundle": "^4.4",
+        "symfony/validator": "4.4.*",
+        "symfony/web-link": "4.4.*",
+        "symfony/yaml": "4.4.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0",
-        "symfony/browser-kit": "~3.4",
-        "symfony/css-selector": "~3.4",
-        "symfony/phpunit-bridge": "^4.2"
-    },
-    "scripts": {
-        "symfony-scripts": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-install-cmd": [
-            "@symfony-scripts"
-        ],
-        "post-update-cmd": [
-            "@symfony-scripts"
-        ]
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "^4.4",
+        "symfony/css-selector": "^4.4",
+        "symfony/debug-bundle": "^4.4",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "^5.3",
+        "symfony/stopwatch": "^4.4",
+        "symfony/var-dumper": "^4.4",
+        "symfony/web-profiler-bundle": "^4.4"
     },
     "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
         "sort-packages": true
     },
-    "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
-        "symfony-tests-dir": "tests",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
-        "branch-alias": null
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.4.*"
+        }
     }
 }

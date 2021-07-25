@@ -1,0 +1,303 @@
+fos_js_routing:
+  resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+hwi_oauth_redirect:
+  resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+  prefix:   /OAuth
+
+hwi_oauth_connect:
+  resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+  prefix:   /OAuth
+
+hwi_oauth_login:
+  resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+  prefix:   /OAuth
+
+facebook_login:
+  path: /login/check-facebook
+
+twitter_login:
+  path: /login/check-twitter
+
+google_login:
+  path: /login/check-google
+
+##################################################
+###################### MAIN ######################
+##################################################
+accueil_show:
+  path: /
+  controller: 'App\Controller\MainController:accueil'
+
+mentions_show:
+  path: /mentions
+  controller: 'App\Controller\MainController:mentions'
+
+conditions_show:
+  path: /conditions
+  controller: 'App\Controller\MainController:conditions'
+
+contact_show:
+  path: /contact
+  controller: 'App\Controller\MainController:contact'
+
+apropos_show:
+  path: /a-propos
+  controller: 'App\Controller\MainController:aPropos'
+
+##################################################
+#################### AMBIGUSS ####################
+##################################################
+ambiguss_export:
+  path: /export
+  controller: 'App\Controller\MainController:export'
+
+api_signalement_new:
+  path: /api/signalement/new
+  controller: 'App\Controller\APIController:newSignalement'
+
+api_autocomplete_glose:
+  path: /api/autocomplete/glose
+  controller: 'App\Controller\APIController:autocompleteGlose'
+  options:
+    expose: true
+
+api_autocomplete_mot_ambigu:
+  path: /api/autocomplete/motambigu
+  controller: 'App\Controller\APIController:autocompleteMotAmbigu'
+  options:
+    expose: true
+
+api_glose_new:
+  path: /api/glose/new
+  controller: 'App\Controller\APIController:newGlose'
+
+api_gloses_mot_ambigu_show:
+  path: /api/motambigu/gloses
+  controller: 'App\Controller\APIController:showGlosesMotAmbigu'
+  options:
+    expose: true
+
+api_mots_ambigus_glose_show:
+  path: /api/glose/motambigu
+  controller: 'App\Controller\APIController:showMotsAmbigusGlose'
+  options:
+    expose: true
+
+api_phrase_like:
+  path: /api/phrase/{id}/like
+  controller: 'App\Controller\APIController:like'
+  requirements:
+    id: \d+
+
+api_historique_show:
+  path: /api/historique/
+  controller: 'App\Controller\APIController:historique'
+  options:
+    expose: true
+
+game_show:
+  path: /jeu/{id}
+  controller: 'App\Controller\GameController:show'
+  defaults:
+    id: null
+  methods: [GET]
+  options:
+    expose: true
+
+game_play:
+  path: /jeu/{id}
+  controller: 'App\Controller\GameController:play'
+  defaults:
+    id: \d+
+  methods: [POST]
+
+phrase_new:
+  path: /phrase/new
+  controller: 'App\Controller\PhraseController:new'
+
+phrase_edit:
+  path: /phrase/{id}/edit
+  controller: 'App\Controller\PhraseController:edit'
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+##################################################
+################### CLASSEMENT ###################
+##################################################
+classement_joueurs_show:
+  path: /classement/joueurs
+  controller: 'App\Controller\ClassementController:joueurs'
+
+classement_phrases_show:
+  path: /classement/phrases
+  controller: 'App\Controller\ClassementController:phrases'
+
+classement_personnel_show:
+  path: /classement/personnel
+  controller: 'App\Controller\ClassementController:personnel'
+
+##################################################
+###################### MODO ######################
+##################################################
+modo_membres_show:
+  path: /moderation/membres
+  controller: 'App\Controller\ModoController:showMembres'
+
+modo_membre_edit:
+  path: /moderation/membre/{id}/edit
+  controller: 'App\Controller\ModoController:editMembre'
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+modo_signalements_membre_show:
+  path: /moderation/signalement/membre/{id}
+  controller: 'App\Controller\ModoController:showMembreSignalements'
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+modo_phrases_show:
+  path: /moderation/phrases
+  controller: 'App\Controller\ModoController:showPhrases'
+
+modo_phrase_edit:
+  path: /moderation/phrase/{id}/edit
+  controller: 'App\Controller\ModoController:editPhrase'
+
+modo_gloses_show:
+  path: /moderation/gloses
+  controller: 'App\Controller\ModoController:showGloses'
+
+modo_glose_edit:
+  path: /moderation/glose/{id}/edit
+  controller: 'App\Controller\ModoController:editGlose'
+  requirements:
+    id: \d+
+
+modo_mots_ambigus_gloses_show:
+  path: /moderation/mots-ambigus-gloses
+  controller: 'App\Controller\ModoController:showMotsAmbigusGloses'
+
+modo_mots_ambigus_gloses_delete:
+  path: /moderation/mots-ambigus-gloses/delete
+  controller: 'App\Controller\ModoController:deleteMotsAmbigusGloses'
+  options:
+    expose: true
+
+modo_signalement_edit:
+  path: /moderation/signalement/{id}/edit
+  controller: 'App\Controller\ModoController:editSignalement'
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+modo_signalements_glose_show:
+  path: /moderation/signalement/glose/{id}
+  controller: 'App\Controller\ModoController:showGloseSignalements'
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+modo_signalements_show:
+  path: /moderation/signalements
+  controller: 'App\Controller\ModoController:showSignalements'
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+##################################################
+##################### ADMIN ######################
+##################################################
+admin_stats:
+  path: /admin/statistiques
+  controller: 'App\Controller\AdminController:statistiques'
+
+##################################################
+#################### FOSUSER #####################
+##################################################
+fos_user_security_login:
+  path: /connexion
+  controller: fos_user.security.controller:login
+  methods: [GET, POST]
+  options:
+    expose: true
+
+fos_user_security_check:
+  path: /login_check
+  controller: fos_user.security.controller:check
+  methods: [POST]
+
+fos_user_security_logout:
+  path: /deconnexion
+  controller: fos_user.security.controller:logout
+  methods: [GET, POST]
+
+fos_user_profile_show:
+  path: /profil/{id}
+  controller: App:User:show
+  methods: [GET]
+  defaults:
+    id: null
+  requirements:
+    id: \d+
+  options:
+    expose: true
+
+fos_user_profile_edit:
+  path: /profil/edit
+  controller: fos_user.profile.controller:edit
+  methods: [GET, POST]
+
+fos_user_change_password:
+  path: /profil/edit/password
+  controller: fos_user.change_password.controller:changePassword
+  methods: [GET, POST]
+
+fos_user_registration_register:
+  path: /inscription/
+  controller: fos_user.registration.controller:register
+  methods: [GET, POST]
+
+fos_user_registration_check_email:
+  path: /inscription/check-email
+  controller: fos_user.registration.controller:checkEmail
+  methods: [GET]
+
+fos_user_registration_confirm:
+  path: /inscription/confirmation/{token}
+  controller: fos_user.registration.controller:confirm
+  methods: [GET]
+
+fos_user_registration_confirmed:
+  path: /inscription/confirme
+  controller: fos_user.registration.controller:confirmed
+  methods: [GET]
+
+fos_user_resetting_request:
+  path: /reinitialisation/
+  controller: fos_user.resetting.controller:request
+  methods: [GET]
+
+fos_user_resetting_send_email:
+  path: /reinitialisation/send-email
+  controller: fos_user.resetting.controller:sendEmail
+  methods: [POST]
+
+fos_user_resetting_check_email:
+  path: /reinitialisation/check-email
+  controller: fos_user.resetting.controller:checkEmail
+  methods: [GET]
+
+fos_user_resetting_reset:
+  path: /reinitialisation/reset/{token}
+  controller: fos_user.resetting.controller:reset
+  methods: [GET, POST]

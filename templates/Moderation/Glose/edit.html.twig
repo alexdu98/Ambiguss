@@ -1,0 +1,40 @@
+<div class="container-fluid">
+
+	<div class="alert alert-danger">
+		<b>TRÈS IMPORTANT :</b><br>
+		La modification d'une glose sera effective pour tous les mots ambigus liés.<br>
+		Avant de la modifier, <a href="{{ path('modo_mots_ambigus_gloses_show') }}" target="_blank">assurez-vous que la nouvelle glose sera toujours valide</a> pour les mots
+		ambigus liés.<br>
+		Si besoin, créez une nouvelle glose, liez-là au mot ambigu, puis supprimez le lien du mot ambigu et de l'ancienne glose.
+	</div>
+
+	{{ form_start(form) }}
+
+	{{ form_errors(form) }}
+
+	{{ form_row(form.valeur) }}
+
+	<div class="row">
+		<div class="col-md-3">
+			{{ form_label(form.signale) }} : {{ form_widget(form.signale) }}
+		</div>
+		<div class="col-md-3">
+			{{ form_label(form.visible) }} : {{ form_widget(form.visible) }}
+		</div>
+	</div>
+
+	{{ form_rest(form) }}
+	{{ form_end(form) }}
+
+	<div class="row form-error">
+
+	</div>
+
+	<div class="form-group text-center">
+		<a id="toggleSignalements" class="btn btn-primary">Voir/cacher les signalements en cours</a>
+	</div>
+	<div class="form-group">
+		<div id="signalements" hidden></div>
+	</div>
+
+</div>

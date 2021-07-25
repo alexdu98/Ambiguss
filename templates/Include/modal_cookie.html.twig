@@ -1,0 +1,139 @@
+<div class="modal fade" id="cookieModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" id="cookie-modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="cookie-modal-title">Cookies</h4>
+            </div>
+            <div class="modal-body" id="cookie-modal-body">
+                <div class="container-fluid">
+                    En poursuivant votre navigation sur Ambiguss, vous acceptez l'utilisation des cookies.<br>
+                    <a href="{{ path('mentions_show') }}#cookies">En savoir plus.</a><br>
+                    <div class="collapse" id="collapseCookie">
+                        <hr>
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Ambiguss
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <p class="text-danger">
+                                            Certains cookies Ambiguss sont obligatoires et ne peuvent pas être bloqués (connexion).
+                                        </p>
+                                        <p class="text-primary">
+                                            D'autres permettent une meilleure expérience utilisateur mais peuvent être désactivés (reconnexion automatique, message d'aide manuel).
+                                        </p>
+                                        <div style="text-align: right;">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-success btn-sm active">
+                                                    <input type="radio" name="cookiesAmbiguss" autocomplete="off" class="configCookies" value="ambiguss" checked> Activé
+                                                </label>
+                                                <label class="btn btn-danger btn-sm">
+                                                    <input type="radio" name="cookiesAmbiguss" autocomplete="off"> Désactivé
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingTwo">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Facebook
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <p class="text-primary">
+                                            En bloquant les cookies Facebook vous ne pourrez pas profiter des fonctionnalités de partage.
+                                        </p>
+                                        <div style="text-align: right;">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-success btn-sm active">
+                                                    <input type="radio" name="cookiesFacebook" autocomplete="off" class="configCookies" value="facebook" checked> Activé
+                                                </label>
+                                                <label class="btn btn-danger btn-sm">
+                                                    <input type="radio" name="cookiesFacebook" autocomplete="off"> Désactivé
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingThree">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Twitter
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="panel-body">
+                                        <p class="text-primary">
+                                            En bloquant les cookies Twitter vous ne pourrez pas profiter des fonctionnalités de tweet.
+                                        </p>
+                                        <div style="text-align: right;">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-success btn-sm active">
+                                                    <input type="radio" name="cookiesTwitter" autocomplete="off" class="configCookies" value="twitter" checked> Activé
+                                                </label>
+                                                <label class="btn btn-danger btn-sm">
+                                                    <input type="radio" name="cookiesTwitter" autocomplete="off"> Désactivé
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingFour">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false"
+                                           aria-controls="collapseFour">
+                                            Google
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                    <div class="panel-body">
+                                        <p class="text-danger">
+                                            Certains cookies Google sont obligatoires et ne peuvent pas être bloqués (anti-robot).
+                                        </p>
+                                        <p class="text-primary">
+                                            En bloquant les cookies Google vous ne pourrez pas profiter des fonctionnalités de Google.
+                                        </p>
+                                        <div style="text-align: right;">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-success btn-sm active">
+                                                    <input type="radio" name="cookiesGoogle" autocomplete="off" class="configCookies" value="google" checked> Activé
+                                                </label>
+                                                <label class="btn btn-danger btn-sm">
+                                                    <input type="radio" name="cookiesGoogle" autocomplete="off"> Désactivé
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="cookie-modal-footer">
+                <a class="btn btn-default btn-sm" data-toggle="collapse" data-target="#collapseCookie">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Je configure
+                </a>
+                <a id="cookieAccept" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Je valide
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

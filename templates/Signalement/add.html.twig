@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+
+{{ form_errors(form) }}
+
+{{ form_row(form.typeObjet) }}
+<div class="form-group" id="signalementObjetId">
+	{{ form_label(form.objetId) }}
+	{{ form_widget(form.objetId) }}
+</div>
+
+{{ form_row(form.categorieSignalement) }}
+
+{{ form_row(form.description) }}
+
+{{ form_rest(form) }}
+{{ form_end(form) }}

@@ -1,0 +1,79 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    app.site_name: "Ambiguss"
+    app.version: "2.1.1"
+    app.github_web: "https://github.com"
+    app.github_api: "https://api.github.com"
+    app.ambiguss_repo: "alexdu98/Ambiguss"
+    # Phrase
+    app.costCreatePhraseByMotAmbiguCredits: 100
+    app.gainCreatePhrasePoints: 25
+    app.gainPerLikePhrasePoints: 25
+    app.gainPercentByGame: 10
+    app.dureeAvantJouabiliteSecondes: 600
+    app.nbPhrasesDisponiblesNonConnecte: 25
+    # Glose
+    app.nbGlosesFree: 2
+    app.costCreateGloseByGlosesOfMotAmbigu: 50
+    # Classement
+    app.maxResultForClassementGeneral: 100
+    app.maxResultForClassementPhrases: 100
+    # Signalement
+    app.gainSignalementValide: 25
+    # Visite
+    app.timeBetweenTwoVisitesSecondes: 86400 # 1 jour
+    # Download directory of export
+    app.downloadDirectory: "%kernel.project_dir%/public/download/"
+    # Infos of export
+    app.infosExport: >
+        Données collectées depuis le jeu Ambiguss.
+        Site web réalisé en 2017 dans le cadre d'un TER de première année de master informatique à l'université de Montpellier.
+        Groupe : Isna Ouazi, Melissa Mekaoui, Nicolas Delalande, Alexandre Culty.
+        Tuteur : Mathieu Lafourcade.
+    # Durée avant expiration des cookies d'aide
+    app.ttl_cookie_helper: 60 # jours
+    app.ttl_cookie_info: 365 # jours
+    app.ttl_cookie_info_not_fully_accepted: 30 # jours
+    # Recaptcha
+    app.recaptcha: 6LedRk0UAAAAAHmJ9L1pjrWYbBCuKfof5NwU-tep
+    # Services de connexion
+    app.facebook_id: 1793610560900722
+    app.twitter_id: zDbQOofeuAGcyAaWvwkJ9bpcq
+    app.google_id: 222989329459-q58pj9g5eelrm1sros2pq3bgu1od3o8f.apps.googleusercontent.com
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Service\ExportService:
+        autowire: true
+        arguments: { $infos: '%app.infosExport%', $downloadDir: '%app.downloadDirectory%' }
+
+    App\Service\RecaptchaService:
+        autowire: true
+        arguments: { $secret: '%env(resolve:APP_RECAPTCHA_SECRET)%' }

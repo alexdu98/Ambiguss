@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Export{% endblock %}
+{% block titre %}<h1>Export</h1>{% endblock %}
+{% block contenu %}
+
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="bulle">
+				Ambiguss met à disposition les données que nous récupérons sous forme de fichier JSON.<br>
+				Il existe plusieurs types d'export qui répondent à différents besoins, à vous de voir ceux dont vous avez besoin.<br><br>
+				<img src="{{ asset('images/save.png') }}" alt=""/> <a target='_blank' href="{{ asset('download/export_phrases.json') }}" download>Toutes les
+					phrases avec leurs réponses</a><br><br>
+				<img src="{{ asset('images/save.png') }}" alt=""/> <a target='_blank' href="{{ asset('download/export_motsAmbigus.json') }}" download>Tous
+					les mots ambigus avec leurs gloses</a><br><br>
+
+			</div>
+			</div>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+<div class="container-fluid">
+	{{ form_start(form) }}
+
+	{{ form_errors(form) }}
+
+	<div class="row">
+		<div class="col-md-3">
+			{{ form_label(form.signale) }} : {{ form_widget(form.signale) }}
+		</div>
+		<div class="col-md-3">
+			{{ form_label(form.renamable) }} : {{ form_widget(form.renamable) }}
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row vcenter">
+		<div class="col-md-3">
+			{{ form_label(form.banni) }} : {{ form_widget(form.banni) }}
+		</div>
+		<div class="col-md-9">
+			{{ form_row(form.commentaireBan) }}
+			<div class="form-group">
+				{{ form_label(form.dateDeban) }}
+				{{ form_widget(form.dateDeban) }}
+				<span class="help-block">
+					<i class="fa fa-info-circle"></i> Choisir date et heure de fin ou laisser vide pour bannir à vie
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row form-group">
+		{{ form_widget(form.modifier) }}
+	</div>
+
+	{{ form_end(form) }}
+
+	<div class="row form-error">
+
+	</div>
+
+	<div class="form-group text-center">
+		<a id="toggleSignalements" class="btn btn-primary">Voir/cacher les signalements en cours</a>
+	</div>
+	<div class="form-group">
+		<div id="signalements" hidden></div>
+	</div>
+
+</div>

@@ -1,0 +1,35 @@
+<h4>
+	<b>But du jeu</b>
+	<a class="btn btn-primary btn-sm" role="button" data-toggle="collapse" href="#toggleBut" aria-expanded="false" aria-controls="toggleBut">
+		Afficher/cacher
+	</a>
+</h4>
+<div class="collapse in" id="toggleBut">
+	Une phrase est composée d'un ou plusieurs mots ambigus signalés <span class="color-red">en rouge</span>.<br>
+	Vous devez indiquer pour chacun de ces mots ambigus, quel est son sens selon vous.<br>
+	Pour cela, vous devez choisir une glose dans le menu déroulant.<br>
+</div>
+<hr>
+{{ include('InfosModal/gloses.html.twig') }}
+<hr>
+<h4>
+	<b>Tirage au sort de la phrase</b>
+	<a class="btn btn-primary btn-sm" role="button" data-toggle="collapse" href="#toggleTiragePhrase" aria-expanded="false" aria-controls="toggleTiragePhrase">
+		Afficher/cacher
+	</a>
+</h4>
+<div class="collapse" id="toggleTiragePhrase">
+	<b>Mode connecté :</b><br>
+	La phrase est tirée au hasard parmi celles dont vous n'êtes pas l'auteur et pour lesquelles vous n'avez pas encore jouées.
+	Si vous avez joué toutes les phrases, le tirage a lieu parmi toutes les phrases existantes.<br>
+	<b>Mode non connecté :</b><br>
+	La phrase est tirée au hasard parmi les {{ nbPhrasesDisponiblesNonConnecte }} premières phrases créées.<br><br>
+	<span class="text-info">
+		Si vous décidez de passer la phrase ou si vous n'êtes pas connecté, le même algorithme s’appliquera pour vous en proposer une autre.<br>
+		Il est donc possible de retomber plusieurs fois à la suite sur la même phrase.
+	</span><br>
+</div>
+<hr>
+<div class="alert alert-info">
+	Vous pouvez réouvrir ce message à l'aide du bouton "INFO" situé en bas à droite de la page.
+</div>

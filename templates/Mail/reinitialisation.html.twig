@@ -1,0 +1,11 @@
+{% extends "base_email.html.twig" %}
+
+{% block content %}
+    <p>
+		Vous venez de demander à réinitialiser votre mot de passe.<br><br>
+		Pour changer votre mot de passe, merci de visiter le lien suivant : <br>
+		<a href="{{ url('fos_user_resetting_reset', {'token': user.confirmationToken}) }}">
+		    {{ url('fos_user_resetting_reset', {'token': user.confirmationToken}) }}
+		</a>
+	</p>
+{% endblock %}

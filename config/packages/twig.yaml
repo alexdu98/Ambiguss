@@ -1,0 +1,25 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    exception_controller: null
+    form_themes:
+        - 'bootstrap_3_layout.html.twig'
+    globals:
+        github_web: "%app.github_web%"
+        github_api: "%app.github_api%"
+        ambiguss_repo: "%app.ambiguss_repo%"
+        costCreatePhraseByMotAmbiguCredits: "%app.costCreatePhraseByMotAmbiguCredits%"
+        gainCreatePhrasePoints: "%app.gainCreatePhrasePoints%"
+        gainPerLikePhrasePoints: "%app.gainPerLikePhrasePoints%"
+        gainPercentByGame: "%app.gainPercentByGame%"
+        dureeAvantJouabiliteSecondes: "%app.dureeAvantJouabiliteSecondes%"
+        nbGlosesFree: "%app.nbGlosesFree%"
+        costCreateGloseByGlosesOfMotAmbigu: "%app.costCreateGloseByGlosesOfMotAmbigu%"
+        maxResultForClassementGeneral: "%app.maxResultForClassementGeneral%"
+        recaptcha: "%app.recaptcha%"
+        version: "%app.version%"
+        ttl_cookie_helper: "%app.ttl_cookie_helper%"
+        ttl_cookie_info: "%app.ttl_cookie_info%"
+        ttl_cookie_info_not_fully_accepted: "%app.ttl_cookie_info_not_fully_accepted%"
+        nbPhrasesDisponiblesNonConnecte: "%app.nbPhrasesDisponiblesNonConnecte%"

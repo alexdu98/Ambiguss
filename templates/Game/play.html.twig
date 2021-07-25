@@ -1,0 +1,247 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeu{% endblock %}
+{% block titre %}<h1 class="tlt" data-in-effect="rollIn">Jouons </h1>{% endblock %}
+{% block meta %}
+    <meta property="og:url" content="{{ url('game_show', {id: phrase.id}) }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Ambiguss, le jeu de désambiguïsation lexicale."/>
+    <meta property="og:description" content="'{{ phrase.contenuPur|replace({'"':'\\"'}) }}'. Ambigu non ?"/>
+    <meta property="og:image" content="{{ absolute_url(asset('images/avocat256.png')) }}"/>
+
+    <link rel="canonical" href="{{ url('game_show', {id: phrase.id}) }}">
+{% endblock %}
+
+{% block contenu %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2 bulle">
+            {% if app.user is null %}
+                <p class="text-success">
+                    <b>
+                        <a href="{{ path('fos_user_security_login') }}" class="size18">Connectez-vous</a>
+                        pour enregistrer vos parties et avoir accès à toutes les phrases et fonctionnalités !
+                    </b>
+                </p>
+            {% endif %}
+
+            {% if phrase.auteur == app.user %}
+                <p class="text-warning size16">Vous êtes l'auteur cette phrase, vous ne gagnerez donc pas de points.</p>
+            {% elseif alreadyPlayed and app.user %}
+                <p class="text-warning size16">Vous avez déjà joué cette phrase, vous ne gagnerez donc pas de points.</p>
+            {% endif %}
+
+            {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message|raw }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <h3 id="result">{{ phrase.contenuHTML|raw }}</h3>
+            <div class="form-group">
+                {% if app.user %}
+                    <button id="phraseLike" class="btn btn-{% if liked %}primary{% else %}default{% endif %} btn-xs">
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                        J'aime cette phrase
+                    </button>
+                {% endif %}
+                <span class="spanServices"></span>
+                {% if app.user %}
+                    <button id="phraseSignal" class="btn btn-danger btn-xs" data-toggle="modall" data-target="#modal">
+                        <i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+                        Signaler un élément
+                    </button>
+                {% endif %}
+                {% if is_granted('ROLE_MODERATEUR') %}
+                    <a class="btn btn-warning btn-xs" href="{{ path('modo_phrase_edit', {id: phrase.id}) }}">
+                        <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+                        Modifier la phrase
+                    </a>
+                {% endif %}
+            </div>
+            <br>
+            {{ form_start(form, {'attr': {'id': 'gameForm'}, 'form-type' : 'horizontal'}) }}
+
+            {{ form_errors(form) }}
+            <div class="form-group">
+                {% for reponse in form.reponses %}
+                    <div class="form-group row reponseGroupe" id="rep{{ reponse.vars.data.motAmbiguPhrase.ordre }}">
+                        <div id="{{ reponse.vars.id }}">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-sm-offset-1 col-md-offset-1 text-right text-left-xs">
+                                <label class="control-label required" for="{{ reponse.glose.vars.id }}">
+                                    <span class="amb color-red size16"
+                                          data-amb="{{ reponse.vars.data.motAmbiguPhrase.motAmbigu.valeur }}"
+                                          data-id="{{ reponse.vars.data.motAmbiguPhrase.motAmbigu.id }}"
+                                          title="Ce mot est ambigu (id : {{ reponse.vars.data.motAmbiguPhrase.ordre }})">
+                                        {{ reponse.vars.data.motAmbiguPhrase.motAmbigu.valeur }}
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <select id="{{ reponse.glose.vars.id }}" name="{{ reponse.glose.vars.full_name }}"
+                                {% for key,value in reponse.glose.vars.attr %}
+                                    {{ key }}="{{ value }}{% if key == 'class' %} form-control{% endif %}"
+                                {% endfor %}
+                                >
+                                    <option selected disabled value>Choisissez une glose ({{ reponse.glose.vars.choices|length }} existantes)</option>
+                                    {% for id,glose in reponse.glose.vars.choices %}
+                                        <option value="{{ id }}">{{ glose.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% if app.user %}
+                                <div class="col-xs-12 col-sm-3 col-md-3 addGloseButton">
+                                    <button type="button" class="btn btn-primary addGloseModal" data-toggle="modal" data-target="#modal">Ajouter une glose</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% do form.reponses.setRendered %}
+            </div>
+            <br>
+            <div class="form-group">
+                {{ form_widget(form.valider) }}
+                <a href="{{ path('game_show') }}" class="btn btn-default">Passer cette
+                    phrase</a>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <button type="button" class="pull-right infobulle" data-toggle="modal" data-target="#modal" id="helpGameModal">
+        <img src="{{ asset('images/infobulle.png') }}">
+    </button>
+{% endblock %}
+    {% block js %}
+        <script>
+            var nbGlosesFree = {{ nbGlosesFree }};
+            var costCreateGloseByGlosesOfMotAmbigu = {{ costCreateGloseByGlosesOfMotAmbigu }};
+            var gloseAddForm = "{{ form(addGloseForm)|e('js') }}";
+            $(document).ready(function () {
+
+                $("#phraseLike").click(function () {
+                    var boutonLike = $(this);
+                    $.getJSON('{{ path('api_phrase_like', {'id': phrase.id}) }}', function (data) {
+                        if (data.status === 'succes') {
+                            if (data.action === 'like' || data.action === 'relike') {
+                                boutonLike.removeClass('btn-default').addClass('btn-primary');
+                            } else {
+                                boutonLike.removeClass('btn-primary').addClass('btn-default');
+                            }
+                        }
+                    });
+                });
+
+                // Signalement
+                $("#phraseSignal").click(function () {
+                    var boutonSignal = $(this);
+                    setModalSize('modal-lg');
+                    setModalTitle("Signaler un élément de la phrase \"{{ phrase.contenuHTML|replace({'"':'\\"'})|raw }}\"");
+                    setModalBody('{{ include('Signalement/add.html.twig', {'form': addSignalementForm})|e('js') }}');
+                    $("#modal").modal("show");
+
+                    // MAJ type objet signalement
+                    $("#signalement_add_typeObjet").on('change', function () {
+                        var idTypeObjet = $(this).val();
+                        var typeObjet = $(this).find('[value="' + idTypeObjet + '"]').html();
+
+                        $('#signalement_add_typeObjet').next().remove();
+                        $('#signalement_add_signaler').prop('disabled', false);
+                        $('#signalement_add_objetId').removeAttr('readonly');
+                        $('#signalement_add_objetId').attr('required', true);
+
+                        if (typeObjet === 'Glose') {
+                            $('#signalement_add_objetId').empty().append('<option selected disabled>Choisissez une glose</option>').prop('disabled', false);
+                            $('.gloses').each(function () {
+                                var ma = $(this).closest('.reponseGroupe').find('.amb').data('amb');
+                                var opts = $(this).clone();
+                                opts.find('option').eq(0).remove();
+                                $('#signalement_add_objetId').append('<optgroup label="' + ma + '">' + opts.html() + '</optgroup>')
+                            });
+                        }
+                        else if (typeObjet === 'Phrase') {
+                            $('#signalement_add_objetId').attr('readonly', true);
+                            $('#signalement_add_objetId').empty().append('<option selected value="{{ phrase.id }}">{{ phrase.contenuPur }}</option>');
+                        }
+                        else if (typeObjet === 'Membre') {
+                            $('#signalement_add_signaler').prop('disabled', true);
+                            $('#signalement_add_typeObjet').after('<span class="text-danger">Vous ne pouvez pas signaler un membre sur cette page</span>');
+                        }
+                        else {
+                            $('#signalement_add_signaler').prop('disabled', true);
+                        }
+                    });
+                    $("#signalement_add_typeObjet").trigger('change');
+
+
+                    // On envoit le formulaire par ajax
+                    $('form[name="signalement_add"]').ajaxForm({
+                        beforeSubmit: function (arr, form, opt) {
+                            var idTypeObjet = $('#signalement_add_typeObjet').val();
+                            var typeObjet = $('#signalement_add_typeObjet').find('[value="' + idTypeObjet + '"]').html();
+
+                            $('#signalement_add_objetId').next().remove();
+
+                            // Si pas d'objet sélectionné, pas d'envoi
+                            if($('#signalement_add_objetId').val() == null && (typeObjet == 'Phrase' || typeObjet == 'Glose')) {
+
+                                $('#signalement_add_objetId').after('<span class="text-danger">Sélectionnez un objet</span>');
+                                return false;
+                            }
+
+                            // On affiche l'image laoding en attendant la réponse
+                            $(form).after('<img src="' + urlImageLoading + '" id="loading">');
+                        },
+                        // Quand la réponse Ajax sera reçu, on appelle ce callback
+                        success: function (data, status, xhr, form) {
+                            // On supprime l'image loading
+                            $(form).next().remove();
+                            if (data.succes) {
+                                $(form).after(
+                                    '<div class="alert alert-success alert-dismissible fade in" role="alert">'
+                                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'
+                                    + 'Élément signalé</div>'
+                                );
+                                $('#signalement_add_description').val('');
+                            }
+                            else {
+                                $(form).after('<div class="alert alert-danger">Erreur : ' + data.message + '</div>');
+                            }
+                        },
+                        error: function () {
+                            loading = $("#loading");
+                            next = loading.prev().nextAll();
+                            loading.before('<span class="text-danger">Erreur</span>');
+                            next.remove();
+                        }
+                    });
+                });
+
+                // Au click sur le bouton, exécute la fonction
+                $('#helpGameModal').click(helpGameModal);
+
+                function helpGameModal(event) {
+                    // Si les cookies Ambiguss sont activés
+                    if (cookieIsActivated('ambiguss')) {
+                        // Place le cookie pendant X jours
+                        Cookies.set('helpGameV1', 'true', {expires: {{ ttl_cookie_helper }}, secure: true, sameSite: 'strict'});
+                    }
+                    setModalSize('modal-lg');
+                    setModalTitle('Informations sur le jeu');
+                    setModalBody('{{ include('InfosModal/game.html.twig')|e('js') }}');
+                }
+
+                // Affiche automatiquement la modal si le visiteur n'a pas le cookie comme quoi il a déjà vu les infos
+                {% if not app.request.cookies.has('helpGameV1') %}
+                    $('#helpGameModal').trigger('click');
+                {% endif %}
+            });
+            $('.tlt').textillate({in: {effect: 'rollIn'}});
+        </script>
+        <script src="{{ asset('js/addGlose.js') }}"></script>
+    {% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classement{% endblock %}
+
+{% block css %}
+	<link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
+{% endblock %}
+
+{% block titre %}Les phrases les plus populaires{% endblock %}
+
+{% block contenu %}
+	<div class="well">
+		<table id="classement" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Phrase</th>
+				<th>Nombre de j'aime</th>
+				<th>Gains</th>
+				<th>Date de création</th>
+			</tr>
+			</thead>
+			<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Phrase</th>
+				<th>Nombre de j'aime</th>
+				<th>Gains</th>
+				<th>Date de création</th>
+			</tr>
+			</tfoot>
+			<tbody>
+			{% for row in classement %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>
+						<a title="Jouer cette phrase" style="color:black" href="{{ path('game_show' , {'id':row.id}) }}">{{ row.contenu | getPhraseHTML | raw }}</a>
+					</td>
+					<td>{{ row.nbJAime }}</td>
+					<td>{{ row.gainCreateur }}</td>
+					<td data-order="{{ row.dateCreation|date("U") + row.dateCreation|date("Z") }}">{{ row.dateCreation|date("d/m/Y") }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
+	<script>
+		$(document).ready(function () {
+			$('#classement').DataTable({
+				stateSave: true, // Enregistre les configurations
+				stateSaveParams: function (settings, data) {
+					data.start = 0; // On enregistre pas la page
+					data.order = [[2, "desc"]]; // On ordonne sur le nombre de j'aime
+					data.search = {}; // On enregistre pas la recherche
+				},
+				stateDuration: 0, // pour une durée illimitée
+				order: [[2, 'desc']],
+				responsive: true,
+				language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+			});
+		});
+	</script>
+{% endblock %}

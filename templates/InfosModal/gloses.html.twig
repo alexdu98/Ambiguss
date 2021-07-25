@@ -1,0 +1,18 @@
+<h4>
+    <b>Les gloses</b>
+    <a class="btn btn-primary btn-sm" role="button" data-toggle="collapse" href="#toggleGloses" aria-expanded="false" aria-controls="toggleGloses">
+        Afficher/cacher
+    </a>
+</h4>
+<div class="collapse" id="toggleGloses">
+    Définition de glose : "Explication de un ou plusieurs mots qui éclaircit le sens d'autres mots".<br>
+    Vous pouvez ajouter de nouvelles gloses si celles déjà présentes ne vous conviennent pas, mais cela a un coût.<br><br>
+    La formule du coût de création d'une glose est la suivante :<br>
+    <span class="text-primary">
+		Nombre de gloses pour le mot ambigu * {{ costCreateGloseByGlosesOfMotAmbigu }} crédits.<br>
+	</span>
+    Les {{ nbGlosesFree }} premières gloses d'un mot ambigu sont gratuites.<br><br>
+    <b>Exemple :</b><br>
+    Si le mot ambigu a déjà 3 gloses, cela fera 3 * {{ costCreateGloseByGlosesOfMotAmbigu }} = {{ 3 * costCreateGloseByGlosesOfMotAmbigu }}
+    crédits pour créer une nouvelle glose.<br>
+</div>

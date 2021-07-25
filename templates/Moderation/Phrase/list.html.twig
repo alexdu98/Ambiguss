@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Phrases{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.css') }}">
+{% endblock %}
+
+{% block titre %}Modération des phrases{% endblock %}
+
+{% block contenu %}
+    <div class="well">
+        <table id="phrasesTable" class="display responsive no-wrap table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Contenu</th>
+                <th>Auteur</th>
+                <th>Gain pour l'auteur</th>
+                <th>Date de création</th>
+                <th>Modificateur</th>
+                <th>Date de modification</th>
+                <th>Visible</th>
+                <th>Signalée</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Contenu</th>
+                <th>Auteur</th>
+                <th>Gain pour l'auteur</th>
+                <th>Date de création</th>
+                <th>Modificateur</th>
+                <th>Date de modification</th>
+                <th>Visible</th>
+                <th>Signalée</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for phrase in phrases %}
+                <tr id="phrase-{{ phrase.id }}" {% if phrase.signale %}class="text-danger"{% endif %}>
+                    <td>{{ phrase.id }}</td>
+                    <td><a href="{{ path('game_show' , {'id': phrase.id}) }}">{{ phrase | getPhraseHTML | raw }}</a></td>
+                    <td><a href="{{ path('fos_user_profile_show' , {'id': phrase.auteur.id}) }}">{{ phrase.auteur.username }}</a></td>
+                    <td>{{ phrase.gainCreateur }}</td>
+                    <td data-order="{{ phrase.dateCreation|date("U") + phrase.dateCreation|date("Z") }}">{{ phrase.dateCreation|date("d/m/Y H:i") }}</td>
+                    {% if not phrase.modificateur %}
+                        <td class="phrase-modificateur"><a href="#">{{ phrase.modificateur.username|default('') }}</a></td>
+                    {% else %}
+                        <td class="phrase-modificateur"><a href="{{ path('fos_user_profile_show' , {'id':phrase.modificateur.id}) }}">{{ phrase.modificateur.username|default('') }}</a>
+                        </td>
+                    {% endif %}
+                    <td class="glose-dateModification" data-order="{{ phrase.dateModification is empty ? "" : phrase.dateModification|date("U") + phrase.dateModification|date("Z") }}">
+                        {{ phrase.dateModification is empty ? "" : phrase.dateModification|date("d/m/Y H:i") }}
+                    </td>
+
+                    <td class="phrase-visible">{% if phrase.visible %}Oui{% else %}Non{% endif %}</td>
+                    <td class="phrase-signale">{% if phrase.signale %}Oui <span class="badge">!</span>{% else %}Non{% endif %}</td>
+                    <td class="text-center">
+                        <a class="btn btn-warning btn-sm" href="{{ path('modo_phrase_edit', {id: phrase.id}) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#phrasesTable').DataTable({
+                stateSave: true, // Enregistre les configurations
+                stateSaveParams: function (settings, data) {
+                    data.start = 0; // On enregistre pas la page
+                    data.order = [[8, "desc"]]; // On ordonne sur l'id
+                    data.search = {}; // On enregistre pas la recherche
+                },
+                stateDuration: 0, // pour une durée illimitée
+                columnDefs: [
+                    {targets: 1, width: '25%'},
+                    {targets: 9, orderable: false}
+                ],
+                order: [[8, 'desc']], // On ordonne sur l'id
+                responsive: true,
+                language: {url: '{{ asset('vendor/DataTables/datatables.french.lang') }}'}
+            });
+        });
+    </script>
+{% endblock %}

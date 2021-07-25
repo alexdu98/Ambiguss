@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+{% block titre %}Contact{% endblock %}
+
+{% block contenu %}
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="bulle">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1 well text-left">
+                        {% for label, messages in app.flashes(['danger', 'success', 'info', 'warning']) %}
+                            {% for message in messages %}
+								<div class="alert alert-{{ label }}">
+                                    {{ message }}
+								</div>
+                            {% endfor %}
+                        {% endfor %}
+
+						{{ form_start(form, {'attr': {'id': 'formContact'}}) }}
+
+						{{ form_errors(form) }}
+
+						{% if not app.user %}
+							{{ form_row(form.pseudo) }}
+
+							{{ form_row(form.email) }}
+						{% else %}
+							{% do form.pseudo.setRendered %}
+							{% do form.email.setRendered %}
+						{% endif %}
+
+						{{ form_row(form.message) }}
+						<div id='recaptcha' class="g-recaptcha" data-sitekey="{{ recaptcha }}" data-callback="onSubmit" data-size="invisible"></div>
+						{{ form_widget(form.envoyer) }}
+
+						{{ form_rest(form) }}
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script>
+		// Ne pas supprimé, callback recaptcha
+		function onSubmit(token) {
+			$('#formContact').submit();
+		}
+
+		function validate(event) {
+			event.preventDefault();
+			var erreurs = [];
+
+			{% if not app.user %}
+			var pseudo = $('#App_contact_pseudo');
+			if (pseudo.val() === '') {
+				erreurs.push('pseudo');
+				pseudo.next().remove();
+				pseudo.after('<span class="color-red">Vous devez indiquer un pseudo</span>');
+			}
+			else if (!pseudo.val().match(/^[a-zA-Z0-9-_ ]{3,32}$/)) {
+				erreurs.push('pseudoreg');
+				pseudo.next().remove();
+				pseudo.after('<span class="color-red">Le pseudo doit être alphanumérique (-, _, , autorisé) et faire entre 3 et 32 ' +
+					'caractères</span>');
+			}
+			else {
+				pseudo.next().remove();
+			}
+
+			var email = $('#App_contact_email');
+			if (email.val() === '') {
+				erreurs.push('email');
+				email.next().remove();
+				email.after('<span class="color-red">Vous devez indiquer un email</span>');
+			}
+			else {
+				email.next().remove();
+			}
+			{% endif %}
+
+			var message = $('#App_contact_message');
+			if (message.val() === '') {
+				erreurs.push('message');
+				message.next().remove();
+				message.after('<span class="color-red">Vous devez indiquer un message</span>');
+			}
+			else {
+				message.next().remove();
+			}
+
+			if (erreurs.length === 0) {
+				grecaptcha.execute();
+			}
+		}
+
+		function onload() {
+			var element = document.getElementById('App_contact_envoyer');
+			element.onclick = validate;
+		}
+
+		onload();
+	</script>
+{% endblock %}

@@ -12,7 +12,7 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'ENV', choices: ['preprod', 'ambiguss'], description: '')
+        choice(name: 'ENV', choices: ['ambiguss'], description: '')
     }
 
     stages {

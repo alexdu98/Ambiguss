@@ -4,13 +4,27 @@ namespace App\Controller;
 
 use App\Form\Main\ContactType;
 use App\Service\GithubService;
+use App\Service\RecaptchaService;
 use App\Service\MailerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class MainController extends AbstractController
 {
+
+    private $request;
+    private $logger;
+    private $recaptcha;
+    private $mailer;
+
+    public function __construct(RequestStack $request, LoggerInterface $logger, RecaptchaService $recaptcher, MailerService $mailer)
+    {
+        $this->request = $request;
+        $this->logger = $logger;
+        $this->recaptcher = $recaptcher;
+        $this->mailer = $mailer;
+    }
 
 	public function accueil()
 	{
@@ -27,22 +41,21 @@ class MainController extends AbstractController
 		return $this->render('Main/conditions.html.twig');
 	}
 
-	public function contact(Request $request, LoggerInterface $logger)
+	public function contact()
 	{
 		$form = $this->get('form.factory')->create(ContactType::class);
 
-		$form->handleRequest($request);
+		$form->handleRequest($this->request->getCurrentRequest());
 
 		if($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
 			// Vérifie le captcha
-			$recaptchaService = $this->get('App\Service\RecaptchaService');
-			$recaptcha = $recaptchaService->check($request->request->get('g-recaptcha-response'), $request->server->get('REMOTE_ADDR'));
+			$recaptcha = $this->recaptcher->check($this->request->getCurrentRequest()->get('g-recaptcha-response'), $this->request->getCurrentRequest()->server->get('REMOTE_ADDR'));
 
 			// S'il y a eu une erreur avec le captcha
-			if(!$recaptcha['success']){
+			if(isset($recaptcha['success']) && !$recaptcha['success']){
                 $message = implode('<br>', $recaptcha['error-codes']);
                 $this->get('session')->getFlashBag()->add('danger', $message);
 
@@ -68,8 +81,7 @@ class MainController extends AbstractController
                 }
 
                 // On envoie le mail de contact
-                $mailerService = $this->get('App\Service\MailerService');
-                $nbMail = $mailerService->sendEmail(
+                $nbMail = $this->mailer->sendEmail(
                     MailerService::CONTACT,
                     array(
                         'pseudoExpediteur' => $data['pseudo'],

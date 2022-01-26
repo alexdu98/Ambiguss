@@ -2,22 +2,20 @@
 
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-class MailerService implements MailerInterface
+class MailerService
 {
     const USER_CONFIRM = 0;
     const USER_RESET = 1;
     const CONTACT = 2;
     const DUMP_BD = 3;
 
-    private $container;
+    private $parameter;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ParameterBagInterface $parameter)
     {
-        $this->container = $container;
+        $this->parameter = $parameter;
     }
 
     /**
@@ -50,7 +48,7 @@ class MailerService implements MailerInterface
 
     public function sendEmail($type, $params = null)
     {
-        $from = $this->container->getParameter('mailer_from');
+        $from = $this->parameter->get('mailer_from');
         $subject = $recipient = $template = $attach = null;
 
         switch ($type) {
@@ -70,16 +68,16 @@ class MailerService implements MailerInterface
 
             case self::CONTACT:
                 $subject = 'Contact';
-                $recipient = $this->container->getParameter('contact_email');
+                $recipient = $this->parameter->get('contact_email');
                 $template = 'App:Mail:contact.html.twig';
 
                 break;
 
             case self::DUMP_BD:
                 $subject = 'Dump du ' . $params['date'] . ' : ' . ($params['dumpSuccess'] ? 'OK' : 'KO');
-                $recipient = $this->container->getParameter('dump_email');
+                $recipient = $this->parameter->get('dump_email');
                 $template = 'App:Mail:dump.html.twig';
-                $params['dump_dir'] = $this->container->getParameter('dump_dir');
+                $params['dump_dir'] = $this->parameter->get('dump_dir');
                 $params['dumpAbsPath'] = $params['dump_dir'] . '/' . $params['dumpName'];
 
                 if ($params['dumpSuccess'])
@@ -114,7 +112,7 @@ class MailerService implements MailerInterface
         if(!empty($attach))
             $message->attach(\Swift_Attachment::fromPath($attach));
 
-        return $this->container->get('mailer')->send($message);
+        return $this->send($message);
     }
 
 }

@@ -50,6 +50,6 @@ class RecaptchaService{
         }
 
         // Renvoie le résultat sous forme de tableau
-        return json_decode($res, true);
+        return $res;
 	}
 }
